@@ -1,0 +1,37 @@
+@layout("/common/_container.html",{bg:"bg-white",js:["/assets/modular/system/notice/notice_add.js"]}){
+<div class="layui-row layui-col-space15">
+    <div class="layui-col-md12">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <i class="layui-icon layui-icon-rate-solid" style="color: #FF8000;"></i>
+                <i class="layui-icon layui-icon-rate-solid" style="color: #FF8000;"></i>
+                <i class="layui-icon layui-icon-rate-solid" style="color: #FF8000;"></i>
+                新增通知
+            </div>
+            <div class="layui-card-body">
+                <form id="noticeForm" lay-filter="noticeForm" class="layui-form model-form"
+                      style="max-width: 700px;margin: auto;">
+                    <input name="noticeId" type="hidden"/>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">标题<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input name="title" placeholder="请输入标题" type="text" class="layui-input"
+                                   lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">内容<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <textarea name="content" placeholder="请输入内容" class="layui-textarea"></textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item text-right">
+                        <button class="layui-btn" lay-filter="btnSubmit" lay-submit>确定</button>
+                        <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog" id="backupPage">返回</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@}

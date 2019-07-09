@@ -1,0 +1,17 @@
+@layout("/common/_container.html",{js:["/assets/modular/system/log/detail.js"]}){
+<div class="layui-row layui-col-space15">
+    <div class="layui-col-xs12">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <div style="margin: 10px auto">
+                <button class="layui-btn layui-btn-danger" type="button" ew-event="closeDialog" id="backupPage">关闭</button>
+                </div>
+            </div>
+            <div class="layui-card-body">
+                <pre class="layui-code">${log}
+                </pre>
+            </div>
+        </div>
+    </div>
+</div>
+@}
