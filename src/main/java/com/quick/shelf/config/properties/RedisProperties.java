@@ -34,13 +34,13 @@ public class RedisProperties {
 
     private int timeout;
 
-    private org.springframework.boot.autoconfigure.data.redis.RedisProperties.Sentinel sentinel;
+    private Sentinel sentinel;
 
-    private org.springframework.boot.autoconfigure.data.redis.RedisProperties.Cluster cluster;
+    private Cluster cluster;
 
-    private final org.springframework.boot.autoconfigure.data.redis.RedisProperties.Jedis jedis = new org.springframework.boot.autoconfigure.data.redis.RedisProperties.Jedis();
+    private final Jedis jedis = new Jedis();
 
-    private final org.springframework.boot.autoconfigure.data.redis.RedisProperties.Lettuce lettuce = new org.springframework.boot.autoconfigure.data.redis.RedisProperties.Lettuce();
+    private final Lettuce lettuce = new Lettuce();
 
     public RedisProperties() {
     }
@@ -101,27 +101,27 @@ public class RedisProperties {
         return this.timeout;
     }
 
-    public org.springframework.boot.autoconfigure.data.redis.RedisProperties.Sentinel getSentinel() {
+    public Sentinel getSentinel() {
         return this.sentinel;
     }
 
-    public void setSentinel(org.springframework.boot.autoconfigure.data.redis.RedisProperties.Sentinel sentinel) {
+    public void setSentinel(Sentinel sentinel) {
         this.sentinel = sentinel;
     }
 
-    public org.springframework.boot.autoconfigure.data.redis.RedisProperties.Cluster getCluster() {
+    public Cluster getCluster() {
         return this.cluster;
     }
 
-    public void setCluster(org.springframework.boot.autoconfigure.data.redis.RedisProperties.Cluster cluster) {
+    public void setCluster(Cluster cluster) {
         this.cluster = cluster;
     }
 
-    public org.springframework.boot.autoconfigure.data.redis.RedisProperties.Jedis getJedis() {
+    public Jedis getJedis() {
         return this.jedis;
     }
 
-    public org.springframework.boot.autoconfigure.data.redis.RedisProperties.Lettuce getLettuce() {
+    public Lettuce getLettuce() {
         return this.lettuce;
     }
 
@@ -150,16 +150,16 @@ public class RedisProperties {
     }
 
     public static class Jedis {
-        private org.springframework.boot.autoconfigure.data.redis.RedisProperties.Pool pool;
+        private Pool pool;
 
         public Jedis() {
         }
 
-        public org.springframework.boot.autoconfigure.data.redis.RedisProperties.Pool getPool() {
+        public Pool getPool() {
             return this.pool;
         }
 
-        public void setPool(org.springframework.boot.autoconfigure.data.redis.RedisProperties.Pool pool) {
+        public void setPool(Pool pool) {
             this.pool = pool;
         }
     }
@@ -216,7 +216,7 @@ public class RedisProperties {
         private int maxIdle = 8;
         private int minIdle = 0;
         private int maxActive = 8;
-        private Duration maxWait = Duration.ofMillis(-1L);
+        private Long maxWait = -1L;
 
         public Pool() {
         }
@@ -245,11 +245,11 @@ public class RedisProperties {
             this.maxActive = maxActive;
         }
 
-        public Duration getMaxWait() {
+        public Long getMaxWait() {
             return this.maxWait;
         }
 
-        public void setMaxWait(Duration maxWait) {
+        public void setMaxWait(Long maxWait) {
             this.maxWait = maxWait;
         }
     }
