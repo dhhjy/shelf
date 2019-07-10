@@ -33,8 +33,8 @@ spring:
     type: redis
 
 mybatis-plus:
-  typeAliasesPackage: com.quick.shelf.modular.system.model
-  mapper-locations: classpath:com/quick/shelf/modular/**/mapping/*.xml
+  typeAliasesPackage: com.quick.shelf.modular.**.model
+  mapper-locations: classpath:**/mapping/*.xml
 
 log:
   path: shelf-logs
