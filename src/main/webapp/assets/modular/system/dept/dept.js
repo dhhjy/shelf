@@ -66,6 +66,7 @@ layui.use(['layer', 'table', 'admin', 'ax', 'ztree'], function () {
             },
             end: function () {
                 admin.getTempData('formOk') && table.reload(Dept.tableId);
+                admin.getTempData('formOk') && ztree.init();
             }
         });
         layer.full(index);
@@ -102,6 +103,7 @@ layui.use(['layer', 'table', 'admin', 'ax', 'ztree'], function () {
             },
             end: function () {
                 admin.getTempData('formOk') && table.reload(Dept.tableId);
+                admin.getTempData('formOk') && ztree.init();
             }
         });
         layer.full(index);
@@ -118,6 +120,7 @@ layui.use(['layer', 'table', 'admin', 'ax', 'ztree'], function () {
                 layer.closeAll();
                 Feng.success("删除成功!");
                 table.reload(Dept.tableId);
+                ztree.init();
             }, function (data) {
                 Feng.error("删除失败!" + data.responseJSON.message + "!");
             });
