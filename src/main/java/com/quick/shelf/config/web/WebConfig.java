@@ -1,10 +1,5 @@
 package com.quick.shelf.config.web;
 
-import com.quick.shelf.config.properties.ShelfProperties;
-import com.quick.shelf.core.common.controller.GunsErrorView;
-import com.quick.shelf.core.interceptor.AttributeSetInteceptor;
-import com.quick.shelf.core.interceptor.RestApiInteceptor;
-import com.quick.shelf.core.listener.ConfigListener;
 import cn.stylefeng.roses.core.xss.XssFilter;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.support.http.StatViewServlet;
@@ -13,10 +8,14 @@ import com.alibaba.druid.support.spring.stat.BeanTypeAutoProxyCreator;
 import com.alibaba.druid.support.spring.stat.DruidStatInterceptor;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
+import com.quick.shelf.config.properties.ShelfProperties;
+import com.quick.shelf.core.common.controller.GunsErrorView;
+import com.quick.shelf.core.interceptor.AttributeSetInteceptor;
+import com.quick.shelf.core.interceptor.RestApiInteceptor;
+import com.quick.shelf.core.listener.ConfigListener;
 import org.springframework.aop.Advisor;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.aop.support.JdkRegexpMethodPointcut;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -117,7 +116,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public JdkRegexpMethodPointcut druidStatPointcut() {
         JdkRegexpMethodPointcut druidStatPointcut = new JdkRegexpMethodPointcut();
-        String patterns = "cn.quick.shelf.modular.*.service.*";
+        String patterns = "com.quick.shelf.modular.*.service.*";
         //可以set多个
         druidStatPointcut.setPatterns(patterns);
         return druidStatPointcut;
