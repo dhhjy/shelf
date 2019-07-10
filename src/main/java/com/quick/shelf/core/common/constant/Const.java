@@ -48,6 +48,11 @@ public interface Const {
     String ADMIN_NAME = "administrator";
 
     /**
+     * 总公司管理人员
+     */
+    String DEPT_ADMIN_NAME = "companyAdministrator";
+
+    /**
      * 管理员id
      */
     Long ADMIN_ID = 1L;
