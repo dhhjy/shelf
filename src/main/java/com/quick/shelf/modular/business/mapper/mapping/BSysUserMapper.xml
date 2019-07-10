@@ -25,11 +25,11 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        user_id AS "userId", account AS "account", salt AS "salt", name AS "name", sex AS "sex", phone_number AS "phoneNumber", role_id AS "roleId", dept_id AS "deptId", id_card AS "idCard", status AS "status", create_time AS "createTime", update_time AS "updateTime", update_user AS "updateUser", version AS "version"
+        user_id AS "userId", user_account AS "userAccount", salt AS "salt", name AS "name", sex AS "sex", phone_number AS "phoneNumber", role_id AS "roleId", dept_id AS "deptId", id_card AS "idCard", status AS "status", create_time AS "createTime", update_time AS "updateTime", update_user AS "updateUser", version AS "version"
     </sql>
 
     <sql id="Base_Column_List_With_Pwd">
-		 user_id AS "userId", account AS "account", salt AS "salt", password AS "password", name AS "name", sex AS "sex", phone_number AS "phoneNumber", role_id AS "roleId", dept_id AS "deptId", id_card AS "idCard", status AS "status", create_time AS "createTime", update_time AS "updateTime", update_user AS "updateUser", version AS "version"
+		 user_id AS "userId", user_account AS "userAccount", salt AS "salt", password AS "password", name AS "name", sex AS "sex", phone_number AS "phoneNumber", role_id AS "roleId", dept_id AS "deptId", id_card AS "idCard", status AS "status", create_time AS "createTime", update_time AS "updateTime", update_user AS "updateUser", version AS "version"
 	</sql>
 
     <select id="selectBSysUsers" resultType="map">
@@ -43,8 +43,7 @@
             or name like CONCAT('%',#{name},'%'))
         </if>
         <if test="deptId != null and deptId != 0">
-            and (dept_id = #{deptId} or dept_id in ( select dept_id from sys_dept where pids like CONCAT('%$[',
-            #{deptId}, '$]%') escape '$' ))
+            and (dept_id = #{deptId} )
         </if>
         <if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
             and (create_time between CONCAT(#{beginTime},' 00:00:00') and CONCAT(#{endTime},' 23:59:59'))
