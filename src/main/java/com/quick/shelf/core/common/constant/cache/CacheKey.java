@@ -28,4 +28,13 @@ public interface CacheKey {
      */
     String DEPT_NAME = "dept_name_";
 
+    /**
+     * 性别名称
+     */
+    String SEX_NAME = "sex_name_";
+
+    /**
+     * 常用部门树缓存
+     */
+    String DEPT_TREE_NAME = "dept_tree";
 }

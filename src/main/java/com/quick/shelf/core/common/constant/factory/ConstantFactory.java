@@ -250,6 +250,7 @@ public class ConstantFactory implements IConstantFactory {
     }
 
     @Override
+    @Cacheable(value = Cache.CONSTANT, key = "'" + CacheKey.SEX_NAME + "'+#sexCode")
     public String getSexName(String sexCode) {
         return getDictsByName("性别", sexCode);
     }
