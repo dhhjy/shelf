@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.quick.shelf.modular.business.mapper.BSysUserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.quick.shelf.modular.business.entity.BSysUser">
+        <id column="user_id" property="userId"/>
+        <result column="user_account" property="userAccount"/>
+        <result column="name" property="name"/>
+        <result column="password" property="password"/>
+        <result column="salt" property="salt"/>
+        <result column="phone_number" property="phoneNumber"/>
+        <result column="sex" property="sex"/>
+        <result column="id_card" property="idCard"/>
+        <result column="status" property="status"/>
+        <result column="role_id" property="roleId"/>
+        <result column="dept_id" property="deptId"/>
+        <result column="first_referrer" property="firstReferrer"/>
+        <result column="second_referrer" property="secondReferrer"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="version" property="version"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        user_id AS "userId", account AS "account", salt AS "salt", name AS "name", sex AS "sex", phone_number AS "phoneNumber", role_id AS "roleId", dept_id AS "deptId", id_card AS "idCard", status AS "status", create_time AS "createTime", update_time AS "updateTime", update_user AS "updateUser", version AS "version"
+    </sql>
+
+    <sql id="Base_Column_List_With_Pwd">
+		 user_id AS "userId", account AS "account", salt AS "salt", password AS "password", name AS "name", sex AS "sex", phone_number AS "phoneNumber", role_id AS "roleId", dept_id AS "deptId", id_card AS "idCard", status AS "status", create_time AS "createTime", update_time AS "updateTime", update_user AS "updateUser", version AS "version"
+	</sql>
+
+    <select id="selectBSysUsers" resultType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from b_sys_user
+        where status != 'DELETED'
+        <if test="name != null and name != ''">
+            and (phone like CONCAT('%',#{name},'%')
+            or account like CONCAT('%',#{name},'%')
+            or name like CONCAT('%',#{name},'%'))
+        </if>
+        <if test="deptId != null and deptId != 0">
+            and (dept_id = #{deptId} or dept_id in ( select dept_id from sys_dept where pids like CONCAT('%$[',
+            #{deptId}, '$]%') escape '$' ))
+        </if>
+        <if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+            and (create_time between CONCAT(#{beginTime},' 00:00:00') and CONCAT(#{endTime},' 23:59:59'))
+        </if>
+        order by create_time desc
+    </select>
+</mapper>
