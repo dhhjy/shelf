@@ -15,9 +15,15 @@
  */
 package com.quick.shelf.core.beetl;
 
+import com.quick.shelf.core.common.constant.Const;
+import com.quick.shelf.core.common.constant.factory.ConstantFactory;
+import com.quick.shelf.core.shiro.ShiroKit;
 import com.quick.shelf.core.shiro.ShiroUser;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+
+import java.util.List;
+import java.util.Objects;
 
 public class ShiroExt {
     private static final String NAMES_DELIMETER = ",";
@@ -42,6 +48,34 @@ public class ShiroExt {
         } else {
             return (ShiroUser) getSubject().getPrincipals().getPrimaryPrincipal();
         }
+    }
+
+    /**
+     * 判断当前用户是否是超级管理员
+     */
+    public static boolean isAdmin() {
+        List<Long> roleList = Objects.requireNonNull(ShiroKit.getUser()).getRoleList();
+        for (Long integer : roleList) {
+            String singleRoleTip = ConstantFactory.me().getSingleRoleTip(integer);
+            if (singleRoleTip.equals(Const.ADMIN_NAME)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 判断当前用户是否总公司人员
+     */
+    public static boolean isDeptAdmin() {
+        List<Long> roleList = Objects.requireNonNull(ShiroKit.getUser()).getRoleList();
+        for (Long integer : roleList) {
+            String singleRoleTip = ConstantFactory.me().getSingleRoleTip(integer);
+            if (singleRoleTip.equals(Const.DEPT_ADMIN_NAME)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
