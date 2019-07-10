@@ -52,7 +52,6 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/system")
 @Slf4j
-@Api(tags = "SystemController")
 public class SystemController extends BaseController {
 
     @Resource
@@ -74,7 +73,6 @@ public class SystemController extends BaseController {
      * @Date 2018/12/24 22:43
      */
     @RequestMapping("/console")
-    @ApiOperation(value = "控制台页面", notes = "控制台页面")
     public String console() {
         return "/modular/frame/console.html";
     }
