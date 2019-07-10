@@ -13,22 +13,16 @@
     <link href="${ctxPath}/assets/expand/plugins/ztree/zTreeStyle.css" rel="stylesheet" type="text/css"/>
 </head>
 
-<body style="padding: 5px;height:auto;width:auto">
+<body style="overflow-x: hidden">
 <div class="layui-row layui-col-space15">
     <div class="layui-col-md12">
         <div class="layui-card">
-            <div class="layui-card-header">
-                <i class="layui-icon layui-icon-rate-solid" style="color: #FF8000;"></i>
-                <i class="layui-icon layui-icon-rate-solid" style="color: #FF8000;"></i>
-                <i class="layui-icon layui-icon-rate-solid" style="color: #FF8000;"></i>
-                分配角色
-            </div>
             <div class="layui-card-body">
                 <div id="deptForm">
                     <div class="layui-row" style="margin-top:15px;padding: 20px;">
                         <ul id="zTree" class="ztree"></ul>
                     </div>
-                    <div class="layui-form-item">
+                    <div class="layui-form-item" style="display: none;">
                         <div class="layui-input-block">
                             <button id="saveButton" class="layui-btn" lay-filter="btnSubmit" lay-submit>确定</button>
                             <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog"
@@ -41,7 +35,6 @@
         </div>
     </div>
 </div>
-
 @/* 加入contextPath属性和session超时的配置 */
 <script type="text/javascript">
     var Feng = {
@@ -63,16 +56,22 @@
 
 <script type="text/javascript">
 
-    layui.use(['ztree', 'ax'], function () {
+    layui.use(['ztree', 'ax', 'admin'], function () {
         var $ZTree = layui.ztree;
         var $ax = layui.ax;
+        var admin = layui.admin;
 
+        var ZTreeDlg = {
+            index: parent.layer.getFrameIndex(window.name)
+        };
 
         $("#saveButton").bind("click", function () {
             var ids = Feng.zTreeCheckedNodes("zTree");
             var ajax = new $ax(Feng.ctxPath + "/mgr/setRole", function (data) {
                 Feng.success("分配角色成功!");
-                window.location.href = Feng.ctxPath + "/mgr";
+                //传给上个页面，刷新table用
+                admin.putTempData('success', true);
+                parent.layer.close(ZTreeDlg.index);
             }, function (data) {
                 Feng.error("分配角色失败!" + data.responseJSON.message + "!");
             });
@@ -101,11 +100,6 @@
         var ztree = new $ZTree("zTree", "/role/roleTreeListByUserId/${userId}");
         ztree.setSettings(setting);
         ztree.init();
-
-        //返回按钮
-        $("#backupPage").click(function () {
-            window.location.href = Feng.ctxPath + "/mgr";
-        });
     });
 
 </script>

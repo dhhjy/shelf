@@ -1,25 +1,30 @@
-<link rel="stylesheet" href="${ctxPath}/assets/common/layui/css/layui.css"/>
-<link href="${ctxPath}/assets/expand/plugins/ztree/zTreeStyle.css" rel="stylesheet" type="text/css"/>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>${systemName}</title>
+    <meta name="description" content="${systemName}">
+    <meta name="author" content="stylefeng">
+
+    <link rel="stylesheet" href="${ctxPath}/assets/common/layui/css/layui.css"/>
+    <link href="${ctxPath}/assets/expand/plugins/ztree/zTreeStyle.css" rel="stylesheet" type="text/css"/>
+</head>
+
+<body style="overflow-x: hidden">
 <div class="layui-row layui-col-space15">
     <div class="layui-col-md12">
         <div class="layui-card">
-            <div class="layui-card-header">
-                <i class="layui-icon layui-icon-rate-solid" style="color: #FF8000;"></i>
-                <i class="layui-icon layui-icon-rate-solid" style="color: #FF8000;"></i>
-                <i class="layui-icon layui-icon-rate-solid" style="color: #FF8000;"></i>
-                权限配置
-            </div>
             <div class="layui-card-body">
                 <div id="deptForm" class="layui-fluid">
-                    <div class="layui-row" style="margin-top:15px;padding: 20px;">
+                    <div class="layui-row">
                         <ul id="zTree" class="ztree"></ul>
                     </div>
-                    <div class="layui-form-item">
-                        <div class="layui-input-block">
-                            <button id="saveButton" class="layui-btn" lay-filter="btnSubmit" lay-submit>确定</button>
-                            <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog"
-                                    id="backupPage">返回
-                            </button>
+                    <div class="layui-row" style="display: none;">
+                        <div style="text-align: center;">
+                            <button class="layui-btn layui-btn-sm" id="saveButton">保存</button>
                         </div>
                     </div>
                 </div>
@@ -49,15 +54,22 @@
 
 <script type="text/javascript">
 
-    layui.use(['ztree', 'ax'], function () {
+    layui.use(['ztree', 'ax', 'admin'], function () {
         var $ZTree = layui.ztree;
         var $ax = layui.ax;
+        var admin = layui.admin;
+
+        var ZTreeDlg = {
+            index: parent.layer.getFrameIndex(window.name)
+        };
 
         $("#saveButton").bind("click", function () {
             var ids = Feng.zTreeCheckedNodes("zTree");
             var ajax = new $ax(Feng.ctxPath + "/role/setAuthority", function (data) {
-                Feng.success("分配角色成功!");
-                window.location.href = Feng.ctxPath + "/role";
+                Feng.success("分配菜单成功!");
+                //传给上个页面，刷新table用
+                admin.putTempData('success', true);
+                parent.layer.close(ZTreeDlg.index);
             }, function (data) {
                 Feng.error("分配角色失败!" + data.responseJSON.message + "!");
             });
@@ -84,11 +96,10 @@
         var ztree = new $ZTree("zTree", "/menu/menuTreeListByRoleId/${roleId}");
         ztree.setSettings(setting);
         ztree.init();
-
-        //返回按钮
-        $("#backupPage").click(function () {
-            window.location.href = Feng.ctxPath + "/role";
-        });
     });
 
 </script>
+
+</body>
+
+</html>

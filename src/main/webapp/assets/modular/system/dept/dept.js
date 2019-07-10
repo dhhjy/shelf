@@ -1,4 +1,5 @@
-layui.use(['table', 'admin', 'ax', 'ztree'], function () {
+layui.use(['layer', 'table', 'admin', 'ax', 'ztree'], function () {
+    var layer = layui.layer;
     var $ = layui.$;
     var table = layui.table;
     var $ax = layui.ax;
@@ -52,7 +53,22 @@ layui.use(['table', 'admin', 'ax', 'ztree'], function () {
      * 弹出添加
      */
     Dept.openAddDept = function () {
-        window.location.href = Feng.ctxPath + '/dept/dept_add';
+        admin.putTempData('formOk', false);
+        var index = layer.open({
+            type: 2,
+            title: '',
+            content: Feng.ctxPath + '/dept/dept_add',
+            btn: ['确定', '关闭'],
+            yes: function (index) {
+                //取子页面的btn
+                var btn = layer.getChildFrame('#deptSubmitBtn', index);
+                btn.click();
+            },
+            end: function () {
+                admin.getTempData('formOk') && table.reload(Dept.tableId);
+            }
+        });
+        layer.full(index);
     };
 
     /**
@@ -73,7 +89,22 @@ layui.use(['table', 'admin', 'ax', 'ztree'], function () {
      * @param data 点击按钮时候的行数据
      */
     Dept.onEditDept = function (data) {
-        window.location.href = Feng.ctxPath + '/dept/dept_update?deptId=' + data.deptId;
+        admin.putTempData('formOk', false);
+        var index = layer.open({
+            type: 2,
+            title: '',
+            content: Feng.ctxPath + '/dept/dept_update?deptId=' + data.deptId,
+            btn: ['确定', '关闭'],
+            yes: function (index) {
+                //取子页面的btn
+                var btn = layer.getChildFrame('#deptSubmitBtn', index);
+                btn.click();
+            },
+            end: function () {
+                admin.getTempData('formOk') && table.reload(Dept.tableId);
+            }
+        });
+        layer.full(index);
     };
 
     /**
@@ -109,6 +140,8 @@ layui.use(['table', 'admin', 'ax', 'ztree'], function () {
         elem: '#' + Dept.tableId,
         url: Feng.ctxPath + '/dept/list',
         page: true,
+        limits: [20, 50, 100],  //每页条数的选择项，默认：[10,20,30,40,50,60,70,80,90]。
+        limit: 20, //每页默认显示的数量
         height: "full-98",
         cellMinWidth: 100,
         cols: Dept.initColumn()

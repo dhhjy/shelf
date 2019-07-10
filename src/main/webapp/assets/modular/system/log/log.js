@@ -57,7 +57,12 @@ layui.use(['layer', 'table', 'ax', 'laydate'], function () {
      * 日志详情
      */
     LoginLog.logDetail = function (param) {
-        window.location.href = Feng.ctxPath + '/log/detail/' + param.operationLogId;
+        var index = layer.open({
+            type: 2,
+            content: Feng.ctxPath + '/log/detail/' + param.operationLogId,
+            btn: ['关闭']
+        });
+        layer.full(index);
     };
 
     /**
@@ -90,6 +95,8 @@ layui.use(['layer', 'table', 'ax', 'laydate'], function () {
         elem: '#' + LoginLog.tableId,
         url: Feng.ctxPath + '/log/list',
         page: true,
+        limits: [20, 50, 100],  //每页条数的选择项，默认：[10,20,30,40,50,60,70,80,90]。
+        limit: 20, //每页默认显示的数量
         height: "full-98",
         cellMinWidth: 100,
         cols: LoginLog.initColumn()

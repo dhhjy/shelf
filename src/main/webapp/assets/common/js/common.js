@@ -102,11 +102,11 @@ layui.config({
 }).use(['admin'], function () {
     var $ = layui.jquery;
     var admin = layui.admin;
-
-    // 移除loading动画
-    setTimeout(function () {
-        admin.removeLoading();
-    }, window == top ? 600 : 100);
+    admin.removeLoading();
+    // // 移除loading动画
+    // setTimeout(function () {
+    //     admin.removeLoading();
+    // }, window == top ? 600 : 100);
 
     //注册session超时的操作
     $.ajaxSetup({

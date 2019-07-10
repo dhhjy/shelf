@@ -61,7 +61,22 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
      * 跳转到添加用户的界面
      */
     MgrUser.openAddUser = function () {
-        window.location.href = Feng.ctxPath + '/mgr/user_add';
+        admin.putTempData('formOk', false);
+        var index = layer.open({
+            type: 2,
+            title: '',
+            content: Feng.ctxPath + '/mgr/user_add',
+            btn: ['确定', '关闭'],
+            yes: function (index) {
+                //取子页面的btn
+                var btn = layer.getChildFrame('#userSubmitBtn', index);
+                btn.click();
+            },
+            end: function () {
+                admin.getTempData('formOk') && table.reload(MgrUser.tableId);
+            }
+        });
+        layer.full(index);
     };
 
     /**
@@ -82,7 +97,22 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
      * @param data 点击按钮时候的行数据
      */
     MgrUser.onEditUser = function (data) {
-        window.location.href = Feng.ctxPath + '/mgr/user_edit?userId=' + data.userId;
+        admin.putTempData('formOk', false);
+        var index = layer.open({
+            type: 2,
+            title: '',
+            content: Feng.ctxPath + '/mgr/user_edit?userId=' + data.userId,
+            btn: ['确定', '关闭'],
+            yes: function (index) {
+                //取子页面的btn
+                var btn = layer.getChildFrame('#userSubmitBtn', index);
+                btn.click();
+            },
+            end: function () {
+                admin.getTempData('formOk') && table.reload(MgrUser.tableId);
+            }
+        });
+        layer.full(index);
     };
 
     /**
@@ -120,7 +150,21 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
      * @param data 点击按钮时候的行数据
      */
     MgrUser.roleAssign = function (data) {
-        window.location.href = Feng.ctxPath + '/mgr/role_assign?userId=' + data.userId;
+        admin.putTempData('success', false);
+        layui.admin.popupRight({
+            type: 2,
+            title: '角色分配',
+            content: Feng.ctxPath + '/mgr/role_assign?userId=' + data.userId,
+            btn: ['分配'],
+            yes: function (index) {
+                //取子页面的btn
+                var btn = layer.getChildFrame('#saveButton', index);
+                btn.click();
+            },
+            end: function () {
+                admin.getTempData('success') && table.reload(MgrUser.tableId);
+            }
+        });
     };
 
     /**
@@ -184,6 +228,8 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
         elem: '#' + MgrUser.tableId,
         url: Feng.ctxPath + '/mgr/list',
         page: true,
+        limits: [20, 50, 100],  //每页条数的选择项，默认：[10,20,30,40,50,60,70,80,90]。
+        limit: 20, //每页默认显示的数量
         height: "full-98",
         cellMinWidth: 100,
         cols: MgrUser.initColumn()

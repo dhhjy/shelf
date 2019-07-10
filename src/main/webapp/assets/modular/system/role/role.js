@@ -43,7 +43,22 @@ layui.use(['layer', 'form', 'table', 'admin', 'ax'], function () {
      * 弹出添加角色
      */
     Role.openAddRole = function () {
-        window.location.href = Feng.ctxPath + '/role/role_add';
+        admin.putTempData('formOk', false);
+        var index = layer.open({
+            type: 2,
+            title: '',
+            content: Feng.ctxPath + '/role/role_add',
+            btn: ['确定', '关闭'],
+            yes: function (index) {
+                //取子页面的btn
+                var btn = layer.getChildFrame('#saveButton', index);
+                btn.click();
+            },
+            end: function () {
+                admin.getTempData('formOk') && table.reload(Role.tableId);
+            }
+        });
+        layer.full(index);
     };
 
     /**
@@ -64,7 +79,22 @@ layui.use(['layer', 'form', 'table', 'admin', 'ax'], function () {
      * @param data 点击按钮时候的行数据
      */
     Role.onEditRole = function (data) {
-        window.location.href = Feng.ctxPath + '/role/role_edit?roleId=' + data.roleId;
+        admin.putTempData('formOk', false);
+        var index = layer.open({
+            type: 2,
+            title: '',
+            content: Feng.ctxPath + '/role/role_edit?roleId=' + data.roleId,
+            btn: ['确定', '关闭'],
+            yes: function (index) {
+                //取子页面的btn
+                var btn = layer.getChildFrame('#saveButton', index);
+                btn.click();
+            },
+            end: function () {
+                admin.getTempData('formOk') && table.reload(Role.tableId);
+            }
+        });
+        layer.full(index);
     };
 
     /**
@@ -101,7 +131,21 @@ layui.use(['layer', 'form', 'table', 'admin', 'ax'], function () {
      * @param data 点击按钮时候的行数据
      */
     Role.roleAssign = function (data) {
-        window.location.href = Feng.ctxPath + '/role/role_assign/' + data.roleId;
+        admin.putTempData('success', false);
+        layui.admin.popupRight({
+            type: 2,
+            title: '菜单分配',
+            content: Feng.ctxPath + '/role/role_assign/' + data.roleId,
+            btn: ['分配'],
+            yes: function (index) {
+                //取子页面的btn
+                var btn = layer.getChildFrame('#saveButton', index);
+                btn.click();
+            },
+            end: function () {
+                admin.getTempData('success') && table.reload(Role.tableId);
+            }
+        });
     };
 
     // 渲染表格
@@ -109,6 +153,8 @@ layui.use(['layer', 'form', 'table', 'admin', 'ax'], function () {
         elem: '#' + Role.tableId,
         url: Feng.ctxPath + '/role/list',
         page: true,
+        limits: [20, 50, 100],  //每页条数的选择项，默认：[10,20,30,40,50,60,70,80,90]。
+        limit: 20, //每页默认显示的数量
         height: "full-98",
         cellMinWidth: 100,
         cols: Role.initColumn()

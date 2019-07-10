@@ -62,14 +62,21 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
      */
     Menu.openAddMenu = function () {
         admin.putTempData('formOk', false);
-        top.layui.admin.open({
+        var index = layer.open({
             type: 2,
-            title: '添加菜单',
+            title: '',
             content: Feng.ctxPath + '/menu/menu_add',
+            btn: ['确定', '关闭'],
+            yes: function (index) {
+                //取子页面的btn
+                var btn = layer.getChildFrame('#menuSubmitBtm', index);
+                btn.click();
+            },
             end: function () {
                 admin.getTempData('formOk') && Menu.initTable(Menu.tableId);
             }
         });
+        layer.full(index);
     };
 
     /**
@@ -91,14 +98,21 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
      */
     Menu.onEditMenu = function (data) {
         admin.putTempData('formOk', false);
-        top.layui.admin.open({
+        var index = layer.open({
             type: 2,
-            title: '编辑菜单',
+            title: '',
             content: Feng.ctxPath + '/menu/menu_edit?menuId=' + data.menuId,
+            btn: ['确定', '关闭'],
+            yes: function (index) {
+                //取子页面的btn
+                var btn = layer.getChildFrame('#menuSubmitBtm', index);
+                btn.click();
+            },
             end: function () {
                 admin.getTempData('formOk') && Menu.initTable(Menu.tableId);
             }
         });
+        layer.full(index);
     };
 
     /**
@@ -109,6 +123,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
     Menu.onDeleteMenu = function (data) {
         var operation = function () {
             var ajax = new $ax(Feng.ctxPath + "/menu/remove", function () {
+                layer.closeAll();
                 Feng.success("删除成功!");
                 Menu.condition.menuId = "";
                 Menu.initTable(Menu.tableId);
@@ -118,7 +133,16 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
             ajax.set("menuId", data.menuId);
             ajax.start();
         };
-        Feng.confirm("是否删除菜单" + data.name + "?", operation);
+
+        layui.admin.open({
+            type: 1,
+            title: "删除用户",
+            btn: ['确定', '取消'],
+            content: '<div style="padding: 50px; line-height: 22px; background-color: #f2f2f2; color: #000000;">是否删除菜单 ' + data.name + ' ?</div>',
+            yes: function () {
+                operation();
+            }
+        });
     };
 
     /**
