@@ -29,6 +29,7 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * shiro工具类
@@ -275,7 +276,7 @@ public class ShiroKit {
      * 获取当前用户的部门数据范围的集合
      */
     public static List<Long> getDeptDataScope() {
-        Long deptId = getUser().getDeptId();
+        Long deptId = Objects.requireNonNull(getUser()).getDeptId();
         List<Long> subDeptIds = ConstantFactory.me().getSubDeptId(deptId);
         subDeptIds.add(deptId);
         return subDeptIds;
@@ -285,10 +286,24 @@ public class ShiroKit {
      * 判断当前用户是否是超级管理员
      */
     public static boolean isAdmin() {
-        List<Long> roleList = ShiroKit.getUser().getRoleList();
+        List<Long> roleList = Objects.requireNonNull(ShiroKit.getUser()).getRoleList();
         for (Long integer : roleList) {
             String singleRoleTip = ConstantFactory.me().getSingleRoleTip(integer);
             if (singleRoleTip.equals(Const.ADMIN_NAME)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 判断当前用户是否总公司人员
+     */
+    public static boolean isDeptAdmin() {
+        List<Long> roleList = Objects.requireNonNull(ShiroKit.getUser()).getRoleList();
+        for (Long integer : roleList) {
+            String singleRoleTip = ConstantFactory.me().getSingleRoleTip(integer);
+            if (singleRoleTip.equals(Const.DEPT_ADMIN_NAME)) {
                 return true;
             }
         }
