@@ -1,0 +1,38 @@
+# Mysql数据库
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/xinwei?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
+    username: root
+    password: xinwei
+    filters: wall,mergeStat
+    data-source-name: gunsdb
+    max-wait: 10000
+    initial-size: 20
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    timeout: 50000 #redis操作的超时时间
+    password: xinwei.
+    lettuce:
+      shutdown-timeout: 100  # 关闭超时时间
+      pool:
+        #最大连接数：能够同时建立的“最大链接个数”
+        max-active: 500
+        #最大空闲数：空闲链接数大于maxIdle时，将进行回收
+        max-idle: 50
+        #最小空闲数：低于minIdle时，将创建新的链接
+        min-idle: 5
+        #最大等待时间：单位ms
+        max-wait: 50000
+
+# 多数据源情况的配置
+guns:
+  muti-datasource:
+    open: false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://120.78.204.6:3306/xinwei?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
+    username: root
+    password: xinwei
+    data-source-name: otherdb

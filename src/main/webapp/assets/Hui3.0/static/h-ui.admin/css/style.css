@@ -1,0 +1,5 @@
+@charset "utf-8";
+/* 你自己的样式 */
+/*鼠标悬停样式*/
+.table-hover tbody tr:hover td,
+.table-hover tbody tr:hover th{background-color:#BBFFBB}

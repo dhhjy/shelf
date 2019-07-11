@@ -33,7 +33,6 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
             {field: 'sex', sort: true, title: '性别'},
             {field: 'deptName', sort: true, title: '部门', minWidth: 150},
             {field: 'createTime', sort: true, title: '创建时间', minWidth: 150},
-            {field: 'status', sort: true, templet: '#statusTpl', title: '状态'},
             {align: 'center', toolbar: '#tableBar', title: '操作', minWidth: 280}
         ]];
     };
@@ -58,28 +57,6 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
     };
 
     /**
-     * 跳转到添加用户的界面
-     */
-    BSysUser.openAddUser = function () {
-        admin.putTempData('formOk', false);
-        var index = layer.open({
-            type: 2,
-            title: '',
-            content: Feng.ctxPath + '/mgr/user_add',
-            btn: ['确定', '关闭'],
-            yes: function (index) {
-                //取子页面的btn
-                var btn = layer.getChildFrame('#userSubmitBtn', index);
-                btn.click();
-            },
-            end: function () {
-                admin.getTempData('formOk') && table.reload(BSysUser.tableId);
-            }
-        });
-        layer.full(index);
-    };
-
-    /**
      * 导出excel按钮
      */
     BSysUser.exportExcel = function () {
@@ -96,23 +73,14 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
      *
      * @param data 点击按钮时候的行数据
      */
-    BSysUser.onEditUser = function (data) {
-        admin.putTempData('formOk', false);
-        var index = layer.open({
+    BSysUser.onDetailsUser = function (data) {
+        var index = parent.layer.open({
             type: 2,
-            title: '',
-            content: Feng.ctxPath + '/mgr/user_edit?userId=' + data.userId,
-            btn: ['确定', '关闭'],
-            yes: function (index) {
-                //取子页面的btn
-                var btn = layer.getChildFrame('#userSubmitBtn', index);
-                btn.click();
-            },
-            end: function () {
-                admin.getTempData('formOk') && table.reload(BSysUser.tableId);
-            }
+            title: '查看详情',
+            content: Feng.ctxPath + '/bSysUser/details?userId=' + data.userId,
+            btn: ['关闭']
         });
-        layer.full(index);
+        parent.layer.full(index);
     };
 
     /**
@@ -195,38 +163,10 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
         });
     };
 
-    /**
-     * 修改用户状态
-     *
-     * @param userId 用户id
-     * @param checked 是否选中（true,false），选中就是解锁用户，未选中就是锁定用户
-     */
-    BSysUser.changeUserStatus = function (userId, checked) {
-        if (checked) {
-            var ajax = new $ax(Feng.ctxPath + "/mgr/unfreeze", function (data) {
-                Feng.success("解除冻结成功!");
-            }, function (data) {
-                Feng.error("解除冻结失败!");
-                table.reload(BSysUser.tableId);
-            });
-            ajax.set("userId", userId);
-            ajax.start();
-        } else {
-            var ajax = new $ax(Feng.ctxPath + "/mgr/freeze", function (data) {
-                Feng.success("冻结成功!");
-            }, function (data) {
-                Feng.error("冻结失败!" + data.responseJSON.message + "!");
-                table.reload(BSysUser.tableId);
-            });
-            ajax.set("userId", userId);
-            ajax.start();
-        }
-    };
-
     // 渲染表格
     var tableResult = table.render({
         elem: '#' + BSysUser.tableId,
-        url: Feng.ctxPath + '/business/bSysUser/list',
+        url: Feng.ctxPath + '/bSysUser/list',
         page: true,
         limits: [20, 50, 100],  //每页条数的选择项，默认：[10,20,30,40,50,60,70,80,90]。
         limit: 20, //每页默认显示的数量
@@ -267,24 +207,15 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
         var data = obj.data;
         var layEvent = obj.event;
 
-        if (layEvent === 'edit') {
-            BSysUser.onEditUser(data);
+        if (layEvent === 'details') {
+            // 查看详情
+            BSysUser.onDetailsUser(data);
         } else if (layEvent === 'delete') {
+            // 删除用户
             BSysUser.onDeleteUser(data);
-        } else if (layEvent === 'roleAssign') {
-            BSysUser.roleAssign(data);
-        } else if (layEvent === 'reset') {
+        } else if (layEvent === 'resetInfo') {
+            // 重置信息
             BSysUser.resetPassword(data);
         }
     });
-
-    // 修改user状态
-    form.on('switch(status)', function (obj) {
-
-        var userId = obj.elem.value;
-        var checked = obj.elem.checked ? true : false;
-
-        BSysUser.changeUserStatus(userId, checked);
-    });
-
 });
