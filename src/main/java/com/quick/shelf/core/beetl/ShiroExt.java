@@ -53,7 +53,7 @@ public class ShiroExt {
     /**
      * 判断当前用户是否是超级管理员
      */
-    public static boolean isAdmin() {
+    public boolean isAdmin() {
         List<Long> roleList = Objects.requireNonNull(ShiroKit.getUser()).getRoleList();
         for (Long integer : roleList) {
             String singleRoleTip = ConstantFactory.me().getSingleRoleTip(integer);
@@ -67,7 +67,7 @@ public class ShiroExt {
     /**
      * 判断当前用户是否总公司人员
      */
-    public static boolean isDeptAdmin() {
+    public boolean isDeptAdmin() {
         List<Long> roleList = Objects.requireNonNull(ShiroKit.getUser()).getRoleList();
         for (Long integer : roleList) {
             String singleRoleTip = ConstantFactory.me().getSingleRoleTip(integer);

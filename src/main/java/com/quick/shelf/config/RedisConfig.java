@@ -22,21 +22,7 @@ import redis.clients.jedis.JedisPoolConfig;
 import javax.annotation.Resource;
 
 @Configuration
-public class RedisConfig extends CachingConfigurerSupport {
-
-    @Resource
-    private RedisProperties redisProperties;
-
-    @Bean
-    public JedisPool redisPoolFactory() {
-        JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
-        jedisPoolConfig.setMaxIdle(redisProperties.getJedis().getPool().getMaxIdle());
-        jedisPoolConfig.setMaxWaitMillis(redisProperties.getJedis().getPool().getMaxWait());
-        // 是否启用pool的jmx管理功能, 默认true
-        jedisPoolConfig.setJmxEnabled(true);
-        return new JedisPool(jedisPoolConfig, redisProperties.getHost(), redisProperties.getPort(),
-                redisProperties.getTimeout(), redisProperties.getPassword());
-    }
+public class RedisConfig{
 
     @Bean(name="redisTemplate")
     public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory factory) {
@@ -56,7 +42,8 @@ public class RedisConfig extends CachingConfigurerSupport {
         template.setValueSerializer(jackson2JsonRedisSerializer);
         //value hashmap序列化
         template.setHashValueSerializer(jackson2JsonRedisSerializer);
-
+        //redis事务
+        template.setEnableTransactionSupport(true);
         return template;
     }
 
