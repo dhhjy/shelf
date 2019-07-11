@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.quick.shelf.modular.business.mapper.BEmergencyContactInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.quick.shelf.modular.business.entity.BEmergencyContactInfo">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="relative_name1" property="relativeName1"/>
+        <result column="relative1" property="relative1"/>
+        <result column="relative_phone1" property="relativePhone1"/>
+        <result column="relative_name2" property="relativeName2"/>
+        <result column="relative2" property="relative2"/>
+        <result column="relative_phone2" property="relativePhone2"/>
+        <result column="relative_name3" property="relativeName3"/>
+        <result column="social" property="social"/>
+        <result column="social_phone" property="socialPhone"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id AS "id",
+        user_id AS "userId",
+        relative_name1 AS "relativeName1",
+        relative1 AS "relative1",
+        relative_phone1 AS "relativePhone1",
+        relative_name2 AS "relativeName2",
+        relative2 AS "relative2",
+        relative_phone2 AS "relativePhone2",
+        relative_name3 AS "relativeName3",
+        social AS "social",
+        social_phone AS "socialPhone",
+        create_time AS "createTime",
+        update_time AS "updateTime"
+    </sql>
+
+    <select id="selectBEmergencyContactInfoByUserId"
+            resultType="com.quick.shelf.modular.business.entity.BEmergencyContactInfo">
+        select
+        <include refid="Base_Column_List"/>
+        from b_emergency_contact_info where user_id = #{userId}
+    </select>
+</mapper>

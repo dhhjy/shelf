@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 /**
- * @ClassName BSysUserService
- * @Description TODO
- * @Author ken
- * @Date 2019/7/10 15:35
- * @Version 1.0
+ * 用户信息主表的业务层
+ * 主要操作 'b_sys_user' 表
+ *
+ * @author zcn
+ * @date 2019/07/11
  */
 @Service
 public class BSysUserService extends ServiceImpl<BSysUserMapper, BSysUser> {

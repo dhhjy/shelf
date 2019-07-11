@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.quick.shelf.modular.business.mapper.BBankCardInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.quick.shelf.modular.business.entity.BBankCardInfo">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="bank_type" property="bankType"/>
+        <result column="bank_name" property="bankName"/>
+        <result column="bank_area" property="bankArea"/>
+        <result column="phone_number" property="phoneNumber"/>
+        <result column="card_number" property="cardNumber"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="sign_status" property="signStatus"/>
+        <result column="no_agree" property="noAgree"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id AS "id",
+        user_id AS "userId",
+        bank_type AS "bankType",
+        bank_name AS "bankName",
+        bank_area AS "bankArea",
+        phone_number AS "phoneNumber",
+        card_number AS "cardNumber",
+        create_time AS "createTime",
+        update_time AS "updateTime",
+        sign_status AS "signStatus",
+        no_agree AS "noAgree"
+    </sql>
+
+    <select id="selectBBankCardInfosByUserId"
+            resultType="com.quick.shelf.modular.business.entity.BBankCardInfo">
+        select
+        <include refid="Base_Column_List"/>
+        from b_bank_card_info where user_id = #{userId}
+    </select>
+</mapper>

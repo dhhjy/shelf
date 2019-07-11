@@ -16,7 +16,6 @@ import java.util.Map;
  * @Date 2019/7/10 15:36
  * @Version 1.0
  */
-@Mapper
 public interface BSysUserMapper extends BaseMapper<BSysUser> {
 
     /**

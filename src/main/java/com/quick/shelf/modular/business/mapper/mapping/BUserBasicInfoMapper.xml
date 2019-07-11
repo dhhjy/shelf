@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.quick.shelf.modular.business.mapper.BUserBasicInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.quick.shelf.modular.business.entity.BUserBasicInfo">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="education" property="education"/>
+        <result column="job" property="job"/>
+        <result column="income" property="income"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="company" property="company"/>
+        <result column="company_Address" property="company_Address"/>
+        <result column="company_city" property="companyCity"/>
+        <result column="company_phone" property="companyPhone"/>
+        <result column="marriage" property="marriage"/>
+        <result column="children" property="children"/>
+        <result column="address" property="address"/>
+        <result column="address_city" property="addressCity"/>
+        <result column="phone_service_number" property="phoneServiceNumber"/>
+        <result column="mail" property="mail"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id AS "id",
+        user_id AS "userId",
+        education AS "education",
+        job AS "job",
+        income AS "income",
+        create_time AS "createTime",
+        update_time AS "updateTime",
+        company AS "company",
+        company_Address AS "company_Address",
+        company_city AS "companyCity",
+        company_phone AS "companyPhone",
+        marriage AS "marriage",
+        children AS "children",
+        address AS "address",
+        address_city AS "addressCity",
+        phone_service_number AS "phoneServiceNumber",
+        mail AS "mail"
+    </sql>
+
+    <select id="selectBUserBasicInfoByUserId" resultType="com.quick.shelf.modular.business.entity.BUserBasicInfo">
+        select
+        <include refid="Base_Column_List"/>
+        from b_user_basic_info where user_id = #{userId}
+    </select>
+</mapper>
