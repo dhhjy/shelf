@@ -4,10 +4,14 @@ import cn.stylefeng.roses.core.datascope.DataScope;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.quick.shelf.core.common.page.LayuiPageFactory;
+import com.quick.shelf.modular.business.entity.BLocation;
 import com.quick.shelf.modular.business.entity.BSysUser;
 import com.quick.shelf.modular.business.mapper.BSysUserMapper;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,6 +24,9 @@ import java.util.Map;
 @Service
 public class BSysUserService extends ServiceImpl<BSysUserMapper, BSysUser> {
 
+    @Resource
+    private BLocationService bLocationService;
+
     /**
      * 根据条件查询用户列表
      *
@@ -30,4 +37,52 @@ public class BSysUserService extends ServiceImpl<BSysUserMapper, BSysUser> {
         Page page = LayuiPageFactory.defaultPage();
         return this.baseMapper.selectBSysUsers(page, dataScope, name, beginTime, endTime, deptId);
     }
+
+    /**
+     * 信息合并
+     */
+//    public List<BLocation> infoMerging(Integer userId) {
+//        // GPS地址
+//        List<BLocation> locations = this.bLocationService.selectBLocationByUserId(userId);
+//
+//        // 淘宝收货地址
+//        List<String> tbAddress = getTBAddress(userId);
+//
+//        if(null == tbAddress)
+//            tbAddress = new ArrayList<>();
+//
+//        // 身份证
+//        String idCardAddress = getIdCardAddress(userId);
+//
+//        for (Location locat : locations) {
+//            for (String str : tbAddress) {
+//                locat.setDescription(str);
+//                tbAddress.remove(str);
+//
+//                String locatStr = locat.getAddrStr();
+//
+//                if(null == idCardAddress )
+//                    break;
+//
+//                Map<String,String> map = addressResolution(str);
+//                String province = map.get("province"), city = map.get("city"), county = map.get("county");
+//
+//                if(null != province && idCardAddress.contains(province))
+//                {
+//                    if(null != city && idCardAddress.contains(city))
+//                    {
+//                        locat.setDeviceInfo("模糊匹配");
+//                        if(null != county && idCardAddress.contains(county))
+//                            locat.setDeviceInfo("精准匹配");
+//                    }else{
+//                        locat.setDeviceInfo("1");
+//                    }
+//                }else{
+//                    locat.setDeviceInfo("1");
+//                }
+//                break;
+//            }
+//        }
+//        return locations;
+//    }
 }

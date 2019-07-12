@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.quick.shelf.modular.business.mapper.BXinYanDataMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.quick.shelf.modular.business.entity.BXinYanData">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="data_type" property="dataTpe"/>
+        <result column="type" property="type"/>
+        <result column="type_text" property="typeText"/>
+        <result column="data_value" property="dataValue"/>
+        <result column="token" property="token"/>
+        <result column="remark" property="remark"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id AS "id",
+        user_id AS "userId",
+        data_type AS "dataTpe",
+        type AS "type",
+        type_text AS "typeText",
+        data_value AS "dataValue",
+        token AS "token",
+        remark AS "remark",
+        create_time AS "createTime"
+    </sql>
+
+
+    <select id="selectBXinYanDataByUserId" resultType="com.quick.shelf.modular.business.entity.BXinYanData">
+        select
+        <include refid="Base_Column_List"/>
+        from b_xinyan_data
+            where user_id = #{userId}
+                and type = #{type}
+        order by create_time desc
+        limit 0,1
+    </select>
+</mapper>

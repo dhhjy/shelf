@@ -1,28 +1,24 @@
 package com.quick.shelf.modular.business.controller;
 
-import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.datascope.DataScope;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import cn.stylefeng.roses.kernel.model.exception.ServiceException;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.quick.shelf.core.base.BaseController;
 import com.quick.shelf.core.common.annotion.Permission;
 import com.quick.shelf.core.common.exception.BizExceptionEnum;
 import com.quick.shelf.core.common.page.LayuiPageFactory;
 import com.quick.shelf.core.shiro.ShiroKit;
+import com.quick.shelf.core.response.ResponseData;
 import com.quick.shelf.modular.business.entity.*;
 import com.quick.shelf.modular.business.service.*;
 import com.quick.shelf.modular.business.warpper.BSysUserWrapper;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -60,6 +56,12 @@ public class BSysUserController extends BaseController {
 
     @Resource
     private BBankCardInfoService bBankCardInfoService;
+
+    @Resource
+    private BPictureService bPictureService;
+
+    @Resource
+    private BSysUserStatusService bSysUserStatusService;
 
     /**
      * 跳转到用户管理界面
@@ -150,14 +152,63 @@ public class BSysUserController extends BaseController {
          *  用户认证身份证信息 b_identity_info
          */
         BIdentityInfo bIdentityInfo = this.bIdentityInfoService.selectBIdentityInfoByUserId(userId);
-        model.addAttribute("bIdentityInfo",BSysUserWrapper.deSensitization(bIdentityInfo));
+        model.addAttribute("bIdentityInfo", BSysUserWrapper.deSensitization(bIdentityInfo));
 
         /**
          * 用户所关联的银行卡信息 b_bank_card_info
          * 一对多的关系
          */
         List<BBankCardInfo> bBankCardInfos = this.bBankCardInfoService.selectBBankCardInfosByUserId(userId);
-        model.addAttribute("bBankCardInfos",BSysUserWrapper.deSensitization(bBankCardInfos));
+        model.addAttribute("bBankCardInfos", BSysUserWrapper.deSensitization(bBankCardInfos));
+
+        /**
+         * 用户所关联的各类照片信息 b_picture
+         */
+        BPicture bPicture = this.bPictureService.selectBPictureByUserId(userId);
+        model.addAttribute("bPicture", bPicture);
+
+        /**
+         * 用户所关联的中状态信息 b_sys_user_status
+         */
+        BSysUserStatus bSysUserStatus = this.bSysUserStatusService.selectBSysUserStatusByUserId(userId);
+        model.addAttribute("bSysUserStatus", bSysUserStatus);
+
         return PREFIX + "user_details.html";
+    }
+
+    /**
+     * 重置用户认证信息
+     *
+     * @param type
+     * @param userId
+     * @return ResponseData
+     */
+    @ApiOperation(value = "重置用户认证信息", notes = "重置用户认证信息", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "用户主键ID", name = "userId", required = true, paramType = "Integer"),
+            @ApiImplicitParam(value = "重置用户认证信息的类型{" +
+                    "limuMobileReportStatus，identityStatus，userBasicStatus，bankInfoStatus，contactStatus，smsStatus}", name = "type", required = true, paramType = "String")
+    })
+    @RequestMapping(value = "/resetInfo/{userId}", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData resetInfo(@PathVariable Integer userId, String type) {
+        this.bSysUserStatusService.resetInfo(userId, type);
+        return SUCCESS_TIP;
+    }
+
+    /**
+     * 获取用户定位信息并且与收货地址身份证地址比对
+     *
+     * @return 返回gps定位对比页面
+     */
+    @ApiOperation(value = "获取用户定位信息并且与收货地址身份证地址比对", notes = "获取用户定位信息并且与收货地址身份证地址比对", httpMethod = "POST")
+    @ApiImplicitParam(value = "用户主键", name = "userId", required = true, dataType = "Integer")
+    @RequestMapping(value = "/getGpsCompare/{userId}", method = RequestMethod.POST)
+    public String getGpsCompare(@PathVariable Integer userId, Model model) {
+        // 获取GPS地址
+//        model.addAttribute("gps", this.bSysUserService.infoMerging(userId));
+        // 获取身份证地址
+//        model.addAttribute("idCardAddress", userAdminService.getIdCardAddress(userId));
+        return PREFIX + "/gpsCompare.html";
     }
 }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.quick.shelf.modular.business.mapper.BPictureMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.quick.shelf.modular.business.entity.BPicture">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="id_card_url" property="idCardUrl"/>
+        <result column="id_card_back_url" property="idCardBackUrl"/>
+        <result column="bank_card_url" property="bankCardUrl"/>
+        <result column="man_card_url" property="manCardUrl"/>
+        <result column="id_man_url" property="idManUrl"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id AS "id",
+        user_id AS "userId",
+        id_card_url AS "idCardUrl",
+        id_card_back_url AS "idCardBackUrl",
+        bank_card_url AS "bankCardUrl",
+        man_card_url AS "manCardUrl",
+        id_man_url AS "idManUrl",
+        create_time AS "createTime"
+    </sql>
+
+
+    <select id="selectBPictureByUserId" resultType="com.quick.shelf.modular.business.entity.BPicture">
+        select
+        <include refid="Base_Column_List"/>
+        from b_picture where user_id = #{userId}
+    </select>
+</mapper>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.quick.shelf.modular.business.mapper.BSysUserStatusMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.quick.shelf.modular.business.entity.BSysUserStatus">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="identity_status" property="identityStatus"/>
+        <result column="user_basic_status" property="userBasicStatus"/>
+        <result column="bank_info_status" property="bankInfoStatus"/>
+        <result column="contact_status" property="contactStatus"/>
+        <result column="sms_status" property="smsStatus"/>
+        <result column="device_info_status" property="deviceInfoStatus"/>
+        <result column="limu_mobile_report_status" property="limuMobileReportStatus"/>
+        <result column="limu_taobao_report_status" property="limuTaobaoReportStatus"/>
+        <result column="limu_lifang_upgrade_check_status" property="limuLifangUpgradeCheckStatus"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id AS "id",
+        user_id AS "userId",
+        identity_status AS "identityStatus",
+        user_basic_status AS "userBasicStatus",
+        bank_info_status AS "bankInfoStatus",
+        contact_status AS "contactStatus",
+        sms_status AS "smsStatus",
+        device_info_status AS "deviceInfoStatus",
+        limu_mobile_report_status AS "limuMobileReportStatus",
+        limu_taobao_report_status AS "limuTaobaoReportStatus",
+        limu_lifang_upgrade_check_status AS "limuLifangUpgradeCheckStatus",
+        create_time AS "createTime",
+        update_time AS "updateTime"
+    </sql>
+
+    <select id="selectBSysUserStatusByUserId" resultType="com.quick.shelf.modular.business.entity.BSysUserStatus">
+        select
+        <include refid="Base_Column_List"/>
+        from b_sys_user_status where user_id = #{userId}
+    </select>
+
+    <update id="updateByUserId" parameterType="com.quick.shelf.modular.business.entity.BSysUserStatus">
+        update b_sys_user_status
+        <trim prefix="set" suffixOverrides=",">
+            <if test="limuMobileReportStatus != null">
+                limu_mobile_report_status = #{limuMobileReportStatus},
+            </if>
+            <if test="identityStatus != null">
+                identity_status = #{identityStatus},
+            </if>
+            <if test="userBasicStatus != null">
+                user_basic_status = #{userBasicStatus},
+            </if>
+            <if test="bankInfoStatus != null">
+                bank_info_status = #{bankInfoStatus},
+            </if>
+            <if test="contactStatus != null">
+                contact_status = #{contactStatus},
+            </if>
+            <if test="smsStatus != null">
+                sms_status = #{smsStatus},
+            </if>
+        </trim>
+        where user_id = #{userId}
+    </update>
+</mapper>
