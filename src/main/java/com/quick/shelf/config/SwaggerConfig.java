@@ -11,6 +11,8 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger.web.UiConfiguration;
+import springfox.documentation.swagger.web.UiConfigurationBuilder;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
@@ -32,6 +34,12 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))                         //这里采用包含注解的方式来确定要显示的接口
                 //.apis(RequestHandlerSelectors.basePackage("cn.quick.shelf.modular.system.controller"))     //这里采用包扫描的方式来确定要显示的接口
                 .paths(PathSelectors.any())
+                .build();
+    }
+
+    @Bean
+    public UiConfiguration uiConfiguration() {
+        return UiConfigurationBuilder.builder().defaultModelsExpandDepth(0)
                 .build();
     }
 

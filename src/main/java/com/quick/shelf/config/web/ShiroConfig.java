@@ -71,11 +71,11 @@ public class ShiroConfig {
     @ConditionalOnProperty(prefix = "shelf", name = "spring-session-open", havingValue = "false")
     public DefaultWebSessionManager defaultWebSessionManager(CacheManager cacheShiroManager,RedisSessionDAO redisSessionDAO,  ShelfProperties shelfProperties) {
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-        sessionManager.setCacheManager(cacheShiroManager);
         sessionManager.setSessionValidationInterval(shelfProperties.getSessionValidationInterval() * 1000);
         sessionManager.setGlobalSessionTimeout(shelfProperties.getSessionInvalidateTime() * 1000);
         sessionManager.setDeleteInvalidSessions(true);
         sessionManager.setSessionDAO(redisSessionDAO);
+        sessionManager.setCacheManager(cacheShiroManager);
         sessionManager.setSessionValidationSchedulerEnabled(true);
         Cookie cookie = new SimpleCookie(ShiroHttpSession.DEFAULT_SESSION_ID_NAME);
         cookie.setName("shiroCookie");

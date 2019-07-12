@@ -25,7 +25,6 @@ import redis.clients.jedis.JedisPoolConfig;
 import javax.annotation.Resource;
 
 @Configuration
-@AutoConfigureAfter(RedisAutoConfiguration.class)
 public class RedisConfig{
 
     @Bean(name="redisTemplate")
