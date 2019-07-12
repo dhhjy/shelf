@@ -9,12 +9,14 @@ spring:
     data-source-name: gunsdb
     max-wait: 10000
     initial-size: 20
+  cache:
+    type: redis
   redis:
     database: 0
     host: 127.0.0.1
     port: 6379
-    timeout: 50000 #redis操作的超时时间
-    password: xinwei.
+    timeout: 5000 #redis操作的超时时间
+#    password: xinwei.
     lettuce:
       shutdown-timeout: 100  # 关闭超时时间
       pool:
@@ -25,7 +27,7 @@ spring:
         #最小空闲数：低于minIdle时，将创建新的链接
         min-idle: 5
         #最大等待时间：单位ms
-        max-wait: 50000
+        max-wait:  -1ms
 
 # 多数据源情况的配置
 guns:
