@@ -6,7 +6,7 @@
 
 <div class="layui-fluid">
     <div class="layui-row layui-col-space15">
-        @if(shiro.isAdmin() || shiro.isDeptAdmin()){
+        @if(shiro.hasPermission("/bSysUser/zTree")){
         <div class="layui-col-sm12 layui-col-md3 layui-col-lg2">
             <div class="layui-card">
                 <div class="layui-card-body mini-bar">

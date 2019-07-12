@@ -9,6 +9,7 @@
     <title>${systemName}</title>
     <link rel="stylesheet" href="${ctxPath}/assets/common/layui/css/layui.css"/>
 
+    <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/boostrap/bootstrap.3.3.7.min.css">
     <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/Hui3.0/css/mnoReport.css?v=201708101">
     <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/Hui3.0/lib/iconfont/iconfont.css">
 
@@ -232,7 +233,217 @@
         </div>
         <!--身份证信息-->
         @}
+
+        <!-- 银行卡 OR 照片 -->
+        <div class="items cross">
+            <table>
+                <caption class="middle">
+                    照片认证
+                </caption>
+                <tbody>
+                <tr>
+                    <td class="msg">姓名</td>
+                    <td>${bSysUser.name}</td>
+                </tr>
+                <tr>
+                    <td class="msg">手机号</td>
+                    <td>${bSysUser.phoneNumber}</td>
+                </tr>
+                <tr>
+                    <td class="msg">身份证号码</td>
+                    <td>${bIdentityInfo.identityNumber}</td>
+                </tr>
+                <tr>
+                    <td class="msg">身份证照片正面</td>
+                    <td>
+                        <div style="height:480px;width:640px; border: 1px solid #000;">
+                            <img style="max-height:100%;max-width:100%;" src="${bPicture.idCardUrl}"
+                                 onerror="this.src='${ctxPath}/assets/common/images/noImg.jpg'"/>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="msg">身份证照片背面</td>
+                    <td>
+                        <div style="height:480px;width:640px;  border: 1px solid #000;">
+                            <img style="max-height:100%;max-width:100%;" src="${bPicture.idCardBackUrl}"
+                                 onerror="this.src='${ctxPath}/assets/common/images/noImg.jpg'"/>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="msg">正面照</td>
+                    <td>
+                        <div style="height:480px;width:640px;  border: 1px solid #000;">
+                            <img style="max-height:100%;max-width:100%;" src="${bPicture.idManUrl}"
+                                 onerror="this.src='${ctxPath}/assets/common/images/noImg.jpg'"/>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="msg">银行卡正面</td>
+                    <td>
+                        <div style="height:480px;width:640px;  border: 1px solid #000;">
+                            <img style="max-height:100%;max-width:100%;" src="${bPicture.bankCardUrl}"
+                                 onerror="this.src='${ctxPath}/assets/common/images/noImg.jpg'"/>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="msg">手持身份证银行卡照片</td>
+                    <td>
+                        <div style="height:480px;width:640px;  border: 1px solid #000;">
+                            <img style="max-height:100%;max-width:100%;" src="${bPicture.manCardUrl}"
+                                 onerror="this.src='${ctxPath}/assets/common/images/noImg.jpg'"/>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 银行卡 OR 照片 -->
     </div>
+
+    <!--用户信息验证-->
+    <div class="info">
+        <h2 class="title">用户信息验证</h2>
+
+        <!--基础验证-->
+        <div class="items cross">
+            <table>
+                <caption class="middle">基础验证</caption>
+                <thead>
+                <tr>
+                    <td class="msg">描述</td>
+                    <td class="msg">手机</td>
+                    <td class="msg">身份证</td>
+                    <td class="msg">个人信息</td>
+                    <td class="msg">银行卡</td>
+                    <td class="msg">联系人验证</td>
+                    <td class="msg">短信验证</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="msg">状态</td>
+                    <td>
+                        <div id="limuMobileReportStatus_">
+                            @if(bSysUserStatus.limuMobileReportStatus == "1"){
+                            <span class="tag normal">已认证</span>
+                            @}else{
+                            <span class="tag danger">未认证</span>
+                            @}
+                        </div>
+                    </td>
+                    <td>
+                        <div id="identityStatus_">
+                            @if(bSysUserStatus.identityStatus == "1"){
+                            <span class="tag normal">已认证</span>
+                            @}else{
+                            <span class="tag danger">未认证</span>
+                            @}
+                        </div>
+                    </td>
+                    <td>
+                        <div id="userBasicStatus_">
+                            @if(bSysUserStatus.userBasicStatus == "1"){
+                            <span class="tag normal">已认证</span>
+                            @}else{
+                            <span class="tag danger">未认证</span>
+                            @}
+                        </div>
+                    </td>
+                    <td>
+                        <div id="bankInfoStatus_">
+                            @if(bSysUserStatus.bankInfoStatus == "1"){
+                            <span class="tag normal">已认证</span>
+                            @}else{
+                            <span class="tag danger">未认证</span>
+                            @}
+                        </div>
+                    </td>
+                    <td>
+                        <div id="contactStatus_">
+                            @if(bSysUserStatus.contactStatus == "1"){
+                            <span class="tag normal">已认证</span>
+                            @}else{
+                            <span class="tag danger">未认证</span>
+                            @}
+                        </div>
+                    </td>
+                    <td>
+                        <div id="smsStatus_">
+                            @if(bSysUserStatus.smsStatus == "1"){
+                            <span class="tag normal">已认证</span>
+                            @}else{
+                            <span class="tag danger">未认证</span>
+                            @}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="msg">操作</td>
+                    <td><a href="javascript:void(0);" id="limuMobileReportStatus"
+                           class="btn btn-danger">重置</a></td>
+                    <td><a href="javascript:void(0);" id="identityStatus"
+                           class="btn btn-danger">重置</a></td>
+                    <td><a href="javascript:void(0);" id="userBasicStatus"
+                           class="btn btn-danger">重置</a></td>
+                    <td><a href="javascript:void(0);" id="bankInfoStatus"
+                           class="btn btn-danger">重置</a></td>
+                    <td>
+                        <a href="javascript:void(0);" id="contactStatus"
+                           class="btn btn-danger">重置</a>
+                        <a href="javascript:void(0)"
+                           onclick="openUserContactInfo(${bSysUser.userId})"
+                           class="btn btn-primary btn-small">联系人</a>
+                    </td>
+                    <td>
+                        <a href="javascript:void(0);" id="smsStatus"
+                           class="btn btn-danger">重置</a>
+                        <a href="javascript:void(0)"
+                           onclick="openSmsInfo(${bSysUser.userId})"
+                           class="btn btn-primary btn-small">短信</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!--高级验证-->
+        <div class="items cross">
+            <table>
+                <caption class="middle">高级验证</caption>
+                <thead>
+                <tr>
+                    <td class="msg">编号</td>
+                    <td>${bSysUser.userId}</td>
+                    <td class="msg">姓名</td>
+                    <td>${bSysUser.name}</td>
+                    <td class="msg">手机号</td>
+                    <td>${bSysUser.phoneNumber}</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="msg">新颜</td>
+                    <td colspan="5">
+                        <a href='javascript:void(0);' id="openReDar"
+                           class='btn btn-primary'>全景雷达</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="msg">GPS定位</td>
+                    <td colspan="5">
+                        <a href='javascript:void(0);' id="openGPSCompare"
+                           class='btn btn-primary'>定位信息比对</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!--用户信息验证-->
 </div>
 
 @/* 加入contextPath属性和session超时的配置 */
@@ -253,5 +464,138 @@
 </script>
 <script type="text/javascript" src="${ctxPath}/assets/common/layui/layui.js"></script>
 <script type="text/javascript" src="${ctxPath}/assets/common/js/common.js"></script>
+<script>
+    layui.use(['layer', 'table', 'admin', 'ax'], function () {
+        var layer = layui.layer;
+        var $ = layui.$;
+        var table = layui.table;
+        var $ax = layui.ax;
+        var admin = layui.admin;
+
+        // 声明用户主键
+        var userId = "${bSysUser.userId}";
+
+        /**
+         * 重置认证信息
+         */
+        var resetInfo = function (type, msg) {
+            var eve = $("#" + type + "_");
+            var operation = function () {
+                var ajax = new $ax(Feng.ctxPath + "/bSysUser/resetInfo/" + userId, function () {
+                    layer.closeAll();
+                    Feng.info("重置成功!");
+                }, function (data) {
+                    Feng.error("重置失败!" + data.responseJSON.message + "!");
+                });
+                ajax.set("type", type);
+                ajax.start();
+                // 改变当前页面的认证状态
+                eve.empty();
+                eve.html('<span class="tag danger">未认证</span>');
+            };
+
+            layer.open({
+                type: 1,
+                title: "重置信息",
+                btn: ['确定', '取消'],
+                content: '<div style="padding: 50px; line-height: 22px; background-color: #f2f2f2; color: #000000;">是否重置用户' + msg + '?</div>',
+                yes: function () {
+                    operation();
+                }
+            });
+        };
+
+        /**
+         * 打开全景雷达
+         **/
+        var openReDarFun = function () {
+            // 手机认证状态 运营商认证状态
+            var phoneStatus = '${bSysUserStatus.limuMobileReportStatus}';
+            // 身份证
+            var identityStatus = '${bSysUserStatus.identityStatus}';
+
+            if (phoneStatus === '0') {
+                Feng.error("手机运营商报告未认证，无法查看全景雷达");
+                return false;
+            }
+
+            if (identityStatus === '0') {
+                Feng.error("身份证认证未认证，无法查看全景雷达");
+                return false;
+            }
+
+            var url = Feng.ctxPath + "/xinYan/getReDerData/" + userId;
+            parent.layer.open({
+                type: 2,
+                title: "全景雷达",
+                btn: ['关闭'],
+                shadeClose: true,
+                maxmin: true,
+                resize: true,
+                shade: 0.8,
+                area: ['100%', '100%'],
+                content: url
+            });
+        };
+
+
+        /**
+         * 打开定位信息比对
+         **/
+        var openGPSCompareFun = function () {
+            var url = Feng.ctxPath + "/bSysUser/getGpsCompare/" + userId;
+            parent.layer.open({
+                type: 2,
+                title: "定位比对",
+                shadeClose: true,
+                maxmin: true,
+                resize: true,
+                shade: 0.8,
+                area: ['100%', '100%'],
+                content: url
+            });
+        };
+
+        // 手机认证
+        $('#limuMobileReportStatus').click(function () {
+            resetInfo("limuMobileReportStatus", "手机认证信息");
+        });
+
+        // 身份认证
+        $('#identityStatus').click(function () {
+            return Feng.info("身份证信息不能重置");
+        });
+
+        // 个人信息
+        $('#userBasicStatus').click(function () {
+            resetInfo("userBasicStatus", "个人认证信息");
+        });
+
+        // 银行卡证信息
+        $('#bankInfoStatus').click(function () {
+            resetInfo("bankInfoStatus", "银行卡证信息");
+        });
+
+        // 联系人认证
+        $('#contactStatus').click(function () {
+            resetInfo("contactStatus", "联系人认证信息");
+        });
+
+        // 短信认证
+        $('#smsStatus').click(function () {
+            resetInfo("smsStatus", "手机认证信息");
+        });
+
+        // 新颜雷达
+        $('#openReDar').click(function () {
+            openReDarFun();
+        });
+
+        // GPS定位对比
+        $('#openGPSCompare').click(function () {
+            openGPSCompareFun();
+        });
+    })
+</script>
 </body>
 </html>
