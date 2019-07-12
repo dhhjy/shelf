@@ -51,34 +51,6 @@ public class ShiroExt {
     }
 
     /**
-     * 判断当前用户是否是超级管理员
-     */
-    public boolean isAdmin() {
-        List<Long> roleList = Objects.requireNonNull(ShiroKit.getUser()).getRoleList();
-        for (Long integer : roleList) {
-            String singleRoleTip = ConstantFactory.me().getSingleRoleTip(integer);
-            if (singleRoleTip.equals(Const.ADMIN_NAME)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * 判断当前用户是否总公司人员
-     */
-    public boolean isDeptAdmin() {
-        List<Long> roleList = Objects.requireNonNull(ShiroKit.getUser()).getRoleList();
-        for (Long integer : roleList) {
-            String singleRoleTip = ConstantFactory.me().getSingleRoleTip(integer);
-            if (singleRoleTip.equals(Const.DEPT_ADMIN_NAME)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * 验证当前用户是否属于该角色？,使用时与lacksRole 搭配使用
      *
      * @param roleName 角色名
