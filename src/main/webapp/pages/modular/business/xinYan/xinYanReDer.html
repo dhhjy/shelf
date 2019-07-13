@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="${ctxPath}/assets/expand/images/favicon.ico" rel="icon">
+    <title>${systemName}</title>
+    <link rel="stylesheet" href="${ctxPath}/assets/common/layui/css/layui.css"/>
+    <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/boostrap/bootstrap.3.3.7.min.css">
+    <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/Hui3.0/css/mnoReport.css?v=201708101">
+    <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/Hui3.0/lib/iconfont/iconfont.css">
+</head>
+<body>
+<!-- 头部信息 -->
+<header class="header">
+    <figure class="logo">
+        <span class="need_hidden">全景雷达报告</span>
+    </figure>
+    <p style="height: auto;text-align: center;">
+        <span class="need_hidden">
+            <span class="msg">账号：</span>
+                    ${bSysUser.userAccount}
+        </span>
+        <span class="need_hidden">
+            <span class="msg">用户名：</span>
+                    ${bSysUser.name}
+        </span>
+        <span class="need_hidden">
+            <span class="msg">手机号：</span>
+                    ${bSysUser.phoneNumber}
+         </span>
+    </p>
+</header>
+
+<div id="main">
+    <!--基本信息-->
+    <div class="info baseInfo">
+        @if(isNotEmpty(radarData)){
+        <h2 class="title">雷达详情</h2>
+        <!--雷达详情-->
+        <div class="items">
+            <table>
+                <thead>
+                <tr>
+                    <td class="msg" colspan="4" width="50%">描述</td>
+                    <td class="msg" colspan="4" width="50%">结果</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td colspan="4">申请准入分</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.apply_report_detail.apply_score)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.apply_report_detail.apply_score}分
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">申请准入置信度</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.apply_report_detail.apply_credibility)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.apply_report_detail.apply_credibility}%
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">查询机构数</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.apply_report_detail.query_org_count)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.apply_report_detail.query_org_count}家
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">查询消费金融类机构数</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.apply_report_detail.query_finance_count)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.apply_report_detail.query_finance_count}家
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">查询网络贷款类机构数</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.apply_report_detail.query_cash_count)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.apply_report_detail.query_cash_count}家
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">总查询次数</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.apply_report_detail.query_sum_count)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.apply_report_detail.query_sum_count}次
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">近1个月总查询笔数</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.apply_report_detail.latest_one_month)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.apply_report_detail.latest_one_month}笔
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">近3个月总查询笔数</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.apply_report_detail.latest_three_month)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.apply_report_detail.latest_three_month}笔
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">近6个月总查询笔数</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.apply_report_detail.latest_six_month)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.apply_report_detail.latest_six_month}笔
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">最近查询时间</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.apply_report_detail.latest_query_time)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.apply_report_detail.latest_query_time}
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--雷达详情-->
+
+        <h2 class="title">行为报告</h2>
+        <!--行为报告-->
+        <div class="items">
+            <table>
+                <thead>
+                <tr>
+                    <td class="msg" colspan="4" width="50%">描述</td>
+                    <td class="msg" colspan="4" width="50%">结果</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td colspan="4">贷款行为分</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.behavior_report_detail.loans_score)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.behavior_report_detail.loans_score}分
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">贷款行为置信度</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.behavior_report_detail.loans_credibility)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.behavior_report_detail.loans_credibility}%
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">贷款放款总订单数</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.behavior_report_detail.loans_count)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.behavior_report_detail.loans_count}单
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">贷款已结清订单数</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.behavior_report_detail.loans_settle_count)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.behavior_report_detail.loans_settle_count}单
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">贷款逾期订单数（M0+）</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.behavior_report_detail.loans_overdue_count)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.behavior_report_detail.loans_overdue_count}单
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">贷款机构数</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.behavior_report_detail.loans_org_count)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.behavior_report_detail.loans_org_count}个
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">消费金融类机构数</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.behavior_report_detail.consfin_org_count)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.behavior_report_detail.consfin_org_count}个
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">网络贷款类机构数</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.behavior_report_detail.loans_cash_count)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.behavior_report_detail.loans_cash_count}个
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">近1个月贷款笔数</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.behavior_report_detail.latest_one_month)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.behavior_report_detail.latest_one_month}笔
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">近3个月贷款笔数</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.behavior_report_detail.latest_three_month)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.behavior_report_detail.latest_three_month}笔
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">近6个月贷款笔数</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.behavior_report_detail.latest_six_month)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.behavior_report_detail.latest_six_month}笔
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">历史贷款机构成功扣款笔数</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.behavior_report_detail.history_suc_fee)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.behavior_report_detail.history_suc_fee}笔
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">历史贷款机构失败扣款笔数</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.behavior_report_detail.history_fail_fee)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.behavior_report_detail.history_fail_fee}笔
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">近1个月贷款机构成功扣款笔数</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.behavior_report_detail.latest_one_month_suc)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.behavior_report_detail.latest_one_month_suc}笔
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">近1个月贷款机构失败扣款笔数</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.behavior_report_detail.latest_one_month_fail)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.behavior_report_detail.latest_one_month_fail}笔
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">信用贷款时长</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.behavior_report_detail.loans_long_time)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.behavior_report_detail.loans_long_time}天
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">最近一次贷款时间</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.behavior_report_detail.loans_latest_time)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.behavior_report_detail.loans_latest_time}
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--行为报告-->
+
+        <h2 class="title">信用现状</h2>
+        <!--信用现状-->
+        <div class="items">
+            <table>
+                <thead>
+                <tr>
+                    <td class="msg" colspan="4" width="50%">描述</td>
+                    <td class="msg" colspan="4" width="50%">结果</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td colspan="4">网贷建议授信额度</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.current_report_detail.loans_credit_limit)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.current_report_detail.loans_credit_limit}元
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">网贷额度置信度</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.current_report_detail.loans_credibility)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.current_report_detail.loans_credibility}%
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">网络贷款类机构数</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.current_report_detail.loans_org_count)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.current_report_detail.loans_org_count}家
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">网络贷款类产品数</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.current_report_detail.loans_product_count)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.current_report_detail.loans_product_count}个
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">网络贷款机构最大授信额度</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.current_report_detail.loans_max_limit)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.current_report_detail.loans_max_limit}元
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">网络贷款机构平均授信额度</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.current_report_detail.loans_avg_limit)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.current_report_detail.loans_avg_limit}元
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">消金建议授信额度</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.current_report_detail.consfin_credit_limit)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.current_report_detail.consfin_credit_limit}元
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">消金额度置信度</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.current_report_detail.consfin_credibility)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.current_report_detail.consfin_credibility}%
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">消费金融类机构数</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.current_report_detail.consfin_org_count)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.current_report_detail.consfin_org_count}家
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">消费金融类产品数</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.current_report_detail.consfin_product_count)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.current_report_detail.consfin_product_count}个
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">消费金融类机构最大授信额度</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.current_report_detail.consfin_max_limit)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.current_report_detail.consfin_max_limit}元
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">消费金融类机构平均授信额度</td>
+                    <td colspan="4">
+                        @if(isNotEmpty(radarData.data.result_detail.current_report_detail.consfin_avg_limit)){
+                        <span class="tag normal">已认证</span>
+                        ${radarData.data.result_detail.current_report_detail.consfin_avg_limit}元
+                        @}else{
+                        <span class="tag danger">未认证</span>
+                        @}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--信用现状-->
+        @}else{
+        <h2 class="title" style="background:#595959;">无全景雷达报告</h2>
+        @}
+    </div>
+</div>
+
+@/* 加入contextPath属性和session超时的配置 */
+<script type="text/javascript">
+    var Feng = {
+        ctxPath: "",
+        addCtx: function (ctx) {
+            if (this.ctxPath === "") {
+                this.ctxPath = ctx;
+            }
+        }
+    };
+    Feng.addCtx("${ctxPath}");
+
+    document.oncontextmenu = function () {
+        return false;
+    }
+</script>
+<script type="text/javascript" src="${ctxPath}/assets/common/layui/layui.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/common/js/common.js"></script>
+<script>
+
+</script>
+</body>
+</html>
