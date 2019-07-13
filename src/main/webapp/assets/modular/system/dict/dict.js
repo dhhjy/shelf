@@ -1,8 +1,10 @@
-layui.use(['table', 'ax', 'treetable'], function () {
+layui.use(['layer', 'table', 'ax', 'treetable', 'admin'], function () {
+    var layer = layui.layer;
     var $ = layui.$;
     var table = layui.table;
     var $ax = layui.ax;
     var treetable = layui.treetable;
+    var admin = layui.admin;
 
     /**
      * 基础字典管理
@@ -49,7 +51,23 @@ layui.use(['table', 'ax', 'treetable'], function () {
      * 弹出添加对话框
      */
     Dict.openAddDlg = function () {
-        window.location.href = Feng.ctxPath + '/dict/add?dictTypeId=' + $("#dictTypeId").val();
+        admin.putTempData('formOk', false);
+        var index = layer.open({
+            type: 2,
+            title: '',
+            content: Feng.ctxPath + '/dict/add?dictTypeId=' + $("#dictTypeId").val(),
+            closeBtn: 0,
+            btn: ['确定', '关闭'],
+            yes: function (index) {
+                //取子页面的btn
+                var btn = layer.getChildFrame('#dictSubmitBtn', index);
+                btn.click();
+            },
+            end: function () {
+                admin.getTempData('formOk') && Dict.search();
+            }
+        });
+        layer.full(index);
     };
 
     /**
@@ -58,7 +76,23 @@ layui.use(['table', 'ax', 'treetable'], function () {
      * @param data 点击按钮时候的行数据
      */
     Dict.openEditDlg = function (data) {
-        window.location.href = Feng.ctxPath + '/dict/edit?dictId=' + data.dictId;
+        admin.putTempData('formOk', false);
+        var index = layer.open({
+            type: 2,
+            title: '',
+            content: Feng.ctxPath + '/dict/edit?dictId=' + data.dictId,
+            closeBtn: 0,
+            btn: ['确定', '关闭'],
+            yes: function (index) {
+                //取子页面的btn
+                var btn = layer.getChildFrame('#dictSubmitBtn', index);
+                btn.click();
+            },
+            end: function () {
+                admin.getTempData('formOk') && Dict.search();
+            }
+        });
+        layer.full(index);
     };
 
     /**
@@ -68,8 +102,9 @@ layui.use(['table', 'ax', 'treetable'], function () {
      */
     Dict.onDeleteItem = function (data) {
         var operation = function () {
-            var ajax = new $ax(Feng.ctxPath + "/dict/delete", function (data) {
-                Feng.success("删除成功!");
+            var ajax = new $ax(Feng.ctxPath + "/dict/delete", function () {
+                layer.closeAll();
+                Feng.info("删除成功!");
                 Dict.search();
             }, function (data) {
                 Feng.error("删除失败!" + data.responseJSON.message + "!");
@@ -77,7 +112,15 @@ layui.use(['table', 'ax', 'treetable'], function () {
             ajax.set("dictId", data.dictId);
             ajax.start();
         };
-        Feng.confirm("是否删除?", operation);
+        layui.admin.open({
+            type: 1,
+            title: "删除字典",
+            btn: ['确定', '取消'],
+            content: '<div style="padding: 50px; line-height: 22px; background-color: #f2f2f2; color: #000000;">是否确定删除字典 ' + data.name + ' ?</div>',
+            yes: function () {
+                operation();
+            }
+        });
     };
 
     /**

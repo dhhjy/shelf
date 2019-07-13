@@ -1,7 +1,9 @@
-layui.use(['table', 'ax'], function () {
+layui.use(['layer', 'table', 'ax', 'admin'], function () {
     var $ = layui.$;
     var table = layui.table;
     var $ax = layui.ax;
+    var admin = layui.admin;
+    var layer = layui.layer;
 
     /**
      * 字典类型表管理
@@ -69,7 +71,23 @@ layui.use(['table', 'ax'], function () {
      * 弹出添加对话框
      */
     DictType.openAddDlg = function () {
-        window.location.href = Feng.ctxPath + '/dictType/add';
+        admin.putTempData('formOk', false);
+        var index = layer.open({
+            type: 2,
+            title: '',
+            content: Feng.ctxPath + '/dictType/add',
+            closeBtn: 0,
+            btn: ['确定', '关闭'],
+            yes: function (index) {
+                //取子页面的btn
+                var btn = layer.getChildFrame('#dictTypeSubmitBtn', index);
+                btn.click();
+            },
+            end: function () {
+                admin.getTempData('formOk') && table.reload(DictType.tableId);
+            }
+        });
+        layer.full(index);
     };
 
     /**
@@ -78,7 +96,23 @@ layui.use(['table', 'ax'], function () {
      * @param data 点击按钮时候的行数据
      */
     DictType.openEditDlg = function (data) {
-        window.location.href = Feng.ctxPath + '/dictType/edit?dictTypeId=' + data.dictTypeId;
+        admin.putTempData('formOk', false);
+        var index = layer.open({
+            type: 2,
+            title: '',
+            content: Feng.ctxPath + '/dictType/edit?dictTypeId=' + data.dictTypeId,
+            closeBtn: 0,
+            btn: ['确定', '关闭'],
+            yes: function (index) {
+                //取子页面的btn
+                var btn = layer.getChildFrame('#dictTypeSubmitBtn', index);
+                btn.click();
+            },
+            end: function () {
+                admin.getTempData('formOk') && table.reload(DictType.tableId);
+            }
+        });
+        layer.full(index);
     };
 
     /**
@@ -89,7 +123,8 @@ layui.use(['table', 'ax'], function () {
     DictType.onDeleteItem = function (data) {
         var operation = function () {
             var ajax = new $ax(Feng.ctxPath + "/dictType/delete", function (data) {
-                Feng.success("删除成功!");
+                layer.closeAll();
+                Feng.info("删除成功!");
                 table.reload(DictType.tableId);
             }, function (data) {
                 Feng.error("删除失败!" + data.responseJSON.message + "!");
@@ -97,7 +132,15 @@ layui.use(['table', 'ax'], function () {
             ajax.set("dictTypeId", data.dictTypeId);
             ajax.start();
         };
-        Feng.confirm("是否删除?", operation);
+        layui.admin.open({
+            type: 1,
+            title: "删除字典",
+            btn: ['确定', '取消'],
+            content: '<div style="padding: 50px; line-height: 22px; background-color: #f2f2f2; color: #000000;">是否确定删除字典 ' + data.name + '?</div>',
+            yes: function () {
+                operation();
+            }
+        });
     };
 
     // 渲染表格

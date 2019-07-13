@@ -58,6 +58,7 @@ layui.use(['layer', 'table', 'admin', 'ax', 'ztree'], function () {
             type: 2,
             title: '',
             content: Feng.ctxPath + '/dept/dept_add',
+            closeBtn: 0,
             btn: ['确定', '关闭'],
             yes: function (index) {
                 //取子页面的btn
@@ -95,6 +96,7 @@ layui.use(['layer', 'table', 'admin', 'ax', 'ztree'], function () {
             type: 2,
             title: '',
             content: Feng.ctxPath + '/dept/dept_update?deptId=' + data.deptId,
+            closeBtn: 0,
             btn: ['确定', '关闭'],
             yes: function (index) {
                 //取子页面的btn

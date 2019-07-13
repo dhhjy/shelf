@@ -66,6 +66,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
             type: 2,
             title: '',
             content: Feng.ctxPath + '/menu/menu_add',
+            closeBtn: 0,
             btn: ['确定', '关闭'],
             yes: function (index) {
                 //取子页面的btn
@@ -102,6 +103,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
             type: 2,
             title: '',
             content: Feng.ctxPath + '/menu/menu_edit?menuId=' + data.menuId,
+            closeBtn: 0,
             btn: ['确定', '关闭'],
             yes: function (index) {
                 //取子页面的btn

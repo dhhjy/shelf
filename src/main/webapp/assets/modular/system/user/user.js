@@ -66,6 +66,7 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
             type: 2,
             title: '',
             content: Feng.ctxPath + '/mgr/user_add',
+            closeBtn: 0,
             btn: ['确定', '关闭'],
             yes: function (index) {
                 //取子页面的btn
@@ -102,6 +103,7 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
             type: 2,
             title: '',
             content: Feng.ctxPath + '/mgr/user_edit?userId=' + data.userId,
+            closeBtn: 0,
             btn: ['确定', '关闭'],
             yes: function (index) {
                 //取子页面的btn

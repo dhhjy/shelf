@@ -48,6 +48,7 @@ layui.use(['layer', 'form', 'table', 'admin', 'ax'], function () {
             type: 2,
             title: '',
             content: Feng.ctxPath + '/role/role_add',
+            closeBtn: 0,
             btn: ['确定', '关闭'],
             yes: function (index) {
                 //取子页面的btn
@@ -84,6 +85,7 @@ layui.use(['layer', 'form', 'table', 'admin', 'ax'], function () {
             type: 2,
             title: '',
             content: Feng.ctxPath + '/role/role_edit?roleId=' + data.roleId,
+            closeBtn: 0,
             btn: ['确定', '关闭'],
             yes: function (index) {
                 //取子页面的btn
