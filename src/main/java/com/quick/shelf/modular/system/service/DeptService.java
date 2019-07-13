@@ -4,22 +4,24 @@ import cn.stylefeng.roses.core.util.ToolUtil;
 import cn.stylefeng.roses.kernel.model.exception.ServiceException;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.quick.shelf.core.common.constant.cache.Cache;
 import com.quick.shelf.core.common.constant.cache.CacheKey;
 import com.quick.shelf.core.common.exception.BizExceptionEnum;
 import com.quick.shelf.core.common.node.TreeviewNode;
 import com.quick.shelf.core.common.node.ZTreeNode;
 import com.quick.shelf.core.common.page.LayuiPageFactory;
 import com.quick.shelf.core.shiro.ShiroKit;
-import com.quick.shelf.core.util.RedisUtil;
 import com.quick.shelf.modular.system.entity.Dept;
 import com.quick.shelf.modular.system.mapper.DeptMapper;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * <p>
@@ -35,9 +37,6 @@ public class DeptService extends ServiceImpl<DeptMapper, Dept> {
     @Resource
     private DeptMapper deptMapper;
 
-    @Resource
-    private RedisUtil redisUtil;
-
     /**
      * 新增部门
      *
@@ -45,6 +44,7 @@ public class DeptService extends ServiceImpl<DeptMapper, Dept> {
      * @Date 2018/12/23 5:00 PM
      */
     @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(value = Cache.CONSTANT, key = "'" + CacheKey.DEPT_TREE + "'")
     public void addDept(Dept dept) {
 
         if (ToolUtil.isOneEmpty(dept, dept.getSimpleName(), dept.getFullName(), dept.getPid(), dept.getDescription())) {
@@ -55,9 +55,6 @@ public class DeptService extends ServiceImpl<DeptMapper, Dept> {
         this.deptSetPids(dept);
 
         this.save(dept);
-
-        //新增部门时删除旧的缓存
-        redisUtil.del(CacheKey.DEPT_TREE_NAME);
     }
 
     /**
@@ -67,6 +64,10 @@ public class DeptService extends ServiceImpl<DeptMapper, Dept> {
      * @Date 2018/12/23 5:00 PM
      */
     @Transactional(rollbackFor = Exception.class)
+    @Caching(evict = {
+            @CacheEvict(value = Cache.CONSTANT, key = "'" + CacheKey.DEPT_TREE + "'"),
+            @CacheEvict(value = Cache.CONSTANT, key = "'" + CacheKey.DEPT_NAME + "'+#dept.deptId"),
+    })
     public void editDept(Dept dept) {
 
         if (ToolUtil.isOneEmpty(dept, dept.getDeptId(), dept.getSimpleName(), dept.getFullName(), dept.getPid(), dept.getDescription())) {
@@ -77,9 +78,6 @@ public class DeptService extends ServiceImpl<DeptMapper, Dept> {
         this.deptSetPids(dept);
 
         this.updateById(dept);
-
-        //修改部门同时删除旧的缓存
-        redisUtil.del(CacheKey.DEPT_TREE_NAME);
     }
 
     /**
@@ -89,6 +87,10 @@ public class DeptService extends ServiceImpl<DeptMapper, Dept> {
      * @Date 2018/12/23 5:16 PM
      */
     @Transactional
+    @Caching(evict = {
+        @CacheEvict(value = Cache.CONSTANT, key = "'" + CacheKey.DEPT_TREE + "'"),
+        @CacheEvict(value = Cache.CONSTANT, key = "'" + CacheKey.DEPT_NAME + "'+#deptId"),
+    })
     public void deleteDept(Long deptId) {
         Dept dept = deptMapper.selectById(deptId);
 
@@ -100,9 +102,6 @@ public class DeptService extends ServiceImpl<DeptMapper, Dept> {
         }
 
         this.removeById(dept.getDeptId());
-
-        //删除部门同时删除旧的缓存
-        redisUtil.del(CacheKey.DEPT_TREE_NAME);
     }
 
     /**
@@ -112,25 +111,10 @@ public class DeptService extends ServiceImpl<DeptMapper, Dept> {
      * @author zcn
      * @Date 2018/12/23 5:16 PM
      */
+    @Cacheable(value = Cache.CONSTANT, key = "'" + CacheKey.DEPT_TREE + "'")
     public List<ZTreeNode> tree() {
-        List<ZTreeNode> result;
         // 判断是否为超管或者总公司账户
-        if (ShiroKit.isAdmin()) {
-            result = (List<ZTreeNode>) redisUtil.get(CacheKey.DEPT_TREE_NAME);
-            if(null !=  result)
-            {
-                return result;
-            }
-            else
-            {
-                result = this.baseMapper.tree();
-                redisUtil.set(CacheKey.DEPT_TREE_NAME,result);
-                return result;
-            }
-        } else {
-            Long deptId = Objects.requireNonNull(ShiroKit.getUser()).getDeptId();
-            return this.baseMapper.treeByDeptId(deptId);
-        }
+        return this.baseMapper.tree();
     }
 
     /**

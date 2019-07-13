@@ -1,34 +1,23 @@
-/**
- * Copyright 2018-2020 quick & fengshuonan (https://gitee.com/stylefeng)
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.quick.shelf.modular.system.warpper;
 
 import com.quick.shelf.core.common.constant.factory.ConstantFactory;
+import com.quick.shelf.core.common.node.ZTreeNode;
+import com.quick.shelf.core.shiro.ShiroKit;
 import com.quick.shelf.core.util.DecimalUtil;
 import cn.stylefeng.roses.core.base.warpper.BaseControllerWrapper;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import cn.stylefeng.roses.kernel.model.page.PageResult;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 部门列表的包装
  *
- * @author fengshuonan
+ * @author zcn
  * @date 2017年4月25日 18:10:31
  */
 public class DeptWrapper extends BaseControllerWrapper {
@@ -57,6 +46,21 @@ public class DeptWrapper extends BaseControllerWrapper {
             map.put("pName", "--");
         } else {
             map.put("pName", ConstantFactory.me().getDeptName(pid));
+        }
+    }
+
+    /**
+     * 筛选当前单位的列表
+     */
+    public static void filtrateDept(List<ZTreeNode> zTree){
+        List<ZTreeNode> ztree = new ArrayList<>(zTree);
+        Long deptId = Objects.requireNonNull(ShiroKit.getUser()).getDeptId();
+        if(0 == deptId)
+            return;
+        for(ZTreeNode zt : ztree){
+            if(!zt.getId().equals(deptId) && !zt.getPId().equals(deptId)){
+                zTree.remove(zt);
+            }
         }
     }
 }

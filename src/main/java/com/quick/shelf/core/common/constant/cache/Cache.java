@@ -27,4 +27,9 @@ public interface Cache {
      * 常量缓存
      */
     String CONSTANT = "CONSTANT";
+
+    /**
+     * 常量缓存
+     */
+    String DEPT = "DEPT";
 }

@@ -5,6 +5,8 @@ import com.quick.shelf.modular.business.entity.BXinYanData;
 import com.quick.shelf.modular.business.mapper.BXinYanDataMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 /**
  * 用户关联的新颜征信业务层
  * 'b_xinyan_data'
@@ -29,4 +31,15 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
         return this.baseMapper.selectBXinYanDataByUserId(bXinYanData);
     }
 
+    /**
+     * 保存新颜原始数据（新颜只获取原始数据）
+     * @param bXinYanData
+     */
+    public void insert(BXinYanData bXinYanData) {
+        // 数据类型
+        bXinYanData.setDataType(0);
+        // 创建时间 一对多
+        bXinYanData.setCreateTime(new Date());
+        this.baseMapper.insert(bXinYanData);
+    }
 }

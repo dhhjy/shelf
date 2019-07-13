@@ -15,15 +15,9 @@
  */
 package com.quick.shelf.core.beetl;
 
-import com.quick.shelf.core.common.constant.Const;
-import com.quick.shelf.core.common.constant.factory.ConstantFactory;
-import com.quick.shelf.core.shiro.ShiroKit;
 import com.quick.shelf.core.shiro.ShiroUser;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
-
-import java.util.List;
-import java.util.Objects;
 
 public class ShiroExt {
     private static final String NAMES_DELIMETER = ",";

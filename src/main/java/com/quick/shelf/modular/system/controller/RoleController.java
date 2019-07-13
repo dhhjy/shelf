@@ -215,7 +215,7 @@ public class RoleController extends BaseController {
      */
     @RequestMapping("/setAuthority")
     @BussinessLog(value = "配置权限", key = "roleId,ids", dict = RoleDict.class)
-    @Permission(Const.ADMIN_NAME)
+    @Permission({Const.ADMIN_NAME, Const.COMPANY_ADMIN_NAME})
     @ResponseBody
     public ResponseData setAuthority(@RequestParam("roleId") Long roleId, @RequestParam("ids") String ids) {
         if (ToolUtil.isOneEmpty(roleId)) {
@@ -251,7 +251,7 @@ public class RoleController extends BaseController {
         User theUser = this.userService.getById(userId);
         String roleId = theUser.getRoleId();
         if (ToolUtil.isEmpty(roleId)) {
-            return this.roleService.roleTreeList();
+            return RoleWrapper.filtrateRole(this.roleService.roleTreeList());
         } else {
 
             String[] strArray = roleId.split(",");
@@ -262,7 +262,7 @@ public class RoleController extends BaseController {
                 longArray[i] = Long.valueOf(strArray[i]);
             }
 
-            return this.roleService.roleTreeListByRoleId(longArray);
+            return RoleWrapper.filtrateRole(this.roleService.roleTreeListByRoleId(longArray));
         }
     }
 

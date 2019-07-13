@@ -8,12 +8,15 @@ import com.quick.shelf.core.base.BaseController;
 import com.quick.shelf.core.common.annotion.Permission;
 import com.quick.shelf.core.common.exception.BizExceptionEnum;
 import com.quick.shelf.core.common.page.LayuiPageFactory;
-import com.quick.shelf.core.shiro.ShiroKit;
 import com.quick.shelf.core.response.ResponseData;
+import com.quick.shelf.core.shiro.ShiroKit;
 import com.quick.shelf.modular.business.entity.*;
 import com.quick.shelf.modular.business.service.*;
 import com.quick.shelf.modular.business.warpper.BSysUserWrapper;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -130,6 +133,9 @@ public class BSysUserController extends BaseController {
         if (ToolUtil.isEmpty(userId)) {
             throw new ServiceException(BizExceptionEnum.REQUEST_NULL);
         }
+
+        logger.info("用户主键 {} 获取用户的详细信息", userId);
+
         /**
          * 用户主表 b_sys_user
          */
@@ -205,6 +211,7 @@ public class BSysUserController extends BaseController {
     @ApiImplicitParam(value = "用户主键", name = "userId", required = true, dataType = "Integer")
     @RequestMapping(value = "/getGpsCompare/{userId}", method = RequestMethod.POST)
     public String getGpsCompare(@PathVariable Integer userId, Model model) {
+        logger.info("用户主键 {} 获取用户定位信息并且与收货地址身份证地址比对", userId);
         // 获取GPS地址
 //        model.addAttribute("gps", this.bSysUserService.infoMerging(userId));
         // 获取身份证地址

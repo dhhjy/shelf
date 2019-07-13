@@ -72,7 +72,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     public void editUser(UserDto user) {
         User oldUser = this.getById(user.getUserId());
 
-        if (ShiroKit.hasRole(Const.ADMIN_NAME)) {
+        if (ShiroKit.hasRole(Const.ADMIN_NAME) || ShiroKit.hasRole(Const.COMPANY_ADMIN_NAME)) {
             this.updateById(UserFactory.editUser(user, oldUser));
         } else {
             this.assertAuth(user.getUserId());
@@ -215,5 +215,4 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         ShiroUser lastUser = ShiroKit.getUser();
         BeanUtil.copyProperties(shiroUser, lastUser);
     }
-
 }

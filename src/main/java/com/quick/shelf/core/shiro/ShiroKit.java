@@ -303,7 +303,7 @@ public class ShiroKit {
         List<Long> roleList = Objects.requireNonNull(ShiroKit.getUser()).getRoleList();
         for (Long integer : roleList) {
             String singleRoleTip = ConstantFactory.me().getSingleRoleTip(integer);
-            if (singleRoleTip.equals(Const.DEPT_ADMIN_NAME)) {
+            if (singleRoleTip.equals(Const.COMPANY_ADMIN_NAME)) {
                 return true;
             }
         }

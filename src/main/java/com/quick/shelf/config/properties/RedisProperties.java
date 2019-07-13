@@ -127,7 +127,7 @@ public class RedisProperties {
 
     public static class Lettuce {
         private Duration shutdownTimeout = Duration.ofMillis(100L);
-        private org.springframework.boot.autoconfigure.data.redis.RedisProperties.Pool pool;
+        private Pool pool;
 
         public Lettuce() {
         }
@@ -140,11 +140,11 @@ public class RedisProperties {
             this.shutdownTimeout = shutdownTimeout;
         }
 
-        public org.springframework.boot.autoconfigure.data.redis.RedisProperties.Pool getPool() {
+        public Pool getPool() {
             return this.pool;
         }
 
-        public void setPool(org.springframework.boot.autoconfigure.data.redis.RedisProperties.Pool pool) {
+        public void setPool(Pool pool) {
             this.pool = pool;
         }
     }
@@ -216,7 +216,7 @@ public class RedisProperties {
         private int maxIdle = 8;
         private int minIdle = 0;
         private int maxActive = 8;
-        private Long maxWait = -1L;
+        private Duration maxWait = Duration.ofMillis(-1L);
 
         public Pool() {
         }
@@ -245,11 +245,11 @@ public class RedisProperties {
             this.maxActive = maxActive;
         }
 
-        public Long getMaxWait() {
+        public Duration getMaxWait() {
             return this.maxWait;
         }
 
-        public void setMaxWait(Long maxWait) {
+        public void setMaxWait(Duration maxWait) {
             this.maxWait = maxWait;
         }
     }

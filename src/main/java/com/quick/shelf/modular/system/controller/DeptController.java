@@ -1,6 +1,12 @@
 package com.quick.shelf.modular.system.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.stylefeng.roses.core.base.controller.BaseController;
+import cn.stylefeng.roses.core.reqres.response.ResponseData;
+import cn.stylefeng.roses.core.treebuild.DefaultTreeBuildFactory;
+import cn.stylefeng.roses.core.util.ToolUtil;
+import cn.stylefeng.roses.kernel.model.exception.RequestEmptyException;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.quick.shelf.core.common.annotion.BussinessLog;
 import com.quick.shelf.core.common.annotion.Permission;
 import com.quick.shelf.core.common.constant.dictmap.DeptDict;
@@ -9,19 +15,11 @@ import com.quick.shelf.core.common.node.TreeviewNode;
 import com.quick.shelf.core.common.node.ZTreeNode;
 import com.quick.shelf.core.common.page.LayuiPageFactory;
 import com.quick.shelf.core.log.LogObjectHolder;
-import com.quick.shelf.core.shiro.ShiroKit;
 import com.quick.shelf.modular.system.entity.Dept;
 import com.quick.shelf.modular.system.model.DeptDto;
 import com.quick.shelf.modular.system.service.DeptService;
 import com.quick.shelf.modular.system.warpper.DeptTreeWrapper;
 import com.quick.shelf.modular.system.warpper.DeptWrapper;
-import cn.stylefeng.roses.core.base.controller.BaseController;
-import cn.stylefeng.roses.core.reqres.response.ResponseData;
-import cn.stylefeng.roses.core.treebuild.DefaultTreeBuildFactory;
-import cn.stylefeng.roses.core.util.ToolUtil;
-import cn.stylefeng.roses.kernel.model.exception.RequestEmptyException;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +33,7 @@ import java.util.Map;
 /**
  * 部门控制器
  *
- * @author fengshuonan
+ * @author zcn
  * @Date 2017年2月17日20:27:22
  */
 @Controller
@@ -100,6 +98,8 @@ public class DeptController extends BaseController {
     @ResponseBody
     public List<ZTreeNode> tree() {
         List<ZTreeNode> tree = this.deptService.tree();
+        DeptWrapper.filtrateDept(tree);
+        assert tree != null;
         tree.add(ZTreeNode.createParent());
         return tree;
     }

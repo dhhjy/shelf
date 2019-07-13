@@ -29,12 +29,13 @@ public interface CacheKey {
     String DEPT_NAME = "dept_name_";
 
     /**
-     * 性别名称
+     * 部门树缓存
      */
-    String SEX_NAME = "sex_name_";
+    String DEPT_TREE = "dept_tree";
 
     /**
-     * 常用部门树缓存
+     * 角色树缓存
      */
-    String DEPT_TREE_NAME = "dept_tree";
+    String ROLE_TREE = "role_tree";
+
 }

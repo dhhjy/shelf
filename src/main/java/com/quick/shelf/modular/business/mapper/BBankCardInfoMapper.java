@@ -15,5 +15,14 @@ public interface BBankCardInfoMapper extends BaseMapper<BBankCardInfo> {
      * @param userId
      * @return List<BBankCardInfo>
      */
-    List<BBankCardInfo> selectBBankCardInfosByUserId(@Param("userId")Integer userId);
+    List<BBankCardInfo> selectBBankCardInfosByUserId(@Param("userId") Integer userId);
+
+    /**
+     * 根据用户主键id获取用户的最后绑定的一张银行卡
+     * 用户与银行卡的关系为一对多，次方法只会查询一张
+     *
+     * @param userId
+     * @return BBankCardInfo
+     */
+    BBankCardInfo getBBankCardInfosByUserId(@Param("userId") Integer userId);
 }

@@ -27,4 +27,15 @@ public class BBankCardInfoService extends ServiceImpl<BBankCardInfoMapper, BBank
     public List<BBankCardInfo> selectBBankCardInfosByUserId(Integer userId) {
         return this.baseMapper.selectBBankCardInfosByUserId(userId);
     }
+
+    /**
+     * 根据用户主键id获取用户的最后绑定的一张银行卡
+     * 用户与银行卡的关系为一对多，次方法只会查询一张
+     *
+     * @param userId
+     * @return BBankCardInfo
+     */
+    public BBankCardInfo getBBankCardInfosByUserId(Integer userId) {
+        return this.baseMapper.getBBankCardInfosByUserId(userId);
+    }
 }

@@ -38,4 +38,13 @@
         <include refid="Base_Column_List"/>
         from b_bank_card_info where user_id = #{userId}
     </select>
+
+    <select id="getBBankCardInfosByUserId"
+            resultType="com.quick.shelf.modular.business.entity.BBankCardInfo">
+        select
+        <include refid="Base_Column_List"/>
+        from b_bank_card_info where user_id = #{userId}
+        order by create_time desc
+        limit 0,1
+    </select>
 </mapper>

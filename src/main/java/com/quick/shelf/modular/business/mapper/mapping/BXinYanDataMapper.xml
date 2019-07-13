@@ -8,7 +8,7 @@
         <result column="user_id" property="userId"/>
         <result column="data_type" property="dataTpe"/>
         <result column="type" property="type"/>
-        <result column="type_text" property="typeText"/>
+        <result column="type_text" property="dataType"/>
         <result column="data_value" property="dataValue"/>
         <result column="token" property="token"/>
         <result column="remark" property="remark"/>
@@ -19,7 +19,7 @@
     <sql id="Base_Column_List">
         id AS "id",
         user_id AS "userId",
-        data_type AS "dataTpe",
+        data_type AS "dataType",
         type AS "type",
         type_text AS "typeText",
         data_value AS "dataValue",

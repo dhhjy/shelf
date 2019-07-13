@@ -48,9 +48,9 @@ public interface Const {
     String ADMIN_NAME = "administrator";
 
     /**
-     * 总公司管理人员
+     * 公司管理员角色的名字
      */
-    String DEPT_ADMIN_NAME = "companyAdministrator";
+    String COMPANY_ADMIN_NAME = "companyAdministrator";
 
     /**
      * 管理员id

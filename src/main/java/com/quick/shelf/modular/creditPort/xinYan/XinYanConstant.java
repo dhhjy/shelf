@@ -6,8 +6,13 @@ import com.quick.shelf.core.util.xinYanUtils.util.MD5Utils;
 import com.quick.shelf.core.util.xinYanUtils.util.SecurityUtil;
 import net.sf.json.JSONObject;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,6 +23,8 @@ import java.util.Map;
  * 新颜接口常量配置及常用方法
  */
 public class XinYanConstant {
+    public static final Logger logger = LoggerFactory.getLogger(XinYanConstant.class);
+
     // ApiUser
     private static final String ApiUser = "8150738569";
     // Access Key: 6613d600d19941a094753830bd6fc0af
@@ -196,24 +203,31 @@ public class XinYanConstant {
         Map<String, String> headers = new HashMap<>();
 
         // 私匙文件
-        File pfxfile = new File( XinYanConstant.PFX_PATH);
+        Resource resource = new ClassPathResource(XinYanConstant.PFX_PATH);
+        File pfxfile = null;
+        try {
+            pfxfile = resource.getFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assert pfxfile != null;
         if (!pfxfile.exists()) {
-            log("私钥文件不存在！");
+            logger.info("私钥文件不存在！");
             throw new RuntimeException("私钥文件不存在！");
         }
 
         String data_content = RsaCodingUtil.encryptByPriPfxFile(base64str, XinYanConstant.PFX_PATH, XinYanConstant.PRIVATE_KEY_PASSWORD);// 加密数据
-        log("====加密串:" + data_content);
+        logger.info("加密串:{}", data_content);
         Map<String, Object> params = new HashMap<>();
         params.put("member_id", XinYanConstant.ApiUser);
         params.put("terminal_id", XinYanConstant.TERMIANL_CODE);
         params.put("data_type", "json");
         params.put("data_content", data_content);
         String PostString = HttpUtils.doPostByForm(XinYanConstant.REDAR_URL, headers, params);
-        log("请求返回：" + PostString);
+        logger.info("请求返回:{}",  PostString);
 
         if (PostString.isEmpty()) {// 判断参数是否为空
-            log("=====返回数据为空");
+            logger.info("返回数据为空");
             throw new RuntimeException("返回数据为空");
         }else
         {
@@ -231,7 +245,7 @@ public class XinYanConstant {
      * @param bankcard_no   银行卡号
      * @return Base64Encode base64位编码后的字符串
      */
-    public static String assembleEncryptParams(String userId,String id_no, String id_name, String phone_no, String bankcard_no) throws UnsupportedEncodingException {
+    public static String assembleEncryptParams(String userId,String id_no, String id_name, String phone_no, String bankcard_no){
         Map<Object, Object> ArrayData = new HashMap<>();
         // 商户号
         ArrayData.put("member_id", XinYanConstant.ApiUser);
@@ -257,12 +271,14 @@ public class XinYanConstant {
         // 3.将JSON字符串进行转 BASE64 编码处理
         // 4.去掉转编码后的空格、换行符
         // 返回！！！
-        String base64str = SecurityUtil.Base64Encode(JSONObject.fromObject(ArrayData).toString());
+        String base64str = null;
+        try {
+            base64str = SecurityUtil.Base64Encode(JSONObject.fromObject(ArrayData).toString());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        assert base64str != null;
         base64str = base64str.replaceAll("\r\n", "");//重要 避免出现换行空格符
         return base64str;
-    }
-
-    public static void log(String msg) {
-        System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "\t: " + msg);
     }
 }

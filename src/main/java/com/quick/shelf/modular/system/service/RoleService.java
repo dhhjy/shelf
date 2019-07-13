@@ -2,24 +2,27 @@ package com.quick.shelf.modular.system.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.convert.Convert;
-import com.quick.shelf.core.common.constant.Const;
-import com.quick.shelf.core.common.constant.cache.Cache;
-import com.quick.shelf.core.common.constant.factory.ConstantFactory;
-import com.quick.shelf.core.common.exception.BizExceptionEnum;
-import com.quick.shelf.core.common.node.ZTreeNode;
-import com.quick.shelf.core.common.page.LayuiPageFactory;
-import com.quick.shelf.core.log.LogObjectHolder;
-import com.quick.shelf.core.util.CacheUtil;
-import com.quick.shelf.modular.system.entity.Relation;
-import com.quick.shelf.modular.system.entity.Role;
-import com.quick.shelf.modular.system.mapper.RelationMapper;
-import com.quick.shelf.modular.system.mapper.RoleMapper;
-import com.quick.shelf.modular.system.model.RoleDto;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import cn.stylefeng.roses.kernel.model.exception.RequestEmptyException;
 import cn.stylefeng.roses.kernel.model.exception.ServiceException;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.quick.shelf.core.common.constant.Const;
+import com.quick.shelf.core.common.constant.cache.Cache;
+import com.quick.shelf.core.common.constant.cache.CacheKey;
+import com.quick.shelf.core.common.constant.factory.ConstantFactory;
+import com.quick.shelf.core.common.exception.BizExceptionEnum;
+import com.quick.shelf.core.common.node.ZTreeNode;
+import com.quick.shelf.core.common.page.LayuiPageFactory;
+import com.quick.shelf.core.log.LogObjectHolder;
+import com.quick.shelf.modular.system.entity.Relation;
+import com.quick.shelf.modular.system.entity.Role;
+import com.quick.shelf.modular.system.mapper.RelationMapper;
+import com.quick.shelf.modular.system.mapper.RoleMapper;
+import com.quick.shelf.modular.system.model.RoleDto;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,6 +57,7 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
      * @Date 2018/12/23 6:40 PM
      */
     @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(value = Cache.CONSTANT, key = "'" + CacheKey.ROLE_TREE + "'")
     public void addRole(Role role) {
 
         if (ToolUtil.isOneEmpty(role, role.getName(), role.getPid(), role.getDescription())) {
@@ -72,6 +76,9 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
      * @Date 2018/12/23 6:40 PM
      */
     @Transactional(rollbackFor = Exception.class)
+    @Caching(evict = {
+            @CacheEvict(value = Cache.CONSTANT, key = "'" + CacheKey.ROLE_TREE + "'"),
+    })
     public void editRole(RoleDto roleDto) {
 
         if (ToolUtil.isOneEmpty(roleDto, roleDto.getName(), roleDto.getPid(), roleDto.getDescription())) {
@@ -115,6 +122,9 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
      * @Date 2017/5/5 22:24
      */
     @Transactional(rollbackFor = Exception.class)
+    @Caching(evict = {
+            @CacheEvict(value = Cache.CONSTANT, key = "'" + CacheKey.ROLE_TREE + "'"),
+    })
     public void delRoleById(Long roleId) {
 
         if (ToolUtil.isEmpty(roleId)) {
@@ -164,6 +174,7 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
      * @return
      * @date 2017年2月18日 上午10:32:04
      */
+    @Cacheable(value = Cache.CONSTANT, key = "'" + CacheKey.ROLE_TREE + "'")
     public List<ZTreeNode> roleTreeList() {
         return this.baseMapper.roleTreeList();
     }

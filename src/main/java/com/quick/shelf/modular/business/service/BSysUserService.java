@@ -4,14 +4,11 @@ import cn.stylefeng.roses.core.datascope.DataScope;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.quick.shelf.core.common.page.LayuiPageFactory;
-import com.quick.shelf.modular.business.entity.BLocation;
 import com.quick.shelf.modular.business.entity.BSysUser;
 import com.quick.shelf.modular.business.mapper.BSysUserMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,6 +33,16 @@ public class BSysUserService extends ServiceImpl<BSysUserMapper, BSysUser> {
     public Page<Map<String, Object>> selectBSysUsers(DataScope dataScope, String name, String beginTime, String endTime, Long deptId) {
         Page page = LayuiPageFactory.defaultPage();
         return this.baseMapper.selectBSysUsers(page, dataScope, name, beginTime, endTime, deptId);
+    }
+
+    /**
+     * 根据用户主键ID查询用户信息
+     *
+     * @author zcn
+     * @Date 2019/7/10 15:35
+     */
+    public BSysUser selectBSysUserByUserId(Integer userId) {
+        return this.baseMapper.selectById(userId);
     }
 
     /**

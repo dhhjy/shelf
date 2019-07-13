@@ -25,11 +25,11 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        user_id AS "userId", user_account AS "userAccount", salt AS "salt", name AS "name", sex AS "sex", phone_number AS "phoneNumber", role_id AS "roleId", dept_id AS "deptId", id_card AS "idCard", status AS "status", create_time AS "createTime", update_time AS "updateTime", update_user AS "updateUser", version AS "version"
+        user_id AS "userId", user_account AS "userAccount", salt AS "salt", name AS "name", sex AS "sex", phone_number AS "phoneNumber", role_id AS "roleId", dept_id AS "deptId", id_card AS "idCard", status AS "status", create_time AS "createTime", update_time AS "updateTime", update_user AS "updateUser"
     </sql>
 
     <sql id="Base_Column_List_With_Pwd">
-		 user_id AS "userId", user_account AS "userAccount", salt AS "salt", password AS "password", name AS "name", sex AS "sex", phone_number AS "phoneNumber", role_id AS "roleId", dept_id AS "deptId", id_card AS "idCard", status AS "status", create_time AS "createTime", update_time AS "updateTime", update_user AS "updateUser", version AS "version"
+		 user_id AS "userId", user_account AS "userAccount", salt AS "salt", password AS "password", name AS "name", sex AS "sex", phone_number AS "phoneNumber", role_id AS "roleId", dept_id AS "deptId", id_card AS "idCard", status AS "status", create_time AS "createTime", update_time AS "updateTime", update_user AS "updateUser"
 	</sql>
 
     <select id="selectBSysUsers" resultType="map">
@@ -38,8 +38,8 @@
         from b_sys_user
         where status != 'DELETED'
         <if test="name != null and name != ''">
-            and (phone like CONCAT('%',#{name},'%')
-            or account like CONCAT('%',#{name},'%')
+            and (phone_number like CONCAT('%',#{name},'%')
+            or user_account like CONCAT('%',#{name},'%')
             or name like CONCAT('%',#{name},'%'))
         </if>
         <if test="deptId != null and deptId != 0">
