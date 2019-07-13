@@ -79,7 +79,7 @@ public class LogAop {
         try {
             JSONArray arrParam = new JSONArray(Arrays.asList(params));
             if (arrParam.size() > 0)
-                msg = arrParam.get(0).toString();
+                msg = arrParam.toString();
             else
                 msg = "{}";
         } catch (JSONException e) {

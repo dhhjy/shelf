@@ -1,18 +1,25 @@
 package com.quick.shelf.modular.business.controller;
 
+import cn.stylefeng.roses.core.datascope.DataScope;
+import cn.stylefeng.roses.core.util.ToolUtil;
+import cn.stylefeng.roses.kernel.model.exception.ServiceException;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.quick.shelf.core.base.BaseController;
 import com.quick.shelf.core.common.annotion.BussinessLog;
-import com.quick.shelf.modular.business.entity.BBankCardInfo;
+import com.quick.shelf.core.common.exception.BizExceptionEnum;
+import com.quick.shelf.core.common.page.LayuiPageFactory;
+import com.quick.shelf.core.shiro.ShiroKit;
 import com.quick.shelf.modular.business.entity.BSysUser;
 import com.quick.shelf.modular.business.entity.BXinYanData;
-import com.quick.shelf.modular.business.service.BBankCardInfoService;
 import com.quick.shelf.modular.business.service.BSysUserService;
 import com.quick.shelf.modular.business.service.BXinYanDataService;
+import com.quick.shelf.modular.business.warpper.XinYanWrapper;
 import com.quick.shelf.modular.creditPort.xinYan.XinYanConstant;
 import com.quick.shelf.modular.creditPort.xinYan.XinYanConstantEnum;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,8 +27,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 /**
  * 新颜征信控制层
@@ -46,8 +56,52 @@ public class XinYanController extends BaseController {
     @Resource
     private BSysUserService bSysUserService;
 
-    @Resource
-    private BBankCardInfoService bBankCardInfoService;
+    /**
+     * 新颜征信报告页面跳转
+     * @return String
+     */
+    @RequestMapping(value = "/index")
+    public String index(){
+        return PREFIX + "/xinYan.html";
+    }
+
+    /**
+     * 获取新颜征信报告列表
+     */
+    @ApiOperation(value = "获取新颜征信报告列表",notes = "获取新颜征信报告列表",httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "姓名/账号/手机号", name = "name", dataType = "String"),
+            @ApiImplicitParam(value = "开始时间/结束时间", name = "timeLimit", dataType = "String"),
+            @ApiImplicitParam(value = "部门ID主键", name = "deptId", dataType = "String")
+    })
+    @RequestMapping(value = "/list")
+    @ResponseBody
+    public Object list(@RequestParam(required = false) String name,
+                       @RequestParam(required = false) String timeLimit,
+                       @RequestParam(required = false) Long deptId)
+    {
+
+        //拼接查询条件
+        String beginTime = "";
+        String endTime = "";
+
+        if (ToolUtil.isNotEmpty(timeLimit)) {
+            String[] split = timeLimit.split(" - ");
+            beginTime = split[0];
+            endTime = split[1];
+        }
+
+        if (ShiroKit.isAdmin()) {
+            Page<Map<String, Object>> xinYanDatas = bXinYanDataService.selectBXinYanDatas(null, name, beginTime, endTime, deptId);
+            Page wrapped = new XinYanWrapper(xinYanDatas).wrap();
+            return LayuiPageFactory.createPageInfo(wrapped);
+        } else {
+            DataScope dataScope = new DataScope(ShiroKit.getDeptDataScope());
+            Page<Map<String, Object>> xinYanDatas = bXinYanDataService.selectBXinYanDatas(dataScope, name, beginTime, endTime, deptId);
+            Page wrapped = new XinYanWrapper(xinYanDatas).wrap();
+            return LayuiPageFactory.createPageInfo(wrapped);
+        }
+    }
 
     /**
      * 新颜全景雷达报告获取，获取原始数据，
@@ -61,20 +115,16 @@ public class XinYanController extends BaseController {
     @BussinessLog(value = "获取全景雷达报告")
     @ApiOperation(value = "新颜全景雷达报告获取，获取原始数据", notes = "新颜全景雷达报告获取，获取原始数据", httpMethod = "GET")
     @ApiImplicitParam(value = "用户主键", name = "userId", required = true, dataType = "Integer")
-    @RequestMapping(value = "/getReDerData/{userId}")
+    @RequestMapping(value = "/getReDerData/{userId}", produces = "text/plain;charset=utf-8")
     public String getReDerData(@PathVariable Integer userId, Model model) {
         BSysUser bSysUser = this.bSysUserService.selectBSysUserByUserId(userId);
-        BBankCardInfo bBankCardInfo = this.bBankCardInfoService.getBBankCardInfosByUserId(userId);
-        String bankNumber = null;
-        if (null != bBankCardInfo)
-            bankNumber = bBankCardInfo.getCardNumber();
         logger.info("用户主键 {} 获取新颜雷达报告", userId);
         BXinYanData xinYanLd = this.bXinYanDataService.selectBXinYanDataByUserId(userId, XinYanConstantEnum.API_NAME_LD.getApiName());
         if (xinYanLd != null) {
             model.addAttribute("radarData", JSONObject.parseObject(xinYanLd.getDataValue()));
         } else if (bSysUser != null) {
             String base64Str = XinYanConstant.assembleEncryptParams(String.valueOf(userId), bSysUser.getIdCard(),
-                    bSysUser.getName(), bSysUser.getPhoneNumber(), bankNumber);
+                    bSysUser.getName(), bSysUser.getPhoneNumber(), null);
             String result = XinYanConstant.getRaDerResult(base64Str);
             JSONObject jsonResult = JSONObject.parseObject(result);
             if (jsonResult.getString("errorCode") == null) {
@@ -94,6 +144,8 @@ public class XinYanController extends BaseController {
                 }).start();
             }
             model.addAttribute("radarData", JSONObject.parse(result));
+        } else {
+            throw new ServiceException(BizExceptionEnum.USER_NOT_EXISTED);
         }
         model.addAttribute("bSysUser", bSysUser);
         return PREFIX + "xinYanReDer.html";

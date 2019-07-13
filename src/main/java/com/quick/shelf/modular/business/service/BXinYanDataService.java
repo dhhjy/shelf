@@ -1,11 +1,15 @@
 package com.quick.shelf.modular.business.service;
 
+import cn.stylefeng.roses.core.datascope.DataScope;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.quick.shelf.core.common.page.LayuiPageFactory;
 import com.quick.shelf.modular.business.entity.BXinYanData;
 import com.quick.shelf.modular.business.mapper.BXinYanDataMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * 用户关联的新颜征信业务层
@@ -33,6 +37,7 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
 
     /**
      * 保存新颜原始数据（新颜只获取原始数据）
+     *
      * @param bXinYanData
      */
     public void insert(BXinYanData bXinYanData) {
@@ -41,5 +46,19 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
         // 创建时间 一对多
         bXinYanData.setCreateTime(new Date());
         this.baseMapper.insert(bXinYanData);
+    }
+
+    /**
+     * 获取新颜报告列表
+     * @param dataScope
+     * @param name
+     * @param beginTime
+     * @param endTime
+     * @param deptId
+     * @return Page<Map<String, Object>>
+     */
+    public Page<Map<String, Object>> selectBXinYanDatas(DataScope dataScope, String name, String beginTime, String endTime, Long deptId) {
+        Page page = LayuiPageFactory.defaultPage();
+        return this.baseMapper.selectBXinYanDatas(page, dataScope, name, beginTime, endTime, deptId);
     }
 }

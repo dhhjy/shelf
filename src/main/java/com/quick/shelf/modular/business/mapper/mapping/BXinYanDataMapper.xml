@@ -28,13 +28,43 @@
         create_time AS "createTime"
     </sql>
 
+    <select id="selectBXinYanDatas" resultType="map">
+        SELECT
+        b_sys_user.user_id AS "id",
+        b_sys_user.name AS "name",
+        b_sys_user.`phone_number` AS "phoneNumber",
+        b_sys_user.`id_card` AS "idCard",
+        b_sys_user.`dept_id` AS "deptId",
+        b_xinyan_data.data_type AS "dataType",
+        GROUP_CONCAT(DISTINCT b_xinyan_data.type ORDER BY b_xinyan_data.type ASC) AS "type",
+        GROUP_CONCAT(DISTINCT b_xinyan_data.type_text ORDER BY b_xinyan_data.type_text ASC) AS "typeText",
+        b_xinyan_data.create_time AS "createTime"
+        FROM
+        b_sys_user,
+        b_xinyan_data
+        WHERE b_sys_user.status != 'DELETED'
+        AND b_xinyan_data.user_id = b_sys_user.user_id
+        <if test="name != null and name != ''">
+            and (b_sys_user.phone_number like CONCAT('%',#{name},'%')
+            or b_sys_user.name like CONCAT('%',#{name},'%'))
+        </if>
+        <if test="deptId != null and deptId != 0">
+            and (b_sys_user.dept_id = #{deptId} or b_sys_user.dept_id in ( select dept_id from sys_dept where pids like
+            CONCAT('%$[', #{deptId}, '$]%') escape '$' ))
+        </if>
+        <if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+            and (b_xinyan_data.create_time between CONCAT(#{beginTime},' 00:00:00') and CONCAT(#{endTime},' 23:59:59'))
+        </if>
+        GROUP BY b_sys_user.`user_id`
+        ORDER BY b_xinyan_data.create_time DESC
+    </select>
 
     <select id="selectBXinYanDataByUserId" resultType="com.quick.shelf.modular.business.entity.BXinYanData">
         select
         <include refid="Base_Column_List"/>
         from b_xinyan_data
-            where user_id = #{userId}
-                and type = #{type}
+        where user_id = #{userId}
+        and type = #{type}
         order by create_time desc
         limit 0,1
     </select>

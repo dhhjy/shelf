@@ -46,6 +46,14 @@ public class BSysUserService extends ServiceImpl<BSysUserMapper, BSysUser> {
     }
 
     /**
+     * 逻辑删除用户
+     *
+     * @param userId
+     */
+    public void delete(Integer userId) {
+        this.baseMapper.deleteBSysUserByUserId(userId);
+    }
+    /**
      * 信息合并
      */
 //    public List<BLocation> infoMerging(Integer userId) {

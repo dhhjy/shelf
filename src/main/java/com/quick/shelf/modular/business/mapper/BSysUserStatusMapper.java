@@ -14,5 +14,9 @@ public interface BSysUserStatusMapper extends BaseMapper<BSysUserStatus> {
      */
     BSysUserStatus selectBSysUserStatusByUserId(@Param("userId") Integer userId);
 
+    /**
+     * 更新用户的状态
+     * @param bSysUserStatus
+     */
     void updateByUserId(BSysUserStatus bSysUserStatus);
 }

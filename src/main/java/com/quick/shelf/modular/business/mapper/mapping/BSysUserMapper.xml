@@ -36,7 +36,7 @@
         select
         <include refid="Base_Column_List"/>
         from b_sys_user
-        where status != 'DELETED'
+        where status != 'DISABLE'
         <if test="name != null and name != ''">
             and (phone_number like CONCAT('%',#{name},'%')
             or user_account like CONCAT('%',#{name},'%')
@@ -50,4 +50,10 @@
         </if>
         order by create_time desc
     </select>
+
+    <update id="deleteBSysUserByUserId">
+        UPDATE B_SYS_USER
+            SET STATUS = 'DISABLE'
+                WHERE USER_ID = #{userId}
+    </update>
 </mapper>

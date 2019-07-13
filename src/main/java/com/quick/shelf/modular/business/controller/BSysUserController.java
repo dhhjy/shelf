@@ -5,6 +5,7 @@ import cn.stylefeng.roses.core.util.ToolUtil;
 import cn.stylefeng.roses.kernel.model.exception.ServiceException;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.quick.shelf.core.base.BaseController;
+import com.quick.shelf.core.common.annotion.BussinessLog;
 import com.quick.shelf.core.common.annotion.Permission;
 import com.quick.shelf.core.common.exception.BizExceptionEnum;
 import com.quick.shelf.core.common.page.LayuiPageFactory;
@@ -189,16 +190,49 @@ public class BSysUserController extends BaseController {
      * @param userId
      * @return ResponseData
      */
-    @ApiOperation(value = "重置用户认证信息", notes = "重置用户认证信息", httpMethod = "POST")
+    @BussinessLog(value = "重置用户认证信息",key = "userId")
+    @ApiOperation(value = "重置用户认证信息", notes = "重置用户认证信息", httpMethod = "PUT")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "用户主键ID", name = "userId", required = true, paramType = "Integer"),
             @ApiImplicitParam(value = "重置用户认证信息的类型{" +
                     "limuMobileReportStatus，identityStatus，userBasicStatus，bankInfoStatus，contactStatus，smsStatus}", name = "type", required = true, paramType = "String")
     })
-    @RequestMapping(value = "/resetInfo/{userId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/resetInfo/{userId}", method = RequestMethod.PUT)
     @ResponseBody
     public ResponseData resetInfo(@PathVariable Integer userId, String type) {
         this.bSysUserStatusService.resetInfo(userId, type);
+        return SUCCESS_TIP;
+    }
+
+    /**
+     * 逻辑删除用户
+     * 修改 status 状态为 DELETED
+     *
+     * @return
+     */
+    @BussinessLog(value = "删除客户信息")
+    @ApiOperation(value = "删除用户", notes = "删除用户", httpMethod = "DELETE")
+    @ApiImplicitParam(value = "用户主键", name = "userId", required = true, dataType = "Integer")
+    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+    @ResponseBody
+    public ResponseData delete(Integer userId) {
+        this.bSysUserService.delete(userId);
+        return SUCCESS_TIP;
+    }
+
+    /**
+     * 重置用户全部信息
+     * 修改 status 状态为 DELETED
+     *
+     * @return
+     */
+    @BussinessLog(value = "重置用户全部认证信息")
+    @ApiOperation(value = "重置用户全部认证信息", notes = "重置用户全部认证信息", httpMethod = "PUT")
+    @ApiImplicitParam(value = "用户主键", name = "userId", required = true, dataType = "Integer")
+    @RequestMapping(value = "/resetInfoAll", method = RequestMethod.PUT)
+    @ResponseBody
+    public ResponseData resetInfoAll(Integer userId) {
+        this.bSysUserStatusService.resetAllInfo(userId);
         return SUCCESS_TIP;
     }
 
