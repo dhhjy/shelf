@@ -69,7 +69,7 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
     };
 
     /**
-     * 点击编辑用户按钮时
+     * 点击查看详情
      *
      * @param data 点击按钮时候的行数据
      */
@@ -90,13 +90,14 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
      */
     BSysUser.onDeleteUser = function (data) {
         var operation = function () {
-            var ajax = new $ax(Feng.ctxPath + "/mgr/delete", function () {
+            var ajax = new $ax(Feng.ctxPath + "/bSysUser/delete", function () {
                 layer.closeAll();
                 table.reload(BSysUser.tableId);
                 Feng.success("删除成功!");
             }, function (data) {
                 Feng.error("删除失败!" + data.responseJSON.message + "!");
             });
+            ajax.type = "DELETE";
             ajax.set("userId", data.userId);
             ajax.start();
         };
@@ -105,7 +106,7 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
             type: 1,
             title: "删除用户",
             btn: ['确定', '取消'],
-            content: '<div style="padding: 50px; line-height: 22px; background-color: #f2f2f2; color: #000000;">是否确定删除用户 ' + data.account + ' ?</div>',
+            content: '<div style="padding: 50px; line-height: 22px; background-color: #f2f2f2; color: #000000;">是否确定删除客户 ' + data.name + ' ?</div>',
             yes: function () {
                 operation();
             }
@@ -113,41 +114,19 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
     };
 
     /**
-     * 分配角色
+     * 重置用户全部认证信息
      *
      * @param data 点击按钮时候的行数据
      */
-    BSysUser.roleAssign = function (data) {
-        admin.putTempData('success', false);
-        layui.admin.popupRight({
-            type: 2,
-            title: '角色分配',
-            content: Feng.ctxPath + '/mgr/role_assign?userId=' + data.userId,
-            btn: ['分配'],
-            yes: function (index) {
-                //取子页面的btn
-                var btn = layer.getChildFrame('#saveButton', index);
-                btn.click();
-            },
-            end: function () {
-                admin.getTempData('success') && table.reload(BSysUser.tableId);
-            }
-        });
-    };
-
-    /**
-     * 重置密码
-     *
-     * @param data 点击按钮时候的行数据
-     */
-    BSysUser.resetPassword = function (data) {
+    BSysUser.resetInfoAll = function (data) {
         var operation = function () {
-            var ajax = new $ax(Feng.ctxPath + "/mgr/reset", function (data) {
+            var ajax = new $ax(Feng.ctxPath + "/bSysUser/resetInfoAll", function (data) {
                 layer.closeAll();
-                Feng.success("重置密码成功!");
+                Feng.success("重置成功!");
             }, function (data) {
-                Feng.error("重置密码失败!");
+                Feng.error("重置失败!");
             });
+            ajax.type = "PUT";
             ajax.set("userId", data.userId);
             ajax.start();
         };
@@ -156,7 +135,7 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
             type: 1,
             title: "重置密码",
             btn: ['确定', '取消'],
-            content: '<div style="padding: 50px; line-height: 22px; background-color: #f2f2f2; color: #000000;">是否重置密码为111111?</div>',
+            content: '<div style="padding: 50px; line-height: 22px; background-color: #f2f2f2; color: #000000;">是否重置' + data.name + '的认证信息?</div>',
             yes: function () {
                 operation();
             }
@@ -215,7 +194,7 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
             BSysUser.onDeleteUser(data);
         } else if (layEvent === 'resetInfo') {
             // 重置信息
-            BSysUser.resetPassword(data);
+            BSysUser.resetInfoAll(data);
         }
     });
 });
