@@ -85,13 +85,17 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
     /**
      * 打开芝麻分
      */
-    xinYanTable.onTaoBaoWeb = function () {
-        var checkRows = table.checkStatus(xinYanTable.tableId);
-        if (checkRows.data.length === 0) {
-            Feng.error("请选择要导出的数据");
-        } else {
-            table.exportFile(tableResult.config.id, checkRows.data, 'xls');
-        }
+    xinYanTable.onTaoBaoWeb = function (data) {
+        var index = layer.open({
+            type: 2,
+            title: '芝麻分报告',
+            content: Feng.ctxPath + "/xinYan/getTaoBaoWebReport/" + data.id,
+            closeBtn: 0,
+            shadeClose: true,
+            resize: true,
+            btn: ['关闭']
+        });
+        layer.full(index);
     };
 
     // 渲染表格
