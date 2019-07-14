@@ -25,10 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Map;
@@ -58,17 +55,18 @@ public class XinYanController extends BaseController {
 
     /**
      * 新颜征信报告页面跳转
+     *
      * @return String
      */
     @RequestMapping(value = "/index")
-    public String index(){
+    public String index() {
         return PREFIX + "/xinYan.html";
     }
 
     /**
      * 获取新颜征信报告列表
      */
-    @ApiOperation(value = "获取新颜征信报告列表",notes = "获取新颜征信报告列表",httpMethod = "POST")
+    @ApiOperation(value = "获取新颜征信报告列表", notes = "获取新颜征信报告列表", httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "姓名/账号/手机号", name = "name", dataType = "String"),
             @ApiImplicitParam(value = "开始时间/结束时间", name = "timeLimit", dataType = "String"),
@@ -78,8 +76,7 @@ public class XinYanController extends BaseController {
     @ResponseBody
     public Object list(@RequestParam(required = false) String name,
                        @RequestParam(required = false) String timeLimit,
-                       @RequestParam(required = false) Long deptId)
-    {
+                       @RequestParam(required = false) Long deptId) {
 
         //拼接查询条件
         String beginTime = "";
@@ -149,5 +146,24 @@ public class XinYanController extends BaseController {
         }
         model.addAttribute("bSysUser", bSysUser);
         return PREFIX + "xinYanReDer.html";
+    }
+
+    /**
+     * 获取用户芝麻分数据（淘宝报告数据）
+     * 新颜淘宝数据主要使用在芝麻分上，所以，
+     * 前台页面的数据叫做芝麻分
+     *
+     * @return
+     */
+    @BussinessLog(value = "获取用户芝麻分报告（淘宝报告）")
+    @ApiOperation(value = "获取用户芝麻分报告", notes = "获取用户芝麻分报告", httpMethod = "GET")
+    @ApiImplicitParam(value = "用户主键", name = "userId", required = true, dataType = "Integer")
+    @RequestMapping(value = "/getTaoBaoWebReport/{userId}")
+    public String getTaoBaoWebReport(@PathVariable Integer userId, Model model) {
+        BSysUser bSysUser = this.bSysUserService.selectBSysUserByUserId(userId);
+        BXinYanData xinYanLd = this.bXinYanDataService.selectBXinYanDataByUserId(userId, XinYanConstantEnum.API_NAME_TB.getApiName());
+        model.addAttribute("taoBaoWeb",  JSONObject.parseObject(xinYanLd.getDataValue()));
+        model.addAttribute("bSysUser", bSysUser);
+        return PREFIX + "xinYanTaoBaoWeb.html";
     }
 }
