@@ -51,7 +51,7 @@ public class LoginLogController extends BaseController {
      * @Date 2018/12/23 5:51 PM
      */
     @RequestMapping("/list")
-    @Permission(Const.ADMIN_NAME)
+    @Permission
     @ResponseBody
     public Object list(@RequestParam(required = false) String beginTime,
                        @RequestParam(required = false) String endTime,

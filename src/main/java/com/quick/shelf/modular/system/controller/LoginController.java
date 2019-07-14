@@ -2,11 +2,11 @@ package com.quick.shelf.modular.system.controller;
 
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import com.quick.shelf.core.common.node.MenuNode;
+import com.quick.shelf.core.log.LogIp;
 import com.quick.shelf.core.log.LogManager;
 import com.quick.shelf.core.log.factory.LogTaskFactory;
 import com.quick.shelf.core.shiro.ShiroKit;
 import com.quick.shelf.core.shiro.ShiroUser;
-import com.quick.shelf.core.util.RealIPUtil;
 import com.quick.shelf.modular.system.service.UserService;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
@@ -98,7 +98,7 @@ public class LoginController extends BaseController {
 
         //登录成功，记录
         ShiroUser shiroUser = ShiroKit.getUserNotNull();
-        LogManager.me().executeLog(LogTaskFactory.loginLog(shiroUser.getId(), RealIPUtil.getRemoteHost(request)));
+        LogManager.me().executeLog(LogTaskFactory.loginLog(shiroUser.getId(), LogIp.getIpAddr(request)));
 //        LogManager.me().executeLog(LogTaskFactory.loginLog(shiroUser.getId(), getIp()));
 
         ShiroKit.getSession().setAttribute("sessionFlag", true);
@@ -114,7 +114,7 @@ public class LoginController extends BaseController {
      */
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logOut(HttpServletRequest request) {
-        LogManager.me().executeLog(LogTaskFactory.exitLog(ShiroKit.getUserNotNull().getId(), RealIPUtil.getRemoteHost(request)));
+        LogManager.me().executeLog(LogTaskFactory.exitLog(ShiroKit.getUserNotNull().getId(), LogIp.getIpAddr(request)));
         ShiroKit.getSubject().logout();
         deleteAllCookie();
         return REDIRECT + "/login";

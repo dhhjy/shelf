@@ -1,5 +1,6 @@
 package com.quick.shelf.modular.system.service;
 
+import com.quick.shelf.core.shiro.ShiroKit;
 import com.quick.shelf.modular.system.entity.LoginLog;
 import com.quick.shelf.modular.system.mapper.LoginLogMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * <p>
@@ -27,6 +29,9 @@ public class LoginLogService extends ServiceImpl<LoginLogMapper, LoginLog> {
      * @Date 2018/12/23 5:53 PM
      */
     public List<Map<String, Object>> getLoginLogs(Page page, String beginTime, String endTime, String logName) {
-        return this.baseMapper.getLoginLogs(page, beginTime, endTime, logName);
+        Long userId = null;
+        if (!ShiroKit.isAdmin())
+            userId = Objects.requireNonNull(ShiroKit.getUser()).getDeptId();
+        return this.baseMapper.getLoginLogs(page, userId, beginTime, endTime, logName);
     }
 }

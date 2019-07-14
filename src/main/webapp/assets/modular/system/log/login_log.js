@@ -78,6 +78,8 @@ layui.use(['layer', 'table', 'ax', 'laydate'], function () {
         elem: '#' + LoginLog.tableId,
         url: Feng.ctxPath + '/loginLog/list',
         page: true,
+        limits: [20, 50, 100],  //每页条数的选择项，默认：[10,20,30,40,50,60,70,80,90]。
+        limit: 20, //每页默认显示的数量
         height: "full-98",
         cellMinWidth: 100,
         cols: LoginLog.initColumn()
