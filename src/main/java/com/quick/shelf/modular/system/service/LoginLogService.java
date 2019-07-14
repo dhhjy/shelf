@@ -31,7 +31,7 @@ public class LoginLogService extends ServiceImpl<LoginLogMapper, LoginLog> {
     public List<Map<String, Object>> getLoginLogs(Page page, String beginTime, String endTime, String logName) {
         Long userId = null;
         if (!ShiroKit.isAdmin())
-            userId = Objects.requireNonNull(ShiroKit.getUser()).getDeptId();
+            userId = Objects.requireNonNull(ShiroKit.getUser()).getId();
         return this.baseMapper.getLoginLogs(page, userId, beginTime, endTime, logName);
     }
 }
