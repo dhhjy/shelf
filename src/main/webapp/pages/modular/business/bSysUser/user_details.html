@@ -48,6 +48,7 @@
     <div class="info baseInfo">
         <h2 class="title">基本信息</h2>
 
+        @if(null != bUserBasicInfo){
         <!--用户基本信息-->
         <div class="items">
             <table>
@@ -103,6 +104,7 @@
             </table>
         </div>
         <!--用户基本信息-->
+        @}
 
         <!--紧急联系人信息-->
         @if(null != bEmergencyContactInfo){
@@ -233,6 +235,7 @@
         <!--身份证信息-->
         @}
 
+        @if(null != bIdentityInfo){
         <!-- 银行卡 OR 照片 -->
         <div class="items cross">
             <table>
@@ -301,6 +304,7 @@
             </table>
         </div>
         <!-- 银行卡 OR 照片 -->
+        @}
     </div>
 
     <!--用户信息验证-->
