@@ -1,29 +1,15 @@
-/**
- * Copyright 2018-2020 quick & fengshuonan (https://gitee.com/stylefeng)
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.quick.shelf.core.log.factory;
 
+import cn.stylefeng.roses.core.util.SpringContextHolder;
+import cn.stylefeng.roses.core.util.ToolUtil;
 import com.quick.shelf.core.common.constant.state.LogSucceed;
 import com.quick.shelf.core.common.constant.state.LogType;
 import com.quick.shelf.core.log.LogManager;
+import com.quick.shelf.modular.business.service.BPortCountService;
 import com.quick.shelf.modular.system.entity.LoginLog;
 import com.quick.shelf.modular.system.entity.OperationLog;
 import com.quick.shelf.modular.system.mapper.LoginLogMapper;
 import com.quick.shelf.modular.system.mapper.OperationLogMapper;
-import cn.stylefeng.roses.core.util.SpringContextHolder;
-import cn.stylefeng.roses.core.util.ToolUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,14 +18,15 @@ import java.util.TimerTask;
 /**
  * 日志操作任务创建工厂
  *
- * @author fengshuonan
- * @date 2016年12月6日 下午9:18:27
+ * @author zcn
+ * @date 2019/07/15
  */
 public class LogTaskFactory {
 
     private static Logger logger = LoggerFactory.getLogger(LogManager.class);
     private static LoginLogMapper loginLogMapper = SpringContextHolder.getBean(LoginLogMapper.class);
     private static OperationLogMapper operationLogMapper = SpringContextHolder.getBean(OperationLogMapper.class);
+    private static BPortCountService bPortCountService = SpringContextHolder.getBean(BPortCountService.class);
 
     public static TimerTask loginLog(final Long userId, final String ip) {
         return new TimerTask() {
@@ -110,6 +97,26 @@ public class LogTaskFactory {
                     operationLogMapper.insert(operationLog);
                 } catch (Exception e) {
                     logger.error("创建异常日志异常!", e);
+                }
+            }
+        };
+    }
+
+    /**
+     * 接口日志
+     *
+     * @param userId
+     * @param exception
+     * @return
+     */
+    public static TimerTask portLog(final long deptId, final String type, final String typeName, final String msg) {
+        return new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    bPortCountService.insertBPortCount(deptId, type, typeName, msg);
+                } catch (Exception e) {
+                    logger.error("创建接口统计异常!", e);
                 }
             }
         };

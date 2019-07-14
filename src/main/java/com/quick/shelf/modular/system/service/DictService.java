@@ -273,4 +273,13 @@ public class DictService extends ServiceImpl<DictMapper, Dict> {
             }
         }
     }
+
+    /**
+     * 根据字典 的 name 查询
+     * @param name
+     * @return
+     */
+    public Dict selectDictByName(String name){
+        return this.baseMapper.selectDictByName(name);
+    }
 }

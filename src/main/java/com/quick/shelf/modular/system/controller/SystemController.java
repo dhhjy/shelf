@@ -17,6 +17,7 @@ import com.quick.shelf.core.common.exception.BizExceptionEnum;
 import com.quick.shelf.core.log.LogObjectHolder;
 import com.quick.shelf.core.shiro.ShiroKit;
 import com.quick.shelf.core.shiro.ShiroUser;
+import com.quick.shelf.modular.business.service.BPortCountService;
 import com.quick.shelf.modular.system.entity.FileInfo;
 import com.quick.shelf.modular.system.entity.Notice;
 import com.quick.shelf.modular.system.entity.User;
@@ -64,6 +65,9 @@ public class SystemController extends BaseController {
     @Resource
     private ShelfProperties shelfProperties;
 
+    @Resource
+    private BPortCountService bPortCountService;
+
     /**
      * 控制台页面
      *
@@ -71,7 +75,9 @@ public class SystemController extends BaseController {
      * @Date 2018/12/24 22:43
      */
     @RequestMapping("/console")
-    public String console() {
+    public String console(Model model) {
+        model.addAttribute("portNum",this.bPortCountService.getPortNum());
+        model.addAttribute("portChart",this.bPortCountService.getPortChart());
         return "/modular/frame/console.html";
     }
 

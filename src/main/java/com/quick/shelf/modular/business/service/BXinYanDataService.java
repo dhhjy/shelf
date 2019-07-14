@@ -3,9 +3,12 @@ package com.quick.shelf.modular.business.service;
 import cn.stylefeng.roses.core.datascope.DataScope;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.quick.shelf.core.common.annotion.PortLog;
 import com.quick.shelf.core.common.page.LayuiPageFactory;
+import com.quick.shelf.modular.business.entity.BSysUser;
 import com.quick.shelf.modular.business.entity.BXinYanData;
 import com.quick.shelf.modular.business.mapper.BXinYanDataMapper;
+import com.quick.shelf.modular.creditPort.xinYan.XinYanConstant;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -50,15 +53,30 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
 
     /**
      * 获取新颜报告列表
+     *
      * @param dataScope
      * @param name
      * @param beginTime
      * @param endTime
      * @param deptId
-     * @return Page<Map<String, Object>>
+     * @return Page<Map < String, Object>>
      */
     public Page<Map<String, Object>> selectBXinYanDatas(DataScope dataScope, String name, String beginTime, String endTime, Long deptId) {
         Page page = LayuiPageFactory.defaultPage();
         return this.baseMapper.selectBXinYanDatas(page, dataScope, name, beginTime, endTime, deptId);
+    }
+
+    /**
+     * 通过接口获取新颜雷达报告
+     *
+     * @param userId
+     * @param bSysUser
+     * @return
+     */
+    @PortLog(type = "radar", typeName = "全景雷达")
+    public String getReDerData(Integer userId, BSysUser bSysUser) {
+        String base64Str = XinYanConstant.assembleEncryptParams(String.valueOf(userId), bSysUser.getIdCard(),
+                bSysUser.getName(), bSysUser.getPhoneNumber(), null);
+        return XinYanConstant.getRaDerResult(base64Str);
     }
 }

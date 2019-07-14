@@ -120,9 +120,7 @@ public class XinYanController extends BaseController {
         if (xinYanLd != null) {
             model.addAttribute("radarData", JSONObject.parseObject(xinYanLd.getDataValue()));
         } else if (bSysUser != null) {
-            String base64Str = XinYanConstant.assembleEncryptParams(String.valueOf(userId), bSysUser.getIdCard(),
-                    bSysUser.getName(), bSysUser.getPhoneNumber(), null);
-            String result = XinYanConstant.getRaDerResult(base64Str);
+            String result = this.bXinYanDataService.getReDerData(userId, bSysUser);
             JSONObject jsonResult = JSONObject.parseObject(result);
             if (jsonResult.getString("errorCode") == null) {
                 // 异步新增
@@ -162,7 +160,7 @@ public class XinYanController extends BaseController {
     public String getTaoBaoWebReport(@PathVariable Integer userId, Model model) {
         BSysUser bSysUser = this.bSysUserService.selectBSysUserByUserId(userId);
         BXinYanData xinYanLd = this.bXinYanDataService.selectBXinYanDataByUserId(userId, XinYanConstantEnum.API_NAME_TB.getApiName());
-        model.addAttribute("taoBaoWeb",  JSONObject.parseObject(xinYanLd.getDataValue()));
+        model.addAttribute("taoBaoWeb", JSONObject.parseObject(xinYanLd.getDataValue()));
         model.addAttribute("bSysUser", bSysUser);
         return PREFIX + "xinYanTaoBaoWeb.html";
     }

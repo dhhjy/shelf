@@ -38,4 +38,8 @@ public interface CacheKey {
      */
     String ROLE_TREE = "role_tree";
 
+    /**
+     * 接口统计
+     */
+    String PORT_NAME = "port_count_";
 }

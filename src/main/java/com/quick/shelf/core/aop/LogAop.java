@@ -2,7 +2,9 @@ package com.quick.shelf.core.aop;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import com.quick.shelf.core.common.annotion.BussinessLog;
+import com.quick.shelf.core.common.annotion.PortLog;
 import com.quick.shelf.core.log.LogManager;
 import com.quick.shelf.core.log.factory.LogTaskFactory;
 import com.quick.shelf.core.shiro.ShiroKit;
@@ -36,6 +38,10 @@ public class LogAop {
     public void cutService() {
     }
 
+    @Pointcut(value = "@annotation(com.quick.shelf.core.common.annotion.PortLog)")
+    public void cutPort() {
+    }
+
     @Around("cutService()")
     public Object recordSysLog(ProceedingJoinPoint point) throws Throwable {
 
@@ -44,6 +50,21 @@ public class LogAop {
 
         try {
             handle(point);
+        } catch (Exception e) {
+            log.error("日志记录出错!", e);
+        }
+
+        return result;
+    }
+
+    @Around("cutPort()")
+    public Object recordPortLog(ProceedingJoinPoint point) throws Throwable {
+
+        //先执行业务
+        Object result = point.proceed();
+
+        try {
+            handlePort(point, result);
         } catch (Exception e) {
             log.error("日志记录出错!", e);
         }
@@ -112,5 +133,30 @@ public class LogAop {
 //        }
 
         LogManager.me().executeLog(LogTaskFactory.bussinessLog(user.getId(), bussinessName, className, methodName, msg));
+    }
+
+    private void handlePort(ProceedingJoinPoint point, Object result) throws Throwable {
+        //获取拦截的方法名
+        Signature sig = point.getSignature();
+        MethodSignature msig;
+        if (!(sig instanceof MethodSignature)) {
+            throw new IllegalArgumentException("该注解只能用于方法");
+        }
+        msig = (MethodSignature) sig;
+        Method currentMethod = point.getTarget().getClass().getMethod(msig.getName(), msig.getParameterTypes());
+
+        //如果当前用户未登录，不做日志
+        ShiroUser user = ShiroKit.getUser();
+        if (null == user) {
+            return;
+        }
+        //获取操作名称
+        PortLog annotation = currentMethod.getAnnotation(PortLog.class);
+        String type = annotation.type();
+        String typeName = annotation.typeName();
+        JSONObject re = JSONObject.parseObject(result.toString());
+        if (!re.getBoolean("success"))
+            return;
+        LogManager.me().executeLog(LogTaskFactory.portLog(user.getDeptId(), type, typeName, result.toString()));
     }
 }

@@ -45,4 +45,10 @@
         </if>
     </select>
 
+    <select id="selectDictByName" resultType="com.quick.shelf.modular.system.entity.Dict">
+        SELECT
+        <include refid="Base_Column_List"></include>
+        FROM SYS_DICT WHERE name = #{name}
+    </select>
+
 </mapper>
