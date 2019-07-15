@@ -68,4 +68,11 @@
         order by create_time desc
         limit 0,1
     </select>
+
+    <select id="selectJsonDataNum" resultType="Integer">
+        SELECT COUNT(ID)
+        FROM b_xinyan_data
+        WHERE USER_ID = #{userId}
+        AND type = #{type}
+    </select>
 </mapper>

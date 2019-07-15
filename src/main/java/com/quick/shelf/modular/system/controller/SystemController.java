@@ -3,7 +3,6 @@ package com.quick.shelf.modular.system.controller;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.collection.CollectionUtil;
-import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import cn.stylefeng.roses.kernel.model.exception.RequestEmptyException;
@@ -11,6 +10,7 @@ import cn.stylefeng.roses.kernel.model.exception.ServiceException;
 import cn.stylefeng.roses.kernel.model.exception.enums.CoreExceptionEnum;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.quick.shelf.config.properties.ShelfProperties;
+import com.quick.shelf.core.base.BaseController;
 import com.quick.shelf.core.common.constant.DefaultAvatar;
 import com.quick.shelf.core.common.constant.factory.ConstantFactory;
 import com.quick.shelf.core.common.exception.BizExceptionEnum;
@@ -78,6 +78,7 @@ public class SystemController extends BaseController {
     public String console(Model model) {
         model.addAttribute("portNum",this.bPortCountService.getPortNum());
         model.addAttribute("portChart",this.bPortCountService.getPortChart());
+        model.addAttribute("ssss",getProjectPath());
         return "/modular/frame/console.html";
     }
 

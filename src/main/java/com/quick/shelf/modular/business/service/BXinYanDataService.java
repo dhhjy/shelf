@@ -1,17 +1,29 @@
 package com.quick.shelf.modular.business.service;
 
 import cn.stylefeng.roses.core.datascope.DataScope;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.quick.shelf.core.common.annotion.PortLog;
 import com.quick.shelf.core.common.page.LayuiPageFactory;
+import com.quick.shelf.core.util.HttpClientUtil;
 import com.quick.shelf.modular.business.entity.BSysUser;
+import com.quick.shelf.modular.business.entity.BSysUserStatus;
 import com.quick.shelf.modular.business.entity.BXinYanData;
 import com.quick.shelf.modular.business.mapper.BXinYanDataMapper;
+import com.quick.shelf.modular.constant.BusinessConst;
 import com.quick.shelf.modular.creditPort.xinYan.XinYanConstant;
+import com.quick.shelf.modular.creditPort.xinYan.XinYanConstantEnum;
+import com.quick.shelf.modular.creditPort.xinYan.XinYanDataResult;
+import com.quick.shelf.modular.creditPort.xinYan.XinYanResult;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,6 +32,9 @@ import java.util.Map;
  */
 @Service
 public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanData> {
+
+    @Resource
+    private BSysUserStatusService bSysUserStatusService;
 
     /**
      * 根据用户的主键，以及征信报告类型去获取对应的新颜征信数据
@@ -78,5 +93,66 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
         String base64Str = XinYanConstant.assembleEncryptParams(String.valueOf(userId), bSysUser.getIdCard(),
                 bSysUser.getName(), bSysUser.getPhoneNumber(), null);
         return XinYanConstant.getRaDerResult(base64Str);
+    }
+
+    /**
+     * 组装用户数据，进行新增操作
+     */
+    public void assemble(Integer userId, String result, String apiName) {
+        new Thread(() -> {
+            BXinYanData xinYanData = new BXinYanData();
+            // userId
+            xinYanData.setUserId(userId);
+            // 设置服务类型
+            xinYanData.setType(apiName);
+            // 设置服务类型中文名称
+            xinYanData.setTypeText(XinYanConstant.compareApiName(apiName));
+            // 添加数据
+            xinYanData.setDataValue(result);
+            insert(xinYanData);
+
+            // 同时更新用户关联的状态表，更新雷达认证状态字段
+            BSysUserStatus bSysUserStatus = new BSysUserStatus();
+            bSysUserStatus.setUserId(userId);
+
+            if (XinYanConstantEnum.API_NAME_LD.getApiName().equals(apiName))
+                bSysUserStatus.setXinyanRadarStatus(BusinessConst.OK);
+            if (XinYanConstantEnum.API_NAME_TB.getApiName().equals(apiName))
+                bSysUserStatus.setXinyanZmfStatus(BusinessConst.OK);
+
+            this.bSysUserStatusService.updateByUserId(bSysUserStatus);
+        }).start();
+    }
+
+    /**
+     * 保存新颜征信的原始数据
+     * 当请求
+     *
+     * @param xyResult 新颜回调结果对象
+     */
+    @PortLog(type = "taobaoweb", typeName = "淘宝")
+    public void xinYanTBJsonData(XinYanResult xyResult) {
+        // 通过 token 凭证 查询报告
+        List<NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("apiUser", XinYanConstant.ApiUser));
+        params.add(new BasicNameValuePair("apiEnc", XinYanConstant.getJsonDataApiEnc()));
+        params.add(new BasicNameValuePair("token", xyResult.getToken()));
+        // 获取新颜查询的结果
+        String result = HttpClientUtil.doGet(XinYanConstant.DEVELOP_URL + XinYanConstant.JSON_DATA_PATH, params);
+        XinYanDataResult xinYanDataResult = JSONObject.parseObject(result, XinYanDataResult.class);
+
+        // 添加
+        assert xinYanDataResult != null;
+        assemble(Integer.valueOf(xyResult.getTaskId().split("_")[0]), String.valueOf(xinYanDataResult.getDetail()), xyResult.getApiName());
+    }
+
+    /**
+     * 根据用户主键 和 类型 查询相同类型的报告有多少份，返回份数
+     * @param userId
+     * @param type
+     * @return String
+     */
+    public String selectJsonDataNum(Integer userId,String type){
+        return this.baseMapper.selectJsonDataNum(userId,type).toString();
     }
 }

@@ -26,19 +26,19 @@ public class XinYanConstant {
     public static final Logger logger = LoggerFactory.getLogger(XinYanConstant.class);
 
     // ApiUser
-    private static final String ApiUser = "8150738569";
+    public static final String ApiUser = "8150738569";
     // Access Key: 6613d600d19941a094753830bd6fc0af
-    private static final String AccessKey = "R8077DZ2dmrDp90z";
+    public static final String AccessKey = "R8077DZ2dmrDp90z";
     // H5页面导航标签隐藏
     private static final String Hide_Label = "headVisible=0";
     // 生产环境
-    private static final String DEVELOP_URL = "https://qz.xinyan.com";
+    public static final String DEVELOP_URL = "https://qz.xinyan.com";
     // H5超链接地址说明
     // https://qz.xinyan.com/h5/{apiUser}/{apiEnc}/{timeMark}/{apiName}/{taskId}? {jumpUrl}=
     // 请求H5页面
     private static final String H5 = "/h5/";
     // 请求原始数据地址
-    private static final String JSON_DATA_PATH = "/api/user/data?";
+    public static final String JSON_DATA_PATH = "/api/user/data";
     // 请求报告数据地址
     private static final String REPORT_PATH = "/api/user/data/report/json?";
     // 请求页面数据
@@ -91,7 +91,7 @@ public class XinYanConstant {
      * @return
      */
     public static String getJsonDataUrl(String token) {
-        return XinYanConstant.DEVELOP_URL + XinYanConstant.JSON_DATA_PATH + "apiUser=" + XinYanConstant.ApiUser
+        return XinYanConstant.DEVELOP_URL + XinYanConstant.JSON_DATA_PATH + "?apiUser=" + XinYanConstant.ApiUser
                 + "&apiEnc=" + XinYanConstant.getJsonDataApiEnc() + "&token=" + token;
     }
 
@@ -148,7 +148,7 @@ public class XinYanConstant {
      *
      * @return String MD5参数加密后的字符串
      */
-    private static String getJsonDataApiEnc() {
+    public static String getJsonDataApiEnc() {
         return DigestUtils.md5Hex(XinYanConstant.ApiUser + XinYanConstant.AccessKey);
     }
 

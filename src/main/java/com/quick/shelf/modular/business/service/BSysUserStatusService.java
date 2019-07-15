@@ -51,6 +51,7 @@ public class BSysUserStatusService extends ServiceImpl<BSysUserStatusMapper, BSy
      * 重置用户的全部认证信息
      * 立木运营商报告(手机),身份证认证，用户个人信息，
      * 银行卡信息，紧急联系人信息，短信认证信息
+     *
      * @param userId
      */
     public void resetAllInfo(Integer userId) {
@@ -62,6 +63,14 @@ public class BSysUserStatusService extends ServiceImpl<BSysUserStatusMapper, BSy
         bSysUserStatus.setBankInfoStatus("0");
         bSysUserStatus.setContactStatus("0");
         bSysUserStatus.setSmsStatus("0");
+        this.baseMapper.updateByUserId(bSysUserStatus);
+    }
+
+    /**
+     * 根据关联用户主键 userId 更新用户状态信息
+     * @param bSysUserStatus
+     */
+    public void updateByUserId(BSysUserStatus bSysUserStatus) {
         this.baseMapper.updateByUserId(bSysUserStatus);
     }
 }

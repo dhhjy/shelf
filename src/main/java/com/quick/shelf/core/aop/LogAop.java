@@ -1,7 +1,5 @@
 package com.quick.shelf.core.aop;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.quick.shelf.core.common.annotion.BussinessLog;
 import com.quick.shelf.core.common.annotion.PortLog;
@@ -20,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
 /**
  * 日志记录
@@ -95,33 +92,22 @@ public class LogAop {
         String className = point.getTarget().getClass().getName();
         Object[] params = point.getArgs();
 
-        String msg = null;
-
-        try {
-            JSONArray arrParam = new JSONArray(Arrays.asList(params));
-            if (arrParam.size() > 0)
-                msg = arrParam.toString();
-            else
-                msg = "{}";
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
+        String msg;
 
         //获取操作名称
         BussinessLog annotation = currentMethod.getAnnotation(BussinessLog.class);
         String bussinessName = annotation.value();
 //        String key = annotation.key();
 //        Class dictClass = annotation.dict();
-//
-//        StringBuilder sb = new StringBuilder();
-//        for (Object param : params) {
-//            sb.append(param);
-//            sb.append(" & ");
-//        }
-//
-//        //如果涉及到修改,比对变化
-//        String msg;
+
+        StringBuilder sb = new StringBuilder();
+        for (Object param : params) {
+            sb.append(param);
+            sb.append(" & ");
+        }
+        sb.substring(0, sb.length() - 1);
+
+        //如果涉及到修改,比对变化
 //        if (bussinessName.contains("修改") || bussinessName.contains("编辑")) {
 //            Object obj1 = LogObjectHolder.me().get();
 //            Map<String, String> obj2 = HttpContext.getRequestParameters();
@@ -131,8 +117,11 @@ public class LogAop {
 //            AbstractDictMap dictMap = (AbstractDictMap) dictClass.newInstance();
 //            msg = Contrast.parseMutiKey(dictMap, key, parameters);
 //        }
+//        Map<String, String> parameters = HttpContext.getRequestParameters();
+////        AbstractDictMap dictMap = (AbstractDictMap) dictClass.newInstance();
+////        msg = Contrast.parseMutiKey(dictMap, key, parameters);
 
-        LogManager.me().executeLog(LogTaskFactory.bussinessLog(user.getId(), bussinessName, className, methodName, msg));
+        LogManager.me().executeLog(LogTaskFactory.bussinessLog(user.getId(), bussinessName, className, methodName, sb.toString()));
     }
 
     private void handlePort(ProceedingJoinPoint point, Object result) throws Throwable {

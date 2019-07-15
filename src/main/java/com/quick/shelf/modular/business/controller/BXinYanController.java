@@ -17,12 +17,14 @@ import com.quick.shelf.modular.business.service.BXinYanDataService;
 import com.quick.shelf.modular.business.warpper.XinYanWrapper;
 import com.quick.shelf.modular.creditPort.xinYan.XinYanConstant;
 import com.quick.shelf.modular.creditPort.xinYan.XinYanConstantEnum;
+import com.quick.shelf.modular.creditPort.xinYan.XinYanResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +41,7 @@ import java.util.Map;
 @Api(value = "新颜征信控制层")
 @Controller
 @RequestMapping("/xinYan")
-public class XinYanController extends BaseController {
+public class BXinYanController extends BaseController {
     /**
      * log
      */
@@ -123,20 +125,9 @@ public class XinYanController extends BaseController {
             String result = this.bXinYanDataService.getReDerData(userId, bSysUser);
             JSONObject jsonResult = JSONObject.parseObject(result);
             if (jsonResult.getString("errorCode") == null) {
-                // 异步新增
-                new Thread(() -> {
-                    BXinYanData xinYanData = new BXinYanData();
-                    // userId
-                    xinYanData.setUserId(userId);
-                    // 设置服务类型
-                    String apiName = XinYanConstantEnum.API_NAME_LD.getApiName();
-                    xinYanData.setType(apiName);
-                    // 设置服务类型中文名称
-                    xinYanData.setTypeText(XinYanConstant.compareApiName(apiName));
-                    // 添加数据
-                    xinYanData.setDataValue(result);
-                    this.bXinYanDataService.insert(xinYanData);
-                }).start();
+                // 当接口返回正常 即没有 errorCode时，进行
+                // 新增操作，新增时同时修改用户相关的 状态 'b_sys_user_status'
+                this.bXinYanDataService.assemble(userId, result, XinYanConstantEnum.API_NAME_LD.getApiName());
             }
             model.addAttribute("radarData", JSONObject.parse(result));
         } else {
@@ -163,5 +154,56 @@ public class XinYanController extends BaseController {
         model.addAttribute("taoBaoWeb", JSONObject.parseObject(xinYanLd.getDataValue()));
         model.addAttribute("bSysUser", bSysUser);
         return PREFIX + "xinYanTaoBaoWeb.html";
+    }
+
+    /**
+     * 新颜认证页面跳转页
+     *
+     * @param userId 在此处被用作任务ID 每次执行查询时的 taskId = userId
+     * @param type   征信的类型 定义在 XinYanConstantEnum 类中
+     */
+    @BussinessLog(value = "新颜认证页面跳转页")
+    @ApiOperation(value = "新颜认证页面跳转页", notes = "新颜认证页面跳转页", httpMethod = "GET")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "报告类型", name = "type", required = true, dataType = "String"),
+            @ApiImplicitParam(value = "用户主键，用户主键也做每次任务的任务ID", name = "userId", required = true, dataType = "String")
+    })
+    @RequestMapping(value = "/index/{type}/{userId}", method = RequestMethod.GET)
+    public String index(@PathVariable String userId, @PathVariable String type) {
+        // 查询是否有同类型的报告，如果有的话则会在userId后面加上返回的数字 例：19466 + suffix 如果有一份报告 16466 + "1"
+        String suffix = "_" + this.bXinYanDataService.selectJsonDataNum(Integer.valueOf(userId),type);
+        BSysUser bSysUser = this.bSysUserService.selectBSysUserByUserId(Integer.valueOf(userId));
+        // 授权成功以后跳转的页面
+        String jumpUrl = getProjectPath();
+        // 原始数据回调
+        String callbackJson = getProjectPath() + "/xinYan/callbackJson";
+        // 正式接入时使用下面这个即可
+        return REDIRECT + XinYanConstant.getXinYanH5Url(bSysUser.getUserId() + suffix, type, jumpUrl, callbackJson, null);
+    }
+
+    /**
+     * 查询结果通知地址
+     * 新颜原始数据回调
+     *
+     * @return
+     */
+    @BussinessLog(value = "新颜原始数据回调地址")
+    @RequestMapping(value = "/callbackJson", produces = "application/json", method = RequestMethod.POST)
+    @ResponseStatus(value = HttpStatus.OK)
+    public void callbackJson(@RequestBody XinYanResult xyResult) {
+        // 请求成功后进行查询数据并且保存的操作
+        if (XinYanConstant.SUCCESS.equals(xyResult.getSuccess())) {
+            // 设置多个选项的目的是为了记录日志，并且通过AOP的方式
+            // 统计接口统计
+            if (XinYanConstantEnum.API_NAME_TB.getApiName().equals(xyResult.getApiName()))
+                // 保存新颜芝麻分(淘宝)的原始数据
+                this.bXinYanDataService.xinYanTBJsonData(xyResult);
+        }
+    }
+
+
+    public static void main(String[] args){
+        String s = "19466_21";
+        System.out.println( s.split("_")[0]);
     }
 }

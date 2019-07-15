@@ -3569,7 +3569,7 @@ typeof(exports) != 'undefined' ? exports.SyntaxHighlighter = SyntaxHighlighter :
 	{
 		var keywords =	'AddHandler AddressOf AndAlso Alias And Ansi As Assembly Auto ' +
 						'Boolean ByRef Byte ByVal Call Case Catch CBool CByte CChar CDate ' +
-						'CDec CDbl Char CInt Class CLng CObj Const CShort CSng CStr CType ' +
+						'CDec CDbl Char CInt Class CLng CObj constant CShort CSng CStr CType ' +
 						'Date Decimal Declare Default Delegate Dim DirectCast Do Double Each ' +
 						'Else ElseIf End Enum Erase Error Event Exit False Finally For Friend ' +
 						'Function Get GetType GoSub GoTo Handles If Implements Imports In ' +

@@ -112,4 +112,9 @@ public class BaseController {
         headers.setContentDispositionFormData("attachment", dfileName);
         return new ResponseEntity(resource, headers, HttpStatus.CREATED);
     }
+
+    protected String getProjectPath(){
+        HttpServletRequest request = getHttpServletRequest();
+        return request.getServerName()+ "/" + request.getContextPath();
+    }
 }

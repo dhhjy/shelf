@@ -87,6 +87,18 @@ public class BSysUserStatus implements Serializable {
     private String limuLifangUpgradeCheckStatus;
 
     /**
+     * 新颜芝麻分认证状态 （淘宝认证状态）
+     */
+    @TableField("xinyan_zmf_status")
+    private String xinyanZmfStatus;
+
+    /**
+     * 新颜全景雷达认证状态
+     */
+    @TableField("xinyan_radar_status")
+    private String xinyanRadarStatus;
+
+    /**
      * 创建时间
      */
     @TableField("create_time")
