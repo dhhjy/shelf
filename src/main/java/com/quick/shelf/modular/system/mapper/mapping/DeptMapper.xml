@@ -30,7 +30,7 @@
 		WHEN (pid = 0 OR pid IS NULL) THEN
 		'true'
 		ELSE
-		'false'
+		'true'
 		END
 		) as "open" from sys_dept
 	</select>
@@ -42,7 +42,7 @@
 		WHEN (pid = 0 OR pid IS NULL) THEN
 		'true'
 		ELSE
-		'false'
+		'true'
 		END
 		) as "open" from sys_dept where dept_id in ( #{depId}) or pid in ( #{depId})
 

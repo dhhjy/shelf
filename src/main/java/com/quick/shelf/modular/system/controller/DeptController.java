@@ -98,9 +98,8 @@ public class DeptController extends BaseController {
     @ResponseBody
     public List<ZTreeNode> tree() {
         List<ZTreeNode> tree = this.deptService.tree();
-        DeptWrapper.filtrateDept(tree);
-        assert tree != null;
         tree.add(ZTreeNode.createParent());
+        DeptWrapper.filtrateDept(tree);
         return tree;
     }
 

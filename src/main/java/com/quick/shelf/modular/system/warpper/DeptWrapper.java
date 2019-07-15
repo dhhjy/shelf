@@ -58,7 +58,10 @@ public class DeptWrapper extends BaseControllerWrapper {
         if(0 == deptId)
             return;
         for(ZTreeNode zt : ztree){
-            if(!zt.getId().equals(deptId) && !zt.getPId().equals(deptId)){
+            System.out.println(deptId);
+            System.out.println(zt.getId());
+            System.out.println(zt.getPId());
+            if(!zt.getId().equals(deptId) && ! zt.getPId().equals(deptId)){
                 zTree.remove(zt);
             }
         }
