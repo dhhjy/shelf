@@ -1,7 +1,7 @@
-@layout("/common/_container.html",{plugins:["ztree"],js:["/assets/modular/business/xinYan/xinYan.js"]}){
+@layout("/common/_container.html",{plugins:["ztree"],js:["/assets/modular/business/liMu/liMu.js"]}){
 
 <div class="layui-body-header">
-    <span class="layui-body-header-title">新颜征信管理</span>
+    <span class="layui-body-header-title">立木征信管理</span>
 </div>
 
 <div class="layui-fluid">
@@ -32,7 +32,7 @@
                             </div>
                         </div>
                     </div>
-                    <table class="layui-table" id="xinYanTable" lay-filter="xinYanTable"></table>
+                    <table class="layui-table" id="liMuTable" lay-filter="liMuTable"></table>
                 </div>
             </div>
         </div>
@@ -41,16 +41,20 @@
 
 <script type="text/html" id="tableBar">
 
-    @if(shiro.hasPermission("/xinYan/getReDerData")){
-    {{# if(d.type.indexOf('radar') != -1){}}
-    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="radar">全景雷达</a>
+    {{# if(d.type.indexOf('mobileReport') != -1){}}
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="mobileReport">运营商报告</a>
     {{#}}}
-    @}
 
-    @if(shiro.hasPermission("/xinYan/getTaoBaoWebReport")){
-    {{# if(d.type.indexOf('taobaoweb') != -1){}}
-    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="taobaoweb">芝麻分报告</a>
+    {{# if(d.type.indexOf('taobaoReport') != -1){}}
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="taobaoReport">淘宝报告</a>
     {{#}}}
-    @}
+
+    {{# if(d.type.indexOf('lifangupgradecheck') != -1){}}
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="lifangupgradecheck">升级报告</a>
+    {{#}}}
+
+    {{# if(d.type.indexOf('machinecheck') != -1){}}
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="machinecheck">设备报告</a>
+    {{#}}}
 </script>
 @}

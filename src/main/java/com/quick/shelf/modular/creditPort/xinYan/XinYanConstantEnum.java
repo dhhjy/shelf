@@ -1,5 +1,8 @@
 package com.quick.shelf.modular.creditPort.xinYan;
 
+/**
+ * 新颜接口定义
+ */
 public enum XinYanConstantEnum {
     API_NAME_TB("淘宝", "taobaoweb"),
     API_NAME_YYS("运营商", "carrier"),

@@ -7,15 +7,18 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.quick.shelf.core.base.BaseController;
 import com.quick.shelf.core.common.annotion.BussinessLog;
+import com.quick.shelf.core.common.annotion.Permission;
 import com.quick.shelf.core.common.exception.BizExceptionEnum;
 import com.quick.shelf.core.common.page.LayuiPageFactory;
 import com.quick.shelf.core.shiro.ShiroKit;
+import com.quick.shelf.core.util.DateUtil;
+import com.quick.shelf.core.util.RedisUtil;
 import com.quick.shelf.modular.business.entity.BSysUser;
 import com.quick.shelf.modular.business.entity.BXinYanData;
 import com.quick.shelf.modular.business.service.BSysUserService;
 import com.quick.shelf.modular.business.service.BXinYanDataService;
-import com.quick.shelf.modular.business.warpper.XinYanWrapper;
-import com.quick.shelf.modular.creditPort.xinYan.XinYanConstant;
+import com.quick.shelf.modular.business.warpper.BXinYanWrapper;
+import com.quick.shelf.modular.creditPort.xinYan.XinYanConstantMethod;
 import com.quick.shelf.modular.creditPort.xinYan.XinYanConstantEnum;
 import com.quick.shelf.modular.creditPort.xinYan.XinYanResult;
 import io.swagger.annotations.Api;
@@ -55,6 +58,9 @@ public class BXinYanController extends BaseController {
     @Resource
     private BSysUserService bSysUserService;
 
+    @Resource
+    private RedisUtil redisUtil;
+
     /**
      * 新颜征信报告页面跳转
      *
@@ -76,9 +82,12 @@ public class BXinYanController extends BaseController {
     })
     @RequestMapping(value = "/list")
     @ResponseBody
+    @Permission
     public Object list(@RequestParam(required = false) String name,
                        @RequestParam(required = false) String timeLimit,
                        @RequestParam(required = false) Long deptId) {
+
+        logger.info("查询新颜征信列表");
 
         //拼接查询条件
         String beginTime = "";
@@ -92,12 +101,12 @@ public class BXinYanController extends BaseController {
 
         if (ShiroKit.isAdmin()) {
             Page<Map<String, Object>> xinYanDatas = bXinYanDataService.selectBXinYanDatas(null, name, beginTime, endTime, deptId);
-            Page wrapped = new XinYanWrapper(xinYanDatas).wrap();
+            Page wrapped = new BXinYanWrapper(xinYanDatas).wrap();
             return LayuiPageFactory.createPageInfo(wrapped);
         } else {
             DataScope dataScope = new DataScope(ShiroKit.getDeptDataScope());
             Page<Map<String, Object>> xinYanDatas = bXinYanDataService.selectBXinYanDatas(dataScope, name, beginTime, endTime, deptId);
-            Page wrapped = new XinYanWrapper(xinYanDatas).wrap();
+            Page wrapped = new BXinYanWrapper(xinYanDatas).wrap();
             return LayuiPageFactory.createPageInfo(wrapped);
         }
     }
@@ -114,6 +123,7 @@ public class BXinYanController extends BaseController {
     @BussinessLog(value = "获取全景雷达报告")
     @ApiOperation(value = "新颜全景雷达报告获取，获取原始数据", notes = "新颜全景雷达报告获取，获取原始数据", httpMethod = "GET")
     @ApiImplicitParam(value = "用户主键", name = "userId", required = true, dataType = "Integer")
+    @Permission
     @RequestMapping(value = "/getReDerData/{userId}", produces = "text/plain;charset=utf-8")
     public String getReDerData(@PathVariable Integer userId, Model model) {
         BSysUser bSysUser = this.bSysUserService.selectBSysUserByUserId(userId);
@@ -149,6 +159,7 @@ public class BXinYanController extends BaseController {
     @ApiImplicitParam(value = "用户主键", name = "userId", required = true, dataType = "Integer")
     @RequestMapping(value = "/getTaoBaoWebReport/{userId}")
     public String getTaoBaoWebReport(@PathVariable Integer userId, Model model) {
+        logger.info("用户：{} 获取用户芝麻分报告", userId);
         BSysUser bSysUser = this.bSysUserService.selectBSysUserByUserId(userId);
         BXinYanData xinYanLd = this.bXinYanDataService.selectBXinYanDataByUserId(userId, XinYanConstantEnum.API_NAME_TB.getApiName());
         model.addAttribute("taoBaoWeb", JSONObject.parseObject(xinYanLd.getDataValue()));
@@ -170,15 +181,16 @@ public class BXinYanController extends BaseController {
     })
     @RequestMapping(value = "/index/{type}/{userId}", method = RequestMethod.GET)
     public String index(@PathVariable String userId, @PathVariable String type) {
+        logger.info("用户：{} 获取了:{} 的认证页面", userId, type);
         // 查询是否有同类型的报告，如果有的话则会在userId后面加上返回的数字 例：19466 + suffix 如果有一份报告 16466 + "1"
-        String suffix = "_" + this.bXinYanDataService.selectJsonDataNum(Integer.valueOf(userId),type);
+        String suffix = "_" + this.bXinYanDataService.selectJsonDataNum(Integer.valueOf(userId), type);
         BSysUser bSysUser = this.bSysUserService.selectBSysUserByUserId(Integer.valueOf(userId));
         // 授权成功以后跳转的页面
         String jumpUrl = getProjectPath();
         // 原始数据回调
         String callbackJson = getProjectPath() + "/xinYan/callbackJson";
         // 正式接入时使用下面这个即可
-        return REDIRECT + XinYanConstant.getXinYanH5Url(bSysUser.getUserId() + suffix, type, jumpUrl, callbackJson, null);
+        return REDIRECT + XinYanConstantMethod.getXinYanH5Url(bSysUser.getUserId() + suffix, type, jumpUrl, callbackJson, null);
     }
 
     /**
@@ -191,19 +203,18 @@ public class BXinYanController extends BaseController {
     @RequestMapping(value = "/callbackJson", produces = "application/json", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
     public void callbackJson(@RequestBody XinYanResult xyResult) {
+        String userIdStr = xyResult.getTaskId().split("_")[0];
+        // 设置缓存立木回调数据 单位秒：60 * 60 * 24 * 365
+        redisUtil.set(XinYanConstantMethod.REDIS_KEY, userIdStr + "-" + xyResult.getToken() + "-" + xyResult.getApiName() + "-" + DateUtil.getCurrentDateString(), 60 * 60 * 24 * 365);
+
+        logger.info("用户：{} 进行了新颜认证：{}", userIdStr, xyResult.getApiName());
         // 请求成功后进行查询数据并且保存的操作
-        if (XinYanConstant.SUCCESS.equals(xyResult.getSuccess())) {
+        if (XinYanConstantMethod.SUCCESS.equals(xyResult.getSuccess())) {
             // 设置多个选项的目的是为了记录日志，并且通过AOP的方式
             // 统计接口统计
             if (XinYanConstantEnum.API_NAME_TB.getApiName().equals(xyResult.getApiName()))
                 // 保存新颜芝麻分(淘宝)的原始数据
                 this.bXinYanDataService.xinYanTBJsonData(xyResult);
         }
-    }
-
-
-    public static void main(String[] args){
-        String s = "19466_21";
-        System.out.println( s.split("_")[0]);
     }
 }

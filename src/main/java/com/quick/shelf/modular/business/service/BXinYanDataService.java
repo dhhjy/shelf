@@ -12,7 +12,7 @@ import com.quick.shelf.modular.business.entity.BSysUserStatus;
 import com.quick.shelf.modular.business.entity.BXinYanData;
 import com.quick.shelf.modular.business.mapper.BXinYanDataMapper;
 import com.quick.shelf.modular.constant.BusinessConst;
-import com.quick.shelf.modular.creditPort.xinYan.XinYanConstant;
+import com.quick.shelf.modular.creditPort.xinYan.XinYanConstantMethod;
 import com.quick.shelf.modular.creditPort.xinYan.XinYanConstantEnum;
 import com.quick.shelf.modular.creditPort.xinYan.XinYanDataResult;
 import com.quick.shelf.modular.creditPort.xinYan.XinYanResult;
@@ -49,7 +49,7 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
         BXinYanData bXinYanData = new BXinYanData();
         bXinYanData.setUserId(userId);
         bXinYanData.setType(type);
-        bXinYanData.setDataType(0);
+        bXinYanData.setDataType(BusinessConst.ORIGINAL_DATA);
         return this.baseMapper.selectBXinYanDataByUserId(bXinYanData);
     }
 
@@ -90,9 +90,9 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
      */
     @PortLog(type = "radar", typeName = "全景雷达")
     public String getReDerData(Integer userId, BSysUser bSysUser) {
-        String base64Str = XinYanConstant.assembleEncryptParams(String.valueOf(userId), bSysUser.getIdCard(),
+        String base64Str = XinYanConstantMethod.assembleEncryptParams(String.valueOf(userId), bSysUser.getIdCard(),
                 bSysUser.getName(), bSysUser.getPhoneNumber(), null);
-        return XinYanConstant.getRaDerResult(base64Str);
+        return XinYanConstantMethod.getRaDerResult(base64Str);
     }
 
     /**
@@ -106,7 +106,7 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
             // 设置服务类型
             xinYanData.setType(apiName);
             // 设置服务类型中文名称
-            xinYanData.setTypeText(XinYanConstant.compareApiName(apiName));
+            xinYanData.setTypeText(XinYanConstantMethod.compareApiName(apiName));
             // 添加数据
             xinYanData.setDataValue(result);
             insert(xinYanData);
@@ -134,11 +134,11 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
     public void xinYanTBJsonData(XinYanResult xyResult) {
         // 通过 token 凭证 查询报告
         List<NameValuePair> params = new ArrayList<>();
-        params.add(new BasicNameValuePair("apiUser", XinYanConstant.ApiUser));
-        params.add(new BasicNameValuePair("apiEnc", XinYanConstant.getJsonDataApiEnc()));
+        params.add(new BasicNameValuePair("apiUser", XinYanConstantMethod.ApiUser));
+        params.add(new BasicNameValuePair("apiEnc", XinYanConstantMethod.getJsonDataApiEnc()));
         params.add(new BasicNameValuePair("token", xyResult.getToken()));
         // 获取新颜查询的结果
-        String result = HttpClientUtil.doGet(XinYanConstant.DEVELOP_URL + XinYanConstant.JSON_DATA_PATH, params);
+        String result = HttpClientUtil.doGet(XinYanConstantMethod.DEVELOP_URL + XinYanConstantMethod.JSON_DATA_PATH, params);
         XinYanDataResult xinYanDataResult = JSONObject.parseObject(result, XinYanDataResult.class);
 
         // 添加

@@ -22,13 +22,15 @@ import java.util.Map;
 /**
  * 新颜接口常量配置及常用方法
  */
-public class XinYanConstant {
-    public static final Logger logger = LoggerFactory.getLogger(XinYanConstant.class);
+public class XinYanConstantMethod {
+    public static final Logger logger = LoggerFactory.getLogger(XinYanConstantMethod.class);
 
+    // 立木回调数据，redis 缓存键
+    public static final String REDIS_KEY = "xinYanCallBack::";
     // ApiUser
     public static final String ApiUser = "8150738569";
     // Access Key: 6613d600d19941a094753830bd6fc0af
-    public static final String AccessKey = "R8077DZ2dmrDp90z";
+    private static final String AccessKey = "R8077DZ2dmrDp90z";
     // H5页面导航标签隐藏
     private static final String Hide_Label = "headVisible=0";
     // 生产环境
@@ -70,8 +72,8 @@ public class XinYanConstant {
      */
     public static String getXinYanH5Url(String userId, String apiName, String jumpUrl, String dataNotifyUrl, String reportNotifyUrl) {
         // 时间戳
-        String timeMark = XinYanConstant.getTimeMark();
-        String url =  XinYanConstant.DEVELOP_URL + XinYanConstant.H5 + XinYanConstant.ApiUser + "/" +
+        String timeMark = XinYanConstantMethod.getTimeMark();
+        String url =  XinYanConstantMethod.DEVELOP_URL + XinYanConstantMethod.H5 + XinYanConstantMethod.ApiUser + "/" +
                 getApiEnc(timeMark, apiName, userId) + "/" + timeMark + "/" +
                 apiName + "/" + userId + "?" + Hide_Label + "&jumpUrl="
                 + jumpUrl + "&dataNotifyUrl=" + dataNotifyUrl;
@@ -91,8 +93,8 @@ public class XinYanConstant {
      * @return
      */
     public static String getJsonDataUrl(String token) {
-        return XinYanConstant.DEVELOP_URL + XinYanConstant.JSON_DATA_PATH + "?apiUser=" + XinYanConstant.ApiUser
-                + "&apiEnc=" + XinYanConstant.getJsonDataApiEnc() + "&token=" + token;
+        return XinYanConstantMethod.DEVELOP_URL + XinYanConstantMethod.JSON_DATA_PATH + "?apiUser=" + XinYanConstantMethod.ApiUser
+                + "&apiEnc=" + XinYanConstantMethod.getJsonDataApiEnc() + "&token=" + token;
     }
 
     /**
@@ -102,8 +104,8 @@ public class XinYanConstant {
      * @return
      */
     public static String getReportaUrl(String token) {
-        return XinYanConstant.DEVELOP_URL + XinYanConstant.REPORT_PATH + "apiUser=" + XinYanConstant.ApiUser
-                + "&apiEnc=" + XinYanConstant.getJsonDataApiEnc() + "&token=" + token;
+        return XinYanConstantMethod.DEVELOP_URL + XinYanConstantMethod.REPORT_PATH + "apiUser=" + XinYanConstantMethod.ApiUser
+                + "&apiEnc=" + XinYanConstantMethod.getJsonDataApiEnc() + "&token=" + token;
     }
 
     /**
@@ -113,8 +115,8 @@ public class XinYanConstant {
      * @return
      */
     public static String getPageUrl(String token) {
-        return XinYanConstant.DEVELOP_URL + XinYanConstant.PAGE_PATH + "apiUser=" + XinYanConstant.ApiUser
-                + "&apiEnc=" + XinYanConstant.getJsonDataApiEnc() + "&token=" + token;
+        return XinYanConstantMethod.DEVELOP_URL + XinYanConstantMethod.PAGE_PATH + "apiUser=" + XinYanConstantMethod.ApiUser
+                + "&apiEnc=" + XinYanConstantMethod.getJsonDataApiEnc() + "&token=" + token;
     }
 
     /**
@@ -138,7 +140,7 @@ public class XinYanConstant {
      * @return String MD5参数加密后的字符串
      */
     private static String getApiEnc(String timeMark, String apiName, String taskId) {
-        String plaintext = XinYanConstant.ApiUser + timeMark + apiName + taskId + XinYanConstant.AccessKey;
+        String plaintext = XinYanConstantMethod.ApiUser + timeMark + apiName + taskId + XinYanConstantMethod.AccessKey;
         return DigestUtils.md5Hex(plaintext);
     }
 
@@ -149,7 +151,7 @@ public class XinYanConstant {
      * @return String MD5参数加密后的字符串
      */
     public static String getJsonDataApiEnc() {
-        return DigestUtils.md5Hex(XinYanConstant.ApiUser + XinYanConstant.AccessKey);
+        return DigestUtils.md5Hex(XinYanConstantMethod.ApiUser + XinYanConstantMethod.AccessKey);
     }
 
     /**
@@ -178,7 +180,7 @@ public class XinYanConstant {
     }
 
     public static void main(String[] args) throws UnsupportedEncodingException {
-//        File pfxfile = new File(XinYanConstant.PFX_PATH);
+//        File pfxfile = new File(XinYanConstantMethod.PFX_PATH);
 //        if (!pfxfile.exists()) {
 //            log("私钥文件不存在！");
 //            throw new RuntimeException("私钥文件不存在！");
@@ -203,7 +205,7 @@ public class XinYanConstant {
         Map<String, String> headers = new HashMap<>();
 
         // 私匙文件
-        Resource resource = new ClassPathResource(XinYanConstant.PFX_PATH);
+        Resource resource = new ClassPathResource(XinYanConstantMethod.PFX_PATH);
         File pfxfile = null;
         try {
             pfxfile = resource.getFile();
@@ -216,14 +218,14 @@ public class XinYanConstant {
             throw new RuntimeException("私钥文件不存在！");
         }
 
-        String data_content = RsaCodingUtil.encryptByPriPfxFile(base64str, XinYanConstant.PFX_PATH, XinYanConstant.PRIVATE_KEY_PASSWORD);// 加密数据
+        String data_content = RsaCodingUtil.encryptByPriPfxFile(base64str, XinYanConstantMethod.PFX_PATH, XinYanConstantMethod.PRIVATE_KEY_PASSWORD);// 加密数据
         logger.info("加密串:{}", data_content);
         Map<String, Object> params = new HashMap<>();
-        params.put("member_id", XinYanConstant.ApiUser);
-        params.put("terminal_id", XinYanConstant.TERMIANL_CODE);
+        params.put("member_id", XinYanConstantMethod.ApiUser);
+        params.put("terminal_id", XinYanConstantMethod.TERMIANL_CODE);
         params.put("data_type", "json");
         params.put("data_content", data_content);
-        String PostString = HttpUtils.doPostByForm(XinYanConstant.REDAR_URL, headers, params);
+        String PostString = HttpUtils.doPostByForm(XinYanConstantMethod.REDAR_URL, headers, params);
         logger.info("请求返回:{}",  PostString);
 
         if (PostString.isEmpty()) {// 判断参数是否为空
@@ -248,9 +250,9 @@ public class XinYanConstant {
     public static String assembleEncryptParams(String userId,String id_no, String id_name, String phone_no, String bankcard_no){
         Map<Object, Object> ArrayData = new HashMap<>();
         // 商户号
-        ArrayData.put("member_id", XinYanConstant.ApiUser);
+        ArrayData.put("member_id", XinYanConstantMethod.ApiUser);
         // 终端号
-        ArrayData.put("terminal_id", XinYanConstant.TERMIANL_CODE);
+        ArrayData.put("terminal_id", XinYanConstantMethod.TERMIANL_CODE);
         // 时间戳 格式：yyyyMMddHHmmss
         ArrayData.put("trade_date", getTimeMark());
         // 商户请求订单号 唯一
@@ -263,7 +265,7 @@ public class XinYanConstant {
             ArrayData.put("phone_no", MD5Utils.encryptMD5(phone_no.trim()));
         if (null != bankcard_no && !"".equals(bankcard_no))
             ArrayData.put("bankcard_no", MD5Utils.encryptMD5(bankcard_no.trim()));
-        ArrayData.put("versions", XinYanConstant.REDAR_VERSION);
+        ArrayData.put("versions", XinYanConstantMethod.REDAR_VERSION);
         ArrayData.put("encrypt_type", "MD5");// MD5：标准32位小写(推荐) SHA256：标准64位
 
         // 1.先对身份信息 进行MD5加密

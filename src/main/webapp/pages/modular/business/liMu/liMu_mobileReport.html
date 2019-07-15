@@ -1,0 +1,591 @@
+${mobileReport}
+
+<html><head><link type="image/x-icon" href="/static/web/images/favicon.ico" rel="Shortcut Icon">
+
+
+
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+    <title>立方升级版报告</title>
+    <style type="text/css">
+        * {
+            font-family: 'SimSun';
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        html,
+        body {
+            position: relative;
+            width: 90%;
+            height: 100%;
+            font-size: 18px;
+            color: #333;
+            margin: 0 auto;
+
+        }
+
+        .main {
+            position: relative;
+            padding: 24px 50px;
+            margin: 0 auto;
+            box-sizing: border-box;
+            background-color: #fff;
+        }
+
+
+        h1 {
+            height: 34px;
+            line-height: normal;
+            font-size: 28px;
+            font-weight: normal;
+            text-align: center;
+        }
+
+        h3 {
+            margin-top: 10px;
+            font-weight: normal;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .credit_main {
+            color: #333;
+        }
+
+        .credit_head {
+            padding: 0 8px;
+            box-sizing: border-box;
+            background: #f2f2f2;
+        }
+
+        .credit_table .credit_head table {
+            table-layout: fixed;
+            width: 100%;
+            font-size: 18px;
+            border:none;
+        }
+
+        .credit_head td {
+            padding:8px ;
+        }
+
+        .credit_head td span {
+            color: #333;
+        }
+
+        .credit_table>p {
+            text-indent: 1.5em;
+            height: 40px;
+            line-height: 40px;
+            color: #fff;
+            background: #98a1b3;
+        }
+
+        .credit_table table {
+            table-layout: fixed;
+            width: 100%;
+            text-align: left;
+            font-size: 18px;
+            border-left: 1px solid #dfdfdf;
+            border-top: 1px solid #dfdfdf;
+        }
+
+        .credit_table table tbody tr th {
+            padding: 5px 10px;
+            padding-right: 5px;
+            vertical-align: top;
+            font-weight: normal;
+            border-right: 1px solid #dfdfdf;
+            border-bottom: 1px solid #dfdfdf;
+            background: #f2f3f5;
+            vertical-align: middle;
+        }
+
+        .credit_table>table>tbody>tr>td {
+            vertical-align: top;
+            padding: 5px 10px;
+            padding-right: 5px;
+            border-right: 1px solid #dfdfdf;
+            border-bottom: 1px solid #dfdfdf;
+        }
+
+        .credit_table .padNone th,
+        .credit_table .padNone td {
+            padding-left: 5px;
+            padding-right: 0;
+        }
+
+        .small_table {
+            table-layout: fixed;
+            width: 100%;
+        }
+
+        .small_table_td_name {
+            padding-bottom: 5px;
+        }
+        .credit_toggleTable {
+            margin-top: 7px;
+            width: 100%;
+        }
+
+        .credit_toggleTable table {
+            table-layout: fixed;
+            width: 100%;
+        }
+
+        .credit_toggleTable table th {
+            padding-left: 8px;
+            font-weight: normal;
+
+            font-size: 16px;
+            color: #999;
+            background: #f2f3f5;
+        }
+
+        .credit_toggleTable table td {
+            padding:5px 0 5px 8px;
+
+            color: #000;
+            border-bottom: 1px solid #eee;
+            border-right:1px solid #eee;
+        }
+
+        .credit_toggleTable table td span {
+            color: #999;
+        }
+        .mt_6 {
+            margin-top: 6px;
+        }
+        .mt_10 {
+            margin-top: 10px;
+        }
+
+        .mt_14 {
+            margin-top: 14px;
+        }
+
+        .fs_16 {
+            font-size: 16px;
+        }
+        .fs_18 {
+            font-size: 18px;
+        }
+        .fs_20 {
+            font-size: 20px;
+        }
+        .fs_22 {
+            font-size: 22px;
+        }
+
+        .col_000 {
+            color: #000;
+        }
+
+        .col_333 {
+            color: #333;
+        }
+
+        .col_666 {
+            color: #666;
+        }
+
+        .col_999 {
+            color: #999;
+        }
+
+        .col_red {
+            color: #ff0000!important;
+        }
+
+        .col_green {
+            color: #39b31b;
+        }
+
+        .dis_line {
+            display: inline-block;
+        }
+
+        .ml_60 {
+            margin-left: 30px;
+        }
+
+        .ver_middle {
+            vertical-align: middle;
+        }
+
+        .text_center {
+            text-align: center!important;
+        }
+
+        .text_right {
+            text-align: right;
+        }
+
+        /*20170703begin*/
+        .child_table td{
+            line-height: 28px;
+            display: inline-block;
+        }
+        .phoneLine:after{
+            content: "";
+            position: absolute;
+            right: 0;
+            top: 6px;
+            width: 1px;
+            height: 16px;
+            background-color: #ddd;
+        }
+        .phoneLine:before{
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 6px;
+            width: 1px;
+            height: 16px;
+            background-color: #ddd;
+        }
+        .nameLine:after{
+            content: "";
+            position: absolute;
+            right: 0;
+            top: 6px;
+            width: 1px;
+            height: 16px;
+            background-color: #ddd;
+        }
+        .net_parent{
+            position: relative;
+        }
+        .net{
+            position: absolute;
+            left:50%;
+        }
+        .ml_20{
+            margin-left:20px;
+        }
+        .mingzhong{
+            padding-left: 30px;
+            color: #f24130;
+            background: url(/static/web/images/mingzhong.png) no-repeat 0 center;
+            background-size: contain;
+        }
+        .bold{
+            font-weight:bold;
+        }
+        /*20170703end*/
+
+    </style>
+</head>
+<body>
+<div class="main">
+
+    <h1>立方升级版报告</h1>
+
+    <!--风险清单检测-->
+    <div class="mt_14 credit_table">
+        <div class="credit_head">
+            <table border="0" cellspacing="0" cellpadding="0">
+                <tbody>
+                <tr><td>姓名：<span>邓宁</span></td>
+                    <td class="text_center"> 身份证号：<span>360732199809012850</span></td>
+                    <td class="text_right">手机号：<span>18260067635</span></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="mt_14 text_center">风险清单检测<span class="col_red bold">(建议不通过)</span></p>
+        <table border="0" cellspacing="0" cellpadding="0">
+
+
+
+
+            <tbody><tr> <td class="text_center"><span class="mingzhong">身份证命中中风险关注名单</span></td></tr>
+
+            <tr> <td class="text_center"><span class="mingzhong">手机号命中中风险关注名单</span></td></tr>
+
+
+
+
+            </tbody></table>
+    </div>
+    <!--信贷逾期-->
+    <div class="mt_14 credit_table">
+        <p class="text_center">信贷逾期</p>
+        <table border="0" cellspacing="0" cellpadding="0">
+            <tbody><tr>
+                <th colspan="26">身份证号命中逾期</th>
+                <td colspan="74">
+                    <div class="credit_toggleTable">
+
+
+                        无相关数据
+
+
+
+
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th colspan="26">手机号命中逾期</th>
+                <td colspan="74">
+                    <div class="credit_toggleTable">
+
+
+                        无相关数据
+
+
+
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th colspan="26">身份证号命中逾期明细</th>
+                <td colspan="74">
+                    <div class="credit_toggleTable">
+
+
+                        无相关数据
+
+
+
+                    </div>
+                </td>
+            </tr>
+            </tbody></table>
+    </div>
+    <!--多头借贷-->
+    <div class="mt_14 credit_table">
+        <p class="text_center">多头借贷</p>
+        <table border="0" cellspacing="0" cellpadding="0">
+            <tbody><tr>
+                <th colspan="26">手机号申请借款</th>
+                <td colspan="74">
+                    <div class="credit_toggleTable">
+                        <table border="0" cellspacing="0" cellpadding="0">
+                            <tbody><tr>
+                                <th>平台类型</th>
+                                <th>15天内(次数)</th>
+                                <th>1个月内(次数)</th>
+                                <th>3个月内(次数)</th>
+                                <th>6个月内(次数)</th>
+                            </tr>
+
+                            <tr>
+                                <td>线上小额贷款</td>
+                                <td class="col_red">3</td>
+                                <td class="col_red">12</td>
+                                <td class="col_red">27</td>
+                                <td class="col_red">27</td>
+                            </tr>
+
+                            <tr>
+                                <td>线下贷款</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td class="col_red">1</td>
+                                <td class="col_red">1</td>
+                            </tr>
+
+                            <tr>
+                                <td>消费金融</td>
+                                <td class="col_red">1</td>
+                                <td class="col_red">5</td>
+                                <td class="col_red">10</td>
+                                <td class="col_red">10</td>
+                            </tr>
+
+                            <tr>
+                                <td>P2P</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td class="col_red">1</td>
+                                <td class="col_red">1</td>
+                            </tr>
+
+                            <tr>
+                                <td>技术开发公司</td>
+                                <td>0</td>
+                                <td class="col_red">2</td>
+                                <td class="col_red">2</td>
+                                <td class="col_red">2</td>
+                            </tr>
+
+                            <tr>
+                                <td>助贷</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+
+                            <tr>
+                                <td>融资租赁</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+
+                            <tr>
+                                <td>汽车金融</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+
+                            <tr>
+                                <td>贷超引流</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+
+                            <tr>
+                                <td>银行</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+
+                            <tr>
+                                <td>其它</td>
+                                <td class="col_red">1</td>
+                                <td class="col_red">1</td>
+                                <td class="col_red">5</td>
+                                <td class="col_red">9</td>
+                            </tr>
+
+                            </tbody></table>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th colspan="26">身份证号申请借款</th>
+                <td colspan="74">
+                    <div class="credit_toggleTable">
+                        <table border="0" cellspacing="0" cellpadding="0">
+                            <tbody><tr>
+                                <th>平台类型</th>
+                                <th>15天内(次数)</th>
+                                <th>1个月内(次数)</th>
+                                <th>3个月内(次数)</th>
+                                <th>6个月内(次数)</th>
+                            </tr>
+
+                            <tr>
+                                <td>线上小额贷款</td>
+                                <td class="col_red">3</td>
+                                <td class="col_red">12</td>
+                                <td class="col_red">27</td>
+                                <td class="col_red">27</td>
+                            </tr>
+
+                            <tr>
+                                <td>线下贷款</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td class="col_red">1</td>
+                                <td class="col_red">1</td>
+                            </tr>
+
+                            <tr>
+                                <td>消费金融</td>
+                                <td class="col_red">1</td>
+                                <td class="col_red">5</td>
+                                <td class="col_red">11</td>
+                                <td class="col_red">11</td>
+                            </tr>
+
+                            <tr>
+                                <td>P2P</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td class="col_red">1</td>
+                                <td class="col_red">1</td>
+                            </tr>
+
+                            <tr>
+                                <td>技术开发公司</td>
+                                <td>0</td>
+                                <td class="col_red">2</td>
+                                <td class="col_red">2</td>
+                                <td class="col_red">2</td>
+                            </tr>
+
+                            <tr>
+                                <td>助贷</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+
+                            <tr>
+                                <td>融资租赁</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+
+                            <tr>
+                                <td>汽车金融</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+
+                            <tr>
+                                <td>贷超引流</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+
+                            <tr>
+                                <td>银行</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+
+                            <tr>
+                                <td>其它</td>
+                                <td class="col_red">1</td>
+                                <td class="col_red">1</td>
+                                <td class="col_red">2</td>
+                                <td class="col_red">3</td>
+                            </tr>
+
+                            </tbody></table>
+                    </div>
+                </td>
+            </tr>
+            </tbody></table>
+    </div>
+    <!--机构查询历史-->
+    <div class="mt_14 credit_table">
+        <p class="text_center">机构查询历史</p>
+        <table border="0" cellspacing="0" cellpadding="0">
+
+
+            <tbody><tr><td class="text_center">无相关数据</td></tr>
+
+
+
+            </tbody></table>
+    </div>
+</div>
+
+</body></html>

@@ -8,10 +8,10 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
     var admin = layui.admin;
 
     /**
-     * 系统管理--用户管理
+     * 征信管理——立木征信
      */
-    var xinYanTable = {
-        tableId: "xinYanTable",    //表格id
+    var liMuTable = {
+        tableId: "liMuTable",    //表格id
         condition: {
             name: "",
             deptId: "",
@@ -22,7 +22,7 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
     /**
      * 初始化表格的列
      */
-    xinYanTable.initColumn = function () {
+    liMuTable.initColumn = function () {
         return [[
             {type: 'checkbox'},
             {field: 'id', title: '用户id'},
@@ -31,34 +31,34 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
             {field: 'idCard', title: '身份证号', minWidth: 200},
             {field: 'deptName', title: '部门', minWidth: 200},
             {field: 'createTime', sort: true, title: '认证时间', minWidth: 200},
-            {minWidth: 260, align:'center', title: '操作', toolbar: '#tableBar', fixed: 'right'}
+            {minWidth: 350, align:'center', title: '操作', toolbar: '#tableBar', fixed: 'right'}
         ]];
     };
 
     /**
      * 选择部门时
      */
-    xinYanTable.onClickDept = function (e, treeId, treeNode) {
-        xinYanTable.condition.deptId = treeNode.id;
-        xinYanTable.search();
+    liMuTable.onClickDept = function (e, treeId, treeNode) {
+        liMuTable.condition.deptId = treeNode.id;
+        liMuTable.search();
     };
 
     /**
      * 点击查询按钮
      */
-    xinYanTable.search = function () {
+    liMuTable.search = function () {
         var queryData = {};
-        queryData['deptId'] = xinYanTable.condition.deptId;
+        queryData['deptId'] = liMuTable.condition.deptId;
         queryData['name'] = $("#name").val();
         queryData['timeLimit'] = $("#timeLimit").val();
-        table.reload(xinYanTable.tableId, {where: queryData});
+        table.reload(liMuTable.tableId, {where: queryData});
     };
 
     /**
      * 导出excel按钮
      */
-    xinYanTable.exportExcel = function () {
-        var checkRows = table.checkStatus(xinYanTable.tableId);
+    liMuTable.exportExcel = function () {
+        var checkRows = table.checkStatus(liMuTable.tableId);
         if (checkRows.data.length === 0) {
             Feng.error("请选择要导出的数据");
         } else {
@@ -67,13 +67,13 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
     };
 
     /**
-     * 打开全景雷达
+     * 打开立木运营商报告
      */
-    xinYanTable.onRadar = function (data) {
+    liMuTable.onMobileReport = function (data) {
         var index = layer.open({
             type: 2,
-            title: '全景雷达',
-            content: Feng.ctxPath + "/xinYan/getReDerData/" + data.id,
+            title: '运营商报告',
+            content: Feng.ctxPath + "/liMu/getMobileReport/" + data.id,
             closeBtn: 0,
             shadeClose: true,
             resize: true,
@@ -83,13 +83,46 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
     };
 
     /**
-     * 打开芝麻分
+     * 打开淘宝报告
      */
-    xinYanTable.onTaoBaoWeb = function (data) {
+    liMuTable.onTaoBaoReport = function (data) {
+        alert(1)
         var index = layer.open({
             type: 2,
-            title: '芝麻分报告',
-            content: Feng.ctxPath + "/xinYan/getTaoBaoWebReport/" + data.id,
+            title: '淘宝报告',
+            content: Feng.ctxPath + "/liMu/getTaoBaoReport/" + data.id,
+            closeBtn: 0,
+            shadeClose: true,
+            resize: true,
+            btn: ['关闭']
+        });
+        layer.full(index);
+    };
+
+    /**
+     * 打开立方升级报告
+     */
+    liMuTable.onLiFangUpgradeCheck = function (data) {
+        var index = layer.open({
+            type: 2,
+            title: '升级报告',
+            content: Feng.ctxPath + "/liMu/getLiFangUpgradeCheck/" + data.id,
+            closeBtn: 0,
+            shadeClose: true,
+            resize: true,
+            btn: ['关闭']
+        });
+        layer.full(index);
+    };
+
+    /**
+     * 打开设备指纹报告
+     */
+    liMuTable.onMachineCheck = function (data) {
+        var index = layer.open({
+            type: 2,
+            title: '设备报告',
+            content: Feng.ctxPath + "/liMu/getMachineCheck/" + data.id,
             closeBtn: 0,
             shadeClose: true,
             resize: true,
@@ -100,14 +133,14 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
 
     // 渲染表格
     var tableResult = table.render({
-        elem: '#' + xinYanTable.tableId,
-        url: Feng.ctxPath + '/xinYan/list',
+        elem: '#' + liMuTable.tableId,
+        url: Feng.ctxPath + '/liMu/list',
         page: true,
         limits: [20, 50, 100],  //每页条数的选择项，默认：[10,20,30,40,50,60,70,80,90]。
         limit: 20, //每页默认显示的数量
         height: "full-98",
         cellMinWidth: 100,
-        cols: xinYanTable.initColumn()
+        cols: liMuTable.initColumn()
     });
 
     //渲染时间选择框
@@ -119,27 +152,31 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
 
     //初始化左侧部门树
     var ztree = new $ZTree("deptTree", "/dept/tree");
-    ztree.bindOnClick(xinYanTable.onClickDept);
+    ztree.bindOnClick(liMuTable.onClickDept);
     ztree.init();
 
     // 搜索按钮点击事件
     $('#btnSearch').click(function () {
-        xinYanTable.search();
+        liMuTable.search();
     });
 
     // 导出excel
     $('#btnExp').click(function () {
-        xinYanTable.exportExcel();
+        liMuTable.exportExcel();
     });
 
     // 工具条点击事件
-    table.on('tool(' + xinYanTable.tableId + ')', function (obj) {
+    table.on('tool(' + liMuTable.tableId + ')', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'radar') {
-            xinYanTable.onRadar(data);
-        } else if (layEvent === 'taobaoweb') {
-            xinYanTable.onTaoBaoWeb(data);
+        if (layEvent === 'mobileReport') {
+            liMuTable.onMobileReport(data);
+        } else if (layEvent === 'taobaoReport') {
+            liMuTable.onTaoBaoReport(data);
+        }  else if (layEvent === 'lifangupgradecheck') {
+            liMuTable.onLiFangUpgradeCheck(data);
+        }  else if (layEvent === 'machinecheck') {
+            liMuTable.onMachineCheck(data);
         }
     });
 });

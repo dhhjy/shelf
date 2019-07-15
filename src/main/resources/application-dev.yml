@@ -6,9 +6,29 @@ spring:
     username: root
     password: xinwei
     filters: wall,mergeStat
-    data-source-name: gunsdb
-    max-wait: 10000
+    data-source-name: shelfdb
+    # 初始化大小，最小等待连接数量，最大等待连接数量，最大连接数
     initial-size: 20
+    type: com.alibaba.druid.pool.DruidDataSource
+    # 连接池最小空闲连接数
+    minIdle: 5
+    # 连接池最大空闲连接数
+    maxActive: 20
+    # 配置获取连接等待超时的时间
+    maxWait: 60000
+    # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+    timeBetweenEvictionRunsMillis: 60000
+    # 配置一个连接在池中最小生存的时间，单位是毫秒
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    # 指明连接是否被空闲连接回收器(如果有)进行检验，如果检测失败，则连接将被从池中去除
+    testWhileIdle: true
+    testOnBorrow: true
+    testOnReturn: false
+    # 打开PSCache，并且指定每个连接上PSCache的大小
+    poolPreparedStatements: false
+    maxPoolPreparedStatementPerConnectionSize: 20
+  # Redis 配置信息
   cache:
     type: redis
   redis:
