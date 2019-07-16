@@ -2,6 +2,7 @@ package com.quick.shelf.modular.business.controller;
 
 import cn.stylefeng.roses.core.datascope.DataScope;
 import cn.stylefeng.roses.core.util.ToolUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.quick.shelf.core.base.BaseController;
 import com.quick.shelf.core.common.annotion.BussinessLog;
@@ -9,7 +10,9 @@ import com.quick.shelf.core.common.annotion.Permission;
 import com.quick.shelf.core.common.page.LayuiPageFactory;
 import com.quick.shelf.core.shiro.ShiroKit;
 import com.quick.shelf.modular.business.entity.BLiMuData;
+import com.quick.shelf.modular.business.entity.BSysUser;
 import com.quick.shelf.modular.business.service.BLiMuService;
+import com.quick.shelf.modular.business.service.BSysUserService;
 import com.quick.shelf.modular.business.warpper.BLiMuWrapper;
 import com.quick.shelf.modular.constant.BusinessConst;
 import com.quick.shelf.modular.creditPort.liMu.LiMuConstantEnum;
@@ -46,6 +49,9 @@ public class BLiMuController extends BaseController {
 
     @Resource
     private BLiMuService bLiMuService;
+
+    @Resource
+    private BSysUserService bSysUserService;
 
     /**
      * 立木征信报告跳转页面
@@ -102,57 +108,78 @@ public class BLiMuController extends BaseController {
 
     /**
      * 获取立木运营商报告
+     *
      * @return
      */
     @BussinessLog(value = "获取立木运营商报告")
-    @ApiOperation(value = "获取立木运营商报告",notes = "获取立木运营商报告",httpMethod = "GET")
-    @ApiImplicitParam(value = "用户主键", name="userId", required = true, dataType = "Integer")
+    @ApiOperation(value = "获取立木运营商报告", notes = "获取立木运营商报告", httpMethod = "GET")
+    @ApiImplicitParam(value = "用户主键", name = "userId", required = true, dataType = "Integer")
     @RequestMapping(value = "/getMobileReport/{userId}")
-    public String getMobileReport(@PathVariable Integer userId, Model model){
+    public String getMobileReport(@PathVariable Integer userId, Model model) {
         BLiMuData data = this.bLiMuService.selectBLiMuDataByUserId(userId, LiMuConstantEnum.API_NAME_YYS.getApiName(), BusinessConst.PAGE_DATA.toString());
-        model.addAttribute("mobileReport",BLiMuWrapper.replaceHtmlUrl(data.getDataValue()));
+        model.addAttribute("mobileReport", BLiMuWrapper.replaceHtmlUrl(data.getDataValue()));
         return PATH + "liMu_mobileReport.html";
     }
 
     /**
      * 获取淘宝认证报告
+     *
      * @return
      */
     @BussinessLog(value = "获取淘宝认证报告")
-    @ApiOperation(value = "获取淘宝认证报告",notes = "获取淘宝认证报告",httpMethod = "GET")
-    @ApiImplicitParam(value = "用户主键", name="userId", required = true, dataType = "Integer")
+    @ApiOperation(value = "获取淘宝认证报告", notes = "获取淘宝认证报告", httpMethod = "GET")
+    @ApiImplicitParam(value = "用户主键", name = "userId", required = true, dataType = "Integer")
     @RequestMapping(value = "/getTaoBaoReport/{userId}")
-    public String getTaoBaoReport(@PathVariable Integer userId, Model model){
+    public String getTaoBaoReport(@PathVariable Integer userId, Model model) {
         BLiMuData data = this.bLiMuService.selectBLiMuDataByUserId(userId, LiMuConstantEnum.API_NAME_TB.getApiName(), BusinessConst.PAGE_DATA.toString());
-        model.addAttribute("taoBaoReport",BLiMuWrapper.replaceHtmlUrl(data.getDataValue()));
+        model.addAttribute("taoBaoReport", BLiMuWrapper.replaceHtmlUrl(data.getDataValue()));
         return PATH + "liMu_taoBaoReport.html";
     }
 
     /**
      * 获取立方升级报告
+     *
      * @return
      */
     @BussinessLog(value = "获取立方升级报告")
-    @ApiOperation(value = "获取立方升级报告",notes = "获取立方升级报告",httpMethod = "GET")
-    @ApiImplicitParam(value = "用户主键", name="userId", required = true, dataType = "Integer")
+    @ApiOperation(value = "获取立方升级报告", notes = "获取立方升级报告", httpMethod = "GET")
+    @ApiImplicitParam(value = "用户主键", name = "userId", required = true, dataType = "Integer")
     @RequestMapping(value = "/getLiFangUpgradeCheck/{userId}")
-    public String getLiFangUpgradeCheck(@PathVariable Integer userId, Model model){
+    public String getLiFangUpgradeCheck(@PathVariable Integer userId, Model model) {
         BLiMuData data = this.bLiMuService.selectBLiMuDataByUserId(userId, LiMuConstantEnum.API_NAME_LFSJ.getApiName(), BusinessConst.PAGE_DATA.toString());
-        model.addAttribute("liFangUpgradeCheck",BLiMuWrapper.replaceHtmlUrl(data.getDataValue()));
+        model.addAttribute("liFangUpgradeCheck", BLiMuWrapper.replaceHtmlUrl(data.getDataValue()));
         return PATH + "liMu_liFangUpgradeCheck.html";
     }
 
     /**
      * 获取立木设备指纹
+     *
      * @return
      */
     @BussinessLog(value = "获取立木设备指纹")
-    @ApiOperation(value = "获取立木设备指纹",notes = "获取立木设备指纹",httpMethod = "GET")
-    @ApiImplicitParam(value = "用户主键", name="userId", required = true, dataType = "Integer")
-    @RequestMapping(value = "/getMachineCheck/{userId}")
-    public String getMachineCheck(@PathVariable Integer userId, Model model){
+    @ApiOperation(value = "获取立木设备指纹", notes = "获取立木设备指纹", httpMethod = "GET")
+    @ApiImplicitParam(value = "用户主键", name = "userId", required = true, dataType = "Integer")
+    @RequestMapping(value = "/getFingerprint/{userId}")
+    public String getFingerprint(@PathVariable Integer userId, Model model) {
         BLiMuData data = this.bLiMuService.selectBLiMuDataByUserId(userId, LiMuConstantEnum.API_NAME_SBZW.getApiName(), BusinessConst.ORIGINAL_DATA.toString());
-        model.addAttribute("machineCheck",BLiMuWrapper.replaceHtmlUrl(data.getDataValue()));
+        model.addAttribute("fingerprint", JSONObject.parseObject(data.getDataValue()));
+        return PATH + "liMu_fingerprint.html";
+    }
+
+    /**
+     * 获取立木机审报告
+     *
+     * @return
+     */
+    @BussinessLog(value = "获取立木机审报告")
+    @ApiOperation(value = "获取立木机审报告", notes = "获取立木机审报告", httpMethod = "GET")
+    @ApiImplicitParam(value = "用户主键", name = "userId", required = true, dataType = "Integer")
+    @RequestMapping(value = "/getMachineCheck/{userId}")
+    public String getMachineCheck(@PathVariable Integer userId, Model model) {
+        BSysUser bSysUser = bSysUserService.selectBSysUserByUserId(userId);
+        BLiMuData data = this.bLiMuService.selectBLiMuDataByUserId(userId, LiMuConstantEnum.API_NAME_JS.getApiName(), BusinessConst.ORIGINAL_DATA.toString());
+        model.addAttribute("machineCheck", JSONObject.parseObject(data.getDataValue()));
+        model.addAttribute("bSysUser", bSysUser);
         return PATH + "liMu_machineCheck.html";
     }
 }

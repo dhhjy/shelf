@@ -53,8 +53,12 @@
     <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="lifangupgradecheck">升级报告</a>
     {{#}}}
 
+    {{# if(d.type.indexOf('fingerprint') != -1){}}
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="fingerprint">设备报告</a>
+    {{#}}}
+
     {{# if(d.type.indexOf('machinecheck') != -1){}}
-    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="machinecheck">设备报告</a>
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="machinecheck">机审报告</a>
     {{#}}}
 </script>
 @}

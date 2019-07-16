@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="${ctxPath}/assets/expand/images/favicon.ico" rel="icon">
+    <title>${systemName}</title>
+    <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/limu/css/common.css">
+    <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/limu/css/manage.css">
+</head>
+<body>
+<div class="pt_container">
+    <div class="pt_content">
+        <!--我的服务-->
+        <div class="box_wrap">
+            <div class="box_center Mserve">
+                <div class="Mreport"><!--  style="padding-left: 0;" -->
+                    <!-- 左侧菜单 -->
+                    <div class="MrightCon" style="padding: 20px 34px 100px 28px">
+                        @if(isNotEmpty(fingerprint.data)){
+                        <div class="headName text_center">
+                            暂无设备指纹信息
+                        </div>
+                        @}else{
+                        <div class="headName text_center">
+                            设备指纹
+                        </div>
+                        @}
+                        <div class="credit_head">
+                            <table border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td>
+                                        访问设备指纹服务的应用：
+                                        <span>
+                                        @if(isNotEmpty(fingerprint.data.accessApp)){
+                                            ${fingerprint.data.accessApp}
+                                        @}else{
+                                            未获取到信息
+                                        @}
+                                        </span>
+                                    </td>
+                                    <td class="text_center">
+                                        访问设备指纹服务的时间：
+                                        <span>
+                                        @if(isNotEmpty(fingerprint.data.accessTime)){
+                                            ${fingerprint.data.accessTime}
+                                        @}else{
+                                            未获取到信息
+                                        @}
+                                        </span>
+                                    </td>
+                                    <td class="text-right">
+                                        手机品牌：
+                                        <span>
+                                        @if(isNotEmpty(fingerprint.data.brand)){
+                                            ${fingerprint.data.brand}
+                                        @}else{
+                                            未获取到信息
+                                        @}
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <!--内容-->
+                        <div class="credit_main" style="padding-bottom: 100px;">
+                            <h3 class="mt_20 text_center fs_26">设备信息</h3>
+                            <!--设备信息-->
+                            <div class="mt_14 credit_table">
+                                <p>设备信息</p>
+                                <table border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <th colspan="16">访问设备指纹服务的应用</th>
+                                        <td colspan="80">
+                                            @if(isNotEmpty(fingerprint.data.accessApp)){
+                                            <span class="valid">
+                                                    ${fingerprint.data.accessApp}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">访问设备指纹服务的时间</th>
+                                        <td colspan="80">
+                                            @if(isNotEmpty(fingerprint.data.accessTime)){
+                                            <span class="valid">
+                                                    ${fingerprint.data.accessTime}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">指纹设备</th>
+                                        <td colspan="80">
+                                            @if(isNotEmpty(fingerprint.data.deviceId)){
+                                            <span class="valid">
+                                                    ${fingerprint.data.deviceId}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">实际访问IP地址</th>
+                                        <td colspan="80">
+                                            @if(isNotEmpty(fingerprint.data.trueIp)){
+                                            <span class="valid">
+                                                    ${fingerprint.data.trueIp}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">当前设备相关设备信息</th>
+                                        <td colspan="80">
+                                            @if(isNotEmpty(fingerprint.data.deviceIdRelative)){
+                                            <span class="valid">
+                                                    ${fingerprint.data.deviceIdRelative}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">国家</th>
+                                        <td colspan="16">
+                                            @if(isNotEmpty(fingerprint.data.country)){
+                                            <span class="valid">
+                                                    ${fingerprint.data.country}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">城市</th>
+                                        <td colspan="16">
+                                            @if(isNotEmpty(fingerprint.data.city)){
+                                            <span class="valid">
+                                                    ${fingerprint.data.city}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">手机品牌</th>
+                                        <td colspan="16">
+                                            @if(isNotEmpty(fingerprint.data.brand)){
+                                            <span class="valid">
+                                                    ${fingerprint.data.brand}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">设备类型</th>
+                                        <td colspan="16">
+                                            @if(isNotEmpty(fingerprint.data.appType)){
+                                            <span class="valid">
+                                                    ${fingerprint.data.appType}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">CPU 信息</th>
+                                        <td colspan="16">
+                                            @if(isNotEmpty(fingerprint.data.cpu)){
+                                            <span class="valid">
+                                                    ${fingerprint.data.cpu}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">内存容量</th>
+                                        <td colspan="16">
+                                            @if(isNotEmpty(fingerprint.data.ram)){
+                                            <span class="valid">
+                                                    ${fingerprint.data.ram}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">硬盘</th>
+                                        <td colspan="16">
+                                            @if(isNotEmpty(fingerprint.data.diskSpace)){
+                                            <span class="valid">
+                                                    ${fingerprint.data.diskSpace}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">Ip 地址</th>
+                                        <td colspan="16">
+                                            @if(isNotEmpty(fingerprint.data.ip)){
+                                            <span class="valid">
+                                                    ${fingerprint.data.ip}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">是否模拟器</th>
+                                        <td colspan="16">
+                                            @if(isNotEmpty(fingerprint.data.isEmulator)){
+                                            @if(fingerprint.data.isEmulator == false){
+                                            <span class="valid">
+                                                        不是
+                                                    </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                        是
+                                                    </span>
+                                            @}
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">是否越狱</th>
+                                        <td colspan="16">
+                                            @if(isNotEmpty(fingerprint.data.isJailbreak)){
+                                            @if(fingerprint.data.isJailbreak == false){
+                                            <span class="valid">
+                                                        不是
+                                                    </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                        是
+                                                    </span>
+                                            @}
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">是否代理</th>
+                                        <td colspan="16">
+                                            @if(isNotEmpty(fingerprint.data.isProxy)){
+                                            @if(fingerprint.data.isProxy == false){
+                                            <span class="valid">
+                                                        不是
+                                                    </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                        是
+                                                    </span>
+                                            @}
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">是否ROOT</th>
+                                        <td colspan="16">
+                                            @if(isNotEmpty(fingerprint.data.isRoot)){
+                                            @if(fingerprint.data.isRoot == false){
+                                            <span class="valid">
+                                                        不是
+                                                    </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                        是
+                                                    </span>
+                                            @}
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">是否虚拟机</th>
+                                        <td colspan="16">
+                                            @if(isNotEmpty(fingerprint.data.isVM)){
+                                            @if(fingerprint.data.isVM == false){
+                                            <span class="valid">
+                                                        不是
+                                                    </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                        是
+                                                    </span>
+                                            @}
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">是否VPN</th>
+                                        <td colspan="16">
+                                            @if(isNotEmpty(fingerprint.data.isVpn)){
+                                            @if(fingerprint.data.isVpn == false){
+                                            <span class="valid">
+                                                        不是
+                                                    </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                        是
+                                                    </span>
+                                            @}
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">地理定位的精准程度</th>
+                                        <td colspan="16">
+                                            @if(isNotEmpty(fingerprint.data.locationPrecision)){
+                                            @if(fingerprint.data.locationPrecision == false){
+                                            <span class="valid">
+                                                        不是
+                                                    </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                        是
+                                                    </span>
+                                            @}
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">网络类型</th>
+                                        <td colspan="16">
+                                            @if(isNotEmpty(fingerprint.data.networkType)){
+                                            <span class="valid">
+                                                    ${fingerprint.data.networkType}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">系统</th>
+                                        <td colspan="16">
+                                            @if(isNotEmpty(fingerprint.data.operatorSystem)){
+                                            <span class="valid">
+                                                    ${fingerprint.data.operatorSystem}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">操作系统</th>
+                                        <td colspan="16">
+                                            @if(isNotEmpty(fingerprint.data.os)){
+                                            <span class="valid">
+                                                    ${fingerprint.data.os}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">操作系统版本号</th>
+                                        <td colspan="16">
+                                            @if(isNotEmpty(fingerprint.data.osVersion)){
+                                            <span class="valid">
+                                                    ${fingerprint.data.osVersion}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">图片地址</th>
+                                        <td colspan="16">
+                                            @if(isNotEmpty(fingerprint.data.picture)){
+                                            <span class="valid">
+                                                    ${fingerprint.data.picture}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">手机型号</th>
+                                        <td colspan="16">
+                                            @if(isNotEmpty(fingerprint.data.platform)){
+                                            <span class="valid">
+                                                    ${fingerprint.data.platform}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">上市价格</th>
+                                        <td colspan="16">
+                                            @if(isNotEmpty(fingerprint.data.price)){
+                                            <span class="valid">
+                                                    ${fingerprint.data.price}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">省份</th>
+                                        <td colspan="16">
+                                            @if(isNotEmpty(fingerprint.data.region)){
+                                            <span class="valid">
+                                                    ${fingerprint.data.region}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">设备分辨率</th>
+                                        <td colspan="16">
+                                            @if(isNotEmpty(fingerprint.data.resolution)){
+                                            <span class="valid">
+                                                    ${fingerprint.data.resolution}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">设备环境安全系数</th>
+                                        <td colspan="16">
+                                            @if(isNotEmpty(fingerprint.data.score)){
+                                            <span class="valid">
+                                                    ${fingerprint.data.score}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">屏幕尺寸</th>
+                                        <td colspan="16">
+                                            @if(isNotEmpty(fingerprint.data.screenDPI)){
+                                            <span class="valid">
+                                                    ${fingerprint.data.screenDPI}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">屏幕分辨率</th>
+                                        <td colspan="16">
+                                            @if(isNotEmpty(fingerprint.data.screenSize)){
+                                            <span class="valid">
+                                                    ${fingerprint.data.screenSize}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">外壳颜色</th>
+                                        <td colspan="16">
+                                            @if(isNotEmpty(fingerprint.data.shellColor)){
+                                            <span class="valid">
+                                                    ${fingerprint.data.shellColor}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">尺寸</th>
+                                        <td colspan="16">
+                                            @if(isNotEmpty(fingerprint.data.shellSize)){
+                                            <span class="valid">
+                                                    ${fingerprint.data.shellSize}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">上市时间</th>
+                                        <td colspan="16">
+                                            @if(isNotEmpty(fingerprint.data.timeToMarket)){
+                                            <span class="valid">
+                                                    ${fingerprint.data.timeToMarket}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">
+                                                    未获取到信息
+                                                </span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="${ctxPath}/assets/limu/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/limu/js/common.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/limu/js/echarts-4.2.1.common.min.js"></script>
+<script>
+
+</script>
+</body>
+</html>

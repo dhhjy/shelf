@@ -1,1 +1,209 @@
-${machineCheck}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="${ctxPath}/assets/expand/images/favicon.ico" rel="icon">
+    <title>${systemName}</title>
+    <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/limu/css/common.css">
+    <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/limu/css/manage.css">
+    <style>
+        .error {
+            padding-left: 30px !important;
+            color: #f24130;
+            background: url('/resource/img/error.png') no-repeat 0 center;
+            background-size: contain;
+        }
+
+        .success {
+            padding-left: 30px !important;
+            color: #39b31b;
+            background: url('/resource/img/success.png') no-repeat 0 center;
+            background-size: contain;
+        }
+
+        .result {
+            margin: 25px auto;
+            width: 350px;
+            height: 50px;
+            line-height: 50px;
+        }
+    </style>
+</head>
+<body>
+<div class="pt_container">
+    <div class="pt_content">
+        <!--我的服务-->
+        <div class="box_wrap">
+            <div class="box_center Mserve">
+                <div class="Mreport"><!--  style="padding-left: 0;" -->
+                    <!-- 左侧菜单 -->
+                    <div class="MrightCon" style="padding: 20px 34px 100px 28px">
+                        <div class="headName text_center">
+                            机审报告
+                        </div>
+                        <div class="credit_head">
+                            <table border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td>
+                                        姓名：
+                                        <span>
+                                        @if(isNotEmpty(bSysUser.name)){
+                                            ${bSysUser.name}
+                                        @}else{
+                                            未获取到信息
+                                        @}
+                                        </span>
+                                    </td>
+                                    <td class="text_center">
+                                        手机号：
+                                        <span>
+                                        @if(isNotEmpty(bSysUser.phoneNumber)){
+                                            ${bSysUser.phoneNumber}
+                                        @}else{
+                                            未获取到信息
+                                        @}
+                                        </span>
+                                    </td>
+                                    <td class="text-right">
+                                        身份证：
+                                        <span>
+                                        @if(isNotEmpty(bSysUser.idCard)){
+                                            ${bSysUser.idCard}
+                                        @}else{
+                                            未获取到信息
+                                        @}
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        @if(null == machineCheck || null == machineCheck.data){
+                            <div class="result fail text_center fs_20">
+                                <p>机审评估结果：<span class="error col_red">暂无机审报告</span></p>
+                            </div>
+                        @}else{
+
+                        <div class="mt_14 credit_table">
+                            <p style="text-align: center;">机审评估结论：<span class="col_red">${machineCheck.data.resultMsg}</span></p>
+                        </div>
+
+                        <!--内容-->
+                        <div class="credit_main" style="padding-bottom: 100px;">
+
+                            <!--运营商-->
+                            <div class="mt_14 credit_table">
+                                <h3 class="mt_20 text_center fs_26">运营商</h3>
+                                <p>运营商</p>
+                                <table border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <th>规则名称</th>
+                                        <th>结果</th>
+                                        <th>机审建议</th>
+                                    </tr>
+                                    @if(isNotEmpty(machineCheck.data.mReportCheck)){
+                                        @for(mobile in machineCheck.data.mReportCheck){
+                                            <tr>
+                                                <td>${mobile.desc}</td>
+                                                <td><span class="unknow">命中</span></td>
+                                                <td>
+                                                    @if(mobile.result == '00'){
+                                                       <span class="valid">人工复审</span>
+                                                    @}else{
+                                                        <span class="unvalid">直接拒单</span>
+                                                    @}
+                                                </td>
+                                            </tr>
+                                        @}
+                                    @}else{
+                                    <tr>
+                                        <td colspan="3"><span class="valid">暂无检测到此项目的匹配结果信息</span></td>
+                                    </tr>
+                                    @}
+                                </table>
+                            </div>
+
+                            <!--淘宝-->
+                            <div class="mt_14 credit_table">
+                                <h3 class="mt_20 text_center fs_26">淘宝</h3>
+                                <p>淘宝</p>
+                                <table border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <th>规则名称</th>
+                                        <th>结果</th>
+                                        <th>机审建议</th>
+                                    </tr>
+                                    @if(isNotEmpty(machineCheck.data.tbReportCheck)){
+                                        @for(tb in machineCheck.data.tbReportCheck){
+                                            <tr>
+                                                <td>${tb.desc}</td>
+                                                <td><span class="unknow">命中</span></td>
+                                                <td>
+                                                    @if(tb.result == '00'){
+                                                       <span class="valid">人工复审</span>
+                                                    @}else{
+                                                        <span class="unvalid">直接拒单</span>
+                                                    @}
+                                                </td>
+                                            </tr>
+                                        @}
+                                    @}else{
+                                    <tr>
+                                        <td colspan="3"><span class="valid">暂无检测到此项目的匹配结果信息</span></td>
+                                    </tr>
+                                    @}
+                                </table>
+                            </div>
+
+                            <!--升级报告-->
+                            <div class="mt_14 credit_table">
+                                <h3 class="mt_20 text_center fs_26">升级报告</h3>
+                                <p>升级报告</p>
+                                <table border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <th>规则名称</th>
+                                        <th>结果</th>
+                                        <th>机审建议</th>
+                                    </tr>
+                                    @if(isNotEmpty(machineCheck.data.lfuCheck)){
+                                        @for(ifu in machineCheck.data.lfuCheck){
+                                            <tr>
+                                                <td>${ifu.desc}</td>
+                                                <td>
+                                                    <span class="unknow">命中</span>
+                                                </td>
+                                                <td>
+                                                    @if(ifu.result == '00'){
+                                                       <span class="valid">人工复审</span>
+                                                    @}else{
+                                                        <span class="unvalid">直接拒单</span>
+                                                    @}
+                                                </td>
+                                            </tr>
+                                        @}
+                                    @}else{
+                                    <tr>
+                                        <td colspan="3"><span class="valid">暂无检测到此项目的匹配结果信息</span></td>
+                                    </tr>
+                                    @}
+                                </table>
+                            </div>
+                        </div>
+                        @}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="${ctxPath}/assets/limu/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/limu/js/common.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/limu/js/echarts-4.2.1.common.min.js"></script>
+<script>
+
+</script>
+</body>
+</html>

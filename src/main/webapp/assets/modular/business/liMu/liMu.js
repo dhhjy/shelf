@@ -118,6 +118,22 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
     /**
      * 打开设备指纹报告
      */
+    liMuTable.onFingerprint = function (data) {
+        var index = layer.open({
+            type: 2,
+            title: '设备报告',
+            content: Feng.ctxPath + "/liMu/getFingerprint/" + data.id,
+            closeBtn: 0,
+            shadeClose: true,
+            resize: true,
+            btn: ['关闭']
+        });
+        layer.full(index);
+    };
+
+    /**
+     * 打开设备指纹报告
+     */
     liMuTable.onMachineCheck = function (data) {
         var index = layer.open({
             type: 2,
@@ -175,6 +191,8 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
             liMuTable.onTaoBaoReport(data);
         }  else if (layEvent === 'lifangupgradecheck') {
             liMuTable.onLiFangUpgradeCheck(data);
+        }  else if (layEvent === 'fingerprint') {
+            liMuTable.onFingerprint(data);
         }  else if (layEvent === 'machinecheck') {
             liMuTable.onMachineCheck(data);
         }
