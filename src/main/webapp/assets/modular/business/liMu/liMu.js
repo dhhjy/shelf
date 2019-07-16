@@ -1,4 +1,4 @@
-layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], function () {
+layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax', 'element'], function () {
     var layer = layui.layer;
     var form = layui.form;
     var table = layui.table;
@@ -6,6 +6,13 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
     var $ax = layui.ax;
     var laydate = layui.laydate;
     var admin = layui.admin;
+    var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
+
+    //监听导航点击
+    element.on('nav(demo)', function(elem){
+        //console.log(elem)
+        layer.msg(elem.text());
+    });
 
     /**
      * 征信管理——立木征信
@@ -31,7 +38,7 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
             {field: 'idCard', title: '身份证号', minWidth: 200},
             {field: 'deptName', title: '部门', minWidth: 200},
             {field: 'createTime', sort: true, title: '认证时间', minWidth: 200},
-            {minWidth: 350, align:'center', title: '操作', toolbar: '#tableBar', fixed: 'right'}
+            {minWidth: 200, align:'center', title: '操作', toolbar: '#tableBar', fixed: 'right'}
         ]];
     };
 
@@ -86,7 +93,6 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
      * 打开淘宝报告
      */
     liMuTable.onTaoBaoReport = function (data) {
-        alert(1)
         var index = layer.open({
             type: 2,
             title: '淘宝报告',
@@ -132,12 +138,12 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
     };
 
     /**
-     * 打开设备指纹报告
+     * 打开机审报告
      */
     liMuTable.onMachineCheck = function (data) {
         var index = layer.open({
             type: 2,
-            title: '设备报告',
+            title: '机审报告',
             content: Feng.ctxPath + "/liMu/getMachineCheck/" + data.id,
             closeBtn: 0,
             shadeClose: true,

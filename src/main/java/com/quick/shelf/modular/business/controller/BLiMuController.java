@@ -114,6 +114,7 @@ public class BLiMuController extends BaseController {
     @BussinessLog(value = "获取立木运营商报告")
     @ApiOperation(value = "获取立木运营商报告", notes = "获取立木运营商报告", httpMethod = "GET")
     @ApiImplicitParam(value = "用户主键", name = "userId", required = true, dataType = "Integer")
+    @Permission
     @RequestMapping(value = "/getMobileReport/{userId}")
     public String getMobileReport(@PathVariable Integer userId, Model model) {
         BLiMuData data = this.bLiMuService.selectBLiMuDataByUserId(userId, LiMuConstantEnum.API_NAME_YYS.getApiName(), BusinessConst.PAGE_DATA.toString());
@@ -129,6 +130,7 @@ public class BLiMuController extends BaseController {
     @BussinessLog(value = "获取淘宝认证报告")
     @ApiOperation(value = "获取淘宝认证报告", notes = "获取淘宝认证报告", httpMethod = "GET")
     @ApiImplicitParam(value = "用户主键", name = "userId", required = true, dataType = "Integer")
+    @Permission
     @RequestMapping(value = "/getTaoBaoReport/{userId}")
     public String getTaoBaoReport(@PathVariable Integer userId, Model model) {
         BLiMuData data = this.bLiMuService.selectBLiMuDataByUserId(userId, LiMuConstantEnum.API_NAME_TB.getApiName(), BusinessConst.PAGE_DATA.toString());
@@ -144,6 +146,7 @@ public class BLiMuController extends BaseController {
     @BussinessLog(value = "获取立方升级报告")
     @ApiOperation(value = "获取立方升级报告", notes = "获取立方升级报告", httpMethod = "GET")
     @ApiImplicitParam(value = "用户主键", name = "userId", required = true, dataType = "Integer")
+    @Permission
     @RequestMapping(value = "/getLiFangUpgradeCheck/{userId}")
     public String getLiFangUpgradeCheck(@PathVariable Integer userId, Model model) {
         BLiMuData data = this.bLiMuService.selectBLiMuDataByUserId(userId, LiMuConstantEnum.API_NAME_LFSJ.getApiName(), BusinessConst.PAGE_DATA.toString());
@@ -159,6 +162,7 @@ public class BLiMuController extends BaseController {
     @BussinessLog(value = "获取立木设备指纹")
     @ApiOperation(value = "获取立木设备指纹", notes = "获取立木设备指纹", httpMethod = "GET")
     @ApiImplicitParam(value = "用户主键", name = "userId", required = true, dataType = "Integer")
+    @Permission
     @RequestMapping(value = "/getFingerprint/{userId}")
     public String getFingerprint(@PathVariable Integer userId, Model model) {
         BLiMuData data = this.bLiMuService.selectBLiMuDataByUserId(userId, LiMuConstantEnum.API_NAME_SBZW.getApiName(), BusinessConst.ORIGINAL_DATA.toString());
@@ -174,6 +178,7 @@ public class BLiMuController extends BaseController {
     @BussinessLog(value = "获取立木机审报告")
     @ApiOperation(value = "获取立木机审报告", notes = "获取立木机审报告", httpMethod = "GET")
     @ApiImplicitParam(value = "用户主键", name = "userId", required = true, dataType = "Integer")
+    @Permission
     @RequestMapping(value = "/getMachineCheck/{userId}")
     public String getMachineCheck(@PathVariable Integer userId, Model model) {
         BSysUser bSysUser = bSysUserService.selectBSysUserByUserId(userId);

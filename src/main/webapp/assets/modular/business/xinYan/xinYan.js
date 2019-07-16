@@ -31,7 +31,7 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
             {field: 'idCard', title: '身份证号', minWidth: 200},
             {field: 'deptName', title: '部门', minWidth: 200},
             {field: 'createTime', sort: true, title: '认证时间', minWidth: 200},
-            {minWidth: 260, align:'center', title: '操作', toolbar: '#tableBar', fixed: 'right'}
+            {minWidth: 200, align:'center', title: '操作', toolbar: '#tableBar', fixed: 'right'}
         ]];
     };
 

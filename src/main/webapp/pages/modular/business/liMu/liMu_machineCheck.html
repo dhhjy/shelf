@@ -9,20 +9,6 @@
     <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/limu/css/common.css">
     <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/limu/css/manage.css">
     <style>
-        .error {
-            padding-left: 30px !important;
-            color: #f24130;
-            background: url('/resource/img/error.png') no-repeat 0 center;
-            background-size: contain;
-        }
-
-        .success {
-            padding-left: 30px !important;
-            color: #39b31b;
-            background: url('/resource/img/success.png') no-repeat 0 center;
-            background-size: contain;
-        }
-
         .result {
             margin: 25px auto;
             width: 350px;
@@ -82,7 +68,7 @@
 
                         @if(null == machineCheck || null == machineCheck.data){
                             <div class="result fail text_center fs_20">
-                                <p>机审评估结果：<span class="error col_red">暂无机审报告</span></p>
+                                <p>机审评估结果：<span class="valid">暂无机审报告</span></p>
                             </div>
                         @}else{
 

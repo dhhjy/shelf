@@ -43,13 +43,15 @@
 
     @if(shiro.hasPermission("/xinYan/getReDerData")){
     {{# if(d.type.indexOf('radar') != -1){}}
-    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="radar">全景雷达</a>
+    <a title="全景雷达" lay-event="radar"><i class="iconfont">&#xe628;</i></a>
+<!--    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="radar">全景雷达</a>-->
     {{#}}}
     @}
 
     @if(shiro.hasPermission("/xinYan/getTaoBaoWebReport")){
     {{# if(d.type.indexOf('taobaoweb') != -1){}}
-    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="taobaoweb">芝麻分报告</a>
+    <a title="芝麻分报告" lay-event="taobaoweb"><i class="iconfont">&#xe61e;</i></a>
+<!--    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="taobaoweb">芝麻分报告</a>-->
     {{#}}}
     @}
 </script>
