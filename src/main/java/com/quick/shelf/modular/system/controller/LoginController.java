@@ -49,6 +49,9 @@ public class LoginController extends BaseController {
             return "/login.html";
         }
 
+        if(roleList.get(0) == 999)
+            return REDIRECT + "/h5/index";
+
         List<MenuNode> menus = userService.getUserMenuNodes(roleList);
         model.addAttribute("menus", menus);
 
@@ -100,7 +103,6 @@ public class LoginController extends BaseController {
         //登录成功，记录
         ShiroUser shiroUser = ShiroKit.getUserNotNull();
         LogManager.me().executeLog(LogTaskFactory.loginLog(shiroUser.getId(), LogIp.getIpAddr(request)));
-//        LogManager.me().executeLog(LogTaskFactory.loginLog(shiroUser.getId(), getIp()));
 
         ShiroKit.getSession().setAttribute("sessionFlag", true);
 
@@ -118,9 +120,17 @@ public class LoginController extends BaseController {
      */
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logOut(HttpServletRequest request) {
+        List<Long> roles = ShiroKit.getUser().getRoleList();
+        // 记录日志
         LogManager.me().executeLog(LogTaskFactory.exitLog(ShiroKit.getUserNotNull().getId(), LogIp.getIpAddr(request)));
+        // 清除用户
         ShiroKit.getSubject().logout();
+        // 删除cookie
         deleteAllCookie();
-        return REDIRECT + "/login";
+        // 转发到相应的登录页面
+        if(roles.get(0) == 999)
+            return REDIRECT + "/h5/";
+        else
+            return REDIRECT + "/login";
     }
 }
