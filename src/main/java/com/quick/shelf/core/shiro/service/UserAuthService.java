@@ -22,6 +22,13 @@ public interface UserAuthService {
     User user(String account);
 
     /**
+     * 根据账号获取登录用户
+     *
+     * @param phoneNumber 手机号
+     */
+    User BSysuser(String phoneNumber);
+
+    /**
      * 根据系统用户获取Shiro的用户
      *
      * @param user 系统用户

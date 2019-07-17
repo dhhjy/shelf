@@ -1,37 +1,22 @@
-/**
- * Copyright 2018-2020 quick & fengshuonan (https://gitee.com/stylefeng)
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.quick.shelf.core.shiro.service.impl;
 
 import cn.hutool.core.convert.Convert;
+import cn.stylefeng.roses.core.util.SpringContextHolder;
 import com.quick.shelf.core.common.constant.factory.ConstantFactory;
 import com.quick.shelf.core.common.constant.state.ManagerStatus;
 import com.quick.shelf.core.shiro.ShiroKit;
 import com.quick.shelf.core.shiro.ShiroUser;
 import com.quick.shelf.core.shiro.service.UserAuthService;
+import com.quick.shelf.modular.business.entity.BSysUser;
+import com.quick.shelf.modular.business.mapper.BSysUserMapper;
 import com.quick.shelf.modular.system.entity.User;
 import com.quick.shelf.modular.system.mapper.MenuMapper;
 import com.quick.shelf.modular.system.mapper.UserMapper;
-import com.quick.shelf.modular.system.service.UserService;
-import cn.stylefeng.roses.core.util.SpringContextHolder;
 import org.apache.shiro.authc.CredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.util.ByteSource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -56,25 +41,65 @@ public class UserAuthServiceServiceImpl implements UserAuthService {
 
     @Resource
     @Lazy
-    private UserService userService;
+    private BSysUserMapper bSysUserMapper;
 
     public static UserAuthService me() {
         return SpringContextHolder.getBean(UserAuthService.class);
     }
 
+    /**
+     * 查询系统内部用户
+     * @param account 账号
+     * @return
+     */
     @Override
     public User user(String account) {
-
+        // 系统用户查询
         User user = userMapper.getByAccount(account);
-
         // 账号不存在
         if (null == user) {
             throw new CredentialsException();
         }
+
         // 账号被冻结
         if (!user.getStatus().equals(ManagerStatus.OK.getCode())) {
             throw new LockedAccountException();
         }
+        return user;
+    }
+
+    /**
+     * 查询系统客户
+     * @param phoneNumber 手机号
+     * @return
+     */
+    @Override
+    public User BSysuser(String phoneNumber) {
+        //查询系统客户
+        BSysUser bSysUser = bSysUserMapper.getByPhoneNumber(phoneNumber);
+
+        // 账号不存在
+        if (null == bSysUser) {
+            throw new CredentialsException();
+        }
+
+        // 账号被冻结
+        if (!bSysUser.getStatus().equals(ManagerStatus.OK.getCode())) {
+            throw new LockedAccountException();
+        }
+
+        // 将查询出来的数据进行封装为全局 ShiroUser
+        User user = new User();
+        user.setUserId(Long.valueOf(bSysUser.getUserId()));
+        user.setAccount(bSysUser.getUserAccount());
+        user.setPassword(bSysUser.getPassword());
+        user.setSalt(bSysUser.getSalt());
+        user.setDeptId(bSysUser.getDeptId());
+        user.setName(bSysUser.getName());
+        user.setPhone(bSysUser.getPhoneNumber());
+        user.setStatus(bSysUser.getStatus());
+        user.setSex(bSysUser.getSex());
+        user.setRoleId("999");
         return user;
     }
 

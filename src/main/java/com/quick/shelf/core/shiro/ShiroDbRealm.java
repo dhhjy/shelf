@@ -1,9 +1,10 @@
 package com.quick.shelf.core.shiro;
 
+import cn.stylefeng.roses.core.util.HttpContext;
+import cn.stylefeng.roses.core.util.ToolUtil;
 import com.quick.shelf.core.shiro.service.UserAuthService;
 import com.quick.shelf.core.shiro.service.impl.UserAuthServiceServiceImpl;
 import com.quick.shelf.modular.system.entity.User;
-import cn.stylefeng.roses.core.util.ToolUtil;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -15,6 +16,7 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,7 +31,15 @@ public class ShiroDbRealm extends AuthorizingRealm {
             throws AuthenticationException {
         UserAuthService shiroFactory = UserAuthServiceServiceImpl.me();
         UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
-        User user = shiroFactory.user(token.getUsername());
+        HttpServletRequest request = HttpContext.getRequest();
+        String loginType = request.getParameter("loginType");
+        User user = new User();
+
+        if("PC".equals(loginType))
+            user = shiroFactory.user(token.getUsername());
+        if("H5".equals(loginType))
+            user = shiroFactory.BSysuser(token.getUsername());
+
         ShiroUser shiroUser = shiroFactory.shiroUser(user);
         return shiroFactory.info(shiroUser, user, super.getName());
     }
