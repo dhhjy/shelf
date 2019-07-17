@@ -56,4 +56,10 @@
             SET STATUS = 'DISABLE'
                 WHERE USER_ID = #{userId}
     </update>
+
+    <select id="getByPhoneNumber" resultType="com.quick.shelf.modular.business.entity.BSysUser">
+        select
+        <include refid="Base_Column_List_With_Pwd"/>
+        from b_sys_user where phone_number = #{phoneNumber} and status != 'DELETED'
+    </select>
 </mapper>

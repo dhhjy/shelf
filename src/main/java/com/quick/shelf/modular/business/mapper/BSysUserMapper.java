@@ -27,4 +27,9 @@ public interface BSysUserMapper extends BaseMapper<BSysUser> {
      * @param userId
      */
     void deleteBSysUserByUserId(@Param("userId") Integer userId);
+
+    /**
+     * 通过账号获取用户
+     */
+    BSysUser getByPhoneNumber(@Param("phoneNumber") String phoneNumber);
 }
