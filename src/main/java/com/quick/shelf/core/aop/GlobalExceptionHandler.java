@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.UndeclaredThrowableException;
 
 import static cn.stylefeng.roses.core.util.HttpContext.getIp;
@@ -81,7 +82,14 @@ public class GlobalExceptionHandler {
         String username = getRequest().getParameter("username");
         LogManager.me().executeLog(LogTaskFactory.loginLog(username, "账号密码错误", getIp()));
         model.addAttribute("tips", "账号密码错误");
-        return "/login.html";
+        
+        // 判断是移动端登陆还是PC端登陆
+        HttpServletRequest request = getRequest();
+        String loginType = request.getParameter("loginType");
+        if(null != loginType && loginType.equals("PC"))
+            return "/login.html";
+        else
+            return "/H5/login.html";
     }
 
     /**

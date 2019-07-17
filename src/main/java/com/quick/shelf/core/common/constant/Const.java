@@ -38,6 +38,16 @@ public interface Const {
     String DEFAULT_WELCOME_TIP = "欢迎使用鑫炜金融后台管理系统!";
 
     /**
+     * 默认用户系统的名称
+     */
+    String SYSTEM_CLIENT_NAME = "鑫炜科技-秒秒贷";
+
+    /**
+     * 默认欢迎界面的提示
+     */
+    String DEFAULT_CLIENT_TIP = "欢迎!";
+
+    /**
      * 系统默认的管理员密码
      */
     String DEFAULT_PWD = "111111";
@@ -70,6 +80,8 @@ public interface Const {
     /**
      * 不需要权限验证的资源表达式
      */
-    List<String> NONE_PERMISSION_RES = CollectionUtil.newLinkedList("/assets/**", "/gunsApi/**", "/login", "/global/sessionError", "/kaptcha", "/error", "/global/error", "/xinYan/callbackJson");
+    List<String> NONE_PERMISSION_RES = CollectionUtil.newLinkedList("/assets/**", "/gunsApi/**",
+            "/login", "/global/sessionError", "/kaptcha", "/error", "/global/error", "/xinYan/callbackJson",
+            "/h5/","/h5/login");
 
 }
