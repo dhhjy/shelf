@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>登录 - Shelf</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="${ctxPath}/assets/expand/images/favicon.ico" rel="icon">
+    <!--    <link rel="stylesheet" href="${ctxPath}/assets/common/layui/css/layui.css"/>-->
+    <!--    <link rel="stylesheet" href="${ctxPath}/assets/common/css/login.css" media="all">-->
+
+    <link rel="stylesheet" href="${ctxPath}/assets/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="${ctxPath}/assets/h5/css/admin_.css" media="all">
+    <link rel="stylesheet" href="${ctxPath}/assets/common/module/admin.css" media="all">
+    <link rel="stylesheet" href="${ctxPath}/assets/h5/css/login.css" media="all">
+    <link id="layuicss-layer" rel="stylesheet" href="${ctxPath}/assets/common/layui/css/modules/layer/default/layer.css" media="all">
+    <style>
+        .login-footer a {
+            color: rgba(0, 0, 0, 0.7) !important;
+        }
+
+        .login-footer a:hover {
+            color: rgba(0, 0, 0, 0.4) !important;
+        }
+    </style>
+    <script>
+        if (window != top)
+            top.location.replace(location.href);
+    </script>
+</head>
+
+<body>
+<div class="layadmin-user-login layadmin-user-display-show">
+
+    <!--    <div class="login-header">-->
+    <!--        <img src="${ctxPath}/assets/expand/images/logo.png"> Welcome 秒秒贷-->
+    <!--    </div>-->
+
+    <div class="layadmin-user-login-main">
+        <div class="layadmin-user-login-box layadmin-user-login-header">
+            <h2><img style="width: 32px;height: 32px;" src="${ctxPath}/assets/expand/images/logo.png"> Welcome Login</h2>
+            <p>欢迎登陆 鑫炜金融 安全、快捷、方便</p>
+        </div>
+        <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
+            <div class="layui-form-item">
+                <label class="layadmin-user-login-icon layui-icon layui-icon-cellphone" for="LAY-user-login-cellphone"></label>
+                <input type="text" name="cellphone" id="LAY-user-login-cellphone" lay-verify="phone" placeholder="手机" class="layui-input">
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-row">
+                    <div class="layui-col-xs7">
+                        <label class="layadmin-user-login-icon layui-icon layui-icon-vercode" for="LAY-user-login-vercode"></label>
+                        <input type="text" name="vercode" id="LAY-user-login-vercode" lay-verify="required" placeholder="验证码" class="layui-input">
+                    </div>
+                    <div class="layui-col-xs5">
+                        <div style="margin-left: 10px;">
+                            <button type="button" class="layui-btn layui-btn-primary layui-btn-fluid" id="LAY-user-getsmscode">获取验证码</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="LAY-user-login-password"></label>
+                <input type="password" name="password" id="LAY-user-login-password" lay-verify="pass" placeholder="密码" class="layui-input">
+            </div>
+            <div class="layui-form-item">
+                <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="LAY-user-login-repass"></label>
+                <input type="password" name="repass" id="LAY-user-login-repass" lay-verify="required" placeholder="确认密码" class="layui-input">
+            </div>
+            <div class="layui-form-item">
+                <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="LAY-user-login-nickname"></label>
+                <input type="text" name="nickname" id="LAY-user-login-nickname" lay-verify="nickname" placeholder="昵称" class="layui-input">
+            </div>
+            <div class="layui-form-item">
+                <input type="checkbox" name="agreement" lay-skin="primary" title="同意用户协议" checked=""><div class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary"><span>同意用户协议</span><i class="layui-icon layui-icon-ok"></i></div>
+            </div>
+            <div class="layui-form-item">
+                <button class="layui-btn layui-btn-fluid" lay-submit="" lay-filter="LAY-user-reg-submit">注 册</button>
+            </div>
+            <div class="layui-trans layui-form-item layadmin-user-login-other">
+
+                <a href="login.html" class="layadmin-user-jump-change layadmin-link layui-hide-xs">用已有帐号登入</a>
+                <a href="login.html" class="layadmin-user-jump-change layadmin-link layui-hide-sm layui-show-xs-inline-block">登入</a>
+            </div>
+        </div>
+    </div>
+    <div class="layui-trans layadmin-user-login-footer">
+
+        <p>© 2018 <a href="http://www.layui.com/" target="_blank">layui.com</a></p>
+        <p>
+            <span><a href="http://www.layui.com/admin/#get" target="_blank">获取授权</a></span>
+            <span><a href="http://www.layui.com/admin/pro/" target="_blank">在线演示</a></span>
+            <span><a href="http://www.layui.com/admin/" target="_blank">前往官网</a></span>
+        </p>
+    </div>
+</div>
+
+@/* 加入contextPath属性和session超时的配置 */
+<script type="text/javascript">
+    var Feng = {
+        ctxPath: "",
+        addCtx: function (ctx) {
+            if (this.ctxPath === "") {
+                this.ctxPath = ctx;
+            }
+        }
+    };
+    Feng.addCtx("${ctxPath}");
+</script>
+<script type="text/javascript" src="${ctxPath}/assets/common/layui/layui.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/common/js/common.js"></script>
+
+<script>
+    layui.use(['layer', 'form'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+
+        // 表单提交
+        form.on('submit(login-submit)', function (obj) {
+            return true;
+        });
+
+        // 图形验证码
+        // $('.login-captcha').click(function () {
+        //     this.src = this.src + '?t=' + (new Date).getTime();
+        // });
+
+        var errorMsg = "${tips!}";
+        if (errorMsg) {
+            layer.msg(errorMsg, {icon: 5, anim: 6});
+        }
+
+    });
+</script>
+
+
+</body>
+</html>

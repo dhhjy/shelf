@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>登录 - ${clientName}</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="${ctxPath}/assets/expand/images/favicon.ico" rel="icon">
+    <link rel="stylesheet" href="${ctxPath}/assets/common/layui/css/layui.css"/>
+
+    <link rel="stylesheet" href="${ctxPath}/assets/h5/css/admin.css" media="all">
+    <link rel="stylesheet" href="${ctxPath}/assets/common/module/admin.css" media="all">
+    <link rel="stylesheet" href="${ctxPath}/assets/h5/css/login.css" media="all">
+    <link id="layuicss-layer" rel="stylesheet" href="${ctxPath}/assets/common/layui/css/modules/layer/default/layer.css" media="all">
+    <style>
+        .login-footer a {
+            color: rgba(0, 0, 0, 0.7) !important;
+        }
+
+        .login-footer a:hover {
+            color: rgba(0, 0, 0, 0.4) !important;
+        }
+    </style>
+    <script>
+        if (window != top)
+            top.location.replace(location.href);
+    </script>
+</head>
+
+<body>
+<div class="layadmin-user-login layadmin-user-display-show">
+
+    <div class="layadmin-user-login-main">
+        <div class="layadmin-user-login-box layadmin-user-login-header">
+            <h2><img style="width: 30px;height: 30px;" src="${ctxPath}/assets/expand/images/logo.png"> Welcome Login</h2>
+            <p>欢迎登陆 ${clientName} 安全、快捷、方便</p>
+        </div>
+        <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
+            <form class="layui-card-body layui-form layui-form-pane" action="${ctxPath}/login" method="post">
+                <input type="hidden" name="loginType" value="H5">
+                <input type="hidden" name="remember" value="off">
+                <div class="layui-form-item">
+                    <label class="layadmin-user-login-icon layui-icon layui-icon-cellphone" for="username"></label>
+                    <input type="text" name="username" id="username" lay-verify="phone" required  placeholder="手机号、账号" class="layui-input" maxlength="15">
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="password"></label>
+                    <input type="password" name="password" id="password" lay-verify="required" placeholder="密码" class="layui-input">
+                </div>
+
+                <div class="layui-form-item" style="margin-bottom: 20px;">
+                    <a lay-href="/user/forget" class="layadmin-user-jump-change layadmin-link" style="margin-top: 7px;">忘记密码？</a>
+                </div>
+
+                <div class="layui-form-item">
+                    <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="login-submit">登 录</button>
+                </div>
+            </form>
+            <div class="layui-trans layui-form-item layadmin-user-login-other">
+
+                <a href="login.html" class="layadmin-user-jump-change layadmin-link layui-hide-xs">注册账号</a>
+                <a href="login.html" class="layadmin-user-jump-change layadmin-link layui-hide-sm layui-show-xs-inline-block">注册</a>
+            </div>
+        </div>
+    </div>
+    <div class="layui-trans layadmin-user-login-footer">
+
+        <p>© 2019 <a href="#" target="_blank">旗舰版</a></p>
+        <p>
+            <span><a href="#" target="_blank">强大团队</a></span>
+            <span><a href="#" target="_blank">系统审核</a></span>
+            <span><a href="#" target="_blank">信息安全</a></span>
+        </p>
+    </div>
+</div>
+
+@/* 加入contextPath属性和session超时的配置 */
+<script type="text/javascript">
+    var Feng = {
+        ctxPath: "",
+        addCtx: function (ctx) {
+            if (this.ctxPath === "") {
+                this.ctxPath = ctx;
+            }
+        }
+    };
+    Feng.addCtx("${ctxPath}");
+</script>
+<script type="text/javascript" src="${ctxPath}/assets/common/layui/layui.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/common/js/common.js"></script>
+
+<script>
+    layui.use(['layer', 'form'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+
+        // 表单提交
+        form.on('submit(login-submit)', function (obj) {
+            if(obj.field.phoneNumber === '')
+                return false;
+            if(obj.field.password === '')
+                return false;
+            return true;
+        });
+
+        // 图形验证码
+        // $('.login-captcha').click(function () {
+        //     this.src = this.src + '?t=' + (new Date).getTime();
+        // });
+
+        var errorMsg = "${tips!}";
+        if (errorMsg) {
+            layer.msg(errorMsg, {icon: 5, anim: 6});
+        }
+
+    });
+</script>
+
+
+</body>
+</html>
