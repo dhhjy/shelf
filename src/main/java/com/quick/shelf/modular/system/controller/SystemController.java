@@ -78,7 +78,6 @@ public class SystemController extends BaseController {
     public String console(Model model) {
         model.addAttribute("portNum",this.bPortCountService.getPortNum());
         model.addAttribute("portChart",this.bPortCountService.getPortChart());
-        model.addAttribute("ssss",getProjectPath());
         return "/modular/frame/console.html";
     }
 
