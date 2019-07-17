@@ -82,6 +82,7 @@ public class LoginController extends BaseController {
         String username = super.getPara("username").trim();
         String password = super.getPara("password").trim();
         String remember = super.getPara("remember");
+        String loginType = super.getPara("loginType");
 
         Subject currentUser = ShiroKit.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(username, password.toCharArray());
@@ -103,7 +104,10 @@ public class LoginController extends BaseController {
 
         ShiroKit.getSession().setAttribute("sessionFlag", true);
 
-        return REDIRECT + "/";
+        if(loginType.equals("PC"))
+            return REDIRECT + "/";
+        else
+            return REDIRECT + "/h5/index";
     }
 
     /**
