@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * 新颜征信控制层
@@ -180,17 +181,17 @@ public class BXinYanController extends BaseController {
             @ApiImplicitParam(value = "用户主键，用户主键也做每次任务的任务ID", name = "userId", required = true, dataType = "String")
     })
     @RequestMapping(value = "/index/{type}/{userId}", method = RequestMethod.GET)
+    @ResponseBody
     public String index(@PathVariable String userId, @PathVariable String type) {
         logger.info("用户：{} 获取了:{} 的认证页面", userId, type);
         // 查询是否有同类型的报告，如果有的话则会在userId后面加上返回的数字 例：19466 + suffix 如果有一份报告 16466 + "1"
-        String suffix = "_" + this.bXinYanDataService.selectJsonDataNum(Integer.valueOf(userId), type);
+        String suffix = "_" + new Random().nextInt(10000);
         BSysUser bSysUser = this.bSysUserService.selectBSysUserByUserId(Integer.valueOf(userId));
-        // 授权成功以后跳转的页面
-        String jumpUrl = getProjectPath();
+        String jumpUrl = "#";
         // 原始数据回调
         String callbackJson = getProjectPath() + "/xinYan/callbackJson";
         // 正式接入时使用下面这个即可
-        return REDIRECT + XinYanConstantMethod.getXinYanH5Url(bSysUser.getUserId() + suffix, type, jumpUrl, callbackJson, null);
+        return XinYanConstantMethod.getXinYanH5Url(bSysUser.getUserId() + suffix, type, jumpUrl, callbackJson, null);
     }
 
     /**
