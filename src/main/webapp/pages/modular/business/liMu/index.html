@@ -42,34 +42,51 @@
 <script type="text/html" id="tableBar">
     @if(shiro.hasPermission("/liMu/getMobileReport")){
     {{# if(d.type.indexOf('mobileReport') != -1){}}
-    <a title="运营商报告" lay-event="mobileReport"><i class="iconfont">&#xe609;</i></a>
+    <a title="运营商报告" lay-event="mobileReport">
+        <svg class="myIcon" aria-hidden="true">
+            <use xlink:href="#icon-shoujihaoma"></use>
+        </svg>
+    </a>
     {{#}}}
     @}
 
     @if(shiro.hasPermission("/liMu/getTaoBaoReport")){
     {{# if(d.type.indexOf('taobaoReport') != -1){}}
-    <a title="淘宝报告" lay-event="taobaoReport"><i style="height: 100%;" class="iconfont">&#xe622;</i></a>
+    <a title="淘宝报告" lay-event="taobaoReport">
+        <svg class="myIcon" aria-hidden="true">
+            <use xlink:href="#icon-ic_taobaoqiyedianpu"></use>
+        </svg>
+    </a>
     {{#}}}
     @}
 
     @if(shiro.hasPermission("/liMu/getLiFangUpgradeCheck")){
     {{# if(d.type.indexOf('lifangupgradecheck') != -1){}}
-    <a title="升级报告" lay-event="lifangupgradecheck"><i style="height: 100%;" class="iconfont">&#xe62d;</i></a>
-<!--    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="lifangupgradecheck">升级报告</a>-->
+    <a title="升级报告" lay-event="lifangupgradecheck">
+        <svg class="myIcon" aria-hidden="true">
+            <use xlink:href="#icon-shengjijianglijifen"></use>
+        </svg>
+    </a>
     {{#}}}
     @}
 
     @if(shiro.hasPermission("/liMu/getFingerprint")){
     {{# if(d.type.indexOf('fingerprint') != -1){}}
-    <a title="设备报告" lay-event="fingerprint"><i style="height: 100%;" class="iconfont">&#xe644;</i></a>
-<!--    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="fingerprint">设备报告</a>-->
+    <a title="设备指纹" lay-event="fingerprint">
+        <svg class="myIcon" aria-hidden="true">
+            <use xlink:href="#icon-zhiwen5"></use>
+        </svg>
+    </a>
     {{#}}}
     @}
 
     @if(shiro.hasPermission("/liMu/getMachineCheck")){
     {{# if(d.type.indexOf('machinecheck') != -1){}}
-    <a title="机审报告" lay-event="machinecheck"><i style="height: 100%;" class="iconfont">&#xe76d;</i></a>
-<!--    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="machinecheck">机审报告</a>-->
+    <a title="机审报告" lay-event="machinecheck">
+        <svg class="myIcon" aria-hidden="true">
+            <use xlink:href="#icon-jiqiren6"></use>
+        </svg>
+    </a>
     {{#}}}
     @}
 
