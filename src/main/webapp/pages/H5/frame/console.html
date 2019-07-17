@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>${systemName}</title>
+    <link rel="stylesheet" href="${ctxPath}/assets/common/layui/css/layui.css"/>
+    <link rel="stylesheet" href="${ctxPath}/assets/common/module/admin.css?v=311"/>
+    <link rel="stylesheet" href="${ctxPath}/assets/expand/css/style.css" media="all"/>
+    <link rel="stylesheet" href="${ctxPath}/assets/myIcon/iconfont.css" media="all"/>
+
+    <style>
+        .myIcon {
+            width: 26px;
+            height: 26px;
+            vertical-align: middle
+        }
+
+        /** 卡片轮播图样式 */
+        .admin-carousel .layui-carousel-ind {
+            position: absolute;
+            top: -41px;
+            text-align: right;
+        }
+
+        .admin-carousel .layui-carousel-ind ul {
+            background: 0 0;
+        }
+
+        .admin-carousel .layui-carousel-ind li {
+            background-color: #e2e2e2;
+        }
+
+        .admin-carousel .layui-carousel-ind li.layui-this {
+            background-color: #999;
+        }
+
+        /** 广告位轮播图 */
+        .admin-news .layui-carousel-ind {
+            height: 45px;
+        }
+
+        .admin-news a {
+            display: block;
+            line-height: 60px;
+            text-align: center;
+        }
+
+        .layui-col-space15 > * {
+            padding: 0 !important;
+        }
+
+        .layui-card-header {
+            height: 60px;
+            line-height: 60px;
+        }
+    </style>
+
+</head>
+<body>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <!-- 分数统计 -->
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-xs12 layui-col-sm12 layui-col-md12">
+            <div class="layui-card" style="margin:0;pading:0;">
+                <div class="layui-card-header">信用管理</div>
+                <div class="layui-card-body" style="height: 222px;overflow: hidden;">
+                    <div id="hjxl" style="width: 100%;height: 222px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!--身份认证（实人认证）-->
+        <div class="layui-col-xs12 layui-col-sm12 layui-col-md12 idCard_">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    <svg class="myIcon" aria-hidden="true">
+                        <use xlink:href="#icon-shenfenzheng1"></use>
+                    </svg>
+                    身份认证
+                    @if(userStatus.identityStatus == "1"){
+                    <span class="layui-badge layui-bg-blue pull-right">已认证</span>
+                    @}else{
+                    <span class="layui-badge layui-bg-white pull-right">去认证</span>
+                    @}
+                </div>
+            </div>
+        </div>
+
+        <!-- 个人信息认证 -->
+        <div class="layui-col-xs12 layui-col-sm12 layui-col-md12 userInfo_">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    <svg class="myIcon" aria-hidden="true">
+                        <use xlink:href="#icon-geren2"></use>
+                    </svg>
+                    个人信息认证
+                    @if(userStatus.userBasicStatus == "1"){
+                    <span class="layui-badge layui-bg-blue pull-right">已认证</span>
+                    @}else{
+                    <span class="layui-badge layui-bg-white pull-right">去认证</span>
+                    @}
+                </div>
+            </div>
+        </div>
+
+        <!-- 银行卡认证 -->
+        <div class="layui-col-xs12 layui-col-sm12 layui-col-md12 bankCard_">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    <svg class="myIcon" aria-hidden="true">
+                        <use xlink:href="#icon-shuaqiaqiapianyinhangqia1"></use>
+                    </svg>
+                    银行卡认证
+                    @if(userStatus.bankInfoStatus == "1"){
+                    <span class="layui-badge layui-bg-blue pull-right">已认证</span>
+                    @}else{
+                    <span class="layui-badge layui-bg-white pull-right">去认证</span>
+                    @}
+                </div>
+            </div>
+        </div>
+
+        <!-- 运营商认证 -->
+        <div class="layui-col-xs12 layui-col-sm12 layui-col-md12 mobile_">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    <svg class="myIcon" aria-hidden="true">
+                        <use xlink:href="#icon-shoujihaoma"></use>
+                    </svg>
+                    手机号认证
+                    @if(userStatus.limuMobileReportStatus == "1"){
+                    <span class="layui-badge layui-bg-blue pull-right">已认证</span>
+                    @}else{
+                    <span class="layui-badge layui-bg-white pull-right">去认证</span>
+                    @}
+                </div>
+            </div>
+        </div>
+
+        <!-- 淘宝认证 -->
+        <div class="layui-col-xs12 layui-col-sm12 layui-col-md12 taoBao_">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    <svg class="myIcon" aria-hidden="true">
+                        <use xlink:href="#icon-ic_taobaoqiyedianpu"></use>
+                    </svg>
+                    淘宝认证
+                    @if(userStatus.limuTaobaoReportStatus == "1"){
+                    <span class="layui-badge layui-bg-blue pull-right">已认证</span>
+                    @}else{
+                    <span class="layui-badge layui-bg-white pull-right">去认证</span>
+                    @}
+                </div>
+            </div>
+        </div>
+
+        <!-- 芝麻分认证 -->
+        <div class="layui-col-xs12 layui-col-sm12 layui-col-md12 zmf_">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    <svg class="myIcon" aria-hidden="true">
+                        <use xlink:href="#icon-zhimafenx"></use>
+                    </svg>
+                    芝麻分认证
+                    @if(userStatus.xinyanZmfStatus == "1"){
+                    <span class="layui-badge layui-bg-blue pull-right">已认证</span>
+                    @}else{
+                    <span class="layui-badge layui-bg-white pull-right">去认证</span>
+                    @}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 分数统计 -->
+    <div class="layui-row layui-col-space15" style="padding-top: 10px;">
+        <div class="layui-card">
+            <button class="layui-btn layui-bg layui-btn-fluid" lay-submit lay-filter="login-submit"
+                    style="background-color:#2776d4;">去 借 钱
+            </button>
+        </div>
+    </div>
+</div>
+@/* 加入contextPath属性和session超时的配置 */
+<script type="text/javascript">
+    var Feng = {
+        ctxPath: "",
+        addCtx: function (ctx) {
+            if (this.ctxPath === "") {
+                this.ctxPath = ctx;
+            }
+        }
+    };
+    Feng.addCtx("${ctxPath}");
+</script>
+<script type="text/javascript" src="${ctxPath}/assets/common/layui/layui.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/common/js/common.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/myIcon/iconfont.js"></script>
+<script src="${ctxPath}/assets/common/libs/echarts/echarts.min.js"></script>
+<script src="${ctxPath}/assets/common/libs/echarts/echartsTheme.js"></script>
+<script>
+    layui.use(['form', 'ax', 'admin', 'layer', 'index'], function () {
+        var $ = layui.jquery;
+        var $ax = layui.ax;
+        var form = layui.form;
+        var admin = layui.admin;
+        var layer = layui.layer;
+        var index = layui.index;
+
+        // 用户状态
+        var userStatus = ${userStatus};
+
+        // 渲染券核效率图表
+        var myCharts2 = echarts.init(document.getElementById('hjxl'), myEchartsTheme);
+        var option2 = {
+            backgroundColor: 'rgba(35,159,255)',
+            radar: {
+                splitNumber: 1,
+                radius: "55%",
+                //字体颜色
+                name: {
+                    textStyle: {color: '#fff'}
+                },
+                //斜角分割线颜色
+                axisLine: {
+                    lineStyle: {
+                        color: 'rgba(255,255,255,.2)'
+                    }
+                },
+                //雷达图中的背景色透明度
+                splitArea: {
+                    areaStyle: {
+                        opacity: 0
+                    }
+                },
+                //最外层边框颜色
+                splitLine: {
+                    lineStyle: {
+                        width: 1,
+                        color: 'rgba(255,255,255,.5)'
+                    }
+                },
+                indicator: [
+                    {text: '身份特质', max: 50},
+                    {text: '行为偏好', max: 50},
+                    {text: '人脉关系', max: 50},
+                    {text: '信用历史', max: 50},
+                    {text: '履约能力', max: 50}
+                ]
+            },
+
+            series: [
+                {
+                    type: 'radar',
+                    symbolSize: 0,
+                    //填充区域颜色
+                    areaStyle: {
+                        normal: {
+                            color: 'rgba(255,255,255,.3)'
+                        }
+                    },
+                    data: [{
+                        value: [48, 44, 45, 46, 46],
+                        //数据边框样式
+                        lineStyle: {
+                            normal: {
+                                width: 1,
+                                color: 'rgba(82,206,228,1)'
+                            }
+                        }
+                    }]
+                }
+            ]
+        };
+        myCharts2.setOption(option2);
+
+        /**
+         * 进行身份证(实人认证)
+         */
+        var idCardAuthFun = function () {
+            if (userStatus.identityStatus !== '0') {
+                Feng.info("身份证已认证");
+                return false;
+            } else {
+
+            }
+        };
+
+        /**
+         * 进行个人信息认证
+         */
+        var userInfoAuthFun = function () {
+            if (userStatus.userBasicStatus !== '0') {
+                Feng.info("个人信息已认证");
+                return false;
+            } else {
+
+            }
+        };
+
+
+        /**
+         * 进行银行卡认证
+         */
+        var bankCardAuthFun = function () {
+            if (userStatus.bankInfoStatus !== '0') {
+                Feng.info("银行卡已认证");
+                return false;
+            } else {
+
+            }
+        };
+
+
+        /**
+         * 进行手机验证
+         */
+        var mobileAuthFun = function () {
+            if (userStatus.limuMobileReportStatus !== '0') {
+                Feng.info("手机已认证");
+                return false;
+            } else {
+
+            }
+        };
+
+
+        /**
+         * 进行淘宝认证
+         */
+        var taoBaoAuthFun = function () {
+            if (userStatus.limuTaobaoReportStatus !== '0') {
+                Feng.info("淘宝已认证");
+                return false;
+            } else {
+
+            }
+        };
+
+
+        /**
+         * 进行芝麻分(淘宝)认证
+         */
+        var zmfAuthFun = function () {
+            if (userStatus.xinyanZmfStatus !== '0') {
+                Feng.info("芝麻分已认证");
+                return false;
+            } else {
+                $.ajax({
+                    type: 'GET',
+                    url: Feng.ctxPath + "/xinYan/index/taobaoweb/" + userStatus.userId,
+                    success: function (url) {
+                        var ind = layer.open({
+                            type: 2,
+                            title: "",
+                            content: url,
+                            closeBtn: 0,
+                            btn:['关闭'],
+                            end: function () {
+                                location.reload();
+                            }
+                        });
+                        layer.full(ind);
+                    }
+                });
+            }
+        };
+
+        /**
+         * 绑定身份证认证事件
+         */
+        $('.idCard_').click(function () {
+            idCardAuthFun();
+        });
+
+        /**
+         * 绑定个人信息认证事件
+         */
+        $('.userInfo_').click(function () {
+            userInfoAuthFun();
+        });
+
+        /**
+         * 绑定银行卡认证事件
+         */
+        $('.bankCard_').click(function () {
+            bankCardAuthFun();
+        });
+
+        /**
+         * 绑定手机号认证事件
+         */
+        $('.mobile_').click(function () {
+            mobileAuthFun();
+        });
+
+        /**
+         * 绑定淘宝认证事件
+         */
+        $('.taoBao_').click(function () {
+            taoBaoAuthFun();
+        });
+
+        /**
+         * 绑定芝麻分认证事件
+         */
+        $('.zmf_').click(function () {
+            zmfAuthFun();
+        });
+    });
+</script>
+</body>
+</html>

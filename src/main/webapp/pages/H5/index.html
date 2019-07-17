@@ -18,8 +18,24 @@
     </div>
 
     <div class="layui-footer">
-        <!-- 底部固定区域 -->
-        © layui.com - 底部固定区域
+        <div class="layui-row layui-col-space15">
+
+            <div class="layui-col-xs4 layui-col-sm4 layui-col-md4" id="creditManager">
+                <div class="layui-card" style="text-align: center;">
+                    信用管理
+                </div>
+            </div>
+            <div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
+                <div class="layui-card" style="text-align: center;">
+                    产品清单
+                </div>
+            </div>
+            <div class="layui-col-xs4 layui-col-sm4 layui-col-md4" id="btnLogout">
+                <div class="layui-card" style="text-align: center;">
+                    退出
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 @/* 加入contextPath属性和session超时的配置 */
@@ -55,12 +71,12 @@
             height: '150px',
             arrow: 'hover' //始终显示箭头
             // ,anim: 'updown' //切换动画方式
-            ,indicator: 'none'
+            , indicator: 'none'
         });
 
         // 默认加载主页
         index.loadHome({
-            menuPath: '${ctxPath}/system/console',
+            menuPath: '${ctxPath}/h5/console',
             menuName: '<i class="layui-icon layui-icon-home"></i>'
         });
 
@@ -103,6 +119,18 @@
                     });
                 }
             });
+        });
+
+        var creditManagerFun = function () {
+            // 默认加载主页
+            index.loadHome({
+                menuPath: '${ctxPath}/h5/console',
+                menuName: '<i class="layui-icon layui-icon-home"></i>'
+            });
+        };
+
+        $("#creditManager").click(function () {
+            creditManagerFun();
         });
     });
 </script>
