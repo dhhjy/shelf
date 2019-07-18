@@ -184,14 +184,13 @@ public class BXinYanController extends BaseController {
     @ResponseBody
     public String index(@PathVariable String userId, @PathVariable String type) {
         logger.info("用户：{} 获取了:{} 的认证页面", userId, type);
-        // 查询是否有同类型的报告，如果有的话则会在userId后面加上返回的数字 例：19466 + suffix 如果有一份报告 16466 + "1"
+        //  例：19466 + suffix 如果有一份报告 16466 + "_111"
         String suffix = "_" + new Random().nextInt(10000);
         BSysUser bSysUser = this.bSysUserService.selectBSysUserByUserId(Integer.valueOf(userId));
-        String jumpUrl = "#";
         // 原始数据回调
-        String callbackJson = getProjectPath() + "/xinYan/callbackJson";
+        String callbackJson = getProjectPath() + "/xinYan/callbackJson/" + userId;
         // 正式接入时使用下面这个即可
-        return XinYanConstantMethod.getXinYanH5Url(bSysUser.getUserId() + suffix, type, jumpUrl, callbackJson, null);
+        return XinYanConstantMethod.getXinYanH5Url(bSysUser.getUserId() + suffix, type, callbackJson, null);
     }
 
     /**
@@ -201,14 +200,14 @@ public class BXinYanController extends BaseController {
      * @return
      */
     @BussinessLog(value = "新颜原始数据回调地址")
-    @RequestMapping(value = "/callbackJson", produces = "application/json", method = RequestMethod.POST)
+    @RequestMapping(value = "/callbackJson/{userId}", produces = "application/json", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
-    public void callbackJson(@RequestBody XinYanResult xyResult) {
-        String userIdStr = xyResult.getTaskId().split("_")[0];
+    public void callbackJson(@RequestBody XinYanResult xyResult, @PathVariable("userId") Integer userId) {
         // 设置缓存立木回调数据 单位秒：60 * 60 * 24 * 365
-        redisUtil.set(XinYanConstantMethod.REDIS_KEY, userIdStr + "-" + xyResult.getToken() + "-" + xyResult.getApiName() + "-" + DateUtil.getCurrentDateString(), 60 * 60 * 24 * 365);
-
-        logger.info("用户：{} 进行了新颜认证：{}", userIdStr, xyResult.getApiName());
+        redisUtil.set(XinYanConstantMethod.REDIS_KEY + DateUtil.getCurrentTimestampMs() + "-" + userId + "-" + xyResult.getToken() + "-" + xyResult.getApiName(),
+                userId + "-" + xyResult.getToken() + "-" + xyResult.getApiName() + "-" + DateUtil.getCurrentDateString(), 60 * 60 * 24 * 365);
+        xyResult.setTaskId(String.valueOf(userId));
+        logger.info("用户：{} 进行了新颜认证：{}", userId, xyResult.getApiName());
         // 请求成功后进行查询数据并且保存的操作
         if (XinYanConstantMethod.SUCCESS.equals(xyResult.getSuccess())) {
             // 设置多个选项的目的是为了记录日志，并且通过AOP的方式
