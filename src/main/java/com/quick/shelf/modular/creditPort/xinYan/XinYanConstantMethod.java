@@ -70,13 +70,12 @@ public class XinYanConstantMethod {
      * @param reportNotifyUrl 报告数据(页面)通知地址
      * @return String
      */
-    public static String getXinYanH5Url(String userId, String apiName, String jumpUrl, String dataNotifyUrl, String reportNotifyUrl) {
+    public static String getXinYanH5Url(String userId, String apiName, String dataNotifyUrl, String reportNotifyUrl) {
         // 时间戳
         String timeMark = XinYanConstantMethod.getTimeMark();
         String url =  XinYanConstantMethod.DEVELOP_URL + XinYanConstantMethod.H5 + XinYanConstantMethod.ApiUser + "/" +
                 getApiEnc(timeMark, apiName, userId) + "/" + timeMark + "/" +
-                apiName + "/" + userId + "?" + Hide_Label + "&jumpUrl="
-                + jumpUrl + "&dataNotifyUrl=" + dataNotifyUrl;
+                apiName + "/" + userId + "?" + Hide_Label + "&dataNotifyUrl=" + dataNotifyUrl;
 
         if(null != reportNotifyUrl && !("").equals(reportNotifyUrl))
         {
@@ -192,7 +191,7 @@ public class XinYanConstantMethod {
         String jumpUrl = "";
         // 原始数据回调
         String callbackJson = "2539z803m9.qicp.vip:12886" + "/app/xinYan/callbackJson";
-        System.out.println(getXinYanH5Url("101",XinYanConstantEnum.API_NAME_YYS.getApiName(),jumpUrl,callbackJson,null));
+        System.out.println(getXinYanH5Url("101",XinYanConstantEnum.API_NAME_YYS.getApiName(),callbackJson,null));
     }
 
     /**
