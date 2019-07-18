@@ -59,7 +59,10 @@
 
 </head>
 <body>
-
+<!-- 加载动画，移除位置在common.js中 -->
+<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>
 <!-- 正文开始 -->
 <div class="layui-fluid">
     <!-- 分数统计 -->
@@ -301,7 +304,6 @@
             }
         };
 
-
         /**
          * 进行银行卡认证
          */
@@ -314,7 +316,6 @@
             }
         };
 
-
         /**
          * 进行手机验证
          */
@@ -323,10 +324,16 @@
                 Feng.info("手机已认证");
                 return false;
             } else {
-
+                $.ajax({
+                    type: 'GET',
+                    url: Feng.ctxPath + "/liMu/toVerifyUrl/mobileReport/" + userStatus.userId,
+                    success: function (url) {
+                        parent.toolsFun.showFooterFun();
+                        parent.toolsFun.skip(url);
+                    }
+                });
             }
         };
-
 
         /**
          * 进行淘宝认证
@@ -336,10 +343,16 @@
                 Feng.info("淘宝已认证");
                 return false;
             } else {
-
+                $.ajax({
+                    type: 'GET',
+                    url: Feng.ctxPath + "/liMu/toVerifyUrl/taobaoReport/" + userStatus.userId,
+                    success: function (url) {
+                        parent.toolsFun.showFooterFun();
+                        parent.toolsFun.skip(url);
+                    }
+                });
             }
         };
-
 
         /**
          * 进行芝麻分(淘宝)认证
@@ -353,17 +366,8 @@
                     type: 'GET',
                     url: Feng.ctxPath + "/xinYan/index/taobaoweb/" + userStatus.userId,
                     success: function (url) {
-                        var ind = layer.open({
-                            type: 2,
-                            title: "",
-                            content: url,
-                            closeBtn: 0,
-                            btn:['关闭'],
-                            end: function () {
-                                location.reload();
-                            }
-                        });
-                        layer.full(ind);
+                        parent.toolsFun.showFooterFun();
+                        parent.toolsFun.skip(url);
                     }
                 });
             }

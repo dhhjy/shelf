@@ -3,8 +3,9 @@
 
 <head>
     <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!--    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">-->
+    <!--    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">-->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link href="${ctxPath}/assets/expand/images/favicon.ico" rel="icon">
     <title>${clientName}</title>
     <link rel="stylesheet" href="${ctxPath}/assets/common/layui/css/layui.css"/>
@@ -12,12 +13,16 @@
 </head>
 <body class="layui-layout-body" style="background: rgb(255,255,255)">
 
-<div class="layui-row layui-layout layui-layout-admin">
-    <div class="layui-body" style="margin-top: -50px;">
 
+<div class="layui-row layui-layout layui-layout-admin">
+    <div class="layui-header" id="layHeaderDiv" hidden>
+        <button class="layui-btn layui-bg" style="height:50px;background-color: #5291dd" id="btnCallbackFun">返回</button>
     </div>
 
-    <div class="layui-footer">
+    <div class="layui-body" id="layBodyDiv">
+    </div>
+
+    <div class="layui-footer" id="layFooterDiv">
         <div class="layui-row layui-col-space15">
 
             <div class="layui-col-xs4 layui-col-sm4 layui-col-md4" id="creditManager">
@@ -56,29 +61,20 @@
 </script>
 <script type="text/javascript" src="${ctxPath}/assets/common/layui/layui.js"></script>
 <script type="text/javascript" src="${ctxPath}/assets/common/js/common.js"></script>
-
+<script src="${ctxPath}/assets/expand/plugins/jquery/jquery-3.2.1.min.js"></script>
 <script>
     layui.use(['layer', 'element', 'admin', 'index', 'carousel'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var index = layui.index;
-        var carousel = layui.carousel;
-
-        //建造实例
-        carousel.render({
-            elem: '#test1',
-            width: '100%', //设置容器宽度
-            height: '150px',
-            arrow: 'hover' //始终显示箭头
-            // ,anim: 'updown' //切换动画方式
-            , indicator: 'none'
-        });
 
         // 默认加载主页
         index.loadHome({
             menuPath: '${ctxPath}/h5/console',
             menuName: '<i class="layui-icon layui-icon-home"></i>'
         });
+
+        toolsFun.hideFooterFun();
 
         // 修改密码点击事件
         $('#setPsw').click(function () {
@@ -100,8 +96,21 @@
             });
         });
 
-        // 退出登录点击事件
-        $('#btnLogout').click(function () {
+        /**
+         * 信誉管理主页
+         */
+        var creditManagerFun = function () {
+            // 信誉管理主页
+            index.loadHome({
+                menuPath: '${ctxPath}/h5/console',
+                menuName: '<i class="layui-icon layui-icon-home"></i>'
+            });
+        };
+
+        /**
+         * 退出登陆
+         */
+        var logOutFun = function () {
             layer.open({
                 type: 1,
                 title: "退出登陆",
@@ -111,7 +120,7 @@
                 resize: false,
                 btn: ['确定', '取消'],
                 moveType: '1', //拖拽模式，0或者1
-                content: '<div style="padding: 50px; line-height: 22px; background-color: #f2f2f2; color: #000000;">确定退出 ${systemName} ?</div>',
+                content: '<div style="padding: 50px; line-height: 22px; background-color: #f2f2f2; color: #000000;">确定退出 ${clientName} ?</div>',
                 success: function (layero) {
                     var btn = layero.find('.layui-layer-btn');
                     btn.find('.layui-layer-btn0').attr({
@@ -119,20 +128,49 @@
                     });
                 }
             });
-        });
-
-        var creditManagerFun = function () {
-            // 默认加载主页
-            index.loadHome({
-                menuPath: '${ctxPath}/h5/console',
-                menuName: '<i class="layui-icon layui-icon-home"></i>'
-            });
         };
 
+        /**
+         * 信誉管理点击事件绑定
+         */
         $("#creditManager").click(function () {
+            toolsFun.hideFooterFun();
             creditManagerFun();
         });
+
+        /**
+         * 退出事件绑定
+         */
+        $("#btnLogout").click(function () {
+            logOutFun();
+        });
+
+        /**
+         * 返回事件绑定
+         */
+        $("#btnCallbackFun").click(function () {
+            toolsFun.hideFooterFun();
+            creditManagerFun();
+        });
+
     });
+    var toolsFun = {
+        showFooterFun: function () {
+            $("#layBodyDiv").css({"margin-top": "0", "width": "100%", "clear": "both"});
+            $("#layHeaderDiv").show();
+        },
+        hideFooterFun: function () {
+            $("#layBodyDiv").css({"margin-top": "-50px", "width": "100%"});
+            $("#layHeaderDiv").hide();
+        },
+        skip: function(url){
+            // 信誉管理主页
+            layui.index.loadHome({
+                menuPath: url,
+                menuName: '<i class="layui-icon layui-icon-home"></i>'
+            });
+        }
+    };
 </script>
 </body>
 </html>
