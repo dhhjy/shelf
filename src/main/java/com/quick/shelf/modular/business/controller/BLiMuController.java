@@ -9,6 +9,8 @@ import com.quick.shelf.core.common.annotion.BussinessLog;
 import com.quick.shelf.core.common.annotion.Permission;
 import com.quick.shelf.core.common.page.LayuiPageFactory;
 import com.quick.shelf.core.shiro.ShiroKit;
+import com.quick.shelf.core.util.DateUtil;
+import com.quick.shelf.core.util.RedisUtil;
 import com.quick.shelf.modular.business.entity.BLiMuData;
 import com.quick.shelf.modular.business.entity.BSysUser;
 import com.quick.shelf.modular.business.service.BLiMuService;
@@ -16,17 +18,24 @@ import com.quick.shelf.modular.business.service.BSysUserService;
 import com.quick.shelf.modular.business.warpper.BLiMuWrapper;
 import com.quick.shelf.modular.constant.BusinessConst;
 import com.quick.shelf.modular.creditPort.liMu.LiMuConstantEnum;
+import com.quick.shelf.modular.creditPort.liMu.LiMuConstantMethod;
+import com.quick.shelf.modular.creditPort.liMu.LiMuResult;
+import com.quick.shelf.modular.creditPort.xinYan.XinYanConstantMethod;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
@@ -52,6 +61,9 @@ public class BLiMuController extends BaseController {
 
     @Resource
     private BSysUserService bSysUserService;
+
+    @Resource
+    private RedisUtil redisUtil;
 
     /**
      * 立木征信报告跳转页面
@@ -186,5 +198,109 @@ public class BLiMuController extends BaseController {
         model.addAttribute("machineCheck", JSONObject.parseObject(data.getDataValue()));
         model.addAttribute("bSysUser", bSysUser);
         return PATH + "liMu_machineCheck.html";
+    }
+
+    /**
+     * 立木认证页面跳转页
+     *
+     * @param type  报告类型 （type 定义在 LiMuConstantEnum 枚举类）
+     * @param token 用户token信息
+     * @return
+     */
+    @BussinessLog(value = "立木认证页面跳转页")
+    @ApiOperation(value = "立木认证页面跳转页", notes = "立木认证页面跳转页", httpMethod = "GET")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "报告类型", name = "type", required = true, dataType = "String"),
+            @ApiImplicitParam(value = "用户Token信息", name = "token", required = true, dataType = "String")
+    })
+    @RequestMapping(value = "/toVerifyUrl/{type}/{userId}", method = RequestMethod.GET)
+    @ResponseBody
+    public String toVerifyUrl(@PathVariable("type") String type, @PathVariable("userId") String userId) {
+        logger.info("用户：{} 获取了:{} 的认证页面", userId, type);
+        // 查询用户信息
+        BSysUser bSysUser = this.bSysUserService.selectBSysUserByUserId(Integer.valueOf(userId));
+        String signUrl = getProjectPath() + "/liMu/sign";
+        String callBackUrl = getProjectPath() + "/liMu/callback/" + type + "/" + userId;
+        String url = LiMuConstantMethod.getLimuVerifyUrl(bSysUser, type, signUrl, callBackUrl);
+        return url;
+    }
+
+    /**
+     * 立木数据回调通知地址
+     */
+    @BussinessLog(value = "立木数据回调通知")
+    @ApiOperation(value = "立木数据回调通知", notes = "立木数据回调通知", httpMethod = "GET")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "认证类型", name = "type", required = true, dataType = "String"),
+            @ApiImplicitParam(value = "用户主键ID", name = "userId", required = true, dataType = "String")
+    })
+    @RequestMapping(value = "/callBack/{type}/{userId}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void callBack(@RequestBody LiMuResult liMuResult, @PathVariable("type") String type, @PathVariable("userId") String userId) {
+        logger.info("新颜征信回调返回了用户：{} 的{} 类型的认证数据", userId, type);
+        // 设置缓存立木回调数据 单位秒：60 * 60 * 24 * 365
+        redisUtil.set(XinYanConstantMethod.REDIS_KEY + DateUtil.getCurrentTimestampMs() + "-" + userId + "-" + liMuResult.getToken() + "-" + type,
+                userId + "-" + liMuResult.getToken() + "-" + type + "-" + DateUtil.getCurrentDateString(), 60 * 60 * 24 * 365);
+
+        if (liMuResult.getCode().equals(LiMuConstantMethod.SUCCESS_CODE)) {
+            BSysUser bSysUser = this.bSysUserService.selectBSysUserByUserId(Integer.valueOf(userId));
+            // 设置多个判断是为了让每个接口进行自己独立的接口调用统计
+            // 淘宝认证
+            if (LiMuConstantEnum.API_NAME_TB.getApiName().equals(type)) {
+                // 获取立木淘宝的原始数据 并 保存
+                this.bLiMuService.liMuTBJsonData(liMuResult);
+                // 获取立木淘宝的报告页面 并 保存
+                this.bLiMuService.liMuTBPageData(liMuResult);
+            }
+            // 运营商认证
+            if (LiMuConstantEnum.API_NAME_YYS.getApiName().equals(type)) {
+                // 获取立木运营商的原始数据 并 保存
+                this.bLiMuService.liMuYYSJsonData(liMuResult);
+                // 获取立木运营商的报告页面 并 保存
+                this.bLiMuService.liMuYYSPageData(liMuResult);
+
+                // 换取运营商报告后在获取立方升级报告
+                String lfsjToken = this.bLiMuService.liMuLfsjJsonData(bSysUser);
+                // 获取完立木升级的原始报告后，在拿返回的token获取立木的页面报告
+                if (null != lfsjToken && !lfsjToken.equals("error")) {
+                    liMuResult.setBizType(LiMuConstantEnum.API_NAME_LFSJ.getApiName());
+                    liMuResult.setToken(lfsjToken);
+                    this.bLiMuService.liMuLfsjPageData(liMuResult);
+                }
+                // 改变用户状态
+                this.bLiMuService.changeUserStatus(bSysUser.getUserId(), LiMuConstantEnum.API_NAME_LFSJ.getApiName());
+            }
+            // 指纹设备
+            if (LiMuConstantEnum.API_NAME_SBZW.getApiName().equals(type)) {
+                // 获取立木设备指纹的原始数据 并 保存
+                this.bLiMuService.liMuSbzwJsonData(liMuResult);
+            }
+            // 改变用户状态
+            this.bLiMuService.changeUserStatus(bSysUser.getUserId(), type);
+            // 每次都将执行立木的机审报告
+            this.bLiMuService.liMuJsJsonData(liMuResult);
+        }
+    }
+
+    /**
+     * 立木征信 签名方式
+     * 签名地址格式：{signUrl }?message={H5 签名 message}&callback=signHandler
+     * 签名算法：sha1(message+apiSecret)
+     * 权限检查：已登录用
+     *
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "/sign", produces = "application/x-javascript")
+    @ResponseBody
+    public String sign(HttpServletRequest request, HttpServletResponse response) {
+        String message = request.getParameter("message");
+        String callback = request.getParameter("callback");
+        //签名
+        String sign = DigestUtils.sha1Hex(message + LiMuConstantMethod.APISECRET);
+        //返回字条串
+        response.setHeader("Content-Type", "application/x-javascript;charset=UTF-8");
+        return callback + "('" + sign + "')";
     }
 }

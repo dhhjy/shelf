@@ -70,7 +70,7 @@ public class HttpClientUtil {
     }
 
     // 发送POST请求（普通表单形式）
-    public static String doPostForm(String path, List<NameValuePair> parametersBody) {
+    public static String doPostForm(String path, List<BasicNameValuePair> parametersBody) {
         HttpEntity entity = new UrlEncodedFormEntity(parametersBody, Charsets.UTF_8);
         return doPost(path, "application/x-www-form-urlencoded", entity);
     }

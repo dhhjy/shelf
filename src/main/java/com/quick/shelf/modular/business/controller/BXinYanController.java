@@ -203,11 +203,11 @@ public class BXinYanController extends BaseController {
     @RequestMapping(value = "/callbackJson/{userId}", produces = "application/json", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
     public void callbackJson(@RequestBody XinYanResult xyResult, @PathVariable("userId") Integer userId) {
+        logger.info("新颜征信回调返回了用户：{} 的{} 类型的认证数据", userId, xyResult.getApiName());
         // 设置缓存立木回调数据 单位秒：60 * 60 * 24 * 365
         redisUtil.set(XinYanConstantMethod.REDIS_KEY + DateUtil.getCurrentTimestampMs() + "-" + userId + "-" + xyResult.getToken() + "-" + xyResult.getApiName(),
                 userId + "-" + xyResult.getToken() + "-" + xyResult.getApiName() + "-" + DateUtil.getCurrentDateString(), 60 * 60 * 24 * 365);
         xyResult.setTaskId(String.valueOf(userId));
-        logger.info("用户：{} 进行了新颜认证：{}", userId, xyResult.getApiName());
         // 请求成功后进行查询数据并且保存的操作
         if (XinYanConstantMethod.SUCCESS.equals(xyResult.getSuccess())) {
             // 设置多个选项的目的是为了记录日志，并且通过AOP的方式
