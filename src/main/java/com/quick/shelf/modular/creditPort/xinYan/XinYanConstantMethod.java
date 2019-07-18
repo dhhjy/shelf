@@ -4,6 +4,7 @@ import com.quick.shelf.core.util.xinYanUtils.rsa.RsaCodingUtil;
 import com.quick.shelf.core.util.xinYanUtils.util.HttpUtils;
 import com.quick.shelf.core.util.xinYanUtils.util.MD5Utils;
 import com.quick.shelf.core.util.xinYanUtils.util.SecurityUtil;
+import com.quick.shelf.modular.business.entity.BSysUser;
 import net.sf.json.JSONObject;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
@@ -201,7 +202,7 @@ public class XinYanConstantMethod {
      * @param base64str  加密参数的base64位编码字符串
      * @return
      */
-    public static String getRaDerResult(String base64str) {
+    public static String getRaDerResult(String base64str, BSysUser bSysUser) {
         Map<String, String> headers = new HashMap<>();
 
         // 私匙文件
@@ -226,6 +227,10 @@ public class XinYanConstantMethod {
         params.put("data_type", "json");
         params.put("data_content", data_content);
         String PostString = HttpUtils.doPostByForm(XinYanConstantMethod.REDAR_URL, headers, params);
+
+        // 将查询结果转成json对象，把用户主键存入到json对象 在返回
+        com.alibaba.fastjson.JSONObject jsonResult = com.alibaba.fastjson.JSONObject.parseObject(PostString);
+        jsonResult.put("userId", bSysUser.getUserId());
         logger.info("请求返回:{}",  PostString);
 
         if (PostString.isEmpty()) {// 判断参数是否为空
@@ -233,7 +238,7 @@ public class XinYanConstantMethod {
             throw new RuntimeException("返回数据为空");
         }else
         {
-            return PostString;
+            return jsonResult.toString();
         }
     }
 
