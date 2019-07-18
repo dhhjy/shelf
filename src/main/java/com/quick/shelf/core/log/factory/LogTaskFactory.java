@@ -5,7 +5,9 @@ import cn.stylefeng.roses.core.util.ToolUtil;
 import com.quick.shelf.core.common.constant.state.LogSucceed;
 import com.quick.shelf.core.common.constant.state.LogType;
 import com.quick.shelf.core.log.LogManager;
+import com.quick.shelf.modular.business.entity.BSysUser;
 import com.quick.shelf.modular.business.service.BPortCountService;
+import com.quick.shelf.modular.business.service.BSysUserService;
 import com.quick.shelf.modular.system.entity.LoginLog;
 import com.quick.shelf.modular.system.entity.OperationLog;
 import com.quick.shelf.modular.system.mapper.LoginLogMapper;
@@ -27,6 +29,7 @@ public class LogTaskFactory {
     private static LoginLogMapper loginLogMapper = SpringContextHolder.getBean(LoginLogMapper.class);
     private static OperationLogMapper operationLogMapper = SpringContextHolder.getBean(OperationLogMapper.class);
     private static BPortCountService bPortCountService = SpringContextHolder.getBean(BPortCountService.class);
+    private static BSysUserService bSysUserService = SpringContextHolder.getBean(BSysUserService.class);
 
     public static TimerTask loginLog(final Long userId, final String ip) {
         return new TimerTask() {
@@ -71,6 +74,15 @@ public class LogTaskFactory {
         };
     }
 
+    /**
+     * 业务日志
+     * @param userId
+     * @param bussinessName
+     * @param clazzName
+     * @param methodName
+     * @param msg
+     * @return
+     */
     public static TimerTask bussinessLog(final Long userId, final String bussinessName, final String clazzName, final String methodName, final String msg) {
         return new TimerTask() {
             @Override
@@ -86,6 +98,12 @@ public class LogTaskFactory {
         };
     }
 
+    /**
+     * 异常日志
+     * @param userId
+     * @param exception
+     * @return
+     */
     public static TimerTask exceptionLog(final Long userId, final Exception exception) {
         return new TimerTask() {
             @Override
@@ -109,14 +127,37 @@ public class LogTaskFactory {
      * @param exception
      * @return
      */
-    public static TimerTask portLog(final long deptId, final String type, final String typeName, final String msg) {
+    public static TimerTask portLog(final long userId, final String type, final String typeName, final String msg) {
+        BSysUser bSysUser = bSysUserService.selectBSysUserByUserId((int) userId);
         return new TimerTask() {
             @Override
             public void run() {
                 try {
-                    bPortCountService.insertBPortCount(deptId, type, typeName, msg);
+                    bPortCountService.insertBPortCount(bSysUser.getDeptId(), type, typeName, msg);
                 } catch (Exception e) {
                     logger.error("创建接口统计异常!", e);
+                }
+            }
+        };
+    }
+
+    /**
+     * 接口回调日志
+     *
+     * @param userId
+     * @param exception
+     * @return
+     */
+    public static TimerTask callBackLog(final Integer userId, final String bussinessName, final String clazzName, final String methodName, final String msg) {
+        return new TimerTask() {
+            @Override
+            public void run() {
+                OperationLog operationLog = LogFactory.createOperationLog(
+                        LogType.CALLBACK, Long.valueOf(userId), bussinessName, clazzName, methodName, msg, LogSucceed.SUCCESS);
+                try {
+                    operationLogMapper.insert(operationLog);
+                } catch (Exception e) {
+                    logger.error("创建回调日志异常!", e);
                 }
             }
         };
