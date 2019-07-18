@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * 新颜接口常量配置及常用方法
@@ -255,7 +256,7 @@ public class XinYanConstantMethod {
         // 时间戳 格式：yyyyMMddHHmmss
         ArrayData.put("trade_date", getTimeMark());
         // 商户请求订单号 唯一
-        ArrayData.put("trans_id", userId);
+        ArrayData.put("trans_id", userId + new Random().nextInt(10000));
         // MD5加密后的身份证号
         ArrayData.put("id_no", MD5Utils.encryptMD5(id_no.trim()));
         // MD5加密后的姓名
