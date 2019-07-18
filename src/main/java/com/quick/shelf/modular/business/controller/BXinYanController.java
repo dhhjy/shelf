@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.quick.shelf.core.base.BaseController;
 import com.quick.shelf.core.common.annotion.BussinessLog;
+import com.quick.shelf.core.common.annotion.CallBackLog;
 import com.quick.shelf.core.common.annotion.Permission;
 import com.quick.shelf.core.common.exception.BizExceptionEnum;
 import com.quick.shelf.core.common.page.LayuiPageFactory;
@@ -18,8 +19,8 @@ import com.quick.shelf.modular.business.entity.BXinYanData;
 import com.quick.shelf.modular.business.service.BSysUserService;
 import com.quick.shelf.modular.business.service.BXinYanDataService;
 import com.quick.shelf.modular.business.warpper.BXinYanWrapper;
-import com.quick.shelf.modular.creditPort.xinYan.XinYanConstantMethod;
 import com.quick.shelf.modular.creditPort.xinYan.XinYanConstantEnum;
+import com.quick.shelf.modular.creditPort.xinYan.XinYanConstantMethod;
 import com.quick.shelf.modular.creditPort.xinYan.XinYanResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -199,7 +200,7 @@ public class BXinYanController extends BaseController {
      *
      * @return
      */
-    @BussinessLog(value = "新颜原始数据回调地址")
+    @CallBackLog(value = "新颜原始数据回调地址")
     @RequestMapping(value = "/callbackJson/{userId}", produces = "application/json", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
     public void callbackJson(@RequestBody XinYanResult xyResult, @PathVariable("userId") Integer userId) {
