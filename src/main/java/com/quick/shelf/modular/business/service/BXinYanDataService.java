@@ -12,8 +12,8 @@ import com.quick.shelf.modular.business.entity.BSysUserStatus;
 import com.quick.shelf.modular.business.entity.BXinYanData;
 import com.quick.shelf.modular.business.mapper.BXinYanDataMapper;
 import com.quick.shelf.modular.constant.BusinessConst;
-import com.quick.shelf.modular.creditPort.xinYan.XinYanConstantMethod;
 import com.quick.shelf.modular.creditPort.xinYan.XinYanConstantEnum;
+import com.quick.shelf.modular.creditPort.xinYan.XinYanConstantMethod;
 import com.quick.shelf.modular.creditPort.xinYan.XinYanDataResult;
 import com.quick.shelf.modular.creditPort.xinYan.XinYanResult;
 import org.apache.http.NameValuePair;
@@ -92,7 +92,35 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
     public String getReDerData(Integer userId, BSysUser bSysUser) {
         String base64Str = XinYanConstantMethod.assembleEncryptParams(String.valueOf(userId), bSysUser.getIdCard(),
                 bSysUser.getName(), bSysUser.getPhoneNumber(), null);
-        return XinYanConstantMethod.getRaDerResult(base64Str);
+        return XinYanConstantMethod.getRaDerResult(base64Str,bSysUser);
+    }
+
+    /**
+     * 保存新颜征信的原始数据
+     * 当请求
+     *
+     * @param xyResult 新颜回调结果对象
+     */
+    @PortLog(type = "taobaoweb", typeName = "淘宝")
+    public String xinYanTBJsonData(XinYanResult xyResult) {
+        // 通过 token 凭证 查询报告
+        List<NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("apiUser", XinYanConstantMethod.ApiUser));
+        params.add(new BasicNameValuePair("apiEnc", XinYanConstantMethod.getJsonDataApiEnc()));
+        params.add(new BasicNameValuePair("token", xyResult.getToken()));
+        // 获取新颜查询的结果
+        String result = HttpClientUtil.doGet(XinYanConstantMethod.DEVELOP_URL + XinYanConstantMethod.JSON_DATA_PATH, params);
+        XinYanDataResult xinYanDataResult = JSONObject.parseObject(result, XinYanDataResult.class);
+
+        // 添加
+        assert xinYanDataResult != null;
+        assemble(Integer.valueOf(xyResult.getTaskId()), String.valueOf(xinYanDataResult.getDetail()), xyResult.getApiName());
+
+        JSONObject jsonResult = JSONObject.parseObject(result);
+        jsonResult.put("userId", xyResult.getTaskId());
+        //一定要返回本次的result，需要做后置日志的接口调用保存
+        //会通过返回result进行查找并保存日志
+        return jsonResult.toString();
     }
 
     /**
@@ -122,27 +150,5 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
 
             this.bSysUserStatusService.updateByUserId(bSysUserStatus);
         }).start();
-    }
-
-    /**
-     * 保存新颜征信的原始数据
-     * 当请求
-     *
-     * @param xyResult 新颜回调结果对象
-     */
-    @PortLog(type = "taobaoweb", typeName = "淘宝")
-    public void xinYanTBJsonData(XinYanResult xyResult) {
-        // 通过 token 凭证 查询报告
-        List<NameValuePair> params = new ArrayList<>();
-        params.add(new BasicNameValuePair("apiUser", XinYanConstantMethod.ApiUser));
-        params.add(new BasicNameValuePair("apiEnc", XinYanConstantMethod.getJsonDataApiEnc()));
-        params.add(new BasicNameValuePair("token", xyResult.getToken()));
-        // 获取新颜查询的结果
-        String result = HttpClientUtil.doGet(XinYanConstantMethod.DEVELOP_URL + XinYanConstantMethod.JSON_DATA_PATH, params);
-        XinYanDataResult xinYanDataResult = JSONObject.parseObject(result, XinYanDataResult.class);
-
-        // 添加
-        assert xinYanDataResult != null;
-        assemble(Integer.valueOf(xyResult.getTaskId()), String.valueOf(xinYanDataResult.getDetail()), xyResult.getApiName());
     }
 }
