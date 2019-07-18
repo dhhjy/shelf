@@ -143,16 +143,6 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
 
         // 添加
         assert xinYanDataResult != null;
-        assemble(Integer.valueOf(xyResult.getTaskId().split("_")[0]), String.valueOf(xinYanDataResult.getDetail()), xyResult.getApiName());
-    }
-
-    /**
-     * 根据用户主键 和 类型 查询相同类型的报告有多少份，返回份数
-     * @param userId
-     * @param type
-     * @return String
-     */
-    public String selectJsonDataNum(Integer userId,String type){
-        return this.baseMapper.selectJsonDataNum(userId,type).toString();
+        assemble(Integer.valueOf(xyResult.getTaskId()), String.valueOf(xinYanDataResult.getDetail()), xyResult.getApiName());
     }
 }
