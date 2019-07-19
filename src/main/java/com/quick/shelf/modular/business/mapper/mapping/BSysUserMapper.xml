@@ -62,4 +62,22 @@
         <include refid="Base_Column_List_With_Pwd"/>
         from b_sys_user where phone_number = #{phoneNumber} and status != 'DELETED'
     </select>
+
+    <select id="getBSysUserCount" resultType="Integer">
+        SELECT COUNT(PHONE_NUMBER)
+        FROM B_SYS_USER
+        <if test="deptId != 0">
+            WHERE DEPT_ID = #{deptId}
+        </if>
+    </select>
+
+    <select id="getBSysUserToDayCount" resultType="Integer">
+        SELECT COUNT(PHONE_NUMBER)
+        FROM B_SYS_USER
+        WHERE DATE(CREATE_TIME) = CURDATE()
+        <if test="deptId != 0">
+            AND DEPT_ID = #{deptId}
+        </if>
+
+    </select>
 </mapper>

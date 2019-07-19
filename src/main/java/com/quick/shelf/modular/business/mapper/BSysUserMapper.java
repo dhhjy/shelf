@@ -32,4 +32,16 @@ public interface BSysUserMapper extends BaseMapper<BSysUser> {
      * 通过账号获取用户
      */
     BSysUser getByPhoneNumber(@Param("phoneNumber") String phoneNumber);
+
+    /**
+     * 查询网站总注册人数
+     */
+    Integer getBSysUserCount(@Param("deptId") Long deptId);
+
+    /**
+     * 查询网站今天注册的人数
+     * @param deptId
+     * @return
+     */
+    Integer getBSysUserToDayCount(@Param("deptId") Long deptId);
 }

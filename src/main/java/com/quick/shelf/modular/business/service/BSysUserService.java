@@ -71,6 +71,14 @@ public class BSysUserService extends ServiceImpl<BSysUserMapper, BSysUser> {
         return this.baseMapper.getByPhoneNumber(phone) == null;
     }
 
+    public Integer getBSysUserCount(Long deptId) {
+        return this.baseMapper.getBSysUserCount(deptId);
+    }
+
+    public Integer getBSysUserToDayCount(Long deptId) {
+        return this.baseMapper.getBSysUserToDayCount(deptId);
+    }
+
     /**
      * 信息合并
      */

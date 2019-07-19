@@ -17,6 +17,7 @@ import com.quick.shelf.core.log.LogObjectHolder;
 import com.quick.shelf.core.response.ResponseData;
 import com.quick.shelf.core.shiro.ShiroKit;
 import com.quick.shelf.core.shiro.ShiroUser;
+import com.quick.shelf.core.util.RedisUtil;
 import com.quick.shelf.modular.business.service.BPortCountService;
 import com.quick.shelf.modular.system.entity.FileInfo;
 import com.quick.shelf.modular.system.entity.Notice;
@@ -72,6 +73,9 @@ public class SystemController extends BaseController {
     @Resource
     private ShortMessageService shortMessageService;
 
+    @Resource
+    private RedisUtil redisUtil;
+
     /**
      * 控制台页面
      *
@@ -80,8 +84,16 @@ public class SystemController extends BaseController {
      */
     @RequestMapping("/console")
     public String console(Model model) {
+        ShiroUser user = ShiroKit.getUser();
+        assert user != null;
+        // 接口调用总次数
         model.addAttribute("portNum", this.bPortCountService.getPortNum());
+        // 接口调用总价格
         model.addAttribute("portChart", this.bPortCountService.getPortChart());
+        // 网站总人数
+        model.addAttribute("clientUserCount", this.bPortCountService.getClientUserCount(user.getDeptId()));
+        // 网站当天人数
+        model.addAttribute("clientUserToDayCount", this.bPortCountService.getClientToDayUserCount(user.getDeptId()));
         return "/modular/frame/console.html";
     }
 
@@ -255,7 +267,7 @@ public class SystemController extends BaseController {
             byte[] decode = Base64.decode(avatar);
             response.getOutputStream().write(decode);
         } catch (IOException e) {
-            log.error("获取图片的流错误！", avatar);
+            log.error("获取图片的流错误！");
             throw new ServiceException(CoreExceptionEnum.SERVICE_ERROR);
         }
 
@@ -320,15 +332,15 @@ public class SystemController extends BaseController {
      */
     @RequestMapping(value = "/sendSms/{phone}")
     @ResponseBody
-    public ResponseData sendSms(@PathVariable("phone") String phone, String type) {
+    public ResponseData sendSms(@PathVariable("phone") String phone, String type,
+                                @RequestParam(defaultValue = "21") Long deptId) {
         String message = null;
         if (shelfProperties.getSmsAliYun()) {
-            message = this.shortMessageService.sendAliYunSms(phone, type);
+            message = this.shortMessageService.sendAliYunSms(phone, type, deptId);
         }
         if (shelfProperties.getSmsJiGuang()) {
-            message = this.shortMessageService.sendJiGuangSms(phone, type);
+            message = this.shortMessageService.sendJiGuangSms(phone, type, deptId);
         }
-
         return ResponseData.success(0, message, null);
     }
 }

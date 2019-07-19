@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.quick.shelf.core.shiro.ShiroKit;
 import com.quick.shelf.modular.business.entity.BPortCount;
 import com.quick.shelf.modular.business.mapper.BPortCountMapper;
+import com.quick.shelf.modular.constant.BusinessConst;
 import com.quick.shelf.modular.system.service.DictService;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -19,8 +21,12 @@ import java.util.*;
  */
 @Service
 public class BPortCountService extends ServiceImpl<BPortCountMapper, BPortCount> {
+
     @Resource
     private DictService dictService;
+
+    @Resource
+    private BSysUserService bSysUserService;
 
     /**
      * 插入接口统计
@@ -60,8 +66,8 @@ public class BPortCountService extends ServiceImpl<BPortCountMapper, BPortCount>
      *
      * @return
      */
-    public Map<String,List> getPortChart() {
-        Map<String,List> result = new HashMap<>();
+    public Map<String, List> getPortChart() {
+        Map<String, List> result = new HashMap<>();
         Long deptId = 0L;
         if (!ShiroKit.isAdmin())
             deptId = Objects.requireNonNull(ShiroKit.getUser()).getDeptId();
@@ -86,38 +92,60 @@ public class BPortCountService extends ServiceImpl<BPortCountMapper, BPortCount>
         day.add(Integer.valueOf(map.get("0_day").toString()));
 
         LinkedList<Double> price = new LinkedList<>();
-        if(null == map.get("6_price"))
+        if (null == map.get("6_price"))
             price.add(0.0);
-       else
+        else
             price.add(Double.valueOf(map.get("6_price").toString()));
-        if(null == map.get("5_price"))
+        if (null == map.get("5_price"))
             price.add(0.0);
-       else
+        else
             price.add(Double.valueOf(map.get("5_price").toString()));
-        if(null == map.get("4_price"))
+        if (null == map.get("4_price"))
             price.add(0.0);
-       else
+        else
             price.add(Double.valueOf(map.get("4_price").toString()));
-        if(null == map.get("3_price"))
+        if (null == map.get("3_price"))
             price.add(0.0);
-       else
+        else
             price.add(Double.valueOf(map.get("3_price").toString()));
-        if(null == map.get("2_price"))
+        if (null == map.get("2_price"))
             price.add(0.0);
-       else
+        else
             price.add(Double.valueOf(map.get("2_price").toString()));
-        if(null == map.get("1_price"))
+        if (null == map.get("1_price"))
             price.add(0.0);
-       else
+        else
             price.add(Double.valueOf(map.get("1_price").toString()));
-        if(null == map.get("0_price"))
+        if (null == map.get("0_price"))
             price.add(0.0);
-       else
+        else
             price.add(Double.valueOf(map.get("0_price").toString()));
 
         result.put("data", data);
         result.put("day", day);
         result.put("price", price);
         return result;
+    }
+
+    @Cacheable(value = BusinessConst.CONSOLE, key = "'" + BusinessConst.CLIENT_USER_CONT + "'+#deptId")
+    public Integer getClientUserCount(Long deptId) {
+        if (ShiroKit.isAdmin() || ShiroKit.isDeptAdmin()) {
+            //管理员或者总公司查询就查询全部出来
+            return this.bSysUserService.getBSysUserCount(0L);
+        } else {
+            // 分公司只查询自己的
+            return this.bSysUserService.getBSysUserCount(deptId);
+        }
+    }
+
+    @Cacheable(value = BusinessConst.CONSOLE, key = "'" + BusinessConst.CLIENT_TO_DAY_USER_CONT + "'+#deptId")
+    public Integer getClientToDayUserCount(Long deptId) {
+        if (ShiroKit.isAdmin() || ShiroKit.isDeptAdmin()) {
+            //管理员或者总公司查询就查询全部出来
+            return this.bSysUserService.getBSysUserToDayCount(0L);
+        } else {
+            // 分公司只查询自己的
+            return this.bSysUserService.getBSysUserToDayCount(deptId);
+        }
     }
 }

@@ -67,7 +67,16 @@ public class BSysUserStatusService extends ServiceImpl<BSysUserStatusMapper, BSy
     }
 
     /**
+     * 新增用户状态信息表
+     * @param bSysUserStatus
+     */
+    public void insertBSysUserStatus(BSysUserStatus bSysUserStatus) {
+        this.baseMapper.insert(bSysUserStatus);
+    }
+
+    /**
      * 根据关联用户主键 userId 更新用户状态信息
+     *
      * @param bSysUserStatus
      */
     public void updateByUserId(BSysUserStatus bSysUserStatus) {

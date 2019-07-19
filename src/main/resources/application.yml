@@ -8,8 +8,8 @@ shelf:
   spring-session-open: false        #是否开启spring session,如果是多机环境需要开启(true/false)
   session-invalidate-time: 3600     #session失效时间(只在单机环境下生效，多机环境在SpringSessionConfig类中配置) 单位：秒
   session-validation-interval: 900  #多久检测一次失效的session(只在单机环境下生效) 单位：秒
-  sms-aliYun: true                  #短信发送接口（阿里云平台短信） 短信接口只能打开一个，否则会冲突，产生报错
-  sms-jiGuang: false                #短信发送接口（极光推送平台短信） 短信接口只能打开一个，否则会冲突，产生报错
+  sms-aliYun: false                  #短信发送接口（阿里云平台短信） 短信接口只能打开一个，否则会冲突，产生报错
+  sms-jiGuang: true                #短信发送接口（极光推送平台短信） 短信接口只能打开一个，否则会冲突，产生报错
 
 spring:
   profiles:
