@@ -9,6 +9,7 @@ import com.quick.shelf.core.log.LogManager;
 import com.quick.shelf.core.log.factory.LogTaskFactory;
 import com.quick.shelf.core.shiro.ShiroKit;
 import com.quick.shelf.core.shiro.ShiroUser;
+import com.quick.shelf.modular.creditPort.liMu.LiMuConstantMethod;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
@@ -164,12 +165,22 @@ public class LogAop {
         String type = annotation.type();
         String typeName = annotation.typeName();
         JSONObject re = JSONObject.parseObject(result.toString());
-        if (!re.getBoolean("success"))
+        if(null != re.getString("code") &&
+                !re.getString("code").equals(LiMuConstantMethod.SUCCESS_CODE))
+            return;
+        if (null != re.getString("success") &&
+                !re.getBoolean("success"))
             return;
 
         LogManager.me().executeLog(LogTaskFactory.portLog(Long.valueOf(re.getString("userId")), type, typeName, result.toString()));
     }
 
+    /**
+     * APO 获取当前方法的封装
+     * @param point
+     * @return
+     * @throws NoSuchMethodException
+     */
     private Method getCurrentMethod(ProceedingJoinPoint point) throws NoSuchMethodException {
         Signature sig = point.getSignature();
         MethodSignature msig;
@@ -200,7 +211,7 @@ public class LogAop {
         List<Object> param = new ArrayList<>(Arrays.asList(params));
         Integer userId = 0;
         if (param.size() > 1)
-            userId = (Integer) param.get(1);
+            userId = Integer.valueOf(param.get(1).toString());
 
         JSONArray resultArray = new JSONArray(param);
 
