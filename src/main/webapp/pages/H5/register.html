@@ -2,19 +2,18 @@
 <html>
 
 <head>
-    <title>登录 - Shelf</title>
+    <title>注册 - 秒秒贷</title>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link href="${ctxPath}/assets/expand/images/favicon.ico" rel="icon">
-    <!--    <link rel="stylesheet" href="${ctxPath}/assets/common/layui/css/layui.css"/>-->
-    <!--    <link rel="stylesheet" href="${ctxPath}/assets/common/css/login.css" media="all">-->
-
-    <link rel="stylesheet" href="${ctxPath}/assets/common/layui/css/layui.css" media="all">
-    <link rel="stylesheet" href="${ctxPath}/assets/h5/css/admin_.css" media="all">
+    <link rel="stylesheet" href="${ctxPath}/assets/common/layui/css/layui.css"/>
+    <link rel="stylesheet" href="${ctxPath}/assets/h5/css/admin.css" media="all">
     <link rel="stylesheet" href="${ctxPath}/assets/common/module/admin.css" media="all">
     <link rel="stylesheet" href="${ctxPath}/assets/h5/css/login.css" media="all">
-    <link id="layuicss-layer" rel="stylesheet" href="${ctxPath}/assets/common/layui/css/modules/layer/default/layer.css" media="all">
+    <link id="layuicss-layer" rel="stylesheet" href="${ctxPath}/assets/common/layui/css/modules/layer/default/layer.css"
+          media="all">
+
     <style>
         .login-footer a {
             color: rgba(0, 0, 0, 0.7) !important;
@@ -32,66 +31,64 @@
 
 <body>
 <div class="layadmin-user-login layadmin-user-display-show">
-
-    <!--    <div class="login-header">-->
-    <!--        <img src="${ctxPath}/assets/expand/images/logo.png"> Welcome 秒秒贷-->
-    <!--    </div>-->
-
     <div class="layadmin-user-login-main">
         <div class="layadmin-user-login-box layadmin-user-login-header">
-            <h2><img style="width: 32px;height: 32px;" src="${ctxPath}/assets/expand/images/logo.png"> Welcome Login</h2>
-            <p>欢迎登陆 鑫炜金融 安全、快捷、方便</p>
+            <h2><img style="width: 32px;height: 32px;" src="${ctxPath}/assets/expand/images/logo.png"> 注 册</h2>
+            <p>欢迎注册鑫炜科技旗下金融产品</p>
         </div>
         <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
             <div class="layui-form-item">
-                <label class="layadmin-user-login-icon layui-icon layui-icon-cellphone" for="LAY-user-login-cellphone"></label>
-                <input type="text" name="cellphone" id="LAY-user-login-cellphone" lay-verify="phone" placeholder="手机" class="layui-input">
+                <label class="layadmin-user-login-icon layui-icon layui-icon-cellphone" for="userAccount"></label>
+                <input type="text" name="userAccount" id="userAccount" lay-verify="phone" placeholder="手机"
+                       class="layui-input" maxlength="12">
             </div>
             <div class="layui-form-item">
                 <div class="layui-row">
                     <div class="layui-col-xs7">
-                        <label class="layadmin-user-login-icon layui-icon layui-icon-vercode" for="LAY-user-login-vercode"></label>
-                        <input type="text" name="vercode" id="LAY-user-login-vercode" lay-verify="required" placeholder="验证码" class="layui-input">
+                        <label class="layadmin-user-login-icon layui-icon layui-icon-vercode" for="vercode"></label>
+                        <input type="text" name="vercode" id="vercode" lay-verify="required" placeholder="验证码"
+                               class="layui-input">
                     </div>
                     <div class="layui-col-xs5">
                         <div style="margin-left: 10px;">
-                            <button type="button" class="layui-btn layui-btn-primary layui-btn-fluid" id="LAY-user-getsmscode">获取验证码</button>
+                            <button type="button" class="layui-btn layui-btn-primary layui-btn-fluid"
+                                    id="getsmscode">获取验证码
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="LAY-user-login-password"></label>
-                <input type="password" name="password" id="LAY-user-login-password" lay-verify="pass" placeholder="密码" class="layui-input">
+                <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="password"></label>
+                <input type="password" name="password" id="password" lay-verify="pass" placeholder="密码"
+                       class="layui-input">
             </div>
             <div class="layui-form-item">
-                <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="LAY-user-login-repass"></label>
-                <input type="password" name="repass" id="LAY-user-login-repass" lay-verify="required" placeholder="确认密码" class="layui-input">
+                <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="repass"></label>
+                <input type="password" name="repass" id="repass" lay-verify="required" placeholder="确认密码"
+                       class="layui-input">
             </div>
             <div class="layui-form-item">
-                <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="LAY-user-login-nickname"></label>
-                <input type="text" name="nickname" id="LAY-user-login-nickname" lay-verify="nickname" placeholder="昵称" class="layui-input">
-            </div>
-            <div class="layui-form-item">
-                <input type="checkbox" name="agreement" lay-skin="primary" title="同意用户协议" checked=""><div class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary"><span>同意用户协议</span><i class="layui-icon layui-icon-ok"></i></div>
+                <input type="checkbox" name="agreement" lay-skin="primary" title="同意用户协议" checked="">
+                <div class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary">
+                    <span>同意用户协议</span><i class="layui-icon layui-icon-ok"></i></div>
             </div>
             <div class="layui-form-item">
                 <button class="layui-btn layui-btn-fluid" lay-submit="" lay-filter="LAY-user-reg-submit">注 册</button>
             </div>
             <div class="layui-trans layui-form-item layadmin-user-login-other">
-
-                <a href="login.html" class="layadmin-user-jump-change layadmin-link layui-hide-xs">用已有帐号登入</a>
-                <a href="login.html" class="layadmin-user-jump-change layadmin-link layui-hide-sm layui-show-xs-inline-block">登入</a>
+                <a href="/h5/login" class="layadmin-user-jump-change layadmin-link layui-hide-xs">用已有帐号登入</a>
+                <a href="/h5/login"
+                   class="layadmin-user-jump-change layadmin-link layui-hide-sm layui-show-xs-inline-block">登入</a>
             </div>
         </div>
     </div>
     <div class="layui-trans layadmin-user-login-footer">
-
-        <p>© 2018 <a href="http://www.layui.com/" target="_blank">layui.com</a></p>
+        <p>© 2019 <a href="#" target="_blank">旗舰版</a></p>
         <p>
-            <span><a href="http://www.layui.com/admin/#get" target="_blank">获取授权</a></span>
-            <span><a href="http://www.layui.com/admin/pro/" target="_blank">在线演示</a></span>
-            <span><a href="http://www.layui.com/admin/" target="_blank">前往官网</a></span>
+            <span><a href="#" target="_blank">强大团队</a></span>
+            <span><a href="#" target="_blank">系统审核</a></span>
+            <span><a href="#" target="_blank">信息安全</a></span>
         </p>
     </div>
 </div>
@@ -110,10 +107,12 @@
 </script>
 <script type="text/javascript" src="${ctxPath}/assets/common/layui/layui.js"></script>
 <script type="text/javascript" src="${ctxPath}/assets/common/js/common.js"></script>
+<script src="${ctxPath}/assets/expand/plugins/jquery/jquery-3.2.1.min.js"></script>
 
 <script>
-    layui.use(['layer', 'form'], function () {
+    layui.use(['layer', 'form', 'ax'], function () {
         var $ = layui.jquery;
+        var $ax = layui.ax;
         var layer = layui.layer;
         var form = layui.form;
 
@@ -122,17 +121,62 @@
             return true;
         });
 
-        // 图形验证码
-        // $('.login-captcha').click(function () {
-        //     this.src = this.src + '?t=' + (new Date).getTime();
-        // });
 
         var errorMsg = "${tips!}";
         if (errorMsg) {
             layer.msg(errorMsg, {icon: 5, anim: 6});
         }
 
+        /**
+         * 发送验证码点击事件绑定
+         */
+        $("#getsmscode").click(function () {
+            if (checkPhone()) {
+                //发送验证码
+                $.ajax({
+                    type: 'POST',
+                    url: Feng.ctxPath + "/system/sendSms/" + $("#userAccount").val(),
+                    data: {"type": "register"},
+                    success: function(result){
+                        if(result.success){
+                            Feng.info(result.message);
+                            var btn = document.getElementById("getsmscode");
+                            settime(btn);
+                        }
+                    }
+                });
+            }
+        });
     });
+
+    var countdown = 60;
+
+    function settime(btn) {
+        if (countdown === 0) {
+            btn.removeAttribute("disabled");
+            btn.innerHTML = "获取验证码";
+            countdown = 60;
+        } else {
+            // 禁用按钮
+            btn.setAttribute("disabled", true);
+            btn.innerHTML = "重新发送(" + countdown + ")";
+            countdown--;
+            setTimeout(function () {
+                    settime(btn)
+                },
+                1000);
+        }
+    }
+
+    function checkPhone() {
+        var myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
+        if (!myreg.test($("#userAccount").val())) {
+            Feng.error("请输入有效的号码");
+            return false;
+        } else {
+            return true;
+        }
+    }
 </script>
 
 

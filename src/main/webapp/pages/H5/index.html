@@ -21,7 +21,6 @@
 
     <div class="layui-body" id="layBodyDiv">
     </div>
-
     <div class="layui-footer" id="layFooterDiv">
         <div class="layui-row layui-col-space15">
 
@@ -156,14 +155,14 @@
     });
     var toolsFun = {
         showFooterFun: function () {
-            $("#layBodyDiv").css({"margin-top": "0", "width": "100%", "clear": "both"});
+            $("#layBodyDiv").css({"margin-top": "0", "width": "100%", "clear": "both", "left": "0px"});
             $("#layHeaderDiv").show();
         },
         hideFooterFun: function () {
-            $("#layBodyDiv").css({"margin-top": "-50px", "width": "100%"});
+            $("#layBodyDiv").css({"margin-top": "-50px", "width": "100%", "left": "0px"});
             $("#layHeaderDiv").hide();
         },
-        skip: function(url){
+        skip: function (url) {
             // 信誉管理主页
             layui.index.loadHome({
                 menuPath: url,

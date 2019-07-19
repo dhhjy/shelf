@@ -32,6 +32,10 @@ public class ShelfProperties {
 
     private Boolean springSessionOpen = false;
 
+    private Boolean smsAliYun = false;
+
+    private Boolean smsJiGuang = false;
+
     /**
      * session 失效时间（默认为30分钟 单位：秒）
      */

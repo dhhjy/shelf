@@ -49,6 +49,8 @@ spring:
         #最大等待时间：单位ms
         max-wait: -1ms
 
+beetl:
+  resource-auto-check: true         #热加载beetl模板，开发时候用
 
 # 多数据源情况的配置
 guns:

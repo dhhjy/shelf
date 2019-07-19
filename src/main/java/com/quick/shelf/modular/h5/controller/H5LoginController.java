@@ -76,4 +76,26 @@ public class H5LoginController extends BaseController {
         model.addAttribute("userStatus", JSONObject.toJSON(userStatus));
         return H5_PATH + "frame/console.html";
     }
+
+    /**
+     * 客户端注册页面跳转
+     *
+     * @return
+     */
+    @ApiOperation(value = "客户端注册页面跳转", notes = "客户端注册页面跳转", httpMethod = "GET")
+    @RequestMapping(value = "/registerIndex")
+    public String registerIndex() {
+        return H5_PATH + "register.html";
+    }
+
+    /**
+     * 客户端找回密码页面跳转
+     *
+     * @return
+     */
+    @ApiOperation(value = "客户端找回密码页面跳转", notes = "客户端找回密码页面跳转", httpMethod = "GET")
+    @RequestMapping(value = "/findPassword")
+    public String findPassword() {
+        return H5_PATH + "findPassword.html";
+    }
 }

@@ -3,7 +3,6 @@ package com.quick.shelf.modular.system.controller;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.collection.CollectionUtil;
-import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import cn.stylefeng.roses.kernel.model.exception.RequestEmptyException;
 import cn.stylefeng.roses.kernel.model.exception.ServiceException;
@@ -15,6 +14,7 @@ import com.quick.shelf.core.common.constant.DefaultAvatar;
 import com.quick.shelf.core.common.constant.factory.ConstantFactory;
 import com.quick.shelf.core.common.exception.BizExceptionEnum;
 import com.quick.shelf.core.log.LogObjectHolder;
+import com.quick.shelf.core.response.ResponseData;
 import com.quick.shelf.core.shiro.ShiroKit;
 import com.quick.shelf.core.shiro.ShiroUser;
 import com.quick.shelf.modular.business.service.BPortCountService;
@@ -24,6 +24,7 @@ import com.quick.shelf.modular.system.entity.User;
 import com.quick.shelf.modular.system.factory.UserFactory;
 import com.quick.shelf.modular.system.service.FileInfoService;
 import com.quick.shelf.modular.system.service.NoticeService;
+import com.quick.shelf.modular.system.service.ShortMessageService;
 import com.quick.shelf.modular.system.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -68,6 +69,9 @@ public class SystemController extends BaseController {
     @Resource
     private BPortCountService bPortCountService;
 
+    @Resource
+    private ShortMessageService shortMessageService;
+
     /**
      * 控制台页面
      *
@@ -76,8 +80,8 @@ public class SystemController extends BaseController {
      */
     @RequestMapping("/console")
     public String console(Model model) {
-        model.addAttribute("portNum",this.bPortCountService.getPortNum());
-        model.addAttribute("portChart",this.bPortCountService.getPortChart());
+        model.addAttribute("portNum", this.bPortCountService.getPortNum());
+        model.addAttribute("portChart", this.bPortCountService.getPortChart());
         return "/modular/frame/console.html";
     }
 
@@ -307,5 +311,24 @@ public class SystemController extends BaseController {
         return ResponseData.success(0, "上传成功", map);
     }
 
+    /**
+     * 发送短信通用方法
+     *
+     * @param phone 待发送的手机号
+     * @param type  短信模板的类型
+     * @return
+     */
+    @RequestMapping(value = "/sendSms/{phone}")
+    @ResponseBody
+    public ResponseData sendSms(@PathVariable("phone") String phone, String type) {
+        String message = null;
+        if (shelfProperties.getSmsAliYun()) {
+            message = this.shortMessageService.sendAliYunSms(phone, type);
+        }
+        if (shelfProperties.getSmsJiGuang()) {
+            message = this.shortMessageService.sendJiGuangSms(phone, type);
+        }
 
+        return ResponseData.success(0, message, null);
+    }
 }

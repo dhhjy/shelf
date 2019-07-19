@@ -2,13 +2,12 @@
 <html>
 
 <head>
-    <title>登录 - ${clientName}</title>
+    <title>登录 - 秒秒贷</title>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link href="${ctxPath}/assets/expand/images/favicon.ico" rel="icon">
     <link rel="stylesheet" href="${ctxPath}/assets/common/layui/css/layui.css"/>
-
     <link rel="stylesheet" href="${ctxPath}/assets/h5/css/admin.css" media="all">
     <link rel="stylesheet" href="${ctxPath}/assets/common/module/admin.css" media="all">
     <link rel="stylesheet" href="${ctxPath}/assets/h5/css/login.css" media="all">
@@ -30,19 +29,18 @@
 
 <body>
 <div class="layadmin-user-login layadmin-user-display-show">
-
     <div class="layadmin-user-login-main">
         <div class="layadmin-user-login-box layadmin-user-login-header">
             <h2><img style="width: 30px;height: 30px;" src="${ctxPath}/assets/expand/images/logo.png"> Welcome Login</h2>
-            <p>欢迎登陆 ${clientName} 安全、快捷、方便</p>
+            <p>欢迎登陆鑫炜科技旗下金融产品</p>
         </div>
         <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
-            <form class="layui-card-body layui-form layui-form-pane" action="${ctxPath}/login" method="post">
+            <form class="layui-form" action="${ctxPath}/login" method="post">
                 <input type="hidden" name="loginType" value="H5">
                 <input type="hidden" name="remember" value="off">
                 <div class="layui-form-item">
                     <label class="layadmin-user-login-icon layui-icon layui-icon-cellphone" for="username"></label>
-                    <input type="text" name="username" id="username" lay-verify="phone" required  placeholder="手机号、账号" class="layui-input" maxlength="15">
+                    <input type="text" name="username" id="username" lay-verify="phone" required  placeholder="手机号" class="layui-input" maxlength="15">
                 </div>
 
                 <div class="layui-form-item">
@@ -51,7 +49,7 @@
                 </div>
 
                 <div class="layui-form-item" style="margin-bottom: 20px;">
-                    <a lay-href="/user/forget" class="layadmin-user-jump-change layadmin-link" style="margin-top: 7px;">忘记密码？</a>
+                    <a lay-href="/h5/findPassword" class="layadmin-user-jump-change layadmin-link" style="margin-top: 7px;">忘记密码？</a>
                 </div>
 
                 <div class="layui-form-item">
@@ -59,9 +57,8 @@
                 </div>
             </form>
             <div class="layui-trans layui-form-item layadmin-user-login-other">
-
-                <a href="login.html" class="layadmin-user-jump-change layadmin-link layui-hide-xs">注册账号</a>
-                <a href="login.html" class="layadmin-user-jump-change layadmin-link layui-hide-sm layui-show-xs-inline-block">注册</a>
+                <a href="/h5/registerIndex" class="layadmin-user-jump-change layadmin-link layui-hide-xs">注册账号</a>
+                <a href="/h5/registerIndex" class="layadmin-user-jump-change layadmin-link layui-hide-sm layui-show-xs-inline-block">注册</a>
             </div>
         </div>
     </div>
@@ -101,9 +98,8 @@
         form.on('submit(login-submit)', function (obj) {
             if(obj.field.phoneNumber === '')
                 return false;
-            if(obj.field.password === '')
-                return false;
-            return true;
+            return obj.field.password !== '';
+
         });
 
         // 图形验证码

@@ -116,8 +116,8 @@ public class BaseController {
     protected String getProjectPath(){
         HttpServletRequest request = getHttpServletRequest();
         String projPath = request.getServerName()+ "/" + request.getContextPath();
-        if(projPath.equals("localhost/"))
-            projPath = "2539z803m8.qicp.vip:23154";
+        if(projPath.equals("localhost/") || projPath.equals("192.168.0.106/") )
+            projPath = "http://25b762d818.qicp.vip:12157";
         return projPath;
     }
 }
