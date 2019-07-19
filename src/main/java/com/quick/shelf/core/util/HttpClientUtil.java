@@ -104,12 +104,16 @@ public class HttpClientUtil {
         post.addHeader("Accept", "application/json");
         post.setEntity(entity);
         try {
-            HttpClient client = HttpClientBuilder.create().build();
+            HttpClient client = HttpClientBuilder
+                    .create()
+                    .build();
             HttpResponse response = client.execute(post);
             int code = response.getStatusLine().getStatusCode();
             if (code >= 400)
+            {
+                logger.error("doPost 发生异常，CODE={}", code);
                 throw new RuntimeException(EntityUtils.toString(response.getEntity()));
-            logger.error("doPost 发生异常，CODE={}", code);
+            }
             return EntityUtils.toString(response.getEntity());
         } catch (ClientProtocolException e) {
             logger.error("doPost 发生 连接协议 异常，异常信息：{}", e.getMessage());

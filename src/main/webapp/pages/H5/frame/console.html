@@ -284,7 +284,7 @@
          * 进行身份证(实人认证)
          */
         var idCardAuthFun = function () {
-            if (userStatus.identityStatus !== '0') {
+            if (userStatus.identityStatus !== '0' && userStatus.identityStatus !== 'ENABLE') {
                 Feng.info("身份证已认证");
                 return false;
             } else {
@@ -296,7 +296,7 @@
          * 进行个人信息认证
          */
         var userInfoAuthFun = function () {
-            if (userStatus.userBasicStatus !== '0') {
+            if (userStatus.userBasicStatus !== '0' && userStatus.userBasicStatus !== 'ENABLE') {
                 Feng.info("个人信息已认证");
                 return false;
             } else {
@@ -308,7 +308,7 @@
          * 进行银行卡认证
          */
         var bankCardAuthFun = function () {
-            if (userStatus.bankInfoStatus !== '0') {
+            if (userStatus.bankInfoStatus !== '0' && userStatus.bankInfoStatus !== 'ENABLE') {
                 Feng.info("银行卡已认证");
                 return false;
             } else {
@@ -320,7 +320,7 @@
          * 进行手机验证
          */
         var mobileAuthFun = function () {
-            if (userStatus.limuMobileReportStatus !== '0') {
+            if (userStatus.limuMobileReportStatus !== '0' && userStatus.limuMobileReportStatus !== 'ENABLE') {
                 Feng.info("手机已认证");
                 return false;
             } else {
@@ -339,7 +339,7 @@
          * 进行淘宝认证
          */
         var taoBaoAuthFun = function () {
-            if (userStatus.limuTaobaoReportStatus !== '0') {
+            if (userStatus.limuTaobaoReportStatus !== '0' && userStatus.limuTaobaoReportStatus !== 'ENABLE') {
                 Feng.info("淘宝已认证");
                 return false;
             } else {
@@ -358,7 +358,7 @@
          * 进行芝麻分(淘宝)认证
          */
         var zmfAuthFun = function () {
-            if (userStatus.xinyanZmfStatus !== '0') {
+            if (userStatus.xinyanZmfStatus !== '0' && userStatus.xinyanZmfStatus !== 'ENABLE') {
                 Feng.info("芝麻分已认证");
                 return false;
             } else {

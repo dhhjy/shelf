@@ -36,46 +36,60 @@
             <h2><img style="width: 32px;height: 32px;" src="${ctxPath}/assets/expand/images/logo.png"> 注 册</h2>
             <p>欢迎注册鑫炜科技旗下金融产品</p>
         </div>
-        <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
-            <div class="layui-form-item">
-                <label class="layadmin-user-login-icon layui-icon layui-icon-cellphone" for="userAccount"></label>
-                <input type="text" name="userAccount" id="userAccount" lay-verify="phone" placeholder="手机"
-                       class="layui-input" maxlength="12">
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-row">
-                    <div class="layui-col-xs7">
-                        <label class="layadmin-user-login-icon layui-icon layui-icon-vercode" for="vercode"></label>
-                        <input type="text" name="vercode" id="vercode" lay-verify="required" placeholder="验证码"
-                               class="layui-input">
-                    </div>
-                    <div class="layui-col-xs5">
-                        <div style="margin-left: 10px;">
-                            <button type="button" class="layui-btn layui-btn-primary layui-btn-fluid"
-                                    id="getsmscode">获取验证码
-                            </button>
+        <div id="registerMessageInfo" hidden class="layadmin-user-login-box layadmin-user-login-body layui-form" style="padding-top: 50px;">
+            <h2 style="text-align: center;color: #00A65A">恭喜，您已成功注册秒秒贷！</h2>
+            <h2 style="text-align: center">您的账号：<span id="accountInfo"></span></h2>
+            <h2 style="text-align: center">您的密码：<span id="passwordInfo"></span></h2>
+            <h5 style="text-align: center;color: #00A65A;">请妥善保管您的凭据</h5>
+            <h5 style="text-align: center;"><span id="cd"></span>秒后进行跳转或
+                <span><a id='skipLogin' href='/h5/' class='layadmin-link'>立即跳转<a></span>
+            </h5>
+        </div>
+        <div id="registerDiv" class="layadmin-user-login-box layadmin-user-login-body layui-form">
+            <form id="registerForm" class="layui-form" action="${ctxPath}/login" method="post">
+                <input type="hidden" id="deptId" name="deptId" value="21">
+                <div class="layui-form-item">
+                    <label class="layadmin-user-login-icon layui-icon layui-icon-cellphone" for="userAccount"></label>
+                    <input type="text" name="userAccount" id="userAccount" lay-verify="phone" placeholder="手机"
+                           class="layui-input" maxlength="12">
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-row">
+                        <div class="layui-col-xs7">
+                            <label class="layadmin-user-login-icon layui-icon layui-icon-vercode" for="vercode"></label>
+                            <input type="text" name="vercode" id="vercode" lay-verify="required" placeholder="验证码"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-col-xs5">
+                            <div style="margin-left: 10px;">
+                                <button type="button" class="layui-btn layui-btn-primary layui-btn-fluid"
+                                        id="getsmscode">获取验证码
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="password"></label>
-                <input type="password" name="password" id="password" lay-verify="pass" placeholder="密码"
-                       class="layui-input">
-            </div>
-            <div class="layui-form-item">
-                <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="repass"></label>
-                <input type="password" name="repass" id="repass" lay-verify="required" placeholder="确认密码"
-                       class="layui-input">
-            </div>
-            <div class="layui-form-item">
-                <input type="checkbox" name="agreement" lay-skin="primary" title="同意用户协议" checked="">
-                <div class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary">
-                    <span>同意用户协议</span><i class="layui-icon layui-icon-ok"></i></div>
-            </div>
-            <div class="layui-form-item">
-                <button class="layui-btn layui-btn-fluid" lay-submit="" lay-filter="LAY-user-reg-submit">注 册</button>
-            </div>
+                <div class="layui-form-item">
+                    <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="password"></label>
+                    <input type="password" name="password" id="password" lay-verify="required|psw" placeholder="密码"
+                           class="layui-input" maxlength="16">
+                </div>
+                <div class="layui-form-item">
+                    <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="repass"></label>
+                    <input type="password" name="repass" id="repass" lay-verify="required|repsw" placeholder="确认密码"
+                           class="layui-input" maxlength="16">
+                </div>
+                <div class="layui-form-item">
+                    <input type="checkbox" name="agreement" lay-skin="primary" title="同意用户协议" checked="">
+                    <div class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary">
+                        <span>同意用户协议</span><i class="layui-icon layui-icon-ok"></i></div>
+                </div>
+                <div class="layui-form-item">
+                    <button class="layui-btn layui-btn-fluid" lay-submit="" lay-filter="LAY-user-reg-submit"
+                            id="LAY-user-reg-submit">注 册
+                    </button>
+                </div>
+            </form>
             <div class="layui-trans layui-form-item layadmin-user-login-other">
                 <a href="/h5/login" class="layadmin-user-jump-change layadmin-link layui-hide-xs">用已有帐号登入</a>
                 <a href="/h5/login"
@@ -116,11 +130,15 @@
         var layer = layui.layer;
         var form = layui.form;
 
-        // 表单提交
-        form.on('submit(login-submit)', function (obj) {
-            return true;
+        // 添加表单验证方法
+        form.verify({
+            psw: [/^[\S]{6,12}$/, '密码必须6到12位，且不能出现空格'],
+            repsw: function (value) {
+                if (value !== $('#registerForm input[name=password]').val()) {
+                    return '两次密码输入不一致';
+                }
+            }
         });
-
 
         var errorMsg = "${tips!}";
         if (errorMsg) {
@@ -128,17 +146,50 @@
         }
 
         /**
+         * 点击注册事件绑定
+         */
+        // 表单提交事件
+        form.on('submit(LAY-user-reg-submit)', function (data) {
+            if (data.field.vercode.length < 5) {
+                Feng.error("验证码不正确");
+                return false;
+            }
+            if (data.field.agreement === undefined) {
+                Feng.error("未同意注册协议");
+                return false;
+            }
+            var ajax = new $ax(Feng.ctxPath + "/h5/register", function (data) {
+                if (data && data.code === 0) {
+                    $("#registerDiv").hide();
+                    $("#registerMessageInfo").show();
+                    changePageInfoFun(data.data);
+                } else {
+                    Feng.error(data.message);
+                }
+            }, function (data) {
+                Feng.error("添加失败！" + data.message)
+            });
+            ajax.set(data.field);
+            ajax.start();
+            return false;
+        });
+
+        /**
          * 发送验证码点击事件绑定
          */
         $("#getsmscode").click(function () {
             if (checkPhone()) {
+                var deptId = $("#deptId").val();
                 //发送验证码
                 $.ajax({
                     type: 'POST',
                     url: Feng.ctxPath + "/system/sendSms/" + $("#userAccount").val(),
-                    data: {"type": "register"},
-                    success: function(result){
-                        if(result.success){
+                    data: {
+                        "type": "register",
+                        "deptId": deptId
+                    },
+                    success: function (result) {
+                        if (result.success) {
                             Feng.info(result.message);
                             var btn = document.getElementById("getsmscode");
                             settime(btn);
@@ -175,6 +226,26 @@
             return false;
         } else {
             return true;
+        }
+    }
+
+    var cd = 3;
+
+    /**
+     * 注册成功后，替换div内容
+     */
+    function changePageInfoFun(data) {
+        if(cd == 0){
+            document.getElementById("skipLogin").click();
+        }else{
+            $("#accountInfo").text(data.userAccount);
+            $("#passwordInfo").text(data.password);
+            $("#cd").text(cd);
+            cd --;
+            setTimeout(function () {
+                    changePageInfoFun(data)
+                },
+                1000);
         }
     }
 </script>

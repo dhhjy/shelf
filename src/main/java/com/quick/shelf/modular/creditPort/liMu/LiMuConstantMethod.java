@@ -73,9 +73,9 @@ public class LiMuConstantMethod {
      * @param successUrl
      * @return
      */
-    public static String getLimuVerifyUrl(BSysUser bSysUser, String apiName, String signUrl, String callBackUrl) {
+    public static String getLimuVerifyUrl(BSysUser bSysUser, String apiName, String signUrl, String callBackUrl, String jumpUrl) {
         return LiMuConstantMethod.H5_URL + apiName + "?apiKey=" + LiMuConstantMethod.APIKEY + "&uid=" + bSysUser.getUserId() + "&mobilePhone=" + bSysUser.getPhoneNumber()
-                + "&signUrl=" + signUrl + "&callBackUrl=" + callBackUrl + "&isWxHeadHide=1";
+                + "&signUrl=" + signUrl + "&callBackUrl=" + callBackUrl + "&isWxHeadHide=1&backUrl=" + jumpUrl;
     }
 
     /**

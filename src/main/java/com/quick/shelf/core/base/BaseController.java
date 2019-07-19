@@ -39,15 +39,15 @@ public class BaseController {
     }
 
     protected HttpSession getSession(Boolean flag) {
-        return ((HttpServletRequest)Objects.requireNonNull(HttpContext.getRequest())).getSession(flag);
+        return ((HttpServletRequest) Objects.requireNonNull(HttpContext.getRequest())).getSession(flag);
     }
 
     protected String getPara(String name) {
-        return ((HttpServletRequest)Objects.requireNonNull(HttpContext.getRequest())).getParameter(name);
+        return ((HttpServletRequest) Objects.requireNonNull(HttpContext.getRequest())).getParameter(name);
     }
 
     protected void setAttr(String name, Object value) {
-        ((HttpServletRequest)Objects.requireNonNull(HttpContext.getRequest())).setAttribute(name, value);
+        ((HttpServletRequest) Objects.requireNonNull(HttpContext.getRequest())).setAttribute(name, value);
     }
 
     protected Object warpObject(BaseControllerWrapper warpper) {
@@ -59,7 +59,7 @@ public class BaseController {
         Cookie[] var3 = cookies;
         int var4 = cookies.length;
 
-        for(int var5 = 0; var5 < var4; ++var5) {
+        for (int var5 = 0; var5 < var4; ++var5) {
             Cookie cookie = var3[var5];
             if (cookie.getName().equals(cookieName)) {
                 Cookie temp = new Cookie(cookie.getName(), "");
@@ -75,7 +75,7 @@ public class BaseController {
         Cookie[] var2 = cookies;
         int var3 = cookies.length;
 
-        for(int var4 = 0; var4 < var3; ++var4) {
+        for (int var4 = 0; var4 < var3; ++var4) {
             Cookie cookie = var2[var4];
             Cookie temp = new Cookie(cookie.getName(), "");
             temp.setMaxAge(0);
@@ -87,14 +87,14 @@ public class BaseController {
     protected ResponseEntity<InputStreamResource> renderFile(String fileName, String filePath) {
         try {
             FileInputStream inputStream = new FileInputStream(filePath);
-            return this.renderFile(fileName, (InputStream)inputStream);
+            return this.renderFile(fileName, (InputStream) inputStream);
         } catch (FileNotFoundException var4) {
             throw new ServiceException(CoreExceptionEnum.FILE_READING_ERROR);
         }
     }
 
     protected ResponseEntity<InputStreamResource> renderFile(String fileName, byte[] fileBytes) {
-        return this.renderFile(fileName, (InputStream)(new ByteArrayInputStream(fileBytes)));
+        return this.renderFile(fileName, (InputStream) (new ByteArrayInputStream(fileBytes)));
     }
 
     protected ResponseEntity<InputStreamResource> renderFile(String fileName, InputStream inputStream) {
@@ -113,11 +113,12 @@ public class BaseController {
         return new ResponseEntity(resource, headers, HttpStatus.CREATED);
     }
 
-    protected String getProjectPath(){
+    protected String getProjectPath() {
         HttpServletRequest request = getHttpServletRequest();
-        String projPath = request.getServerName()+ "/" + request.getContextPath();
-        if(projPath.equals("localhost/") || projPath.equals("192.168.0.106/") )
-            projPath = "http://25b762d818.qicp.vip:12157";
+        String projPath = request.getServerName() + "/" + request.getContextPath();
+        if (projPath.equals("localhost/") || projPath.equals("192.168.0.106/") || projPath.equals("192.168.1.107/"))
+//            projPath = "http://25b762d818.qicp.vip:12157";
+            projPath = "http://2539z803m8.qicp.vip:23154";
         return projPath;
     }
 }

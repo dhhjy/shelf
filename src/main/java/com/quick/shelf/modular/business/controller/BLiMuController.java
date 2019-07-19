@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.quick.shelf.core.base.BaseController;
 import com.quick.shelf.core.common.annotion.BussinessLog;
+import com.quick.shelf.core.common.annotion.CallBackLog;
 import com.quick.shelf.core.common.annotion.Permission;
 import com.quick.shelf.core.common.page.LayuiPageFactory;
 import com.quick.shelf.core.shiro.ShiroKit;
@@ -220,23 +221,23 @@ public class BLiMuController extends BaseController {
         // 查询用户信息
         BSysUser bSysUser = this.bSysUserService.selectBSysUserByUserId(Integer.valueOf(userId));
         String signUrl = getProjectPath() + "/liMu/sign";
-        String callBackUrl = getProjectPath() + "/liMu/callback/" + type + "/" + userId;
-        String url = LiMuConstantMethod.getLimuVerifyUrl(bSysUser, type, signUrl, callBackUrl);
+        String jumpUrl = getProjectPath() + "/h5/index";
+        String callBackUrl = getProjectPath() + "/liMu/callBack/" + type + "/" + userId;
+        String url = LiMuConstantMethod.getLimuVerifyUrl(bSysUser, type, signUrl, callBackUrl, jumpUrl);
         return url;
     }
 
     /**
      * 立木数据回调通知地址
      */
-    @BussinessLog(value = "立木数据回调通知")
+    @CallBackLog(value = "立木数据回调通知")
     @ApiOperation(value = "立木数据回调通知", notes = "立木数据回调通知", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "认证类型", name = "type", required = true, dataType = "String"),
             @ApiImplicitParam(value = "用户主键ID", name = "userId", required = true, dataType = "String")
     })
     @RequestMapping(value = "/callBack/{type}/{userId}")
-    @ResponseStatus(value = HttpStatus.OK)
-    public void callBack(@RequestBody LiMuResult liMuResult, @PathVariable("type") String type, @PathVariable("userId") String userId) {
+    public void callBack(LiMuResult liMuResult, @PathVariable("userId") String userId, @PathVariable("type") String type) {
         logger.info("新颜征信回调返回了用户：{} 的{} 类型的认证数据", userId, type);
         // 设置缓存立木回调数据 单位秒：60 * 60 * 24 * 365
         redisUtil.set(XinYanConstantMethod.REDIS_KEY + DateUtil.getCurrentTimestampMs() + "-" + userId + "-" + liMuResult.getToken() + "-" + type,
@@ -251,24 +252,28 @@ public class BLiMuController extends BaseController {
                 this.bLiMuService.liMuTBJsonData(liMuResult);
                 // 获取立木淘宝的报告页面 并 保存
                 this.bLiMuService.liMuTBPageData(liMuResult);
+                // 更
             }
             // 运营商认证
             if (LiMuConstantEnum.API_NAME_YYS.getApiName().equals(type)) {
                 // 获取立木运营商的原始数据 并 保存
-                this.bLiMuService.liMuYYSJsonData(liMuResult);
+                String result = this.bLiMuService.liMuYYSJsonData(liMuResult);
+                JSONObject jsonObject = JSONObject.parseObject(result);
+                // 防止没有身份证和用户姓名导致报错
+                bSysUser.setName(jsonObject.getJSONObject("data").getJSONObject("basicInfo").getString("name"));
+                bSysUser.setIdCard(jsonObject.getJSONObject("data").getJSONObject("basicInfo").getString("identityNo"));
                 // 获取立木运营商的报告页面 并 保存
                 this.bLiMuService.liMuYYSPageData(liMuResult);
 
                 // 换取运营商报告后在获取立方升级报告
                 String lfsjToken = this.bLiMuService.liMuLfsjJsonData(bSysUser);
+                lfsjToken = JSONObject.parseObject(lfsjToken).getString("token");
                 // 获取完立木升级的原始报告后，在拿返回的token获取立木的页面报告
                 if (null != lfsjToken && !lfsjToken.equals("error")) {
                     liMuResult.setBizType(LiMuConstantEnum.API_NAME_LFSJ.getApiName());
                     liMuResult.setToken(lfsjToken);
                     this.bLiMuService.liMuLfsjPageData(liMuResult);
                 }
-                // 改变用户状态
-                this.bLiMuService.changeUserStatus(bSysUser.getUserId(), LiMuConstantEnum.API_NAME_LFSJ.getApiName());
             }
             // 指纹设备
             if (LiMuConstantEnum.API_NAME_SBZW.getApiName().equals(type)) {
