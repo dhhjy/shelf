@@ -46,6 +46,13 @@ public class BSysUserService extends ServiceImpl<BSysUserMapper, BSysUser> {
     }
 
     /**
+     *
+     */
+    public void insert(BSysUser bSysUser) {
+        this.baseMapper.insert(bSysUser);
+    }
+
+    /**
      * 逻辑删除用户
      *
      * @param userId
@@ -53,6 +60,17 @@ public class BSysUserService extends ServiceImpl<BSysUserMapper, BSysUser> {
     public void delete(Integer userId) {
         this.baseMapper.deleteBSysUserByUserId(userId);
     }
+
+    /**
+     * 查询电话是否存在
+     *
+     * @param phone
+     * @return boolean 不存在返回 true 存在返回 false
+     */
+    public boolean phoneIsExist(String phone) {
+        return this.baseMapper.getByPhoneNumber(phone) == null;
+    }
+
     /**
      * 信息合并
      */
