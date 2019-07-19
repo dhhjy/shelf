@@ -50,7 +50,7 @@ public class RedisUtil {
      * @param key 键
      * @return true 存在 false不存在
      */
-    public boolean hasKey(String key){
+    public boolean keyIfExist(String key){
         try {
             return redisTemplate.hasKey(key);
         } catch (Exception e) {
