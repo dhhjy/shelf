@@ -18,6 +18,8 @@ import lombok.Data;
 @Data
 public class SendAliSmsUtil {
 
+    //短信运用平台
+    public static final Integer ALIYUN = 1;
     // 产品名称:云通信短信API产品,开发者无需替换
     private static final String PRODUCT = "Dysmsapi";
     // 产品域名,开发者无需替换

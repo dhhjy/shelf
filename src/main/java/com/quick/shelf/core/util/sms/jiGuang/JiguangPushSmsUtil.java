@@ -1,4 +1,4 @@
-package com.quick.shelf.core.util.sms;
+package com.quick.shelf.core.util.sms.jiGuang;
 
 import cn.jiguang.common.resp.APIConnectionException;
 import cn.jiguang.common.resp.APIRequestException;
@@ -14,18 +14,17 @@ import java.util.Map;
  */
 public class JiguangPushSmsUtil {
 
+    //极光推送短信平台
+    public static final Integer JIGUANG = 2;
     // 产品访问标识
-    private static String Access_Key_Id;
+    private static final String Access_Key_Id = "92937259e7869f9efd7790b3";
     // 产品访问密匙
-    private static String Access_Key_Secet;
+    private static final String Access_Key_Secet = "0d376c5083e5464f2587a603";
     // 发送短信的手机号码
     private static String Phone_Number;
 
-
-    public static String send(SmsPortInfo smsPortInfo, String phoneNumber, String templateCode, String param) {
+    public static String send(String phoneNumber, String templateCode, String param) {
         Map<String,String> code = new HashMap<>();
-        Access_Key_Id = smsPortInfo.getAccess_key_id();
-        Access_Key_Secet = smsPortInfo.getAccess_key_secet();
         Phone_Number = phoneNumber;
         if(param != null && !"".equals(param))
         {
