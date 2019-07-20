@@ -259,11 +259,7 @@
             <artifactId>jsms-client</artifactId>
             <version>1.2.1</version>
         </dependency>
-        <dependency>
-            <groupId>cn.jpush.api</groupId>
-            <artifactId>jiguang-common</artifactId>
-            <version>1.0.6</version>
-        </dependency>
+
 
         <!-- 阿里云短信接口 -->
         <dependency>
@@ -277,6 +273,11 @@
             <version>4.1.2</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.10.3</version>
+        </dependency>
         <!--需要分布式session的话需要放开注释-->
         <!--<dependency>-->
         <!--<groupId>org.springframework.session</groupId>-->

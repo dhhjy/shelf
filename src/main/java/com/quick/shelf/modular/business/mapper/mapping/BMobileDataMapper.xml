@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.quick.shelf.modular.business.mapper.BMobileDataMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.quick.shelf.modular.business.entity.BMobileData">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="t_mobile" property="tMobile"/>
+        <result column="status" property="status"/>
+        <result column="callNum" property="callNum"/>
+        <result column="isHitRiskList" property="isHitRiskList"/>
+        <result column="attribution" property="attribution"/>
+        <result column="callCnt" property="callCnt"/>
+        <result column="callTime" property="callTime"/>
+        <result column="callingCnt" property="callingCnt"/>
+        <result column="callingTime" property="callingTime"/>
+        <result column="calledCnt" property="calledCnt"/>
+        <result column="calledTime" property="calledTime"/>
+        <result column="lastStart" property="lastStart"/>
+        <result column="lastTime" property="lastTime"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id AS "id",
+        user_id AS "userId",
+        t_mobile AS "tMobile",
+        status,
+        callNum,
+        isHitRiskList,
+        attribution,
+        callCnt,
+        callTime,
+        callingCnt,
+        callingTime,
+        calledCnt,
+        calledTime,
+        lastStart,
+        lastTime,
+        create_time AS "createTime"
+    </sql>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        insert into
+        B_MOBILE_DATA
+        (
+        USER_ID,
+        T_MOBILE,
+        STATUS,
+        CALLNUM,
+        ISHITRISKLIST,
+        ATTRIBUTION,
+        CALLCNT,
+        CALLTIME,
+        CALLINGCNT,
+        CALLINGTIME,
+        CALLEDCNT,
+        CALLEDTIME,
+        LASTSTART,
+        LASTTIME,
+        CREATE_TIME
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.userId,jdbcType=INTEGER},
+            #{item.tMobile,jdbcType=INTEGER},
+            #{item.status,jdbcType=INTEGER},
+            #{item.callNum,jdbcType=VARCHAR},
+            #{item.isHitRiskList,jdbcType=VARCHAR},
+            #{item.attribution,jdbcType=VARCHAR},
+            #{item.callCnt,jdbcType=INTEGER},
+            #{item.callTime,jdbcType=VARCHAR},
+            #{item.callingCnt,jdbcType=INTEGER},
+            #{item.callingTime,jdbcType=VARCHAR},
+            #{item.calledCnt,jdbcType=INTEGER},
+            #{item.calledTime,jdbcType=VARCHAR},
+            #{item.lastStart,jdbcType=TIMESTAMP},
+            #{item.lastTime,jdbcType=VARCHAR},
+            #{item.createTime,jdbcType=DATE}
+            )
+        </foreach>
+    </insert>
+
+</mapper>

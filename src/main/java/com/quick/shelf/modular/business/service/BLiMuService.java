@@ -7,9 +7,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.quick.shelf.core.common.annotion.PortLog;
 import com.quick.shelf.core.common.page.LayuiPageFactory;
-import com.quick.shelf.core.util.HttpClientUtil;
+import com.quick.shelf.core.util.HttpClientUtils;
+import com.quick.shelf.core.util.mobile.MobileUtil;
 import com.quick.shelf.core.util.xinYanUtils.util.HttpUtils;
 import com.quick.shelf.modular.business.entity.BLiMuData;
+import com.quick.shelf.modular.business.entity.BMobileData;
 import com.quick.shelf.modular.business.entity.BSysUser;
 import com.quick.shelf.modular.business.entity.BSysUserStatus;
 import com.quick.shelf.modular.business.mapper.BLiMuMapper;
@@ -17,8 +19,6 @@ import com.quick.shelf.modular.constant.BusinessConst;
 import com.quick.shelf.modular.creditPort.liMu.LiMuConstantEnum;
 import com.quick.shelf.modular.creditPort.liMu.LiMuConstantMethod;
 import com.quick.shelf.modular.creditPort.liMu.LiMuResult;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -42,6 +42,9 @@ public class BLiMuService extends ServiceImpl<BLiMuMapper, BLiMuData> {
 
     @Resource
     private BSysUserStatusService bSysUserStatusService;
+
+    @Resource
+    private BMobileDataService bMobileDataService;
 
     /**
      * 获取立木报告列表
@@ -112,6 +115,18 @@ public class BLiMuService extends ServiceImpl<BLiMuMapper, BLiMuData> {
         String result = this.insertJsonData(liMuResult);
         JSONObject jsonResult = JSONObject.parseObject(result);
         jsonResult.put("userId", liMuResult.getUid());
+
+        // 在其他线程中进行通讯录的操作
+        new Thread(() -> {
+            List<BMobileData> phoneResultList = MobileUtil.getPhoneNumberByType
+                    (liMuResult.getBizType(), Integer.valueOf(liMuResult.getUid()), result);
+
+            assert phoneResultList != null;
+            if (phoneResultList.size() > 0)
+                //批量插入
+                bMobileDataService.batchInsert(phoneResultList);
+        }).start();
+
         return jsonResult.toString();
     }
 
@@ -137,29 +152,25 @@ public class BLiMuService extends ServiceImpl<BLiMuMapper, BLiMuData> {
     @PortLog(type = "lifangupgradecheck", typeName = "立方升级")
     public String liMuLfsjJsonData(BSysUser bSysUser) {
         // 创建接口参数集
-        List<BasicNameValuePair> reqParam = new ArrayList<>();
+        Map<String,Object> params = new HashMap<>();
         // 封装参数
         // (必填) 立方升级报告原始数据接口：api.identity.lifangupgradecheck
-        reqParam.add(new BasicNameValuePair("method", "api.identity.lifangupgradecheck"));
+        params.put("method", "api.identity.lifangupgradecheck");
         // (必填) 必须通过 apiKey 才能访问 api
-        reqParam.add(new BasicNameValuePair("apiKey", LiMuConstantMethod.APIKEY));
+        params.put("apiKey", LiMuConstantMethod.APIKEY);
         // (必填) 调用的接口版本，立方升级报告版本 1.1.1 可以回传Token
-        reqParam.add(new BasicNameValuePair("version", "1.1.1"));
-        if (null == bSysUser.getName())
-            return new JSONObject().put("error", "没有用户姓名，终止认证").toString();
+        params.put("version", "1.1.1");
         /// (必填) 姓名
-        reqParam.add(new BasicNameValuePair("name", bSysUser.getName()));
-        if (null == bSysUser.getIdCard())
-            return new JSONObject().put("error", "用户没有身份证，终止认证").toString();
+        params.put("name", bSysUser.getName());
         /// (必填) 身份证
-        reqParam.add(new BasicNameValuePair("identityNo", bSysUser.getIdCard()));
+        params.put("identityNo", bSysUser.getIdCard());
         /// (必填) 手机号
-        reqParam.add(new BasicNameValuePair("mobile", bSysUser.getPhoneNumber()));
+        params.put("mobile", bSysUser.getPhoneNumber());
         // (必填)  对所有请求参数加密，得到签名
-        reqParam.add(new BasicNameValuePair("sign", LiMuConstantMethod.getSign(reqParam)));
+        params.put("sign", LiMuConstantMethod.getSign(params));
 
         // 发起POST接口请求，并得到结果JSON
-        String result = HttpClientUtil.doPostForm(LiMuConstantMethod.URL, reqParam);
+        String result = HttpUtils.doPost(LiMuConstantMethod.URL, params);
         // 将结果转换为JSONObejct格式，方便取参数
         JSONObject resultJson = JSON.parseObject(result);
         if (result != null && LiMuConstantMethod.SUCCESS_CODE.equals(resultJson.getString("code"))) {
@@ -207,38 +218,38 @@ public class BLiMuService extends ServiceImpl<BLiMuMapper, BLiMuData> {
     public String liMuJsJsonData(LiMuResult liMuResult) {
         BSysUserStatus bSysStatus = this.bSysUserStatusService.selectBSysUserStatusByUserId(Integer.valueOf(liMuResult.getUid()));
 
-        List<BasicNameValuePair> reqParam = new ArrayList<>();
-        reqParam.add(new BasicNameValuePair("method", "api.identity.machinecheck"));//接口名称
-        reqParam.add(new BasicNameValuePair("apiKey", LiMuConstantMethod.APIKEY));//API授权
-        reqParam.add(new BasicNameValuePair("version", "1.0.0"));//调用的接口版本
+        Map<String,Object> params = new HashMap<>();
+        params.put("method", "api.identity.machinecheck");//接口名称
+        params.put("apiKey", LiMuConstantMethod.APIKEY);//API授权
+        params.put("version", "1.0.0");//调用的接口版本
 
         if (BusinessConst.OK.equals(bSysStatus.getLimuMobileReportStatus())) {
             BLiMuData liMuData = selectBLiMuDataByUserId(Integer.valueOf(liMuResult.getUid()), LiMuConstantEnum.API_NAME_YYS.getApiName(), BusinessConst.ORIGINAL_DATA.toString());
             String mobileToken = liMuData.getToken();
-            reqParam.add(new BasicNameValuePair("mrToken", mobileToken));//已成功的运营商信用报告业务标识 token
+            params.put("mrToken", mobileToken);//已成功的运营商信用报告业务标识 token
             logger.info("用户:{} 获取" + LiMuConstantEnum.API_NAME_YYS.getServerName() + "报告的Token:{}", liMuResult.getUid(), mobileToken);
         }
         if (BusinessConst.OK.equals(bSysStatus.getLimuTaobaoReportStatus())) {
             BLiMuData liMuData = selectBLiMuDataByUserId(Integer.valueOf(liMuResult.getUid()), LiMuConstantEnum.API_NAME_TB.getApiName(), BusinessConst.ORIGINAL_DATA.toString());
             String taobaoReportToken = liMuData.getToken();
-            reqParam.add(new BasicNameValuePair("tbrToken", taobaoReportToken));//已成功的电商报告业务标识 token
+            params.put("tbrToken", taobaoReportToken);//已成功的电商报告业务标识 token
             logger.info("用户:{} 获取" + LiMuConstantEnum.API_NAME_TB.getServerName() + "报告的Token:{}", liMuResult.getUid(), taobaoReportToken);
         }
         if (BusinessConst.OK.equals(bSysStatus.getLimuLifangUpgradeCheckStatus())) {
             BLiMuData liMuData = selectBLiMuDataByUserId(Integer.valueOf(liMuResult.getUid()), LiMuConstantEnum.API_NAME_LFSJ.getApiName(), BusinessConst.ORIGINAL_DATA.toString());
             String lifangUpgradeCheckToken = liMuData.getToken();
-            reqParam.add(new BasicNameValuePair("tbrToken", lifangUpgradeCheckToken));//已成功的立方升级版业务标识 token
+            params.put("tbrToken", lifangUpgradeCheckToken);//已成功的立方升级版业务标识 token
             logger.info("用户:{} 获取" + LiMuConstantEnum.API_NAME_LFSJ.getServerName() + "报告的Token:{}", liMuResult.getUid(), lifangUpgradeCheckToken);
         }
         if (BusinessConst.OK.equals(bSysStatus.getDeviceInfoStatus())) {
             BLiMuData liMuData = selectBLiMuDataByUserId(Integer.valueOf(liMuResult.getUid()), LiMuConstantEnum.API_NAME_SBZW.getApiName(), BusinessConst.ORIGINAL_DATA.toString());
             String fingerprintToken = liMuData.getToken();
-            reqParam.add(new BasicNameValuePair("tbrToken", fingerprintToken));//已成功的指纹设备业务标识 token
+            params.put("tbrToken", fingerprintToken);//已成功的指纹设备业务标识 token
             logger.info("用户:{} 获取" + LiMuConstantEnum.API_NAME_SBZW.getServerName() + "报告的Token:{}", liMuResult.getUid(), fingerprintToken);
         }
-        reqParam.add(new BasicNameValuePair("sign", LiMuConstantMethod.getSign(reqParam)));//请求参数签名
-        logger.info("参数：" + reqParam);
-        String result = HttpClientUtil.doPostForm(LiMuConstantMethod.URL, reqParam);
+        params.put("sign", LiMuConstantMethod.getSign(params));//请求参数签名
+        logger.info("参数：" + params);
+        String result = HttpUtils.doPost(LiMuConstantMethod.URL, params);
         JSONObject resultJson = JSON.parseObject(result);
         if (result != null && LiMuConstantMethod.SUCCESS_CODE.equals(resultJson.getString("code"))) {
             assemble(Integer.valueOf(liMuResult.getUid()), BusinessConst.ORIGINAL_DATA.toString(), LiMuConstantEnum.API_NAME_JS.getApiName(), result, resultJson.getString("token"));
@@ -253,7 +264,7 @@ public class BLiMuService extends ServiceImpl<BLiMuMapper, BLiMuData> {
      * @param liMuResult
      */
     private String insertJsonData(LiMuResult liMuResult) {
-        List<BasicNameValuePair> params = LiMuConstantMethod.getJsonParams(liMuResult.getToken(), liMuResult.getBizType());
+        Map<String,Object> params = LiMuConstantMethod.getJsonParams(liMuResult.getToken(), liMuResult.getBizType());
 
         // 发起POST接口请求，并得到结果JSON
         String result = HttpUtils.doPost(LiMuConstantMethod.URL, params);
@@ -273,21 +284,15 @@ public class BLiMuService extends ServiceImpl<BLiMuMapper, BLiMuData> {
      * @param liMuResult
      */
     private void insertPageData(LiMuResult liMuResult) {
-        List<BasicNameValuePair> params = LiMuConstantMethod.getPageParams(liMuResult.getToken(), liMuResult.getBizType());
-        List<NameValuePair> parametersBody = new ArrayList<>();
-        parametersBody.add(new BasicNameValuePair("apiKey", LiMuConstantMethod.APIKEY));
-        parametersBody.add(new BasicNameValuePair("version", LiMuConstantMethod.VERSION));
-        parametersBody.add(new BasicNameValuePair("token", liMuResult.getToken()));
-        parametersBody.add(new BasicNameValuePair("bizType", liMuResult.getBizType()));
-        parametersBody.add(new BasicNameValuePair("sign", LiMuConstantMethod.getSign(params)));
-        String url = LiMuConstantMethod.REPORT_URL;
+        Map<String,Object> params = LiMuConstantMethod.getPageParams(liMuResult.getToken(), liMuResult.getBizType());
+        // 拼接get请求字符串
+        String url = LiMuConstantMethod.REPORT_URL + "?apiKey=" + LiMuConstantMethod.APIKEY + "&version=" + LiMuConstantMethod.VERSION
+                + "&token=" + liMuResult.getToken() + "&bizType=" + liMuResult.getBizType() + "&sign=" + LiMuConstantMethod.getSign(params);
         // 发起GET接口请求，并得到结果JSON
-        String result = HttpClientUtil.doGet(url, parametersBody);
+        String result = HttpClientUtils.get(url);
         assert result != null;
-        if (!result.contains("error_div") && !result.contains("签名异常") && !result.contains("参数异常")) {
-            assemble(Integer.valueOf(liMuResult.getUid()), BusinessConst.ORIGINAL_DATA.toString(), liMuResult.getBizType(),
-                    result, liMuResult.getToken());
-        }
+        assemble(Integer.valueOf(liMuResult.getUid()), BusinessConst.PAGE_DATA.toString(), liMuResult.getBizType(),
+                result, liMuResult.getToken());
     }
 
     /**
@@ -306,6 +311,12 @@ public class BLiMuService extends ServiceImpl<BLiMuMapper, BLiMuData> {
      * 一个用户可以有多份相同的立木报告
      */
     public void assemble(Integer userId, String dataType, String apiName, String result, String token) {
+        String tn = "原始数据";
+        if (dataType.equals("1")) {
+            tn = "页面报告";
+        }
+        logger.info("用户：{}，插入：{} 类型的：{}", userId, LiMuConstantMethod.compareApiName(apiName), tn);
+
         new Thread(() -> {
             BLiMuData bLiMuData = new BLiMuData();
             // 设置用户主键 userId

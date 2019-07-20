@@ -29,7 +29,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -221,10 +221,8 @@ public class BLiMuController extends BaseController {
         // 查询用户信息
         BSysUser bSysUser = this.bSysUserService.selectBSysUserByUserId(Integer.valueOf(userId));
         String signUrl = getProjectPath() + "/liMu/sign";
-        String jumpUrl = getProjectPath() + "/h5/index";
         String callBackUrl = getProjectPath() + "/liMu/callBack/" + type + "/" + userId;
-        String url = LiMuConstantMethod.getLimuVerifyUrl(bSysUser, type, signUrl, callBackUrl, jumpUrl);
-        return url;
+        return LiMuConstantMethod.getLimuVerifyUrl(bSysUser, type, signUrl, callBackUrl);
     }
 
     /**
@@ -270,9 +268,12 @@ public class BLiMuController extends BaseController {
                 lfsjToken = JSONObject.parseObject(lfsjToken).getString("token");
                 // 获取完立木升级的原始报告后，在拿返回的token获取立木的页面报告
                 if (null != lfsjToken && !lfsjToken.equals("error")) {
-                    liMuResult.setBizType(LiMuConstantEnum.API_NAME_LFSJ.getApiName());
-                    liMuResult.setToken(lfsjToken);
-                    this.bLiMuService.liMuLfsjPageData(liMuResult);
+                    // 对象copy 不破坏原有数据的完整性
+                    LiMuResult lm = new LiMuResult();
+                    BeanUtils.copyProperties(liMuResult, lm);
+                    lm.setBizType(LiMuConstantEnum.API_NAME_LFSJ.getApiName());
+                    lm.setToken(lfsjToken);
+                    this.bLiMuService.liMuLfsjPageData(lm);
                 }
             }
             // 指纹设备

@@ -96,7 +96,8 @@ public class LogAop {
         Object result = point.proceed();
 
         try {
-            handleCallBack(point);
+            if(null != result)
+                handleCallBack(point);
         } catch (Exception e) {
             log.error("日志记录出错!", e);
         }
@@ -164,6 +165,9 @@ public class LogAop {
         PortLog annotation = currentMethod.getAnnotation(PortLog.class);
         String type = annotation.type();
         String typeName = annotation.typeName();
+        log.error("错误!类型：{}，名称：{}",type,typeName);
+        System.out.println(type);
+        System.out.println(typeName);
         JSONObject re = JSONObject.parseObject(result.toString());
         if(null != re.getString("code") &&
                 !re.getString("code").equals(LiMuConstantMethod.SUCCESS_CODE))

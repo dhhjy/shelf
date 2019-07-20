@@ -2,15 +2,11 @@ package com.quick.shelf.modular.creditPort.liMu;
 
 import com.quick.shelf.modular.business.entity.BSysUser;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.message.BasicNameValuePair;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @ClassName 立木征信接口常量方法
@@ -73,51 +69,51 @@ public class LiMuConstantMethod {
      * @param successUrl
      * @return
      */
-    public static String getLimuVerifyUrl(BSysUser bSysUser, String apiName, String signUrl, String callBackUrl, String jumpUrl) {
+    public static String getLimuVerifyUrl(BSysUser bSysUser, String apiName, String signUrl, String callBackUrl) {
         return LiMuConstantMethod.H5_URL + apiName + "?apiKey=" + LiMuConstantMethod.APIKEY + "&uid=" + bSysUser.getUserId() + "&mobilePhone=" + bSysUser.getPhoneNumber()
-                + "&signUrl=" + signUrl + "&callBackUrl=" + callBackUrl + "&isWxHeadHide=1&backUrl=" + jumpUrl;
+                + "&signUrl=" + signUrl + "&callBackUrl=" + callBackUrl + "&isWxHeadHide=1";
     }
 
     /**
      * 立木认证原始报告时所需要的参数封装
      */
-    public static List<BasicNameValuePair> getJsonParams(String token, String type) {
-        List<BasicNameValuePair> reqParam = new ArrayList<>();
+    public static Map<String,Object> getJsonParams(String token, String type) {
+        Map<String,Object> params = new HashMap<>();
         // 设置请求参数
         // (必填) 原始数据接口：api.common.getResult 报告接口：api.common.getReport
-        reqParam.add(new BasicNameValuePair("method", apiMethod));
+        params.put("method", apiMethod);
         // (必填) 必须通过 apiKey 才能访问 api
-        reqParam.add(new BasicNameValuePair("apiKey", LiMuConstantMethod.APIKEY));
+        params.put("apiKey", LiMuConstantMethod.APIKEY);
         // (必填) 调用的接口版本
-        reqParam.add(new BasicNameValuePair("version", LiMuConstantMethod.VERSION));
+        params.put("version", LiMuConstantMethod.VERSION);
         // (必填) 查询唯一标识
-        reqParam.add(new BasicNameValuePair("token", token));
+        params.put("token", token);
         //（必填）业务类型
-        reqParam.add(new BasicNameValuePair("bizType", type));
+        params.put("bizType", type);
         //（非必填）当位运营商报告时，可以开启立木分选项
         if (type.equals(LiMuConstantEnum.API_NAME_YYS.getApiName())) {
-            reqParam.add(new BasicNameValuePair("score", "01"));//启动立木分
+            params.put("score", "01");//启动立木分
         }
         // (必填)  对所有请求参数加密，得到签名
-        reqParam.add(new BasicNameValuePair("sign", LiMuConstantMethod.getSign(reqParam)));
-        return reqParam;
+        params.put("sign", LiMuConstantMethod.getSign(params));
+        return params;
     }
 
     /**
      * 立木认证报告页面时所需要的参数封装
      */
-    public static List<BasicNameValuePair> getPageParams(String token, String type) {
-        List<BasicNameValuePair> reqParam = new ArrayList<>();
+    public static Map<String,Object> getPageParams(String token, String type) {
+        Map<String,Object> params = new HashMap<>();
         // 设置请求参数
         // (必填) 必须通过 apiKey 才能访问 api
-        reqParam.add(new BasicNameValuePair("apiKey", LiMuConstantMethod.APIKEY));
+        params.put("apiKey", LiMuConstantMethod.APIKEY);
         // (必填) 调用的接口版本
-        reqParam.add(new BasicNameValuePair("version", LiMuConstantMethod.VERSION));
+        params.put("version", LiMuConstantMethod.VERSION);
         // (必填) 查询唯一标识
-        reqParam.add(new BasicNameValuePair("token", token));
+        params.put("token", token);
         //（必填）业务类型
-        reqParam.add(new BasicNameValuePair("bizType", type));
-        return reqParam;
+        params.put("bizType", type);
+        return params;
     }
 
     /**
@@ -126,40 +122,55 @@ public class LiMuConstantMethod {
      * @param reqParam
      * @return
      */
-    public static String getSign(List<BasicNameValuePair> reqParam) {
+    public static String getSign(Map<String,Object> params) {
 
-        StringBuilder sbb = new StringBuilder();
+        StringBuffer sbb = new StringBuffer();
         int index = 1;
-        for (BasicNameValuePair nameValuePair : reqParam) {
-            sbb.append(nameValuePair.getName()).append("=").append(nameValuePair.getValue());
-            if (reqParam.size() != index) {
+        Set set = params.keySet();
+        for(Iterator iter = set.iterator(); iter.hasNext();)
+        {
+            String key = (String)iter.next();
+            String value = (String)params.get(key);
+            sbb.append(key).append("=").append(value);
+            if (set.size() != index) {
                 sbb.append("&");
             }
             index++;
         }
+
+//        for (BasicNameValuePair nameValuePair : reqParam) {
+//            sbb.append(nameValuePair.getName() + "=" + nameValuePair.getValue());
+//            if (reqParam.size() != index) {
+//                sbb.append("&");
+//            }
+//            index++;
+//        }
         String sign = sbb.toString();
 
-        Map<String, String> paramMap = new HashMap<>();
+        Map<String, String> paramMap = new HashMap<String, String>();
         String ret;
         if (!StringUtils.isEmpty(sign)) {
             String[] arr = sign.split("&");
-            for (String tmp : arr) {
-                if (tmp.contains("=")) {
-                    paramMap.put(tmp.substring(0, tmp.indexOf("=")), tmp.substring(tmp.indexOf("=") + 1));
+            for (int i = 0; i < arr.length; i++) {
+                String tmp = arr[i];
+                if (-1 != tmp.indexOf("=")) {
+                    paramMap.put(tmp.substring(0, tmp.indexOf("=")), tmp.substring(tmp.indexOf("=") + 1, tmp.length()));
                 }
 
             }
         }
-        List<Map.Entry<String, String>> list = new ArrayList<>(paramMap.entrySet());
-        list.sort((o1, o2) -> {
-            int ret1;
-            ret1 = o1.getKey().compareTo(o2.getKey());
-            if (ret1 > 0) {
-                ret1 = 1;
-            } else {
-                ret1 = -1;
+        List<Map.Entry<String, String>> list = new ArrayList<Map.Entry<String, String>>(paramMap.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<String, String>>() {
+            public int compare(Map.Entry<String, String> o1, Map.Entry<String, String> o2) {
+                int ret = 0;
+                ret = o1.getKey().compareTo(o2.getKey());
+                if (ret > 0) {
+                    ret = 1;
+                } else {
+                    ret = -1;
+                }
+                return ret;
             }
-            return ret1;
         });
 
         StringBuilder sbTmp = new StringBuilder();

@@ -1,22 +1,5 @@
 package com.quick.shelf.core.util;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -44,28 +27,37 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 
 /**
  * HttpClient工具类
  */
-public class HttpClient2 {
-    private static Log log = LogFactory.getLog(HttpClient2.class);
+public class HttpClientUtils {
+    private static Log log = LogFactory.getLog(HttpClientUtils.class);
 
-    public static final int CONNECTION_TIMEOUT = 500000;// 连接超时时间
+    private static final int CONNECTION_TIMEOUT = 500000;// 连接超时时间
 
-    public static final int CONNECTION_REQUEST_TIMEOUT = 500000;// 请求超时时间
+    private static final int CONNECTION_REQUEST_TIMEOUT = 500000;// 请求超时时间
 
-    public static final int SOCKET_TIMEOUT = 10000;// 数据读取等待超时
+    private static final int SOCKET_TIMEOUT = 10000;// 数据读取等待超时
 
     public static final String HTTP = "http";// http
 
-    public static final String HTTPS = "https";// https
+    private static final String HTTPS = "https";// https
 
-    public static final int DEFAULT_HTTP_PORT = 80;// http端口
-
-    public static final int DEFAULT_HTTPS_PORT = 443;// https端口
-
-    public static final String DEFAULT_ENCODING = "UTF-8";// 默认编码
+    private static final String DEFAULT_ENCODING = "UTF-8";// 默认编码
 
     /**
      * get请求(1.处理http请求;2.处理https请求,信任所有证书)[默认编码:UTF-8]
@@ -74,7 +66,8 @@ public class HttpClient2 {
      * @return
      */
     public static String get(String url) {
-        return get(url, null, DEFAULT_ENCODING);
+        List<BasicNameValuePair> list = new ArrayList<>();
+        return get(url, list, DEFAULT_ENCODING);
     }
 
     /**
@@ -84,8 +77,8 @@ public class HttpClient2 {
      * @param reqMap (参数放置到一个map中)
      * @return
      */
-    public static String get(String url, Map<String, String> reqMap) {
-        return get(url, reqMap, DEFAULT_ENCODING);
+    public static String doGet(String url, List<BasicNameValuePair> params) {
+        return get(url, params, DEFAULT_ENCODING);
     }
 
     /**
@@ -95,38 +88,31 @@ public class HttpClient2 {
      * @param encoding
      * @return
      */
-    public static String get(String url, Map<String, String> reqMap, String encoding) {
+    public static String get(String url, List<BasicNameValuePair> params, String encoding) {
         String result = "";
         if (StringUtils.isBlank(url)) {
             log.info("----->url为空");
             return result;
         }
 
-        // 处理参数
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        if (reqMap != null && reqMap.keySet().size() > 0) {
-            Iterator<Map.Entry<String, String>> iter = reqMap.entrySet().iterator();
-            while (iter.hasNext()) {
-                Map.Entry<String, String> entity = iter.next();
-                params.add(new BasicNameValuePair(entity.getKey(), entity.getValue()));
-            }
-        }
-
-        CloseableHttpClient httpClient = null;
+        CloseableHttpClient httpClient;
         if (url.startsWith(HTTPS)) {
             // 创建一个SSL信任所有证书的httpClient对象
-            httpClient = HttpClient2.createSSLInsecureClient();
+            httpClient = HttpClientUtils.createSSLInsecureClient();
         } else {
             httpClient = HttpClients.createDefault();
         }
 
         CloseableHttpResponse response = null;
-        HttpGet httpGet = null;
-
+        HttpGet httpGet;
+        List<NameValuePair> pa;
         try {
-            if (params != null && params.size() > 0) {
+            if (params.size() > 0) {
                 URIBuilder builder = new URIBuilder(url);
-                builder.setParameters(params);
+                if (params.size() > 0) {
+                    pa = new ArrayList<>(params);
+                    builder.setParameters(pa);
+                }
                 httpGet = new HttpGet(builder.build());
             } else {
                 httpGet = new HttpGet(url);
@@ -162,7 +148,7 @@ public class HttpClient2 {
      * @param reqMap
      * @return
      */
-    public static String post(String url, List<BasicNameValuePair> params) {
+    public static String doPost(String url, List<BasicNameValuePair> params) {
         return post(url, params, DEFAULT_ENCODING);
     }
 
@@ -181,10 +167,10 @@ public class HttpClient2 {
             return result;
         }
 
-        CloseableHttpClient httpClient = null;
+        CloseableHttpClient httpClient;
         if (url.startsWith(HTTPS)) {
             // 创建一个SSL信任所有证书的httpClient对象
-            httpClient = HttpClient2.createSSLInsecureClient();
+            httpClient = HttpClientUtils.createSSLInsecureClient();
         } else {
             httpClient = HttpClients.createDefault();
         }
@@ -229,10 +215,10 @@ public class HttpClient2 {
             return result;
         }
 
-        CloseableHttpClient httpClient = null;
+        CloseableHttpClient httpClient;
         if (url.startsWith(HTTPS)) {
             // 创建一个SSL信任所有证书的httpClient对象
-            httpClient = HttpClient2.createSSLInsecureClient();
+            httpClient = HttpClientUtils.createSSLInsecureClient();
         } else {
             httpClient = HttpClients.createDefault();
         }
@@ -269,23 +255,15 @@ public class HttpClient2 {
      *
      * @return
      */
-    public static CloseableHttpClient createSSLInsecureClient() {
+    private static CloseableHttpClient createSSLInsecureClient() {
         try {
-            SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(null, new TrustStrategy() {
-                // 默认信任所有证书
-                public boolean isTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-                    return true;
-                }
-            }).build();
+            // 默认信任所有证书
+            SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(null, (TrustStrategy) (chain, authType) -> true).build();
 
             SSLConnectionSocketFactory sslcsf = new SSLConnectionSocketFactory(sslContext);
 
             return HttpClients.custom().setSSLSocketFactory(sslcsf).build();
-        } catch (KeyManagementException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (KeyStoreException e) {
+        } catch (KeyManagementException | NoSuchAlgorithmException | KeyStoreException e) {
             e.printStackTrace();
         }
 
@@ -313,7 +291,7 @@ public class HttpClient2 {
 
                     if (entity != null) {
                         br = new BufferedReader(new InputStreamReader(entity.getContent(), encoding));
-                        String s = null;
+                        String s;
                         while ((s = br.readLine()) != null) {
                             sb.append(s);
                         }
@@ -385,9 +363,7 @@ public class HttpClient2 {
         // 添加参数
         List<NameValuePair> params = new ArrayList<>();
         if (reqMap != null && reqMap.keySet().size() > 0) {
-            Iterator<Map.Entry<String, String>> iter = reqMap.entrySet().iterator();
-            while (iter.hasNext()) {
-                Map.Entry<String, String> entity = iter.next();
+            for (Map.Entry<String, String> entity : reqMap.entrySet()) {
                 params.add(new BasicNameValuePair(entity.getKey(), entity.getValue()));
             }
         }
@@ -433,7 +409,7 @@ public class HttpClient2 {
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
      */
-    public static SSLContext createIgnoreVerifySSL() throws NoSuchAlgorithmException, KeyManagementException {
+    private static SSLContext createIgnoreVerifySSL() throws NoSuchAlgorithmException, KeyManagementException {
         SSLContext sc = SSLContext.getInstance("SSLv3");
 
         // 实现一个X509TrustManager接口，用于绕过验证，不用修改里面的方法
@@ -441,13 +417,13 @@ public class HttpClient2 {
             @Override
             public void checkClientTrusted(
                     java.security.cert.X509Certificate[] paramArrayOfX509Certificate,
-                    String paramString) throws CertificateException {
+                    String paramString) {
             }
 
             @Override
             public void checkServerTrusted(
                     java.security.cert.X509Certificate[] paramArrayOfX509Certificate,
-                    String paramString) throws CertificateException {
+                    String paramString) {
             }
 
             @Override
@@ -458,6 +434,10 @@ public class HttpClient2 {
 
         sc.init(null, new TrustManager[]{trustManager}, null);
         return sc;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(get("http://page.limuzhengxin.com/page/web/task?apiKey=1807072515702764&version=1.2.0&token=f352e29218e74802a0f5f2a783005098&bizType=lifangupgradecheck&sign=953b65f6fe2beef065d2c562850a707c0b77cbbb"));
     }
 
 }
