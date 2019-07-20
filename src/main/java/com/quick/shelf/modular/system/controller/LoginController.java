@@ -7,6 +7,7 @@ import com.quick.shelf.core.log.LogManager;
 import com.quick.shelf.core.log.factory.LogTaskFactory;
 import com.quick.shelf.core.shiro.ShiroKit;
 import com.quick.shelf.core.shiro.ShiroUser;
+import com.quick.shelf.core.util.UserAgentUtil;
 import com.quick.shelf.modular.system.service.UserService;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
@@ -38,7 +39,7 @@ public class LoginController extends BaseController {
      * @Date 2018/12/23 5:41 PM
      */
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String index(Model model,HttpServletRequest httpServletRequest) {
+    public String index(Model model) {
         //获取当前用户角色列表
         ShiroUser user = ShiroKit.getUserNotNull();
         List<Long> roleList = user.getRoleList();
@@ -49,7 +50,7 @@ public class LoginController extends BaseController {
             return "/login.html";
         }
 
-        if(roleList.get(0) == 999)
+        if (roleList.get(0) == 999)
             return REDIRECT + "/h5/index";
 
         List<MenuNode> menus = userService.getUserMenuNodes(roleList);
@@ -65,8 +66,10 @@ public class LoginController extends BaseController {
      * @Date 2018/12/23 5:41 PM
      */
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String login() {
-        if (ShiroKit.isAuthenticated() || ShiroKit.getUser() != null) {
+    public String login(HttpServletRequest httpServletRequest) {
+        if (UserAgentUtil.checkMobileOrPC(httpServletRequest)) {
+            return REDIRECT + "/h5";
+        } else if (ShiroKit.isAuthenticated() || ShiroKit.getUser() != null) {
             return REDIRECT + "/";
         } else {
             return "/login.html";
@@ -106,7 +109,7 @@ public class LoginController extends BaseController {
 
         ShiroKit.getSession().setAttribute("sessionFlag", true);
 
-        if(loginType.equals("PC"))
+        if (loginType.equals("PC"))
             return REDIRECT + "/";
         else
             return REDIRECT + "/h5/index";
@@ -128,7 +131,7 @@ public class LoginController extends BaseController {
         // 删除cookie
         deleteAllCookie();
         // 转发到相应的登录页面
-        if(roles.get(0) == 999)
+        if (roles.get(0) == 999)
             return REDIRECT + "/h5/";
         else
             return REDIRECT + "/login";
