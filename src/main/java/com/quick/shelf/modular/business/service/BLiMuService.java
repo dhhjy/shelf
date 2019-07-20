@@ -152,7 +152,7 @@ public class BLiMuService extends ServiceImpl<BLiMuMapper, BLiMuData> {
     @PortLog(type = "lifangupgradecheck", typeName = "立方升级")
     public String liMuLfsjJsonData(BSysUser bSysUser) {
         // 创建接口参数集
-        Map<String,Object> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         // 封装参数
         // (必填) 立方升级报告原始数据接口：api.identity.lifangupgradecheck
         params.put("method", "api.identity.lifangupgradecheck");
@@ -173,13 +173,14 @@ public class BLiMuService extends ServiceImpl<BLiMuMapper, BLiMuData> {
         String result = HttpUtils.doPost(LiMuConstantMethod.URL, params);
         // 将结果转换为JSONObejct格式，方便取参数
         JSONObject resultJson = JSON.parseObject(result);
+        resultJson.put("userId", bSysUser.getUserId());
+        logger.info(result);
         if (result != null && LiMuConstantMethod.SUCCESS_CODE.equals(resultJson.getString("code"))) {
             assemble(bSysUser.getUserId(), BusinessConst.ORIGINAL_DATA.toString(), LiMuConstantEnum.API_NAME_LFSJ.getApiName(),
                     result, resultJson.getString("token"));
-            resultJson.put("userId", bSysUser.getUserId());
             return resultJson.toString();
         } else {
-            return "error";
+            return resultJson.toString();
         }
     }
 
@@ -218,7 +219,7 @@ public class BLiMuService extends ServiceImpl<BLiMuMapper, BLiMuData> {
     public String liMuJsJsonData(LiMuResult liMuResult) {
         BSysUserStatus bSysStatus = this.bSysUserStatusService.selectBSysUserStatusByUserId(Integer.valueOf(liMuResult.getUid()));
 
-        Map<String,Object> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         params.put("method", "api.identity.machinecheck");//接口名称
         params.put("apiKey", LiMuConstantMethod.APIKEY);//API授权
         params.put("version", "1.0.0");//调用的接口版本
@@ -238,13 +239,13 @@ public class BLiMuService extends ServiceImpl<BLiMuMapper, BLiMuData> {
         if (BusinessConst.OK.equals(bSysStatus.getLimuLifangUpgradeCheckStatus())) {
             BLiMuData liMuData = selectBLiMuDataByUserId(Integer.valueOf(liMuResult.getUid()), LiMuConstantEnum.API_NAME_LFSJ.getApiName(), BusinessConst.ORIGINAL_DATA.toString());
             String lifangUpgradeCheckToken = liMuData.getToken();
-            params.put("tbrToken", lifangUpgradeCheckToken);//已成功的立方升级版业务标识 token
+            params.put("lfuToken", lifangUpgradeCheckToken);//已成功的立方升级版业务标识 token
             logger.info("用户:{} 获取" + LiMuConstantEnum.API_NAME_LFSJ.getServerName() + "报告的Token:{}", liMuResult.getUid(), lifangUpgradeCheckToken);
         }
         if (BusinessConst.OK.equals(bSysStatus.getDeviceInfoStatus())) {
             BLiMuData liMuData = selectBLiMuDataByUserId(Integer.valueOf(liMuResult.getUid()), LiMuConstantEnum.API_NAME_SBZW.getApiName(), BusinessConst.ORIGINAL_DATA.toString());
             String fingerprintToken = liMuData.getToken();
-            params.put("tbrToken", fingerprintToken);//已成功的指纹设备业务标识 token
+            params.put("fpToken", fingerprintToken);//已成功的指纹设备业务标识 token
             logger.info("用户:{} 获取" + LiMuConstantEnum.API_NAME_SBZW.getServerName() + "报告的Token:{}", liMuResult.getUid(), fingerprintToken);
         }
         params.put("sign", LiMuConstantMethod.getSign(params));//请求参数签名
@@ -264,7 +265,7 @@ public class BLiMuService extends ServiceImpl<BLiMuMapper, BLiMuData> {
      * @param liMuResult
      */
     private String insertJsonData(LiMuResult liMuResult) {
-        Map<String,Object> params = LiMuConstantMethod.getJsonParams(liMuResult.getToken(), liMuResult.getBizType());
+        Map<String, Object> params = LiMuConstantMethod.getJsonParams(liMuResult.getToken(), liMuResult.getBizType());
 
         // 发起POST接口请求，并得到结果JSON
         String result = HttpUtils.doPost(LiMuConstantMethod.URL, params);
@@ -284,15 +285,17 @@ public class BLiMuService extends ServiceImpl<BLiMuMapper, BLiMuData> {
      * @param liMuResult
      */
     private void insertPageData(LiMuResult liMuResult) {
-        Map<String,Object> params = LiMuConstantMethod.getPageParams(liMuResult.getToken(), liMuResult.getBizType());
+        Map<String, Object> params = LiMuConstantMethod.getPageParams(liMuResult.getToken(), liMuResult.getBizType());
         // 拼接get请求字符串
         String url = LiMuConstantMethod.REPORT_URL + "?apiKey=" + LiMuConstantMethod.APIKEY + "&version=" + LiMuConstantMethod.VERSION
                 + "&token=" + liMuResult.getToken() + "&bizType=" + liMuResult.getBizType() + "&sign=" + LiMuConstantMethod.getSign(params);
         // 发起GET接口请求，并得到结果JSON
         String result = HttpClientUtils.get(url);
-        assert result != null;
-        assemble(Integer.valueOf(liMuResult.getUid()), BusinessConst.PAGE_DATA.toString(), liMuResult.getBizType(),
-                result, liMuResult.getToken());
+        if (!result.contains("error_div") && !result.contains("签名异常") && !result.contains("参数异常"))
+            assemble(Integer.valueOf(liMuResult.getUid()), BusinessConst.PAGE_DATA.toString(), liMuResult.getBizType(),
+                    result, liMuResult.getToken());
+        else
+            logger.info("获取报告页面时，报告页面出错，并未保存报告页面数据");
     }
 
     /**
@@ -343,20 +346,18 @@ public class BLiMuService extends ServiceImpl<BLiMuMapper, BLiMuData> {
      * @param apiName
      */
     public void changeUserStatus(Integer userId, String apiName) {
-        new Thread(() -> {
-            // 同时更新用户关联的状态表，更新雷达认证状态字段
-            BSysUserStatus bSysUserStatus = new BSysUserStatus();
-            bSysUserStatus.setUserId(userId);
-
-            if (LiMuConstantEnum.API_NAME_TB.getApiName().equals(apiName))
-                bSysUserStatus.setLimuTaobaoReportStatus(BusinessConst.OK);
-            if (LiMuConstantEnum.API_NAME_YYS.getApiName().equals(apiName))
-                bSysUserStatus.setLimuMobileReportStatus(BusinessConst.OK);
-            if (LiMuConstantEnum.API_NAME_LFSJ.getApiName().equals(apiName))
-                bSysUserStatus.setLimuLifangUpgradeCheckStatus(BusinessConst.OK);
-            if (LiMuConstantEnum.API_NAME_SBZW.getApiName().equals(apiName))
-                bSysUserStatus.setDeviceInfoStatus(BusinessConst.OK);
-            this.bSysUserStatusService.updateByUserId(bSysUserStatus);
-        }).start();
+        // 同时更新用户关联的状态表，更新雷达认证状态字段
+        BSysUserStatus bSysUserStatus = new BSysUserStatus();
+        bSysUserStatus.setUserId(userId);
+        logger.info("用户：{}，改变：{}的状态！名称：{}", userId, LiMuConstantMethod.compareApiName(apiName), apiName);
+        if (LiMuConstantEnum.API_NAME_TB.getApiName().equals(apiName))
+            bSysUserStatus.setLimuTaobaoReportStatus(BusinessConst.OK);
+        if (LiMuConstantEnum.API_NAME_YYS.getApiName().equals(apiName))
+            bSysUserStatus.setLimuMobileReportStatus(BusinessConst.OK);
+        if (LiMuConstantEnum.API_NAME_LFSJ.getApiName().equals(apiName))
+            bSysUserStatus.setLimuLifangUpgradeCheckStatus(BusinessConst.OK);
+        if (LiMuConstantEnum.API_NAME_SBZW.getApiName().equals(apiName))
+            bSysUserStatus.setDeviceInfoStatus(BusinessConst.OK);
+        this.bSysUserStatusService.updateByUserId(bSysUserStatus);
     }
 }

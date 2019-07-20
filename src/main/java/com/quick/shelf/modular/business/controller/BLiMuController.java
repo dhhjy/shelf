@@ -246,6 +246,8 @@ public class BLiMuController extends BaseController {
             // 设置多个判断是为了让每个接口进行自己独立的接口调用统计
             // 淘宝认证
             if (LiMuConstantEnum.API_NAME_TB.getApiName().equals(type)) {
+                // 重点 返回的类型与定义的类型不一样
+                liMuResult.setBizType(type);
                 // 获取立木淘宝的原始数据 并 保存
                 this.bLiMuService.liMuTBJsonData(liMuResult);
                 // 获取立木淘宝的报告页面 并 保存
@@ -263,7 +265,8 @@ public class BLiMuController extends BaseController {
                 // 获取立木运营商的报告页面 并 保存
                 this.bLiMuService.liMuYYSPageData(liMuResult);
 
-                // 换取运营商报告后在获取立方升级报告
+                // 异步执行获取立方升级报告的方法
+                // 获取运营商报告后在获取立方升级报告
                 String lfsjToken = this.bLiMuService.liMuLfsjJsonData(bSysUser);
                 lfsjToken = JSONObject.parseObject(lfsjToken).getString("token");
                 // 获取完立木升级的原始报告后，在拿返回的token获取立木的页面报告
@@ -274,17 +277,23 @@ public class BLiMuController extends BaseController {
                     lm.setBizType(LiMuConstantEnum.API_NAME_LFSJ.getApiName());
                     lm.setToken(lfsjToken);
                     this.bLiMuService.liMuLfsjPageData(lm);
+                    // 改变用户立方升级状态
+                    this.bLiMuService.changeUserStatus(bSysUser.getUserId(), LiMuConstantEnum.API_NAME_LFSJ.getApiName());
                 }
+            }
+            if (LiMuConstantEnum.API_NAME_LFSJ.getApiName().equals(type)) {
+                System.out.println(type);
             }
             // 指纹设备
             if (LiMuConstantEnum.API_NAME_SBZW.getApiName().equals(type)) {
                 // 获取立木设备指纹的原始数据 并 保存
                 this.bLiMuService.liMuSbzwJsonData(liMuResult);
             }
+//            // 每次都执行获取立木的机审报告
+            this.bLiMuService.liMuJsJsonData(liMuResult);
+
             // 改变用户状态
             this.bLiMuService.changeUserStatus(bSysUser.getUserId(), type);
-            // 每次都将执行立木的机审报告
-            this.bLiMuService.liMuJsJsonData(liMuResult);
         }
     }
 

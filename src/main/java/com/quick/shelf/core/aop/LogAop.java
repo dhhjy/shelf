@@ -94,10 +94,9 @@ public class LogAop {
 
         //先执行业务
         Object result = point.proceed();
-
+        log.info("回调执行完成后的结果");
         try {
-            if(null != result)
-                handleCallBack(point);
+            handleCallBack(point);
         } catch (Exception e) {
             log.error("日志记录出错!", e);
         }
@@ -165,11 +164,9 @@ public class LogAop {
         PortLog annotation = currentMethod.getAnnotation(PortLog.class);
         String type = annotation.type();
         String typeName = annotation.typeName();
-        log.error("错误!类型：{}，名称：{}",type,typeName);
-        System.out.println(type);
-        System.out.println(typeName);
+        log.error(" AOP 统计外部接口接口调用类型：{}，名称：{}，结果：{}", type, typeName, result);
         JSONObject re = JSONObject.parseObject(result.toString());
-        if(null != re.getString("code") &&
+        if (null != re.getString("code") &&
                 !re.getString("code").equals(LiMuConstantMethod.SUCCESS_CODE))
             return;
         if (null != re.getString("success") &&
@@ -181,6 +178,7 @@ public class LogAop {
 
     /**
      * APO 获取当前方法的封装
+     *
      * @param point
      * @return
      * @throws NoSuchMethodException
@@ -213,6 +211,7 @@ public class LogAop {
         String className = point.getTarget().getClass().getName();
         Object[] params = point.getArgs();
         List<Object> param = new ArrayList<>(Arrays.asList(params));
+        log.error(" AOP 记录外部接口回调通知状态名称：{}，结果：{}", value, param);
         Integer userId = 0;
         if (param.size() > 1)
             userId = Integer.valueOf(param.get(1).toString());

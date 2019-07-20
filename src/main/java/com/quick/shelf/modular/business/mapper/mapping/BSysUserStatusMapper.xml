@@ -49,9 +49,6 @@
     <update id="updateByUserId" parameterType="com.quick.shelf.modular.business.entity.BSysUserStatus">
         update b_sys_user_status
         <trim prefix="set" suffixOverrides=",">
-            <if test="limuMobileReportStatus != null">
-                limu_mobile_report_status = #{limuMobileReportStatus},
-            </if>
             <if test="identityStatus != null">
                 identity_status = #{identityStatus},
             </if>
@@ -72,6 +69,18 @@
             </if>
             <if test="xinyanRadarStatus != null">
                 xinyan_radar_status = #{xinyanRadarStatus},
+            </if>
+            <if test="deviceInfoStatus != null">
+                device_info_status = #{deviceInfoStatus},
+            </if>
+            <if test="limuMobileReportStatus != null">
+                limu_mobile_report_status = #{limuMobileReportStatus},
+            </if>
+            <if test="limuTaobaoReportStatus != null">
+                limu_taobao_report_status = #{limuTaobaoReportStatus},
+            </if>
+            <if test="limuLifangUpgradeCheckStatus != null">
+                limu_lifang_upgrade_check_status = #{limuLifangUpgradeCheckStatus},
             </if>
         </trim>
         where user_id = #{userId}
