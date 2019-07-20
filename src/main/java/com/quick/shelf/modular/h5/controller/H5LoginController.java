@@ -131,26 +131,24 @@ public class H5LoginController extends BaseController {
     @ResponseBody
     public ResponseData findPassword(RegisterDto registerDto) {
         String message;
-//        String phone = registerDto.getUserAccount();
-//        logger.info("手机号:{}的用户正在找回密码！", phone);
-//        String code = redisUtil.get(phone).toString();
-//        // 删除缓存
-//        redisUtil.del(phone);
-//        // 校验验证码是否正确
-//        if (null != code && null != registerDto.getVercode() && !code.equals(registerDto.getVercode())) {
-//            message = "验证码不正确";
-//            return ResponseData.success(3, message, null);
-//        }
-//        // 校验手机号是否存在
-//        else if (this.bSysUserService.phoneIsExist(phone)) {
-//            message = "手机号不存在";
-//            return ResponseData.success(2, message, null);
-//        } else {
-//            message = h5LogingService.findPassword(registerDto);
-//            return ResponseData.success(0, message, registerDto);
-//        }
-        message = h5LogingService.findPassword(registerDto);
-        return ResponseData.success(0, message, registerDto);
+        String phone = registerDto.getUserAccount();
+        logger.info("手机号:{}的用户正在找回密码！", phone);
+        String code = redisUtil.get(phone).toString();
+        // 删除缓存
+        redisUtil.del(phone);
+        // 校验验证码是否正确
+        if (null != code && null != registerDto.getVercode() && !code.equals(registerDto.getVercode())) {
+            message = "验证码不正确";
+            return ResponseData.success(3, message, null);
+        }
+        // 校验手机号是否存在
+        else if (this.bSysUserService.phoneIsExist(phone)) {
+            message = "手机号不存在";
+            return ResponseData.success(2, message, null);
+        } else {
+            message = h5LogingService.findPassword(registerDto);
+            return ResponseData.success(0, message, registerDto);
+        }
     }
 
     /**
