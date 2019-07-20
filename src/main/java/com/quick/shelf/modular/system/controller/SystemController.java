@@ -84,16 +84,20 @@ public class SystemController extends BaseController {
      */
     @RequestMapping("/console")
     public String console(Model model) {
-        ShiroUser user = ShiroKit.getUser();
-        assert user != null;
+        ShiroUser user = ShiroKit.getUserNotNull();
+        Long deptId = user.getDeptId();
         // 接口调用总次数
-        model.addAttribute("portNum", this.bPortCountService.getPortNum());
+        model.addAttribute("portNum", this.bPortCountService.getPortNum(deptId));
         // 接口调用总价格
-        model.addAttribute("portChart", this.bPortCountService.getPortChart());
+        model.addAttribute("portChart", this.bPortCountService.getPortChart(deptId));
+        // 短信接口调用总次数
+        model.addAttribute("smsPortNum", this.bPortCountService.getSmsPortNum(deptId));
+        // 短信接口调用总价格
+        model.addAttribute("smsPortChart", this.bPortCountService.getSmsPortChartCount(deptId));
         // 网站总人数
-        model.addAttribute("clientUserCount", this.bPortCountService.getClientUserCount(user.getDeptId()));
+        model.addAttribute("clientUserCount", this.bPortCountService.getClientUserCount(deptId));
         // 网站当天人数
-        model.addAttribute("clientUserToDayCount", this.bPortCountService.getClientToDayUserCount(user.getDeptId()));
+        model.addAttribute("clientUserToDayCount", this.bPortCountService.getClientToDayUserCount(deptId));
         return "/modular/frame/console.html";
     }
 

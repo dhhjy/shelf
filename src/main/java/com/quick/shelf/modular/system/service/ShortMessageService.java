@@ -9,10 +9,12 @@ import com.quick.shelf.core.util.sms.aliYun.SendAliSmsUtil;
 import com.quick.shelf.core.util.sms.aliYun.AliYunSmsConst;
 import com.quick.shelf.core.util.sms.jiGuang.JiGuangSmsConst;
 import com.quick.shelf.core.util.sms.jiGuang.JiguangPushSmsUtil;
+import com.quick.shelf.modular.constant.BusinessConst;
 import com.quick.shelf.modular.system.entity.SmsMessage;
 import com.quick.shelf.modular.system.mapper.ShortMessageMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -98,8 +100,11 @@ public class ShortMessageService extends ServiceImpl<ShortMessageMapper, SmsMess
      * @param type         发送短信的类型
      * @param templateCode 发送短信的模板编号
      * @param code         发送的验证码
+     *
+     *  方法执行完成以后，会清除短信接口的缓存
      */
-    private void insertSmsMessage(String phone, String type, String templateCode, Integer operator, Long deptId, String code) {
+    @CacheEvict(value = BusinessConst.COMSOLE_SMS, allEntries = true)
+    public void insertSmsMessage(String phone, String type, String templateCode, Integer operator, Long deptId, String code) {
         // 1-验证短信， 2-通知短信
         // 获得模板内容
         String content = SmsTemplateEnum.getContentByTempCode(templateCode);
@@ -110,11 +115,6 @@ public class ShortMessageService extends ServiceImpl<ShortMessageMapper, SmsMess
         // 短信类型
         smsMessage.setSmsType(AliYunSmsConst.getSmsType(type));
         assert content != null;
-//        if(operator == SendAliSmsUtil.ALIYUN)
-//        smsMessage.setContent(content.replace("${code}", code));
-//
-//        if()
-
         smsMessage.setContent(content.replace("${code}", code).replace("{{code}}", code));
         // 短信平台
         smsMessage.setOperator(operator);

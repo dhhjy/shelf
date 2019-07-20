@@ -28,4 +28,18 @@ public interface BPortCountMapper extends BaseMapper<BPortCount> {
      * @return
      */
     Map<String, Object> getPortChartPrice(@Param("deptId") Long deptId);
+
+    /**
+     * 获取今日接口数与接口的总数
+     *
+     * @return
+     */
+    Map<String, String> getSmsPortNum(@Param("deptId") Long deptId);
+
+    /**
+     * 获取7日短信接口数据
+     *
+     * @return
+     */
+    Map<String, Object> getSmsPortChartCount(@Param("deptId") Long deptId);
 }

@@ -34,7 +34,7 @@ public class H5LogingService {
      * @author zcn
      * @Date 2018/12/24 22:51
      */
-    @CacheEvict(value = BusinessConst.CONSOLE, allEntries = true)
+    @CacheEvict(value = BusinessConst.CONSOLE_PERSOON, allEntries = true)
     public String registerBSysUser(RegisterDto registerDto) {
         // 完善账号信息
         String salt = ShiroKit.getRandomSalt(5);
@@ -62,7 +62,7 @@ public class H5LogingService {
      * @author zcn
      * @Date 2018/12/24 22:51
      */
-    @CacheEvict(value = BusinessConst.CONSOLE, allEntries = true)
+    @CacheEvict(value = BusinessConst.CONSOLE_PERSOON, allEntries = true)
     public String findPassword(RegisterDto registerDto) {
         // 查询用户信息
         BSysUser bSysUser = this.bSysUserService.selectBSysUserByPhone(registerDto.getUserAccount());

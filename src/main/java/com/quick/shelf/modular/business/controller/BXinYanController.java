@@ -19,6 +19,7 @@ import com.quick.shelf.modular.business.entity.BXinYanData;
 import com.quick.shelf.modular.business.service.BSysUserService;
 import com.quick.shelf.modular.business.service.BXinYanDataService;
 import com.quick.shelf.modular.business.warpper.BXinYanWrapper;
+import com.quick.shelf.modular.constant.BusinessConst;
 import com.quick.shelf.modular.creditPort.xinYan.XinYanConstantEnum;
 import com.quick.shelf.modular.creditPort.xinYan.XinYanConstantMethod;
 import com.quick.shelf.modular.creditPort.xinYan.XinYanResult;
@@ -28,6 +29,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -200,7 +202,11 @@ public class BXinYanController extends BaseController {
      *
      * @return
      */
+    @CacheEvict(value = BusinessConst.CONSOLE_PORT, allEntries = true)
     @CallBackLog(value = "新颜原始数据回调地址")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "用户主键ID", name = "userId", required = true, dataType = "String")
+    })
     @RequestMapping(value = "/callbackJson/{userId}", produces = "application/json", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
     public void callbackJson(@RequestBody XinYanResult xyResult, @PathVariable("userId") Integer userId) {

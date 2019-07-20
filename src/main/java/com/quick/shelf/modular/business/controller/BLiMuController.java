@@ -30,6 +30,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -228,6 +229,7 @@ public class BLiMuController extends BaseController {
     /**
      * 立木数据回调通知地址
      */
+    @CacheEvict(value = BusinessConst.CONSOLE_PORT, allEntries = true)
     @CallBackLog(value = "立木数据回调通知")
     @ApiOperation(value = "立木数据回调通知", notes = "立木数据回调通知", httpMethod = "GET")
     @ApiImplicitParams({

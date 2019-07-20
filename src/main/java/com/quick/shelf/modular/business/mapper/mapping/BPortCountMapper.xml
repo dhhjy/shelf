@@ -138,4 +138,138 @@
         </if>
         )t7
     </select>
+
+    <select id="getSmsPortNum" resultType="map">
+        SELECT
+        t1.smsPortCallNum,
+        t2.smsPortCallCount
+        FROM
+        (SELECT
+        COUNT(id) AS 'smsPortCallNum'
+        FROM
+        sms_message
+        WHERE 1 = 1
+        <if test="deptId != 0">
+            AND dept_id = #{deptId}
+        </if>
+        AND TO_DAYS(create_time) = TO_DAYS(NOW())) t1,
+        (SELECT
+        COUNT(id) AS 'smsPortCallCount'
+        FROM
+        sms_message
+        WHERE 1 = 1
+        <if test="deptId != 0">
+            AND dept_id = #{deptId}
+        </if>
+        ) t2
+    </select>
+
+    <select id="getSmsPortChartCount" resultType="map">
+        SELECT t1.*,t2.*,t3.*,t4.*,t5.*,t6.*,t7.* FROM
+        (
+        SELECT
+        COUNT(id) AS 0_count,
+        SUM(unit_price) AS 0_price,
+        DATE_FORMAT(
+        DATE_SUB(CURDATE(), INTERVAL 0 DAY),
+        '%d'
+        ) AS 0_day
+        FROM
+        sms_message
+        WHERE DATE(create_time) = DATE(CURDATE())
+        <if test="deptId != 0">
+            AND dept_id = #{deptId}
+        </if>
+        )t1,
+        (
+        SELECT
+        COUNT(id) AS 1_count,
+        SUM(unit_price) AS 1_price,
+        DATE_FORMAT(
+        DATE_SUB(CURDATE(), INTERVAL 1 DAY),
+        '%d'
+        ) AS 1_day
+        FROM
+        sms_message
+        WHERE DATE(create_time) = DATE(CURDATE()-1)
+        <if test="deptId != 0">
+            AND dept_id = #{deptId}
+        </if>
+        )t2,
+        (
+        SELECT
+        COUNT(id) AS 2_count,
+        SUM(unit_price) AS 2_price,
+        DATE_FORMAT(
+        DATE_SUB(CURDATE(), INTERVAL 2 DAY),
+        '%d'
+        ) AS 2_day
+        FROM
+        sms_message
+        WHERE DATE(create_time) = DATE(CURDATE()-2)
+        <if test="deptId != 0">
+            AND dept_id = #{deptId}
+        </if>
+        )t3,
+        (
+        SELECT
+        COUNT(id) AS 3_count,
+        SUM(unit_price) AS 3_price,
+        DATE_FORMAT(
+        DATE_SUB(CURDATE(), INTERVAL 3 DAY),
+        '%d'
+        ) AS 3_day
+        FROM
+        sms_message
+        WHERE DATE(create_time) = DATE(CURDATE()-3)
+        <if test="deptId != 0">
+            AND dept_id = #{deptId}
+        </if>
+        )t4,
+        (
+        SELECT
+        COUNT(id) AS 4_count,
+        SUM(unit_price) AS 4_price,
+        DATE_FORMAT(
+        DATE_SUB(CURDATE(), INTERVAL 4 DAY),
+        '%d'
+        ) AS 4_day
+        FROM
+        sms_message
+        WHERE DATE(create_time) = DATE(CURDATE()-4)
+        <if test="deptId != 0">
+            AND dept_id = #{deptId}
+        </if>
+        )t5,
+        (
+        SELECT
+        COUNT(id) AS 5_count,
+        SUM(unit_price) AS 5_price,
+        DATE_FORMAT(
+        DATE_SUB(CURDATE(), INTERVAL 5 DAY),
+        '%d'
+        ) AS 5_day
+        FROM
+        sms_message
+        WHERE DATE(create_time) = DATE(CURDATE()-5)
+        <if test="deptId != 0">
+            AND dept_id = #{deptId}
+        </if>
+        )t6,
+        (
+        SELECT
+        COUNT(id) AS 6_count,
+        SUM(unit_price)AS 6_price,
+        DATE_FORMAT(
+        DATE_SUB(CURDATE(), INTERVAL 6 DAY),
+        '%d'
+        ) AS 6_day
+        FROM
+        sms_message
+        WHERE DATE(create_time) = DATE(CURDATE()-6)
+        <if test="deptId != 0">
+            AND dept_id = #{deptId}
+        </if>
+        )t7
+    </select>
 </mapper>
