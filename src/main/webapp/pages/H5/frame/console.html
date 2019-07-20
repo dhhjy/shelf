@@ -87,7 +87,8 @@
                     @if(userStatus.identityStatus == "1"){
                     <span class="layui-badge layui-bg-blue pull-right">已认证</span>
                     @}else{
-                    <span class="layui-badge layui-bg-white pull-right">去认证</span>
+<!--                    <span class="layui-badge layui-bg-white pull-right">去认证</span>-->
+                    <span class="layui-badge layui-bg-white pull-right" style="background-color: #c0c4cc">未开通</span>
                     @}
                 </div>
             </div>
@@ -104,7 +105,8 @@
                     @if(userStatus.userBasicStatus == "1"){
                     <span class="layui-badge layui-bg-blue pull-right">已认证</span>
                     @}else{
-                    <span class="layui-badge layui-bg-white pull-right">去认证</span>
+<!--                    <span class="layui-badge layui-bg-white pull-right">去认证</span>-->
+                    <span class="layui-badge layui-bg-white pull-right" style="background-color: #c0c4cc">未开通</span>
                     @}
                 </div>
             </div>
@@ -121,7 +123,8 @@
                     @if(userStatus.bankInfoStatus == "1"){
                     <span class="layui-badge layui-bg-blue pull-right">已认证</span>
                     @}else{
-                    <span class="layui-badge layui-bg-white pull-right">去认证</span>
+<!--                    <span class="layui-badge layui-bg-white pull-right">去认证</span>-->
+                    <span class="layui-badge layui-bg-white pull-right" style="background-color: #c0c4cc">未开通</span>
                     @}
                 </div>
             </div>
@@ -207,11 +210,7 @@
 <script>
     layui.use(['form', 'ax', 'admin', 'layer', 'index'], function () {
         var $ = layui.jquery;
-        var $ax = layui.ax;
-        var form = layui.form;
-        var admin = layui.admin;
         var layer = layui.layer;
-        var index = layui.index;
 
         // 用户状态
         var userStatus = ${userStatus};
@@ -285,7 +284,7 @@
          */
         var idCardAuthFun = function () {
             if (userStatus.identityStatus !== '0' && userStatus.identityStatus !== 'ENABLE') {
-                Feng.info("身份证已认证");
+                layer.msg("身份证已认证");
                 return false;
             } else {
 
@@ -297,7 +296,7 @@
          */
         var userInfoAuthFun = function () {
             if (userStatus.userBasicStatus !== '0' && userStatus.userBasicStatus !== 'ENABLE') {
-                Feng.info("个人信息已认证");
+                layer.msg("个人信息已认证");
                 return false;
             } else {
 
@@ -309,7 +308,7 @@
          */
         var bankCardAuthFun = function () {
             if (userStatus.bankInfoStatus !== '0' && userStatus.bankInfoStatus !== 'ENABLE') {
-                Feng.info("银行卡已认证");
+                layer.msg("银行卡已认证");
                 return false;
             } else {
 
@@ -321,7 +320,7 @@
          */
         var mobileAuthFun = function () {
             if (userStatus.limuMobileReportStatus !== '0' && userStatus.limuMobileReportStatus !== 'ENABLE') {
-                Feng.info("手机已认证");
+                layer.msg("手机已认证");
                 return false;
             } else {
                 $.ajax({
@@ -340,7 +339,7 @@
          */
         var taoBaoAuthFun = function () {
             if (userStatus.limuTaobaoReportStatus !== '0' && userStatus.limuTaobaoReportStatus !== 'ENABLE') {
-                Feng.info("淘宝已认证");
+                layer.msg("淘宝已认证");
                 return false;
             } else {
                 $.ajax({
@@ -359,7 +358,7 @@
          */
         var zmfAuthFun = function () {
             if (userStatus.xinyanZmfStatus !== '0' && userStatus.xinyanZmfStatus !== 'ENABLE') {
-                Feng.info("芝麻分已认证");
+                layer.msg("芝麻分已认证");
                 return false;
             } else {
                 $.ajax({

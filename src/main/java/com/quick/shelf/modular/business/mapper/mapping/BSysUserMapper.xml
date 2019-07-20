@@ -19,7 +19,6 @@
         <result column="second_referrer" property="secondReferrer"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
-        <result column="update_user" property="updateUser"/>
         <result column="version" property="version"/>
     </resultMap>
 
@@ -78,6 +77,13 @@
         <if test="deptId != 0">
             AND DEPT_ID = #{deptId}
         </if>
-
     </select>
+
+    <update id="updateUserPassword" parameterType="com.quick.shelf.modular.business.entity.BSysUser">
+        UPDATE B_SYS_USER
+        SET password = #{password},
+        salt = #{salt},
+        update_time = #{updateTime}
+        WHERE user_id = #{userId}
+    </update>
 </mapper>

@@ -110,7 +110,7 @@ public class BSysUser implements Serializable {
      * 更新时间
      */
     @TableField("update_time")
-    private Date updateTme;
+    private Date updateTime;
 
     /**
      * 更新人

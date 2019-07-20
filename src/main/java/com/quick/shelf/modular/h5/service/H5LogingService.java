@@ -31,7 +31,7 @@ public class H5LogingService {
      * 添加用戶
      * 添加成功后 会缓存清空掉所有的控制台缓存
      *
-     * @author fengshuonan
+     * @author zcn
      * @Date 2018/12/24 22:51
      */
     @CacheEvict(value = BusinessConst.CONSOLE, allEntries = true)
@@ -54,5 +54,26 @@ public class H5LogingService {
         bSysUserStatus.setUserId(bSysUser.getUserId());
         bSysUserStatusService.insertBSysUserStatus(bSysUserStatus);
         return "注册成功!";
+    }
+
+    /**
+     * 修改用户密码
+     *
+     * @author zcn
+     * @Date 2018/12/24 22:51
+     */
+    @CacheEvict(value = BusinessConst.CONSOLE, allEntries = true)
+    public String findPassword(RegisterDto registerDto) {
+        // 查询用户信息
+        BSysUser bSysUser = this.bSysUserService.selectBSysUserByPhone(registerDto.getUserAccount());
+        // 完善账号信息
+        String salt = ShiroKit.getRandomSalt(5);
+        String password = ShiroKit.md5(registerDto.getPassword(), salt);
+        bSysUser.setPassword(password);
+        bSysUser.setSalt(salt);
+        bSysUser.setUpdateTime(DateUtil.getCurrentDate());
+        bSysUser.setUpdateUser(0L);
+        this.bSysUserService.updateUserPassword(bSysUser);
+        return "修改成功!";
     }
 }

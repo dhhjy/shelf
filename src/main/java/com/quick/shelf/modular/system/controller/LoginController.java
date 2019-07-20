@@ -38,7 +38,7 @@ public class LoginController extends BaseController {
      * @Date 2018/12/23 5:41 PM
      */
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String index(Model model) {
+    public String index(Model model,HttpServletRequest httpServletRequest) {
         //获取当前用户角色列表
         ShiroUser user = ShiroKit.getUserNotNull();
         List<Long> roleList = user.getRoleList();

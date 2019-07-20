@@ -62,6 +62,22 @@ public class BSysUserService extends ServiceImpl<BSysUserMapper, BSysUser> {
     }
 
     /**
+     * 根据手机号查询用户
+     * @param phoneNumber
+     * @return
+     */
+    public BSysUser selectBSysUserByPhone(String phoneNumber){
+        return this.baseMapper.getByPhoneNumber(phoneNumber);
+    }
+
+    /**
+     * 修改用户登陆密码
+     */
+    public void updateUserPassword(BSysUser bSysUser){
+        this.baseMapper.updateUserPassword(bSysUser);
+    }
+
+    /**
      * 查询电话是否存在
      *
      * @param phone

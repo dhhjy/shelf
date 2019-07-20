@@ -19,6 +19,7 @@
 package com.quick.shelf.core.interceptor;
 
 import com.quick.shelf.core.shiro.ShiroKit;
+import com.quick.shelf.core.util.UserAgentUtil;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.util.WebUtils;
@@ -93,7 +94,15 @@ public class GunsUserFilter extends AccessControlFilter {
                  */
                 if (ShiroKit.getSession().getAttribute("sessionFlag") == null) {
                     httpServletRequest.setAttribute("tips", "session超时");
-                    httpServletRequest.getRequestDispatcher("/login").forward(request, response);
+
+                    /**
+                     * 判断是客户端用户还是后台系统用户
+                     */
+                    if(UserAgentUtil.checkMobileOrPC(httpServletRequest)){
+                        httpServletRequest.getRequestDispatcher("/h5/login").forward(request, response);
+                    }else{
+                        httpServletRequest.getRequestDispatcher("/login").forward(request, response);
+                    }
                     return false;
                 } else {
                     saveRequestAndRedirectToLogin(request, response);

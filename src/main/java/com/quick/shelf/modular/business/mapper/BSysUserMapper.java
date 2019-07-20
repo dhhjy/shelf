@@ -24,6 +24,7 @@ public interface BSysUserMapper extends BaseMapper<BSysUser> {
 
     /**
      * 逻辑删除用户
+     *
      * @param userId
      */
     void deleteBSysUserByUserId(@Param("userId") Integer userId);
@@ -40,8 +41,15 @@ public interface BSysUserMapper extends BaseMapper<BSysUser> {
 
     /**
      * 查询网站今天注册的人数
+     *
      * @param deptId
      * @return
      */
     Integer getBSysUserToDayCount(@Param("deptId") Long deptId);
+
+    /**
+     * 修改用户登陆密码
+     * @param bSysUser
+     */
+    void updateUserPassword(BSysUser bSysUser);
 }

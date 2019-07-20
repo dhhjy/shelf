@@ -21,7 +21,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
@@ -110,10 +109,48 @@ public class H5LoginController extends BaseController {
      *
      * @return
      */
-    @ApiOperation(value = "客户端找回密码页面跳转", notes = "客户端找回密码页面跳转", httpMethod = "GET")
-    @RequestMapping(value = "/findPassword")
-    public String findPassword() {
+    @ApiOperation(value = "客户端找回密码页面跳转", notes = "客户端找回密码页面跳转")
+    @RequestMapping(value = "/findPasswordIndex")
+    public String findPasswordIndex() {
         return H5_PATH + "findPassword.html";
+    }
+
+    /**
+     * 客户端用户找回密码
+     *
+     * @return
+     */
+    @ApiOperation(value = "客户端用户找回密码", notes = "客户端用户找回密码", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "手机号", name = "userAccount", required = true, dataType = "String"),
+            @ApiImplicitParam(value = "验证码", name = "vercode", required = true, dataType = "String"),
+            @ApiImplicitParam(value = "密码", name = "password", required = true, dataType = "String"),
+            @ApiImplicitParam(value = "注册后属于哪家公司", name = "deptId", required = true, dataType = "Long"),
+    })
+    @RequestMapping(value = "/findPassword", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData findPassword(RegisterDto registerDto) {
+        String message;
+//        String phone = registerDto.getUserAccount();
+//        logger.info("手机号:{}的用户正在找回密码！", phone);
+//        String code = redisUtil.get(phone).toString();
+//        // 删除缓存
+//        redisUtil.del(phone);
+//        // 校验验证码是否正确
+//        if (null != code && null != registerDto.getVercode() && !code.equals(registerDto.getVercode())) {
+//            message = "验证码不正确";
+//            return ResponseData.success(3, message, null);
+//        }
+//        // 校验手机号是否存在
+//        else if (this.bSysUserService.phoneIsExist(phone)) {
+//            message = "手机号不存在";
+//            return ResponseData.success(2, message, null);
+//        } else {
+//            message = h5LogingService.findPassword(registerDto);
+//            return ResponseData.success(0, message, registerDto);
+//        }
+        message = h5LogingService.findPassword(registerDto);
+        return ResponseData.success(0, message, registerDto);
     }
 
     /**

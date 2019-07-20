@@ -151,11 +151,11 @@
         // 表单提交事件
         form.on('submit(LAY-user-reg-submit)', function (data) {
             if (data.field.vercode.length < 5) {
-                Feng.error("验证码不正确");
+                layer.msg("验证码不正确");
                 return false;
             }
             if (data.field.agreement === undefined) {
-                Feng.error("未同意注册协议");
+                layer.msg("未同意注册协议");
                 return false;
             }
             var ajax = new $ax(Feng.ctxPath + "/h5/register", function (data) {
@@ -164,10 +164,10 @@
                     $("#registerMessageInfo").show();
                     changePageInfoFun(data.data);
                 } else {
-                    Feng.error(data.message);
+                    layer.msg(data.message);
                 }
             }, function (data) {
-                Feng.error("添加失败！" + data.message)
+                layer.msg("添加失败！" + data.message)
             });
             ajax.set(data.field);
             ajax.start();
@@ -180,6 +180,8 @@
         $("#getsmscode").click(function () {
             if (checkPhone()) {
                 var deptId = $("#deptId").val();
+                var btn = document.getElementById("getsmscode");
+                settime(btn);
                 //发送验证码
                 $.ajax({
                     type: 'POST',
@@ -187,13 +189,6 @@
                     data: {
                         "type": "register",
                         "deptId": deptId
-                    },
-                    success: function (result) {
-                        if (result.success) {
-                            Feng.info(result.message);
-                            var btn = document.getElementById("getsmscode");
-                            settime(btn);
-                        }
                     }
                 });
             }
@@ -222,7 +217,7 @@
     function checkPhone() {
         var myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
         if (!myreg.test($("#userAccount").val())) {
-            Feng.error("请输入有效的号码");
+            layer.msg("请输入有效的号码");
             return false;
         } else {
             return true;
