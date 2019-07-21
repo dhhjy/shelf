@@ -4,19 +4,19 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.quick.shelf.modular.system.entity.Dict">
-        <id column="dict_id" property="dictId" />
-        <result column="dict_type_id" property="dictTypeId" />
-        <result column="code" property="code" />
-        <result column="name" property="name" />
-        <result column="parent_id" property="parentId" />
-        <result column="parent_ids" property="parentIds" />
-        <result column="status" property="status" />
-        <result column="sort" property="sort" />
-        <result column="description" property="description" />
-        <result column="create_time" property="createTime" />
-        <result column="update_time" property="updateTime" />
-        <result column="create_user" property="createUser" />
-        <result column="update_user" property="updateUser" />
+        <id column="dict_id" property="dictId"/>
+        <result column="dict_type_id" property="dictTypeId"/>
+        <result column="code" property="code"/>
+        <result column="name" property="name"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="parent_ids" property="parentIds"/>
+        <result column="status" property="status"/>
+        <result column="sort" property="sort"/>
+        <result column="description" property="description"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="create_user" property="createUser"/>
+        <result column="update_user" property="updateUser"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
@@ -49,6 +49,21 @@
         SELECT
         <include refid="Base_Column_List"></include>
         FROM SYS_DICT WHERE name = #{name}
+    </select>
+
+    <select id="selectDictByCoede" resultType="com.quick.shelf.modular.system.entity.Dict">
+        SELECT
+        sd.name,
+        sd.code
+        FROM
+        SYS_DICT sd
+        LEFT JOIN SYS_DICT_TYPE sdt
+        ON (
+        sd.`dict_type_id` = sdt.`dict_type_id`
+        )
+        WHERE sdt.CODE = #{code}
+        AND sd.status = 'ENABLE'
+        ORDER BY sd.sort
     </select>
 
 </mapper>

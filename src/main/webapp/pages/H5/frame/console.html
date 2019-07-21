@@ -184,7 +184,7 @@
     <!-- 分数统计 -->
     <div class="layui-row layui-col-space15" style="padding-top: 10px;">
         <div class="layui-card">
-            <button class="layui-btn layui-bg layui-btn-fluid" lay-submit lay-filter="login-submit"
+            <button class="layui-btn layui-bg layui-btn-fluid" lay-submit lay-filter="next-submit"
                     style="background-color:#2776d4;">去 借 钱
             </button>
         </div>
@@ -299,7 +299,7 @@
                 layer.msg("个人信息已认证");
                 return false;
             } else {
-
+                parent.toolsFun.skip(Feng.ctxPath + "/h5/personDetailIndex");
             }
         };
 
@@ -327,7 +327,6 @@
                     type: 'GET',
                     url: Feng.ctxPath + "/liMu/toVerifyUrl/mobileReport/" + userStatus.userId,
                     success: function (url) {
-                        parent.toolsFun.showFooterFun();
                         parent.toolsFun.skip(url);
                     }
                 });
@@ -346,7 +345,6 @@
                     type: 'GET',
                     url: Feng.ctxPath + "/liMu/toVerifyUrl/taobaoReport/" + userStatus.userId,
                     success: function (url) {
-                        parent.toolsFun.showFooterFun();
                         parent.toolsFun.skip(url);
                     }
                 });
@@ -365,7 +363,6 @@
                     type: 'GET',
                     url: Feng.ctxPath + "/xinYan/index/taobaoweb/" + userStatus.userId,
                     success: function (url) {
-                        parent.toolsFun.showFooterFun();
                         parent.toolsFun.skip(url);
                     }
                 });

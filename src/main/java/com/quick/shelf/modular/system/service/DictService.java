@@ -1,5 +1,13 @@
 package com.quick.shelf.modular.system.service;
 
+import cn.stylefeng.roses.core.util.ToolUtil;
+import cn.stylefeng.roses.kernel.model.exception.RequestEmptyException;
+import cn.stylefeng.roses.kernel.model.exception.ServiceException;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.quick.shelf.core.common.constant.cache.Cache;
+import com.quick.shelf.core.common.constant.cache.CacheKey;
 import com.quick.shelf.core.common.constant.state.CommonStatus;
 import com.quick.shelf.core.common.exception.BizExceptionEnum;
 import com.quick.shelf.core.common.node.ZTreeNode;
@@ -9,12 +17,8 @@ import com.quick.shelf.modular.system.entity.Dict;
 import com.quick.shelf.modular.system.mapper.DictMapper;
 import com.quick.shelf.modular.system.model.params.DictParam;
 import com.quick.shelf.modular.system.model.result.DictResult;
-import cn.stylefeng.roses.core.util.ToolUtil;
-import cn.stylefeng.roses.kernel.model.exception.RequestEmptyException;
-import cn.stylefeng.roses.kernel.model.exception.ServiceException;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -38,6 +42,7 @@ public class DictService extends ServiceImpl<DictMapper, Dict> {
      * @author quick
      * @Date 2019-03-13
      */
+    @CacheEvict(value = Cache.DICT, allEntries = true)
     public void add(DictParam param) {
 
         //判断是否已经存在同编码或同名称字典
@@ -67,6 +72,7 @@ public class DictService extends ServiceImpl<DictMapper, Dict> {
      * @author quick
      * @Date 2019-03-13
      */
+    @CacheEvict(value = Cache.DICT, allEntries = true)
     public void delete(DictParam param) {
 
         //删除字典的所有子级
@@ -84,6 +90,7 @@ public class DictService extends ServiceImpl<DictMapper, Dict> {
      * @author quick
      * @Date 2019-03-13
      */
+    @CacheEvict(value = Cache.DICT, allEntries = true)
     public void update(DictParam param) {
         Dict oldEntity = getOldEntity(param);
         Dict newEntity = getEntity(param);
@@ -103,26 +110,6 @@ public class DictService extends ServiceImpl<DictMapper, Dict> {
         dictSetPids(newEntity);
 
         this.updateById(newEntity);
-    }
-
-    /**
-     * 查询单条数据，Specification模式
-     *
-     * @author quick
-     * @Date 2019-03-13
-     */
-    public DictResult findBySpec(DictParam param) {
-        return null;
-    }
-
-    /**
-     * 查询列表，Specification模式
-     *
-     * @author quick
-     * @Date 2019-03-13
-     */
-    public List<DictResult> findListBySpec(DictParam param) {
-        return null;
     }
 
     /**
@@ -248,9 +235,9 @@ public class DictService extends ServiceImpl<DictMapper, Dict> {
 
         ArrayList<Long> longs = new ArrayList<>();
 
-        if(ToolUtil.isEmpty(dictId)){
+        if (ToolUtil.isEmpty(dictId)) {
             return longs;
-        }else{
+        } else {
             List<Dict> list = this.baseMapper.likeParentIds(dictId);
             for (Dict dict : list) {
                 longs.add(dict.getDictId());
@@ -276,10 +263,22 @@ public class DictService extends ServiceImpl<DictMapper, Dict> {
 
     /**
      * 根据字典 的 name 查询
+     *
      * @param name
      * @return
      */
-    public Dict selectDictByName(String name){
+    public Dict selectDictByName(String name) {
         return this.baseMapper.selectDictByName(name);
+    }
+
+    /**
+     * 根据字典类型 code键，查出对应的子集字典列表
+     *
+     * @param code
+     * @return List<Dict>
+     */
+    @Cacheable(value = Cache.DICT, key = "'" + CacheKey.DICT_OPTION + "'+#code")
+    public List<Dict> selectDictByCoede(String code) {
+        return this.baseMapper.selectDictByCoede(code);
     }
 }

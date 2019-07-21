@@ -31,4 +31,9 @@ public interface DictMapper extends BaseMapper<Dict> {
      * 根据字典 的 name 查询
      */
     Dict selectDictByName(@Param("name") String name);
+
+    /**
+     * 根据字典 code 键 查询所有对应的子集字典列表
+     */
+    List<Dict> selectDictByCoede(@Param("code") String code);
 }

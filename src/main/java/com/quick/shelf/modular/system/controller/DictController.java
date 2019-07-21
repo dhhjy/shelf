@@ -1,5 +1,8 @@
 package com.quick.shelf.modular.system.controller;
 
+import cn.stylefeng.roses.core.base.controller.BaseController;
+import cn.stylefeng.roses.core.reqres.response.ResponseData;
+import cn.stylefeng.roses.kernel.model.exception.RequestEmptyException;
 import com.quick.shelf.core.common.node.ZTreeNode;
 import com.quick.shelf.core.common.page.LayuiPageInfo;
 import com.quick.shelf.modular.system.entity.Dict;
@@ -8,16 +11,14 @@ import com.quick.shelf.modular.system.model.params.DictParam;
 import com.quick.shelf.modular.system.model.result.DictResult;
 import com.quick.shelf.modular.system.service.DictService;
 import com.quick.shelf.modular.system.service.DictTypeService;
-import cn.stylefeng.roses.core.base.controller.BaseController;
-import cn.stylefeng.roses.core.reqres.response.ResponseData;
-import cn.stylefeng.roses.kernel.model.exception.RequestEmptyException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 
@@ -33,10 +34,10 @@ public class DictController extends BaseController {
 
     private String PREFIX = "/modular/system/dict";
 
-    @Autowired
+    @Resource
     private DictService dictService;
 
-    @Autowired
+    @Resource
     private DictTypeService dictTypeService;
 
     /**
@@ -182,6 +183,17 @@ public class DictController extends BaseController {
         return this.dictService.dictTreeList(dictTypeId, dictId);
     }
 
+    /**
+     * 根据字典 code 键 查询字典所有对应子集列表
+     *
+     * @param code
+     * @return
+     */
+    @RequestMapping(value = "/selectDictByCoede/{code}")
+    @ResponseBody
+    public Object selectDictByCoede(@PathVariable("code") String code) {
+        return this.dictService.selectDictByCoede(code);
+    }
 }
 
 

@@ -29,7 +29,7 @@ public interface Cache {
     String CONSTANT = "CONSTANT";
 
     /**
-     * 常量缓存
+     * 字典常量缓存
      */
-    String DEPT = "DEPT";
+    String DICT = "DICT";
 }

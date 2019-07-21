@@ -50,7 +50,7 @@ public class BSysUserController extends BaseController {
     private BSysUserService bSysUserService;
 
     @Resource
-    private BUserBasicInfoServer bUserBasicInfoServer;
+    private BUserBasicInfoService bUserBasicInfoService;
 
     @Resource
     private BEmergencyContactInfoService bEmergencyContactInfoService;
@@ -146,7 +146,7 @@ public class BSysUserController extends BaseController {
         /**
          * 用户基本信息 b_user_basic_info
          */
-        BUserBasicInfo bUserBasicInfo = this.bUserBasicInfoServer.selectBUserBasicInfoByUserId(userId);
+        BUserBasicInfo bUserBasicInfo = this.bUserBasicInfoService.selectBUserBasicInfoByUserId(userId);
         model.addAttribute("bUserBasicInfo", bUserBasicInfo);
 
         /**

@@ -42,4 +42,9 @@ public interface CacheKey {
      * 接口统计
      */
     String PORT_NAME = "port_count_";
+
+    /**
+     * 字典缓存键
+     */
+    String DICT_OPTION = "dict_option_";
 }

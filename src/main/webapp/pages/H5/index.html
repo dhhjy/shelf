@@ -73,7 +73,7 @@
             menuName: '<i class="layui-icon layui-icon-home"></i>'
         });
 
-        toolsFun.hideFooterFun();
+        toolsFun.hideHeaderFun();
 
         // 修改密码点击事件
         $('#setPsw').click(function () {
@@ -133,7 +133,7 @@
          * 信誉管理点击事件绑定
          */
         $("#creditManager").click(function () {
-            toolsFun.hideFooterFun();
+            toolsFun.hideHeaderFun();
             creditManagerFun();
         });
 
@@ -148,24 +148,33 @@
          * 返回事件绑定
          */
         $("#btnCallbackFun").click(function () {
-            toolsFun.hideFooterFun();
+            toolsFun.hideHeaderFun();
             creditManagerFun();
         });
 
     });
     var toolsFun = {
-        showFooterFun: function () {
+        showHeaderFun: function () {
             $("#layBodyDiv").css({"margin-top": "0", "width": "100%", "clear": "both", "left": "0px"});
             $("#layHeaderDiv").show();
         },
-        hideFooterFun: function () {
+        hideHeaderFun: function () {
             $("#layBodyDiv").css({"margin-top": "-50px", "width": "100%", "left": "0px"});
             $("#layHeaderDiv").hide();
         },
         skip: function (url) {
+            toolsFun.showHeaderFun();
             // 信誉管理主页
             layui.index.loadHome({
                 menuPath: url,
+                menuName: '<i class="layui-icon layui-icon-home"></i>'
+            });
+        },
+        close:function(){
+            toolsFun.hideHeaderFun();
+            // 信誉管理主页
+            layui.index.loadHome({
+                menuPath: '${ctxPath}/h5/console',
                 menuName: '<i class="layui-icon layui-icon-home"></i>'
             });
         }

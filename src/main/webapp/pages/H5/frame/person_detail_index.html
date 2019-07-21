@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="${ctxPath}/assets/expand/images/favicon.ico" rel="icon">
+    <title>${systemName}</title>
+    <link rel="stylesheet" href="${ctxPath}/assets/common/layui/css/layui.css"/>
+    <link rel="stylesheet" href="${ctxPath}/assets/common/module/admin.css"/>
+    <style>
+        .layui-card-header {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body style="overflow-x: hidden;">
+<div class="layui-row layui-col-space15">
+    <div class="layui-col-xs12 layui-col-sm12 layui-col-md12">
+        <div class="layui-card">
+            <div class="layui-card-header" id="showText">完善个人信息</div>
+            <div class="layui-card-body">
+                <form id="personDetailForm" lay-filter="personDetailForm" class="layui-form">
+                    <!-- 个人详细信息 -->
+                    <div id="stepOne">
+                        <div class="layui-form-item">
+                            <div class="layui-form-mid">姓名<span style="color: red;">*</span></div>
+                            <div class="layui-input-inline">
+                                <label>
+                                    <input type="text" name="name" placeholder="请填写真实姓名" class="layui-input"
+                                           maxlength="10">
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-form-mid">身份证号码<span style="color: red;">*</span></div>
+                            <div class="layui-input-inline">
+                                <label>
+                                    <input type="text" name="idCard" placeholder="请填写身份证号码"
+                                           class="layui-input" maxlength="18">
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-form-mid">性别<span style="color: red;">*</span></div>
+                            <div class="layui-input-block">
+                                <label>
+                                    <input type="radio" name="sex" value="M" title="男">
+                                    <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i>
+                                        <div>男</div>
+                                    </div>
+                                    <input type="radio" name="sex" value="F" title="女" checked="">
+                                    <div class="layui-unselect layui-form-radio layui-form-radioed"><i
+                                            class="layui-anim layui-icon"></i>
+                                        <div>女</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-form-mid">学历<span style="color: red;">*</span></div>
+                            <div class="layui-input-inline">
+                                <select name="education">
+                                    <option value="">请选择</option>
+                                    <option value="小学">小学</option>
+                                    <option value="初中">初中</option>
+                                    <option value="高中/中专/高职">高中/中专/高职</option>
+                                    <option value="大专">大专</option>
+                                    <option value="本科">本科</option>
+                                    <option value="研究生">研究生</option>
+                                    <option value="博士以上">博士以上</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-form-mid">职业<span style="color: red;">*</span></div>
+                            <div class="layui-input-inline">
+                                <select name="job">
+                                    <option value="">请选择</option>
+                                    <option value="教师">教师</option>
+                                    <option value="服务员">服务员</option>
+                                    <option value="厨师">厨师</option>
+                                    <option value="司机">司机</option>
+                                    <option value="理发师">理发师</option>
+                                    <option value="教练">教练</option>
+                                    <option value="文员">文员</option>
+                                    <option value="私营业主">私营业主</option>
+                                    <option value="销售">销售</option>
+                                    <option value="客服">客服</option>
+                                    <option value="营业员">营业员</option>
+                                    <option value="律师">律师</option>
+                                    <option value="医生">医生</option>
+                                    <option value="会计">会计</option>
+                                    <option value="文案">文案</option>
+                                    <option value="工程师">工程师</option>
+                                    <option value="程序员">程序员</option>
+                                    <option value="设计师">设计师</option>
+                                    <option value="其他">其他</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-form-mid">月收入<span style="color: red;">*</span></div>
+                            <div class="layui-input-inline">
+                                <select name="income">
+                                    <option value="">请选择</option>
+                                    <option value="1000">1000元</option>
+                                    <option value="2000">2000元</option>
+                                    <option value="5000">5000元</option>
+                                    <option value="10000">5000元-10000元</option>
+                                    <option value="10000-20000">10000元-20000元</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-form-mid">婚姻状况<span style="color: red;">*</span></div>
+                            <div class="layui-input-inline">
+                                <select name="marriage">
+                                    <option value="">请选择</option>
+                                    <option value="未婚">未婚</option>
+                                    <option value="已婚">已婚</option>
+                                    <option value="丧偶">丧偶</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-form-mid">子女数<span style="color: red;">*</span></div>
+                            <div class="layui-input-inline">
+                                <select name="children">
+                                    <option value="">请选择</option>
+                                    <option value="0">0个</option>
+                                    <option value="1">1个</option>
+                                    <option value="2">2个</option>
+                                    <option value="3">3个及以上</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-form-mid">居住城市<span style="color: red;">*</span></div>
+                            <input type="hidden" id="addressCity" name="addressCity">
+                            <input type="hidden" id="companyCity" name="companyCity">
+                            <div class="layui-input-inline">
+                                <select name="provid" id="provid" lay-filter="provid">
+                                    <option value="">请选择省</option>
+                                </select>
+                            </div>
+                            <div class="layui-input-inline">
+                                <select name="cityid" id="cityid" lay-filter="cityid">
+                                    <option value="">请选择市</option>
+                                </select>
+                            </div>
+                            <div class="layui-input-inline">
+                                <select name="areaid" id="areaid" lay-filter="areaid">
+                                    <option value="">请选择县/区</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-form-mid">详细地址<span style="color: red;">*</span></div>
+                            <div class="layui-input-inline">
+                                <input type="text" name="address" placeholder="请填写详细地址" class="layui-input"
+                                       maxlength="50">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-input-block pull-right">
+                                <a href="#" class="layui-btn" id="nextOneSubmit"
+                                   style="background-color: #5291dd">下 一 步</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 单位信息 -->
+                    <div id="stepTwo" hidden>
+                        <div class="layui-form-item">
+                            <div class="layui-form-mid">单位名称<span style="color: red;">*</span></div>
+                            <div class="layui-input-inline">
+                                <input type="text" name="company" placeholder="请填写单位名称" required
+                                       class="layui-input" maxlength="20">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-form-mid">单位电话<span style="color: red;">*</span></div>
+                            <div class="layui-input-inline">
+                                <label>
+                                    <input type="text" name="companyPhone" placeholder="请填写单位电话"
+                                           class="layui-input" maxlength="18"
+                                           oninput="value=value.replace(/[^\d]/g,'')">
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-form-mid">详细地址<span style="color: red;">*</span></div>
+                            <div class="layui-input-inline">
+                                <input type="text" name="company_Address" placeholder="请填写单位详细地址" class="layui-input"
+                                       maxlength="50">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-input-block pull-right">
+                                <a href="#" class="layui-btn layui-btn-primary" id="goOne"
+                                   style="padding-right: 2px">上 一 步</a>
+                                <a href="#" class="layui-btn" id="nextTwoSubmit"
+                                   style="background-color: #5291dd">下 一 步</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 紧急联系人 -->
+                    <div id="stepThree" hidden>
+                        <div class="layui-form-item">
+                            <div class="layui-form-mid">亲属关系<span style="color: red;">*</span></div>
+                            <div class="layui-input-inline">
+                                <select name="relative1">
+                                    <option value="">请选择</option>
+                                    <option value="父母">父母</option>
+                                    <option value="配偶">配偶</option>
+                                    <option value="子女">子女</option>
+                                    <option value="兄弟姐妹">兄弟姐妹</option>
+                                    <option value="其他亲属">其他亲属</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-form-mid">姓名<span style="color: red;">*</span></div>
+                            <div class="layui-input-inline">
+                                <input type="text" name="relativeName1" placeholder="请填写真实姓名"
+                                       required
+                                       class="layui-input" maxlength="10">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-form-mid">手机号<span style="color: red;">*</span></div>
+                            <div class="layui-input-inline">
+                                <input type="text" name="relativePhone1" placeholder="请填写联系方式"
+                                       class="layui-input" maxlength="18">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-form-mid">亲属关系<span style="color: red;">*</span></div>
+                            <div class="layui-input-inline">
+                                <select name="relative2">
+                                    <option value="">请选择</option>
+                                    <option value="父母">父母</option>
+                                    <option value="配偶">配偶</option>
+                                    <option value="子女">子女</option>
+                                    <option value="兄弟姐妹">兄弟姐妹</option>
+                                    <option value="其他亲属">其他亲属</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-form-mid">姓名<span style="color: red;">*</span></div>
+                            <div class="layui-input-inline">
+                                <input type="text" name="relativeName2" placeholder="请填写真实姓名"
+                                       required
+                                       class="layui-input" maxlength="10">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-form-mid">手机号<span style="color: red;">*</span></div>
+                            <div class="layui-input-inline">
+                                <input type="text" name="relativePhone2" placeholder="请填写联系方式"
+                                       required
+                                       class="layui-input" maxlength="18">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-form-mid">社会关系<span style="color: red;">*</span></div>
+                            <div class="layui-input-inline">
+                                <select name="social">
+                                    <option value="">请选择</option>
+                                    <option value="同学">同学</option>
+                                    <option value="同事">同事</option>
+                                    <option value="朋友">朋友</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-form-mid">姓名<span style="color: red;">*</span></div>
+                            <div class="layui-input-inline">
+                                <input type="text" name="relativeName3" placeholder="请填写真实姓名"
+                                       class="layui-input" maxlength="10">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-form-mid">手机号<span style="color: red;">*</span></div>
+                            <div class="layui-input-inline">
+                                <input type="text" name="socialPhone" placeholder="请填写联系方式"
+                                       class="layui-input" maxlength="18">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-input-block pull-right">
+                                <a href="#" class="layui-btn layui-btn-primary" id="goTwo">上 一 步</a>
+                                <button class="layui-btn pull-right" id="formSubmit" lay-filter="formSubmit"
+                                        lay-submit
+                                        style="background-color: #5291dd">确认完成
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+@/* 加入contextPath属性和session超时的配置 */
+<script type="text/javascript">
+    var Feng = {
+        ctxPath: "",
+        addCtx: function (ctx) {
+            if (this.ctxPath === "") {
+                this.ctxPath = ctx;
+            }
+        }
+    };
+    Feng.addCtx("${ctxPath}");
+
+    document.oncontextmenu = function () {
+        return false;
+    }
+</script>
+<script type="text/javascript" src="${ctxPath}/assets/common/layui/layui.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/common/js/common.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/common/js/data.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/common/js/province.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/common/js/verify.js"></script>
+<script>
+    layui.use(['layer', 'form', 'ax', 'formSelects'], function () {
+        var $ = layui.jquery;
+        var $ax = layui.ax;
+        var layer = layui.layer;
+        var form = layui.form;
+        var formSelects = layui.formSelects;
+        var regName = /^[\u4e00-\u9fa5]{2,4}$/;
+        //电话号码
+        var telReg = /^[1][3,4,5,7,8][0-9]{9}$/;
+
+        //第一步点击事件
+        $("#nextOneSubmit").click(function () {
+            var name = $("#stepOne [name='name']").val();
+            if (name === '') {
+                layer.msg("姓名不能为空");
+                return false;
+            }
+            if (!regName.test(name)) {
+                layer.msg('真实姓名填写有误');
+                return false;
+            }
+            var idCard = $("#stepOne [name='idCard']").val();
+            if (idCard === '') {
+                layer.msg("身份证不能为空");
+                return false;
+            }
+            var regIdNo = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+            if (!regIdNo.test(idCard)) {
+                layer.msg('身份证号填写有误');
+                return false;
+            }
+            if ($("#stepOne [name='education']").val() === '') {
+                layer.msg("未选择学历");
+                return false;
+            }
+            if ($("#stepOne [name='job']").val() === '') {
+                layer.msg("未选择职业");
+                return false;
+            }
+            if ($("#stepOne [name='income']").val() === '') {
+                layer.msg("未选择月收入");
+                return false;
+            }
+            if ($("#stepOne [name='婚姻状况']").val() === '') {
+                layer.msg("未选择婚姻状况");
+                return false;
+            }
+            if ($("#stepOne [name='子女数']").val() === '') {
+                layer.msg("未选择子女数");
+                return false;
+            }
+            if ($("#stepOne [name='provid']").val() === '') {
+                layer.msg("未选择居住省");
+                return false;
+            }
+            if ($("#stepOne [name='cityid']").val() === '') {
+                layer.msg("未选择居住市");
+                return false;
+            }
+            if ($("#stepOne [name='areaid']").val() === '') {
+                layer.msg("未选择居住区/县");
+                return false;
+            }
+            var address = $("#stepOne [name='address']").val();
+            if (address === '') {
+                layer.msg("详细地址不能为空");
+                return false;
+            }
+            if (address.length < 5) {
+                layer.msg("详细地址填写有误");
+                return false;
+            }
+            // 拼接三级联动的地址到居住城市
+            var addr = $("#provid option:selected").text() + "-" + $("#cityid option:selected").text() + "-" + $("#areaid option:selected").text();
+            console.log(addr);
+            $("#addressCity").val(addr);
+            $("#companyCity").val(addr);
+            $("#stepOne").hide();
+            $("#showText").text("完善单位信息");
+            $("#stepTwo").show();
+        });
+
+        //第二步点击事件
+        $("#nextTwoSubmit").click(function () {
+            var companyPhone = $("#stepTwo [name='companyPhone']").val();
+            var company = $("#stepTwo [name='company']").val();
+            if (company === '') {
+                layer.msg("单位名称不能为空");
+                return false;
+            }
+            if (company.length < 4) {
+                layer.msg("单位名称填写有误");
+                return false;
+            }
+            if (companyPhone === '') {
+                layer.msg("单位电话不能为空");
+                return false;
+            }
+            if (!telReg.test(companyPhone)) {
+                layer.msg('单位电话填写有误');
+                return false;
+            }
+            var address = $("#stepTwo [name='company_Address']").val();
+            if (address === '') {
+                layer.msg("详细地址不能为空");
+                return false;
+            }
+            if (address.length < 5) {
+                layer.msg("详细地址填写有误");
+                return false;
+            }
+            $("#stepTwo").hide();
+            $("#showText").text("紧急联系人");
+            $("#stepThree").show();
+        });
+
+        $("#goOne").click(function () {
+            $("#showText").text("完善个人信息");
+            $("#stepTwo").hide();
+            $("#stepOne").show();
+        });
+
+        $("#goTwo").click(function () {
+            $("#showText").text("完善单位信息");
+            $("#stepThree").hide();
+            $("#stepTwo").show();
+        });
+
+        //表单提交事件
+        form.on('submit(formSubmit)', function (data) {
+            if ($("#stepThree [name='relative1']").val() === '') {
+                layer.msg('请选择第一紧急联系人之间的关系');
+                return false;
+            }
+            if ($("#stepThree [name='relative2']").val() === '') {
+                layer.msg('请选择第二紧急联系人之间的关系');
+                return false;
+            }
+            if ($("#stepThree [name='social']").val() === '') {
+                layer.msg('请选择第三紧急联系人之间的关系');
+                return false;
+            }
+            if (!regName.test($("#stepThree [name='relativeName1']").val())) {
+                layer.msg('第一紧急联系人姓名填写有误');
+                return false;
+            }
+            if (!regName.test($("#stepThree [name='relativeName2']").val())) {
+                layer.msg('第二紧急联系人姓名填写有误');
+                return false;
+            }
+            if (!regName.test($("#stepThree [name='relativeName3']").val())) {
+                layer.msg('第三紧急联系人姓名填写有误');
+                return false;
+            }
+            if (!telReg.test($("#stepThree [name='relativePhone1']").val())) {
+                layer.msg('第一紧急联系人电话填写有误');
+                return false;
+            }
+            if (!telReg.test($("#stepThree [name='relativePhone2']").val())) {
+                layer.msg('第二紧急联系人电话填写有误');
+                return false;
+            }
+            if (!telReg.test($("#stepThree [name='socialPhone']").val())) {
+                layer.msg('第三紧急联系人电话填写有误');
+                return false;
+            }
+
+            var ajax = new $ax(Feng.ctxPath + "/basicInfo/addOrUpt", function (data) {
+                if (data) {
+                    layer.msg(data.message, {
+                        time: 1000,
+                        end: function () {
+                            parent.toolsFun.close();
+                        }
+                    });
+
+                }
+            }, function () {
+                layer.msg("认证失败")
+            });
+            ajax.set(data.field);
+            ajax.start();
+            return false;
+        });
+    });
+</script>
+</body>
+</html>
