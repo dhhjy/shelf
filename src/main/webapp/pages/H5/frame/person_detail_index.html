@@ -212,8 +212,7 @@
 
                         <div class="layui-form-item">
                             <div class="layui-input-block pull-right">
-                                <a href="#" class="layui-btn layui-btn-primary" id="goOne"
-                                   style="padding-right: 2px">上 一 步</a>
+                                <a href="#" class="layui-btn layui-btn-primary" id="goOne">上 一 步</a>
                                 <a href="#" class="layui-btn" id="nextTwoSubmit"
                                    style="background-color: #5291dd">下 一 步</a>
                             </div>
@@ -424,7 +423,6 @@
             }
             // 拼接三级联动的地址到居住城市
             var addr = $("#provid option:selected").text() + "-" + $("#cityid option:selected").text() + "-" + $("#areaid option:selected").text();
-            console.log(addr);
             $("#addressCity").val(addr);
             $("#companyCity").val(addr);
             $("#stepOne").hide();
