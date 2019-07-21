@@ -12,7 +12,7 @@
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
         <result column="company" property="company"/>
-        <result column="company_Address" property="company_Address"/>
+        <result column="company_address" property="companyAddress"/>
         <result column="company_city" property="companyCity"/>
         <result column="company_phone" property="companyPhone"/>
         <result column="marriage" property="marriage"/>
@@ -33,7 +33,7 @@
         create_time AS "createTime",
         update_time AS "updateTime",
         company AS "company",
-        company_Address AS "company_Address",
+        company_address AS "companyAddress",
         company_city AS "companyCity",
         company_phone AS "companyPhone",
         marriage AS "marriage",

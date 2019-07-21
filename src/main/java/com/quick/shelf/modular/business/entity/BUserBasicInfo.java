@@ -69,8 +69,8 @@ public class BUserBasicInfo implements Serializable {
     /**
      * 单位详细地址
      */
-    @TableField("company_Address")
-    private String company_Address;
+    @TableField("company_address")
+    private String companyAddress;
 
     /**
      * 单位所在城市
