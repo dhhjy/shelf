@@ -639,17 +639,17 @@
             // 银行卡
             var bankInfoStatus = '${bSysUserStatus.bankInfoStatus}';
 
-            if (phoneStatus === '0') {
+            if (phoneStatus !== '0') {
                 Feng.error("手机运营商报告未认证，无法查看全景雷达");
                 return false;
             }
 
-            if (identityStatus === '0') {
+            if (identityStatus !== '0') {
                 Feng.error("身份证认证未认证，无法查看全景雷达");
                 return false;
             }
 
-            if (bankInfoStatus === '0') {
+            if (bankInfoStatus !== '0') {
                 Feng.error("银行卡认证未认证，无法查看全景雷达");
                 return false;
             }
