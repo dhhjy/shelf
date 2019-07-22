@@ -428,11 +428,41 @@
                 </tr>
                 </thead>
                 <tbody>
+                @if(bSysUserStatus.limuMobileReportStatus == "1" || bSysUserStatus.limuTaobaoReportStatus == "1" ||
+                @bSysUserStatus.limuLifangUpgradeCheckStatus == "1"){
+                <tr>
+                    <td class="msg">立木</td>
+                    <td colspan="5">
+                        @if(bSysUserStatus.deviceInfoStatus == "1"){
+                        <a href='javascript:void(0);' id="openDeviceInfo"
+                           class='btn btn-primary'>设备指纹</a>
+                        @}
+                        @if(bSysUserStatus.limuTaobaoReportStatus == "1"){
+                        <a href='javascript:void(0);' id="openTb"
+                           class='btn btn-primary'>淘宝报告</a>
+                        @}
+                        <a href='javascript:void(0);' id="openMachinecheck"
+                           class='btn btn-primary'>机审报告</a>
+                        @if(bSysUserStatus.limuLifangUpgradeCheckStatus == "1"){
+                        <a href='javascript:void(0);' id="openLiFangUp"
+                           class='btn btn-primary'>升级报告</a>
+                        @}
+                        @if(bSysUserStatus.limuMobileReportStatus == "1"){
+                        <a href='javascript:void(0);' id="openMobile"
+                           class='btn btn-primary'>运营商报告</a>
+                        @}
+                    </td>
+                </tr>
+                @}
                 <tr>
                     <td class="msg">新颜</td>
                     <td colspan="5">
                         <a href='javascript:void(0);' id="openReDar"
                            class='btn btn-primary'>全景雷达</a>
+                        @if(bSysUserStatus.xinyanZmfStatus == "1"){
+                        <a href='javascript:void(0);' id="openZmf"
+                           class='btn btn-primary'>芝麻分报告</a>
+                        @}
                     </td>
                 </tr>
                 <tr>
@@ -509,6 +539,96 @@
         };
 
         /**
+         * 打开设备指纹报告
+         **/
+        var openDeviceInfoFun = function () {
+            var url = Feng.ctxPath + "/liMu/getFingerprint/" + userId;
+            parent.layer.open({
+                type: 2,
+                title: "设备指纹",
+                btn: ['关闭'],
+                shadeClose: true,
+                maxmin: true,
+                resize: true,
+                shade: 0.8,
+                area: ['100%', '100%'],
+                content: url
+            });
+        };
+
+        /**
+         * 打开淘宝报告
+         **/
+        var openTbInfoFun = function () {
+            var url = Feng.ctxPath + "/liMu/getTaoBaoReport/" + userId;
+            parent.layer.open({
+                type: 2,
+                title: "淘宝报告",
+                btn: ['关闭'],
+                shadeClose: true,
+                maxmin: true,
+                resize: true,
+                shade: 0.8,
+                area: ['100%', '100%'],
+                content: url
+            });
+        };
+
+        /**
+         * 打开立方升级报告
+         **/
+        var openLiFangUpFun = function () {
+            var url = Feng.ctxPath + "/liMu/getLiFangUpgradeCheck/" + userId;
+            parent.layer.open({
+                type: 2,
+                title: "升级报告",
+                btn: ['关闭'],
+                shadeClose: true,
+                maxmin: true,
+                resize: true,
+                shade: 0.8,
+                area: ['100%', '100%'],
+                content: url
+            });
+        };
+
+        /**
+         * 打开机审报告
+         **/
+        var openMachinecheckInfoFun = function () {
+            var url = Feng.ctxPath + "/liMu/getMachineCheck/" + userId;
+            parent.layer.open({
+                type: 2,
+                title: "机审报告",
+                btn: ['关闭'],
+                shadeClose: true,
+                maxmin: true,
+                resize: true,
+                shade: 0.8,
+                area: ['100%', '100%'],
+                content: url
+            });
+        };
+
+        /**
+         * 打开运营商报告
+         **/
+        var openMobileFun = function () {
+            var url = Feng.ctxPath + "/xinYan/getMobileReport/" + userId;
+            parent.layer.open({
+                type: 2,
+                title: "淘宝报告",
+                btn: ['关闭'],
+                shadeClose: true,
+                maxmin: true,
+                resize: true,
+                shade: 0.8,
+                area: ['100%', '100%'],
+                content: url
+            });
+        };
+
+        /**
          * 打开全景雷达
          **/
         var openReDarFun = function () {
@@ -538,6 +658,24 @@
             parent.layer.open({
                 type: 2,
                 title: "全景雷达",
+                btn: ['关闭'],
+                shadeClose: true,
+                maxmin: true,
+                resize: true,
+                shade: 0.8,
+                area: ['100%', '100%'],
+                content: url
+            });
+        };
+
+        /**
+         * 打开芝麻分报告
+         **/
+        var openZmfReportFun = function () {
+            var url = Feng.ctxPath + "/xinYan/getTaoBaoWebReport/" + userId;
+            parent.layer.open({
+                type: 2,
+                title: "芝麻分报告",
                 btn: ['关闭'],
                 shadeClose: true,
                 maxmin: true,
@@ -595,9 +733,40 @@
             resetInfo("smsStatus", "手机认证信息");
         });
 
+        // 立木设备指纹
+        $('#openDeviceInfo').click(function () {
+            openDeviceInfoFun();
+        });
+
+        // 立木淘宝报告
+        $('#openTb').click(function () {
+            openTbInfoFun();
+        });
+
+        // 立木机审报告
+        $('#openMachinecheck').click(function () {
+            openMachinecheckInfoFun();
+        });
+
+        // 立木立方升级报告
+        $('#openLiFangUp').click(function () {
+            openLiFangUpFun();
+        });
+
+        // 立木运营商报告
+        $('#openMobile').click(function () {
+            openMobileFun();
+        });
+
+
         // 新颜雷达
         $('#openReDar').click(function () {
             openReDarFun();
+        });
+
+        // 新颜芝麻分
+        $('#openZmf').click(function () {
+            openZmfReportFun();
         });
 
         // GPS定位对比
