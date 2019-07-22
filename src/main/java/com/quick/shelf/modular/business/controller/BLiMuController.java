@@ -218,12 +218,13 @@ public class BLiMuController extends BaseController {
     @RequestMapping(value = "/toVerifyUrl/{type}/{userId}", method = RequestMethod.GET)
     @ResponseBody
     public String toVerifyUrl(@PathVariable("type") String type, @PathVariable("userId") String userId) {
-        logger.info("用户：{} 获取了:{} 的认证页面", userId, type);
         // 查询用户信息
         BSysUser bSysUser = this.bSysUserService.selectBSysUserByUserId(Integer.valueOf(userId));
         String signUrl = getProjectPath() + "/liMu/sign";
         String callBackUrl = getProjectPath() + "/liMu/callBack/" + type + "/" + userId;
-        return LiMuConstantMethod.getLimuVerifyUrl(bSysUser, type, signUrl, callBackUrl);
+        String url = LiMuConstantMethod.getLimuVerifyUrl(bSysUser, type, signUrl, callBackUrl);
+        logger.info("用户：{} 获取了:{} 的认证页面,返回的URL为：{}", userId, type, url);
+        return url;
     }
 
     /**

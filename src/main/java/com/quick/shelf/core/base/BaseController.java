@@ -119,6 +119,9 @@ public class BaseController {
         if (projPath.equals("localhost/") || projPath.equals("192.168.0.106/") || projPath.equals("192.168.1.107/"))
             projPath = "http://25b762d818.qicp.vip:12157";
 //            projPath = "http://2539z803m8.qicp.vip:23154";
+        if (!projPath.contains("http")) {
+            projPath = "http://" + projPath;
+        }
         return projPath;
     }
 }

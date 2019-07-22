@@ -40,7 +40,7 @@ public interface Const {
     /**
      * 默认用户系统的名称
      */
-    String SYSTEM_CLIENT_NAME = "鑫炜科技-秒秒贷";
+    String SYSTEM_CLIENT_NAME = "秒秒贷";
 
     /**
      * 默认欢迎界面的提示
