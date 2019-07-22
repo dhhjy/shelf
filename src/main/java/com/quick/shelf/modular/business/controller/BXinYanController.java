@@ -165,8 +165,8 @@ public class BXinYanController extends BaseController {
     public String getTaoBaoWebReport(@PathVariable Integer userId, Model model) {
         logger.info("用户：{} 获取用户芝麻分报告", userId);
         BSysUser bSysUser = this.bSysUserService.selectBSysUserByUserId(userId);
-        BXinYanData xinYanLd = this.bXinYanDataService.selectBXinYanDataByUserId(userId, XinYanConstantEnum.API_NAME_TB.getApiName());
-        model.addAttribute("taoBaoWeb", JSONObject.parseObject(xinYanLd.getDataValue()));
+        BXinYanData zmf = this.bXinYanDataService.selectBXinYanDataByUserId(userId, XinYanConstantEnum.API_NAME_TB.getApiName());
+        model.addAttribute("taoBaoWeb", null == zmf ? null : JSONObject.parseObject(zmf.getDataValue()));
         model.addAttribute("bSysUser", bSysUser);
         return PREFIX + "xinYanTaoBaoWeb.html";
     }
