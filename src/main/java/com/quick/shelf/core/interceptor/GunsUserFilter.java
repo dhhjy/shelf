@@ -98,9 +98,9 @@ public class GunsUserFilter extends AccessControlFilter {
                     /**
                      * 判断是客户端用户还是后台系统用户
                      */
-                    if(UserAgentUtil.checkMobileOrPC(httpServletRequest)){
+                    if (UserAgentUtil.checkMobileOrPC(httpServletRequest) || UserAgentUtil.isWeChatBrowser(httpServletRequest)) {
                         httpServletRequest.getRequestDispatcher("/h5/login").forward(request, response);
-                    }else{
+                    } else {
                         httpServletRequest.getRequestDispatcher("/login").forward(request, response);
                     }
                     return false;

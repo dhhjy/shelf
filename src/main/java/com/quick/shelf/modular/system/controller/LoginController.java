@@ -67,7 +67,7 @@ public class LoginController extends BaseController {
      */
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(HttpServletRequest httpServletRequest) {
-        if (UserAgentUtil.checkMobileOrPC(httpServletRequest)) {
+        if (UserAgentUtil.checkMobileOrPC(httpServletRequest) || UserAgentUtil.isWeChatBrowser(httpServletRequest)) {
             return REDIRECT + "/h5";
         } else if (ShiroKit.isAuthenticated() || ShiroKit.getUser() != null) {
             return REDIRECT + "/";
