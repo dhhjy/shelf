@@ -190,7 +190,7 @@ public class BSysUserController extends BaseController {
      * @param userId
      * @return ResponseData
      */
-    @BussinessLog(value = "重置用户认证信息",key = "userId")
+    @BussinessLog(value = "重置用户认证信息", key = "userId")
     @ApiOperation(value = "重置用户认证信息", notes = "重置用户认证信息", httpMethod = "PUT")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "用户主键ID", name = "userId", required = true, paramType = "Integer"),
@@ -243,13 +243,22 @@ public class BSysUserController extends BaseController {
      */
     @ApiOperation(value = "获取用户定位信息并且与收货地址身份证地址比对", notes = "获取用户定位信息并且与收货地址身份证地址比对", httpMethod = "POST")
     @ApiImplicitParam(value = "用户主键", name = "userId", required = true, dataType = "Integer")
-    @RequestMapping(value = "/getGpsCompare/{userId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/getGpsCompare/{userId}", method = RequestMethod.GET)
     public String getGpsCompare(@PathVariable Integer userId, Model model) {
         logger.info("用户主键 {} 获取用户定位信息并且与收货地址身份证地址比对", userId);
-        // 获取GPS地址
-//        model.addAttribute("gps", this.bSysUserService.infoMerging(userId));
-        // 获取身份证地址
-//        model.addAttribute("idCardAddress", userAdminService.getIdCardAddress(userId));
-        return PREFIX + "/gpsCompare.html";
+        /**
+         * 用户主表 b_sys_user
+         */
+        BSysUser bSysUser = this.bSysUserService.getById(userId);
+        model.addAttribute("bSysUser", BSysUserWrapper.deSensitization(bSysUser));
+        /**
+         * 用户GPS地址
+         */
+        model.addAttribute("gps", this.bSysUserService.infoMerging(userId));
+        /**
+         * 用户身份证上的地址
+         */
+        model.addAttribute("idCardAddress", this.bSysUserService.getIdCardAddress(userId));
+        return PREFIX + "/gps_compare.html";
     }
 }
