@@ -183,7 +183,7 @@
     <!-- 分数统计 -->
     <div class="layui-row layui-col-space15" style="padding-top: 10px;">
         <div class="layui-card">
-            <button class="layui-btn layui-bg layui-btn-fluid" lay-submit lay-filter="next-submit"
+            <button class="layui-btn layui-bg layui-btn-fluid" id="next-submit" lay-submit lay-filter="next-submit"
                     style="background-color:#2776d4;">去 借 钱
             </button>
         </div>
@@ -297,7 +297,11 @@
             if (userStatus.userBasicStatus !== '0' && userStatus.userBasicStatus !== 'ENABLE') {
                 layer.msg("个人信息已认证");
                 return false;
-            } else {
+            // } else if(userStatus.identityStatus !== "1"){
+            } else if(false ){
+                layer.msg("请先认证身份证信息");
+                return false;
+            }else {
                 parent.toolsFun.skip(Feng.ctxPath + "/h5/personDetailIndex");
             }
         };
@@ -321,7 +325,10 @@
             if (userStatus.limuMobileReportStatus !== '0' && userStatus.limuMobileReportStatus !== 'ENABLE') {
                 layer.msg("手机已认证");
                 return false;
-            } else {
+            } else if(userStatus.userBasicStatus !== "1"){
+                layer.msg("请先认证个人信息认证");
+                return false;
+            }else {
                 $.ajax({
                     type: 'GET',
                     url: Feng.ctxPath + "/liMu/toVerifyUrl/mobileReport/" + userStatus.userId,
@@ -338,6 +345,9 @@
         var taoBaoAuthFun = function () {
             if (userStatus.limuTaobaoReportStatus !== '0' && userStatus.limuTaobaoReportStatus !== 'ENABLE') {
                 layer.msg("淘宝已认证");
+                return false;
+            } else if(userStatus.userBasicStatus !== "1"){
+                layer.msg("请先认证个人信息认证");
                 return false;
             } else {
                 $.ajax({
@@ -356,6 +366,9 @@
         var zmfAuthFun = function () {
             if (userStatus.xinyanZmfStatus !== '0' && userStatus.xinyanZmfStatus !== 'ENABLE') {
                 layer.msg("芝麻分已认证");
+                return false;
+            } else if(userStatus.limuMobileReportStatus !== "1"){
+                layer.msg("请先认证手机号信息认证");
                 return false;
             } else {
                 $.ajax({
@@ -408,6 +421,13 @@
          */
         $('.zmf_').click(function () {
             zmfAuthFun();
+        });
+
+        /**
+         * 绑定去借钱点击事件
+         */
+        $("#next-submit").click(function () {
+            layer.msg("您暂时不符合借贷要求");
         });
     });
 </script>
