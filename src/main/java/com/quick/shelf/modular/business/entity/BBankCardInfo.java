@@ -85,4 +85,10 @@ public class BBankCardInfo implements Serializable {
      */
     @TableField("no_agree")
     private String noAgree;
+
+    /**
+     * 缩略卡号
+     */
+    @TableField("storable_pan")
+    private String storablePan;
 }

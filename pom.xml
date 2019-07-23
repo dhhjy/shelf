@@ -283,6 +283,14 @@
             <artifactId>jsoup</artifactId>
             <version>1.10.3</version>
         </dependency>
+
+        <!--XML解析-->
+        <dependency>
+            <groupId>jdom</groupId>
+            <artifactId>jdom</artifactId>
+            <version>1.0</version>
+        </dependency>
+
         <!--需要分布式session的话需要放开注释-->
         <!--<dependency>-->
         <!--<groupId>org.springframework.session</groupId>-->

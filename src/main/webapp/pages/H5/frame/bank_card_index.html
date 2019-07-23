@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="${ctxPath}/assets/expand/images/favicon.ico" rel="icon">
+    <title>${systemName}</title>
+    <link rel="stylesheet" href="${ctxPath}/assets/common/layui/css/layui.css"/>
+    <link rel="stylesheet" href="${ctxPath}/assets/common/module/admin.css"/>
+    <style>
+        .layui-card-header {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body style="overflow-x: hidden;">
+<div class="layui-row layui-col-space15">
+    <div class="layui-col-xs12 layui-col-sm12 layui-col-md12">
+        <div class="layui-card">
+            <div class="layui-card-header" id="showText">银行卡信息认证</div>
+            <div class="layui-card-body ">
+                <form id="bankForm" lay-filter="bankForm" class="layui-form">
+                    <input type="hidden" name="customerId" value="${user.userId}">
+                    <input type="hidden" name="externalRefNumber">
+                    <input type="hidden" name="token">
+                    <!-- 银行卡信息认证 -->
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">银行卡号<span style="color: red;">*</span></label>
+                        <div class="layui-input-inline">
+                            <label>
+                                <input type="text" name="pan" placeholder="请填写银行卡号" class="layui-input"
+                                       maxlength="19">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">开户银行<span style="color: red;">*</span></label>
+                        <div class="layui-input-inline">
+                            <select name="bankType">
+                                <option value="">请选择</option>
+                                <option value="ICBC">工商银行</option>
+                                <option value="ABC">农业银行</option>
+                                <option value="BOC">中国银行</option>
+                                <option value="CCB">建设银行</option>
+                                <option value="CMB">招商银行</option>
+                                <option value="BCOM">交通银行</option>
+                                <option value="SPDB">浦发银行</option>
+                                <option value="CITIC">中信银行</option>
+                                <option value="CIB">兴业银行</option>
+                                <option value="CMBC">民生银行</option>
+                                <option value="PAB">平安银行</option>
+                                <option value="GDB">广发银行</option>
+                                <option value="SHB">上海银行</option>
+                                <option value="CEB">光大银行</option>
+                                <option value="HXB">华夏银行</option>
+                                <option value="PSBC">中国邮政储蓄银行</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">开户地址<span style="color: red;">*</span></label>
+                        <input type="hidden" id="addressCity" name="addressCity">
+                        <input type="hidden" id="companyCity" name="companyCity">
+                        <div class="layui-input-inline">
+                            <select name="provid" id="provid" lay-filter="provid">
+                                <option value="">请选择省</option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <select name="cityid" id="cityid" lay-filter="cityid">
+                                <option value="">请选择市</option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <select name="areaid" id="areaid" lay-filter="areaid">
+                                <option value="">请选择县/区</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">姓名<span style="color: red;">*</span></label>
+                        <div class="layui-input-inline">
+                            <label>
+                                <input type="text" name="cardHolderName" class="layui-input"
+                                       value="${user.name}" readonly="readonly" maxlength="10">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">身份证号<span style="color: red;">*</span></label>
+                        <div class="layui-input-inline">
+                            <label>
+                                <!-- 默认身份证类型 -->
+                                <input type="hidden" name="idType" value="0">
+                                <input type="text" name="cardHolderId" class="layui-input"
+                                       value="${user.idCard}" readonly="readonly" maxlength="18">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">预留手机<span style="color: red;">*</span></label>
+                        <div class="layui-input-inline">
+                            <label>
+                                <input type="text" name="phoneNO" placeholder="请填写银行预留手机号" class="layui-input"
+                                       value="${user.phoneNumber}" maxlength="15">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-row">
+                            <div class="layui-col-xs2">
+                                <label class="layui-form-label">验证码<span style="color: red;">*</span></label>
+                            </div>
+                            <div class="layui-input-inline">
+                                <div class="layui-col-xs7">
+                                    <input type="text" name="validCode" id="validCode"
+                                           placeholder="验证码"
+                                           class="layui-input">
+                                </div>
+                                <div class="layui-col-xs5">
+                                    <button class="layui-btn layui-btn-primary layui-btn-fluid"
+                                            id="formSubmit" lay-filter="formSubmit"
+                                            lay-submit>获取验证码
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-input-block pull-right">
+                            <button class="layui-btn pull-right" id="formSubmit2" lay-filter="formSubmit2"
+                                    lay-submit
+                                    style="background-color: #5291dd">确认
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@/* 加入contextPath属性和session超时的配置 */
+<script type="text/javascript">
+    var Feng = {
+        ctxPath: "",
+        addCtx: function (ctx) {
+            if (this.ctxPath === "") {
+                this.ctxPath = ctx;
+            }
+        }
+    };
+    Feng.addCtx("${ctxPath}");
+
+    document.oncontextmenu = function () {
+        return false;
+    }
+</script>
+<script type="text/javascript" src="${ctxPath}/assets/common/layui/layui.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/common/js/common.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/common/js/data.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/common/js/province.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/common/js/verify.js"></script>
+
+<script>
+    layui.use(['layer', 'form', 'ax', 'formSelects'], function () {
+        var $ = layui.jquery;
+        var $ax = layui.ax;
+        var layer = layui.layer;
+        var form = layui.form;
+        var userId = ${user.userId}
+
+        var status = 0;
+
+        /**
+         * 点击发送验证码时2提交
+         */
+        form.on('submit(formSubmit)', function (data) {
+            if (data.field.pan === "") {
+                layer.msg("银行卡不能为空");
+                return false;
+            }
+            if (data.field.pan.length < 10) {
+                layer.msg("银行卡位数不正确");
+                return false;
+            }
+            var btn = document.getElementById("formSubmit");
+            // 检测手机号
+            checkPhone();
+            $.ajax({
+                url: Feng.ctxPath + "/bankInfo/bankAuth/" + userId,
+                type: 'POST',
+                data: data.field,
+                success: function (data) {
+                    var result = JSON.parse(data);
+                    if (result.responseCode === '00') {
+                        settime(btn);
+                        $("#bankForm [name='pan']").attr("readonly", true);
+                        $("#bankForm [name='phoneNO']").attr("readonly", true);
+                        $("#bankForm [name='externalRefNumber']").val(result.externalRefNumber);
+                        $("#bankForm [name='token']").val(result.token);
+                        status = 1;
+                    } else {
+                        layer.msg(result.responseTextMessage);
+                    }
+                }
+            });
+            return false;
+        });
+
+        /**
+         * 点击确定按钮完成银行卡签约
+         */
+        form.on('submit(formSubmit2)', function (data) {
+            if (status === 0) {
+                layer.msg("信息不完善，不可认证");
+                return false;
+            }
+            // 组装对象
+            // 银行名称
+            data.field.bankName = $("#bankForm [name='bankType']").find("option:selected").text();
+            // 开户地址
+            data.field.bankArea = $("#provid option:selected").text() + "-" + $("#cityid option:selected").text() + "-" + $("#areaid option:selected").text();
+            $.ajax({
+                url: Feng.ctxPath + "/bankInfo/bankAuthVerify/" + userId,
+                type: 'POST',
+                data: data.field,
+                success: function (data) {
+                    var result = JSON.parse(data);
+                    if (result.responseCode === '00') {
+                        layer.msg("认证成功", {
+                            time: 1000,
+                            end: function () {
+                                parent.toolsFun.close();
+                            }
+                        });
+                    } else {
+                        layer.msg(result.responseTextMessage);
+                    }
+                }
+            });
+            return false;
+        });
+
+        /**
+         * 倒计时
+         */
+        var countdown = 60;
+
+        function settime(btn) {
+            if (countdown === 0) {
+                btn.removeAttribute("disabled");
+                btn.innerHTML = "获取验证码";
+                countdown = 60;
+            } else {
+                // 禁用按钮
+                btn.setAttribute("disabled", true);
+                btn.innerHTML = "重新发送(" + countdown + ")";
+                countdown--;
+                setTimeout(function () {
+                        settime(btn)
+                    },
+                    1000);
+            }
+        }
+
+        /**
+         * 检查手机号是否合法啊
+         */
+        function checkPhone() {
+            var myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
+            if (!myreg.test($("#bankForm [name='phoneNO']").val())) {
+                layer.msg("请输入有效的号码");
+                return false;
+            } else {
+                return true;
+            }
+        }
+    });
+</script>
+</body>
+</html>

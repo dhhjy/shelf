@@ -15,6 +15,7 @@
         <result column="update_time" property="updateTime"/>
         <result column="sign_status" property="signStatus"/>
         <result column="no_agree" property="noAgree"/>
+        <result column="storable_pan" property="storablePan"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
@@ -29,7 +30,8 @@
         create_time AS "createTime",
         update_time AS "updateTime",
         sign_status AS "signStatus",
-        no_agree AS "noAgree"
+        no_agree AS "noAgree",
+        storable_pan AS "storablePan"
     </sql>
 
     <select id="selectBBankCardInfosByUserId"

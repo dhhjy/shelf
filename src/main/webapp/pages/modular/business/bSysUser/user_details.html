@@ -211,22 +211,22 @@
                 <thead>
                 <tr>
                     <td class="msg">编号</td>
-                    <td class="msg">开户行类型</td>
                     <td class="msg">开户行</td>
                     <td class="msg">开户省市区</td>
                     <td class="msg">预留号码</td>
                     <td class="msg">银行卡号</td>
+                    <td class="msg">状态</td>
                 </tr>
                 </thead>
                 <tbody>
                 @for(bBankCardInfo in bBankCardInfos){
                 <tr>
                     <td>${bBankCardInfo.id}</td>
-                    <td>${bBankCardInfo.bankType}</td>
                     <td>${bBankCardInfo.bankName}</td>
                     <td>${bBankCardInfo.bankArea}</td>
                     <td>${bBankCardInfo.phoneNumber}</td>
                     <td>${bBankCardInfo.cardNumber}</td>
+                    <td><span class="tag normal">已签约</span></td>
                 </tr>
                 @}
                 </tbody>
