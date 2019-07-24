@@ -35,7 +35,7 @@ public class H5IndexController extends BaseController {
      */
     public static final Logger logger = LoggerFactory.getLogger(H5LoginController.class);
 
-    private static final String H5_PATH = "/H5/frame";
+    private static final String H5_PATH = "/H5/";
 
     @Resource
     private BSysUserStatusService bSysUserStatusService;
@@ -55,7 +55,7 @@ public class H5IndexController extends BaseController {
     public String console(Model model) {
         BSysUserStatus userStatus = bSysUserStatusService.selectBSysUserStatusByUserId(Objects.requireNonNull(ShiroKit.getUser()).getId().intValue());
         model.addAttribute("userStatus", JSONObject.toJSON(userStatus));
-        return H5_PATH + "/console.html";
+        return H5_PATH + "/frame/console.html";
     }
 
     /**
@@ -67,7 +67,7 @@ public class H5IndexController extends BaseController {
     @RequestMapping(value = "/personDetailIndex")
     @Permission
     public String personDetailIndex() {
-        return H5_PATH + "/person_detail_index.html";
+        return H5_PATH + "/business/person_detail_index.html";
     }
 
     /**
@@ -81,6 +81,6 @@ public class H5IndexController extends BaseController {
     public String bankCardIndex(Model model) {
         ShiroUser user = ShiroKit.getUserNotNull();
         model.addAttribute("user", this.bSysUserService.selectBSysUserByUserId(user.getId().intValue()));
-        return H5_PATH + "/bank_card_index.html";
+        return H5_PATH + "/business/bank_card_index.html";
     }
 }
