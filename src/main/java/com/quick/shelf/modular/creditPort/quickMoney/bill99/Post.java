@@ -85,7 +85,7 @@ public class Post
             conn.setReadTimeout(100000);
 
             //设置通用的请求属性  812451145110002 104110045112012
-            String authString = "104110045112012" + ":" + "vpos123";//测试帐号，生产环境需要替换生产商户编号812451145110002
+                String authString = "104110045112012" + ":" + "vpos123";//测试帐号，生产环境需要替换生产商户编号812451145110002
             String auth = "Basic " + Base64Binrary.encodeBase64Binrary(authString.getBytes());
             conn.setRequestProperty("Authorization", auth);
 

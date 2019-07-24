@@ -161,6 +161,8 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
             xinYanData.setTypeText(XinYanConstantMethod.compareApiName(apiName));
             // 添加数据
             xinYanData.setDataValue(result);
+            // 保存token
+            xinYanData.setToken(JSONObject.parseObject(result).getString("token"));
             insert(xinYanData);
 
             // 同时更新用户关联的状态表，更新雷达认证状态字段
@@ -171,8 +173,7 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
                 bSysUserStatus.setXinyanRadarStatus(BusinessConst.OK);
             if (XinYanConstantEnum.API_NAME_YYS.getApiName().equals(apiName))
                 bSysUserStatus.setXinyanMobileStatus(BusinessConst.OK);
-            if (XinYanConstantEnum.API_NAME_JH.getApiName().equals(apiName))
-            {
+            if (XinYanConstantEnum.API_NAME_JH.getApiName().equals(apiName)) {
                 bSysUserStatus.setXinyanZmfStatus(BusinessConst.OK);
                 bSysUserStatus.setXinyanTaobaoStatus(BusinessConst.OK);
             }

@@ -15,8 +15,6 @@ public class Base64Binrary {
 
     private static final char encodeMap[] = initEncodeMap();
 
-    private static final long serialVersionUID = 1L;
-
     private Base64Binrary() {
     }
 
@@ -112,8 +110,8 @@ public class Base64Binrary {
         return encodeMap[i & 0x3f];
     }
 
-    public static String encodeBase64Binrary(byte input[]) {
-        StringBuffer r = new StringBuffer((input.length * 4) / 3);
+    public static String encodeBase64Binrary(byte[] input) {
+        StringBuilder r = new StringBuilder((input.length * 4) / 3);
 
         for( int i = 0; i < input.length; i += 3 ) {
             switch( (input.length - i) ) {
