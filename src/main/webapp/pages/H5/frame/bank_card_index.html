@@ -9,7 +9,14 @@
     <title>${systemName}</title>
     <link rel="stylesheet" href="${ctxPath}/assets/common/layui/css/layui.css"/>
     <link rel="stylesheet" href="${ctxPath}/assets/common/module/admin.css"/>
+    <link rel="stylesheet" href="${ctxPath}/assets/myIcon/iconfont.css" media="all"/>
     <style>
+        .myIcon {
+            width: 26px;
+            height: 26px;
+            vertical-align: middle
+        }
+
         .layui-card-header {
             margin-bottom: 5px;
         }
@@ -19,7 +26,12 @@
 <div class="layui-row layui-col-space15">
     <div class="layui-col-xs12 layui-col-sm12 layui-col-md12">
         <div class="layui-card">
-            <div class="layui-card-header" id="showText">银行卡信息认证</div>
+            <div class="layui-card-header" id="showText">
+                <svg class="myIcon" aria-hidden="true">
+                    <use xlink:href="#icon-shuaqiaqiapianyinhangqia1"></use>
+                </svg>
+                银行卡信息认证
+            </div>
             <div class="layui-card-body ">
                 <form id="bankForm" lay-filter="bankForm" class="layui-form">
                     <input type="hidden" name="customerId" value="${user.userId}">
@@ -67,17 +79,17 @@
                         <input type="hidden" id="companyCity" name="companyCity">
                         <div class="layui-input-inline">
                             <select name="provid" id="provid" lay-filter="provid">
-                                <option value="">请选择省</option>
+                                <option value="" selected>请选择省</option>
                             </select>
                         </div>
                         <div class="layui-input-inline">
                             <select name="cityid" id="cityid" lay-filter="cityid">
-                                <option value="">请选择市</option>
+                                <option value="" selected>请选择市</option>
                             </select>
                         </div>
                         <div class="layui-input-inline">
                             <select name="areaid" id="areaid" lay-filter="areaid">
-                                <option value="">请选择县/区</option>
+                                <option value="" selected>请选择县/区</option>
                             </select>
                         </div>
                     </div>
@@ -135,13 +147,11 @@
                         </div>
                     </div>
 
-                    <div class="layui-form-item">
-                        <div class="layui-input-block pull-right">
-                            <button class="layui-btn pull-right" id="formSubmit2" lay-filter="formSubmit2"
-                                    lay-submit
-                                    style="background-color: #5291dd">确认
-                            </button>
-                        </div>
+                    <div class="layui-row layui-col-space15" style="padding-top: 15px;">
+                        <button class="layui-btn layui-bg layui-btn-fluid" id="formSubmit2" lay-filter="formSubmit2"
+                                lay-submit
+                                style="background-color: #2776d4;">确 认
+                        </button>
                     </div>
                 </form>
             </div>
@@ -166,6 +176,7 @@
 </script>
 <script type="text/javascript" src="${ctxPath}/assets/common/layui/layui.js"></script>
 <script type="text/javascript" src="${ctxPath}/assets/common/js/common.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/myIcon/iconfont.js"></script>
 <script type="text/javascript" src="${ctxPath}/assets/common/js/data.js"></script>
 <script type="text/javascript" src="${ctxPath}/assets/common/js/province.js"></script>
 <script type="text/javascript" src="${ctxPath}/assets/common/js/verify.js"></script>

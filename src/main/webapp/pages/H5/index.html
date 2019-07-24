@@ -22,21 +22,20 @@
     <div class="layui-body" id="layBodyDiv">
     </div>
     <div class="layui-footer" id="layFooterDiv" style="left:0px;">
-        <div class="layui-row layui-col-space15">
-
+        <div class="layui-row">
             <div class="layui-col-xs4 layui-col-sm4 layui-col-md4" id="creditManager">
-                <div class="layui-card" style="text-align: center;">
+                <div style="text-align: center; ">
                     信用管理
                 </div>
             </div>
-            <div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
-                <div class="layui-card" style="text-align: center;">
+            <div class="layui-col-xs4 layui-col-sm4 layui-col-md4" id="productList">
+                <div style="text-align: center;">
                     产品清单
                 </div>
             </div>
             <div class="layui-col-xs4 layui-col-sm4 layui-col-md4" id="btnLogout">
-                <div class="layui-card" style="text-align: center;">
-                    退出
+                <div style="text-align: center;">
+                    个人中心
                 </div>
             </div>
         </div>
@@ -62,6 +61,7 @@
 <script type="text/javascript" src="${ctxPath}/assets/common/js/common.js"></script>
 <script src="${ctxPath}/assets/expand/plugins/jquery/jquery-3.2.1.min.js"></script>
 <script>
+    var userStatus = ${userStatus};
     layui.use(['layer', 'element', 'admin', 'index', 'carousel'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
@@ -99,11 +99,28 @@
          * 信誉管理主页
          */
         var creditManagerFun = function () {
+            $("#productList").css({"color": "#666", "background-color": "#fff"});
+            $("#creditManager").css({"color": "#FFFFFF", "background-color": "#1E9FFF"});
             // 信誉管理主页
             index.loadHome({
                 menuPath: '${ctxPath}/h5/console',
                 menuName: '<i class="layui-icon layui-icon-home"></i>'
             });
+        };
+
+        /**
+         * 产品清单主页
+         */
+        var productListFun = function () {
+            if(toolsFun.ifStatus() !== false){
+                $("#creditManager").css({"color": "#666", "background-color": "#fff"});
+                $("#productList").css({"color": "#FFFFFF", "background-color": "#1E9FFF"});
+                // 信誉管理主页
+                index.loadHome({
+                    menuPath: '${ctxPath}/h5/console',
+                    menuName: '<i class="layui-icon layui-icon-home"></i>'
+                });
+            }
         };
 
         /**
@@ -135,6 +152,14 @@
         $("#creditManager").click(function () {
             toolsFun.hideHeaderFun();
             creditManagerFun();
+        });
+
+        /**
+         * 产品列表点击事件绑定
+         */
+        $("#productList").click(function () {
+            toolsFun.hideHeaderFun();
+            productListFun();
         });
 
         /**
@@ -170,13 +195,46 @@
                 menuName: '<i class="layui-icon layui-icon-home"></i>'
             });
         },
-        close:function(){
+        close: function () {
             toolsFun.hideHeaderFun();
             // 信誉管理主页
             layui.index.loadHome({
                 menuPath: '${ctxPath}/h5/console',
                 menuName: '<i class="layui-icon layui-icon-home"></i>'
             });
+        },
+        ifStatus: function () {
+            // 判断用户的认证状态
+            // 身份证认证状态
+            // if(userStatus.identityStatus !== '1'){
+            //     layer.msg("身份证未认证");
+            //     return false;
+            // }
+            // 个人信息认证状态
+            if (userStatus.userBasicStatus !== '1') {
+                layer.msg("个人信息未认证");
+                return false;
+            }
+            // 银行卡认证状态
+            if (userStatus.bankInfoStatus !== '1') {
+                layer.msg("银行卡未认证");
+                return false;
+            }
+            // 手机号认证状态
+            if (userStatus.limuMobileReportStatus !== '1') {
+                layer.msg("手机号未认证");
+                return false;
+            }
+            // 淘宝认证状态
+            if (userStatus.limuTaobaoReportStatus !== '1') {
+                layer.msg("淘宝未认证");
+                return false;
+            }
+            // 支付宝认证状态
+            if (userStatus.xinyanZmfStatus !== '1') {
+                layer.msg("芝麻分未认证");
+                return false;
+            }
         }
     };
 </script>
