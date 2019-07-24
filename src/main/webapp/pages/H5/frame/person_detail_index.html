@@ -9,7 +9,14 @@
     <title>${systemName}</title>
     <link rel="stylesheet" href="${ctxPath}/assets/common/layui/css/layui.css"/>
     <link rel="stylesheet" href="${ctxPath}/assets/common/module/admin.css"/>
+    <link rel="stylesheet" href="${ctxPath}/assets/myIcon/iconfont.css" media="all"/>
     <style>
+        .myIcon {
+            width: 26px;
+            height: 26px;
+            vertical-align: middle
+        }
+
         .layui-card-header {
             margin-bottom: 5px;
         }
@@ -19,7 +26,14 @@
 <div class="layui-row layui-col-space15">
     <div class="layui-col-xs12 layui-col-sm12 layui-col-md12">
         <div class="layui-card">
-            <div class="layui-card-header" id="showText">完善个人信息</div>
+            <div class="layui-card-header" id="showText">
+                <svg class="myIcon" aria-hidden="true">
+                    <use xlink:href="#icon-geren2"></use>
+                </svg>
+                <span id="personSapn">个人信息认证</span>
+                <span id="companySpan" hidden>单位信息完善</span>
+                <span id="linkManSpan" hidden>紧急联系人完善</span>
+            </div>
             <div class="layui-card-body">
                 <form id="personDetailForm" lay-filter="personDetailForm" class="layui-form">
                     <!-- 个人详细信息 -->
@@ -173,11 +187,9 @@
                             </div>
                         </div>
 
-                        <div class="layui-form-item">
-                            <div class="layui-input-block pull-right">
-                                <a href="#" class="layui-btn" id="nextOneSubmit"
-                                   style="background-color: #5291dd">下 一 步</a>
-                            </div>
+                        <div class="layui-row layui-col-space15" style="padding-top: 15px;">
+                            <a href="#" class="layui-btn layui-bg layui-btn-fluid" id="nextOneSubmit"
+                               style="background-color: #2776d4">下 一 步</a>
                         </div>
                     </div>
 
@@ -210,12 +222,11 @@
                             </div>
                         </div>
 
-                        <div class="layui-form-item">
-                            <div class="layui-input-block pull-right">
-                                <a href="#" class="layui-btn layui-btn-primary" id="goOne">上 一 步</a>
-                                <a href="#" class="layui-btn" id="nextTwoSubmit"
-                                   style="background-color: #5291dd">下 一 步</a>
-                            </div>
+                        <div class="layui-row layui-col-space15" style="padding-top: 15px;">
+                            <a href="#" class="layui-btn layui-bg layui-btn-primary" id="goOne" style="width: 48%;">上 一
+                                步</a>
+                            <a href="#" class="layui-btn layui-bg" id="nextTwoSubmit"
+                               style="background-color: #2776d4;width: 48%;">下 一 步</a>
                         </div>
                     </div>
 
@@ -310,15 +321,13 @@
                             </div>
                         </div>
 
-                        <div class="layui-form-item">
-                            <div class="layui-input-block pull-right">
-                                <a href="#" class="layui-btn layui-btn-primary" id="goTwo">上 一 步</a>
-                                <button class="layui-btn pull-right" id="formSubmit" lay-filter="formSubmit"
-                                        lay-submit
-                                        style="background-color: #5291dd">确认完成
-                                </button>
-
-                            </div>
+                        <div class="layui-row layui-col-space15" style="padding-top: 15px;">
+                            <a href="#" class="layui-btn layui-bg layui-btn-primary" id="goTwo" style="width: 48%">上 一
+                                步</a>
+                            <button class="layui-btn pull-right layui-bg" id="formSubmit" lay-filter="formSubmit"
+                                    lay-submit
+                                    style="background-color: #2776d4;width: 48%;">确认完成
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -344,6 +353,7 @@
 </script>
 <script type="text/javascript" src="${ctxPath}/assets/common/layui/layui.js"></script>
 <script type="text/javascript" src="${ctxPath}/assets/common/js/common.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/myIcon/iconfont.js"></script>
 <script type="text/javascript" src="${ctxPath}/assets/common/js/data.js"></script>
 <script type="text/javascript" src="${ctxPath}/assets/common/js/province.js"></script>
 <script type="text/javascript" src="${ctxPath}/assets/common/js/verify.js"></script>
@@ -458,19 +468,25 @@
                 layer.msg("详细地址填写有误");
                 return false;
             }
+            $("#companySpan").hide();
+            $("#personSapn").hide();
+            $("#linkManSpan").show();
             $("#stepTwo").hide();
-            $("#showText").text("紧急联系人");
             $("#stepThree").show();
         });
 
         $("#goOne").click(function () {
-            $("#showText").text("完善个人信息");
+            $("#linkManSpan").hide();
+            $("#companySpan").hide();
+            $("#personSapn").show();
             $("#stepTwo").hide();
             $("#stepOne").show();
         });
 
         $("#goTwo").click(function () {
-            $("#showText").text("完善单位信息");
+            $("#linkManSpan").hide();
+            $("#personSapn").hide();
+            $("#companySpan").show();
             $("#stepThree").hide();
             $("#stepTwo").show();
         });
