@@ -121,7 +121,8 @@
                     @if(userStatus.bankInfoStatus == "1"){
                     <span class="layui-badge layui-bg-blue pull-right">已认证</span>
                     @}else{
-                    <span class="layui-badge layui-bg-white pull-right">去认证</span>
+<!--                    <span class="layui-badge layui-bg-white pull-right">去认证</span>-->
+                    <span class="layui-badge layui-bg-white pull-right" style="background-color: #c0c4cc">未开通</span>
                     @}
                 </div>
             </div>
@@ -153,23 +154,6 @@
                     </svg>
                     淘宝认证
                     @if(userStatus.xinyanTaobaoStatus == "1"){
-                    <span class="layui-badge layui-bg-blue pull-right">已认证</span>
-                    @}else{
-                    <span class="layui-badge layui-bg-white pull-right">去认证</span>
-                    @}
-                </div>
-            </div>
-        </div>
-
-        <!-- 支付宝认证 -->
-        <div class="layui-col-xs12 layui-col-sm12 layui-col-md12 zmf_">
-            <div class="layui-card">
-                <div class="layui-card-header">
-                    <svg class="myIcon" aria-hidden="true">
-                        <use xlink:href="#icon-zhimafenx"></use>
-                    </svg>
-                    芝麻分认证
-                    @if(userStatus.xinyanZmfStatus == "1"){
                     <span class="layui-badge layui-bg-blue pull-right">已认证</span>
                     @}else{
                     <span class="layui-badge layui-bg-white pull-right">去认证</span>
@@ -315,7 +299,7 @@
                 layer.msg("请先认证个人信息认证");
                 return false;
             } else {
-                parent.toolsFun.skip(Feng.ctxPath + "/h5/bankCardIndex");
+                // parent.toolsFun.skip(Feng.ctxPath + "/h5/bankCardIndex");
             }
         };
 
@@ -344,7 +328,7 @@
          * 进行淘宝认证
          */
         var taoBaoAuthFun = function () {
-            if (userStatus.limuTaobaoReportStatus !== '0' && userStatus.limuTaobaoReportStatus !== 'ENABLE') {
+            if (userStatus.xinyanTaobaoStatus !== '0' && userStatus.xinyanTaobaoStatus !== 'ENABLE') {
                 layer.msg("淘宝已认证");
                 return false;
             } else if (userStatus.userBasicStatus !== "1") {
@@ -353,28 +337,7 @@
             } else {
                 $.ajax({
                     type: 'GET',
-                    url: Feng.ctxPath + "/xinYan/index/taobaoweb/" + userStatus.userId,
-                    success: function (url) {
-                        parent.toolsFun.skip(url);
-                    }
-                });
-            }
-        };
-
-        /**
-         * 进行芝麻分(支付宝)认证
-         */
-        var zmfAuthFun = function () {
-            if (userStatus.xinyanZmfStatus !== '0' && userStatus.xinyanZmfStatus !== 'ENABLE') {
-                layer.msg("芝麻分已认证");
-                return false;
-            } else if (userStatus.xinyanMobileStatus !== "1") {
-                layer.msg("请先认证手机号信息认证");
-                return false;
-            } else {
-                $.ajax({
-                    type: 'GET',
-                    url: Feng.ctxPath + "/xinYan/index/zhifubao/" + userStatus.userId,
+                    url: Feng.ctxPath + "/xinYan/index/taobaopay/" + userStatus.userId,
                     success: function (url) {
                         parent.toolsFun.skip(url);
                     }
@@ -415,13 +378,6 @@
          */
         $('.taoBao_').click(function () {
             taoBaoAuthFun();
-        });
-
-        /**
-         * 绑定芝麻分认证事件
-         */
-        $('.zmf_').click(function () {
-            zmfAuthFun();
         });
 
         /**
