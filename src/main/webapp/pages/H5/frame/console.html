@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="${ctxPath}/assets/common/layui/css/layui.css"/>
     <link rel="stylesheet" href="${ctxPath}/assets/common/module/admin.css?v=311"/>
     <link rel="stylesheet" href="${ctxPath}/assets/expand/css/style.css" media="all"/>
-    <link rel="stylesheet" href="${ctxPath}/assets/myIcon/iconfont.css" media="all"/>
 
     <style>
         .myIcon {
@@ -136,7 +135,7 @@
                         <use xlink:href="#icon-shoujihaoma"></use>
                     </svg>
                     手机号认证
-                    @if(userStatus.limuMobileReportStatus == "1"){
+                    @if(userStatus.xinyanMobileStatus == "1"){
                     <span class="layui-badge layui-bg-blue pull-right">已认证</span>
                     @}else{
                     <span class="layui-badge layui-bg-white pull-right">去认证</span>
@@ -153,7 +152,7 @@
                         <use xlink:href="#icon-ic_taobaoqiyedianpu"></use>
                     </svg>
                     淘宝认证
-                    @if(userStatus.limuTaobaoReportStatus == "1"){
+                    @if(userStatus.xinyanTaobaoStatus == "1"){
                     <span class="layui-badge layui-bg-blue pull-right">已认证</span>
                     @}else{
                     <span class="layui-badge layui-bg-white pull-right">去认证</span>
@@ -162,7 +161,7 @@
             </div>
         </div>
 
-        <!-- 芝麻分认证 -->
+        <!-- 支付宝认证 -->
         <div class="layui-col-xs12 layui-col-sm12 layui-col-md12 zmf_">
             <div class="layui-card">
                 <div class="layui-card-header">
@@ -324,7 +323,7 @@
          * 进行手机验证
          */
         var mobileAuthFun = function () {
-            if (userStatus.limuMobileReportStatus !== '0' && userStatus.limuMobileReportStatus !== 'ENABLE') {
+            if (userStatus.xinyanMobileStatus !== '0' && userStatus.xinyanMobileStatus !== 'ENABLE') {
                 layer.msg("手机已认证");
                 return false;
             } else if (userStatus.userBasicStatus !== "1") {
@@ -333,7 +332,7 @@
             } else {
                 $.ajax({
                     type: 'GET',
-                    url: Feng.ctxPath + "/liMu/toVerifyUrl/mobileReport/" + userStatus.userId,
+                    url: Feng.ctxPath + "/xinYan/index/carrier/" + userStatus.userId,
                     success: function (url) {
                         parent.toolsFun.skip(url);
                     }
@@ -354,7 +353,7 @@
             } else {
                 $.ajax({
                     type: 'GET',
-                    url: Feng.ctxPath + "/liMu/toVerifyUrl/taobaoReport/" + userStatus.userId,
+                    url: Feng.ctxPath + "/xinYan/index/taobaoweb/" + userStatus.userId,
                     success: function (url) {
                         parent.toolsFun.skip(url);
                     }
@@ -363,19 +362,19 @@
         };
 
         /**
-         * 进行芝麻分(淘宝)认证
+         * 进行芝麻分(支付宝)认证
          */
         var zmfAuthFun = function () {
             if (userStatus.xinyanZmfStatus !== '0' && userStatus.xinyanZmfStatus !== 'ENABLE') {
                 layer.msg("芝麻分已认证");
                 return false;
-            } else if (userStatus.limuMobileReportStatus !== "1") {
+            } else if (userStatus.xinyanMobileStatus !== "1") {
                 layer.msg("请先认证手机号信息认证");
                 return false;
             } else {
                 $.ajax({
                     type: 'GET',
-                    url: Feng.ctxPath + "/xinYan/index/taobaoweb/" + userStatus.userId,
+                    url: Feng.ctxPath + "/xinYan/index/zhifubao/" + userStatus.userId,
                     success: function (url) {
                         parent.toolsFun.skip(url);
                     }
