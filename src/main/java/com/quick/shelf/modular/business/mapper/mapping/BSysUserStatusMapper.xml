@@ -17,6 +17,8 @@
         <result column="limu_lifang_upgrade_check_status" property="limuLifangUpgradeCheckStatus"/>
         <result column="xinyan_radar_status" property="xinyanRadarStatus"/>
         <result column="xinyan_zmf_status" property="xinyanZmfStatus"/>
+        <result column="xinyan_mobile_status" property="xinyanMobileStatus"/>
+        <result column="xinyan_taobao_status" property="xinyanTaobaoStatus"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
     </resultMap>
@@ -36,6 +38,8 @@
         limu_lifang_upgrade_check_status AS "limuLifangUpgradeCheckStatus",
         xinyan_radar_status AS "xinyanRadarStatus",
         xinyan_zmf_status AS "xinyanZmfStatus",
+        xinyan_mobile_status AS "xinyanMobileStatus",
+        xinyan_taobao_status AS "xinyanTaobaoStatus",
         create_time AS "createTime",
         update_time AS "updateTime"
     </sql>
@@ -69,6 +73,12 @@
             </if>
             <if test="xinyanRadarStatus != null">
                 xinyan_radar_status = #{xinyanRadarStatus},
+            </if>
+            <if test="xinyanMobileStatus != null">
+                xinyan_mobile_status = #{xinyanMobileStatus},
+            </if>
+            <if test="xinyanTaobaoStatus != null">
+                xinyan_taobao_status = #{xinyanTaobaoStatus},
             </if>
             <if test="deviceInfoStatus != null">
                 device_info_status = #{deviceInfoStatus},

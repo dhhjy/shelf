@@ -99,6 +99,18 @@ public class BSysUserStatus implements Serializable {
     private String xinyanRadarStatus;
 
     /**
+     * 新颜运营商认证状态
+     */
+    @TableField("xinyan_mobile_status")
+    private String xinyanMobileStatus;
+
+    /**
+     * 新颜淘宝认证状态
+     */
+    @TableField("xinyan_taobao_status")
+    private String xinyanTaobaoStatus;
+
+    /**
      * 创建时间
      */
     @TableField("create_time")

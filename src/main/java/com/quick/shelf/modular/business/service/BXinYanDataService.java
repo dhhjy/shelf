@@ -18,6 +18,8 @@ import com.quick.shelf.modular.creditPort.xinYan.XinYanDataResult;
 import com.quick.shelf.modular.creditPort.xinYan.XinYanResult;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -32,6 +34,10 @@ import java.util.Map;
  */
 @Service
 public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanData> {
+    /**
+     * log
+     */
+    private static final Logger logger = LoggerFactory.getLogger(BXinYanDataService.class);
 
     @Resource
     private BSysUserStatusService bSysUserStatusService;
@@ -92,7 +98,7 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
     public String getReDerData(Integer userId, BSysUser bSysUser) {
         String base64Str = XinYanConstantMethod.assembleEncryptParams(String.valueOf(userId), bSysUser.getIdCard(),
                 bSysUser.getName(), bSysUser.getPhoneNumber(), null);
-        return XinYanConstantMethod.getRaDerResult(base64Str,bSysUser);
+        return XinYanConstantMethod.getRaDerResult(base64Str, bSysUser);
     }
 
     /**
@@ -103,6 +109,21 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
      */
     @PortLog(type = "taobaoweb", typeName = "淘宝")
     public String xinYanTBJsonData(XinYanResult xyResult) {
+        return this.getXinYanJsonData(xyResult);
+    }
+
+    /**
+     * 保存新颜征信的原始数据
+     * 当请求
+     *
+     * @param xyResult 新颜回调结果对象
+     */
+    @PortLog(type = "carrier", typeName = "运营商")
+    public String xinYanYYSJsonData(XinYanResult xyResult) {
+        return this.getXinYanJsonData(xyResult);
+    }
+
+    private String getXinYanJsonData(XinYanResult xyResult) {
         // 通过 token 凭证 查询报告
         List<NameValuePair> params = new ArrayList<>();
         params.add(new BasicNameValuePair("apiUser", XinYanConstantMethod.ApiUser));
@@ -118,6 +139,7 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
 
         JSONObject jsonResult = JSONObject.parseObject(result);
         jsonResult.put("userId", xyResult.getTaskId());
+        logger.info("用户：{} 认证 {} 的返回结果为：{}", xyResult.getTaskId(), XinYanConstantMethod.compareApiName(xyResult.getApiName()), jsonResult.toString());
         //一定要返回本次的result，需要做后置日志的接口调用保存
         //会通过返回result进行查找并保存日志
         return jsonResult.toString();
@@ -146,6 +168,10 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
             if (XinYanConstantEnum.API_NAME_LD.getApiName().equals(apiName))
                 bSysUserStatus.setXinyanRadarStatus(BusinessConst.OK);
             if (XinYanConstantEnum.API_NAME_TB.getApiName().equals(apiName))
+                bSysUserStatus.setXinyanTaobaoStatus(BusinessConst.OK);
+            if (XinYanConstantEnum.API_NAME_YYS.getApiName().equals(apiName))
+                bSysUserStatus.setXinyanMobileStatus(BusinessConst.OK);
+            if (XinYanConstantEnum.API_NAME_ZFB.getApiName().equals(apiName))
                 bSysUserStatus.setXinyanZmfStatus(BusinessConst.OK);
 
             this.bSysUserStatusService.updateByUserId(bSysUserStatus);
