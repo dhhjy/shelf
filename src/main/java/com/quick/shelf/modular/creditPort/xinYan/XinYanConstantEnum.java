@@ -6,6 +6,7 @@ package com.quick.shelf.modular.creditPort.xinYan;
 public enum XinYanConstantEnum {
     API_NAME_TB("淘宝", "taobaoweb"),
     API_NAME_ZFB("支付宝", "zhifubao"),
+    API_NAME_JH("淘宝支付宝聚合", "taobaopay"),
     API_NAME_YYS("运营商", "carrier"),
     API_NAME_ZHIMAFEN("芝麻信用查验", "zhimafen"),
     API_NAME_LD("全景雷达", "radar");

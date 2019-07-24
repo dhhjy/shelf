@@ -59,8 +59,8 @@ public class XinYanConstantMethod {
     private static final String PFX_PATH = "\\xinwei_pri.pfx";
     // 成功状态
     public static final String SUCCESS = "true";
-
-
+    // 成功状态码
+    public static final String CODE = "20000";
     /**
      * 获取任务的H5回调页面(默认不显示H5的导航)
      * 通过回调地址 jumpUrl 直接 返回到APP的页面上进行授权后的页面展示
@@ -75,15 +75,14 @@ public class XinYanConstantMethod {
     public static String getXinYanH5Url(String userId, String apiName, String dataNotifyUrl, String reportNotifyUrl) {
         // 时间戳
         String timeMark = XinYanConstantMethod.getTimeMark();
-        String url =  XinYanConstantMethod.DEVELOP_URL + XinYanConstantMethod.H5 + XinYanConstantMethod.ApiUser + "/" +
+        String url = XinYanConstantMethod.DEVELOP_URL + XinYanConstantMethod.H5 + XinYanConstantMethod.ApiUser + "/" +
                 getApiEnc(timeMark, apiName, userId) + "/" + timeMark + "/" +
                 apiName + "/" + userId + "?" + Hide_Label + "&dataNotifyUrl=" + dataNotifyUrl;
 
-        if(null != reportNotifyUrl && !("").equals(reportNotifyUrl))
-        {
+        if (null != reportNotifyUrl && !("").equals(reportNotifyUrl)) {
             url += "&reportNotifyUrl=" + reportNotifyUrl;
         }
-
+        logger.info("url:{}", url);
         return url;
     }
 
@@ -177,6 +176,9 @@ public class XinYanConstantMethod {
         if (apiName.equals(XinYanConstantEnum.API_NAME_LD.getApiName()))
             return XinYanConstantEnum.API_NAME_LD.getServerName();
 
+        if (apiName.equals(XinYanConstantEnum.API_NAME_JH.getApiName()))
+            return XinYanConstantEnum.API_NAME_JH.getServerName();
+
         return null;
     }
 
@@ -193,13 +195,13 @@ public class XinYanConstantMethod {
         String jumpUrl = "";
         // 原始数据回调
         String callbackJson = "2539z803m9.qicp.vip:12886" + "/app/xinYan/callbackJson";
-        System.out.println(getXinYanH5Url("101",XinYanConstantEnum.API_NAME_YYS.getApiName(),callbackJson,null));
+        System.out.println(getXinYanH5Url("101", XinYanConstantEnum.API_NAME_YYS.getApiName(), callbackJson, null));
     }
 
     /**
      * 加密全景雷达所需要的参数
      *
-     * @param base64str  加密参数的base64位编码字符串
+     * @param base64str 加密参数的base64位编码字符串
      * @return
      */
     public static String getRaDerResult(String base64str, BSysUser bSysUser) {
@@ -231,13 +233,12 @@ public class XinYanConstantMethod {
         // 将查询结果转成json对象，把用户主键存入到json对象 在返回
         com.alibaba.fastjson.JSONObject jsonResult = com.alibaba.fastjson.JSONObject.parseObject(PostString);
         jsonResult.put("userId", bSysUser.getUserId());
-        logger.info("请求返回:{}",  PostString);
+        logger.info("请求返回:{}", PostString);
 
         if (PostString.isEmpty()) {// 判断参数是否为空
             logger.info("返回数据为空");
             throw new RuntimeException("返回数据为空");
-        }else
-        {
+        } else {
             return jsonResult.toString();
         }
     }
@@ -245,14 +246,14 @@ public class XinYanConstantMethod {
     /**
      * 组装全景雷达加密参数
      *
-     * @param userId        用户主键 不可为空
-     * @param id_no         身份证 不可为空
-     * @param id_name       姓名 不可为空
-     * @param phone_no      手机号
-     * @param bankcard_no   银行卡号
+     * @param userId      用户主键 不可为空
+     * @param id_no       身份证 不可为空
+     * @param id_name     姓名 不可为空
+     * @param phone_no    手机号
+     * @param bankcard_no 银行卡号
      * @return Base64Encode base64位编码后的字符串
      */
-    public static String assembleEncryptParams(String userId,String id_no, String id_name, String phone_no, String bankcard_no){
+    public static String assembleEncryptParams(String userId, String id_no, String id_name, String phone_no, String bankcard_no) {
         Map<Object, Object> ArrayData = new HashMap<>();
         // 商户号
         ArrayData.put("member_id", XinYanConstantMethod.ApiUser);

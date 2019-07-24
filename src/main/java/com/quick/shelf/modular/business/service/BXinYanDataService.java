@@ -102,19 +102,21 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
     }
 
     /**
-     * 保存新颜征信的原始数据
-     * 当请求
+     * 保存新颜淘宝的原始数据
+     * 此方法主要用于AOP日志记录接口调用的类型
+     * 不可简化，否则AOP统计失效
      *
      * @param xyResult 新颜回调结果对象
      */
-    @PortLog(type = "taobaoweb", typeName = "淘宝")
-    public String xinYanTBJsonData(XinYanResult xyResult) {
+    @PortLog(type = "taobaopay", typeName = "淘宝支付宝聚合")
+    public String xinYanJHJsonData(XinYanResult xyResult) {
         return this.getXinYanJsonData(xyResult);
     }
 
     /**
-     * 保存新颜征信的原始数据
-     * 当请求
+     * 保存新颜运营商原始数据
+     * 此方法主要用于AOP日志记录接口调用的类型
+     * 不可简化，否则AOP统计失效
      *
      * @param xyResult 新颜回调结果对象
      */
@@ -167,12 +169,13 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
 
             if (XinYanConstantEnum.API_NAME_LD.getApiName().equals(apiName))
                 bSysUserStatus.setXinyanRadarStatus(BusinessConst.OK);
-            if (XinYanConstantEnum.API_NAME_TB.getApiName().equals(apiName))
-                bSysUserStatus.setXinyanTaobaoStatus(BusinessConst.OK);
             if (XinYanConstantEnum.API_NAME_YYS.getApiName().equals(apiName))
                 bSysUserStatus.setXinyanMobileStatus(BusinessConst.OK);
-            if (XinYanConstantEnum.API_NAME_ZFB.getApiName().equals(apiName))
+            if (XinYanConstantEnum.API_NAME_JH.getApiName().equals(apiName))
+            {
                 bSysUserStatus.setXinyanZmfStatus(BusinessConst.OK);
+                bSysUserStatus.setXinyanTaobaoStatus(BusinessConst.OK);
+            }
 
             this.bSysUserStatusService.updateByUserId(bSysUserStatus);
         }).start();

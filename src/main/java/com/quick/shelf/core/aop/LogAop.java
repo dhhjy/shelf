@@ -10,6 +10,7 @@ import com.quick.shelf.core.log.factory.LogTaskFactory;
 import com.quick.shelf.core.shiro.ShiroKit;
 import com.quick.shelf.core.shiro.ShiroUser;
 import com.quick.shelf.modular.creditPort.liMu.LiMuConstantMethod;
+import com.quick.shelf.modular.creditPort.xinYan.XinYanConstantMethod;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
@@ -167,7 +168,7 @@ public class LogAop {
         log.error(" AOP 统计外部接口接口调用类型：{}，名称：{}，结果：{}", type, typeName, result);
         JSONObject re = JSONObject.parseObject(result.toString());
         if (null != re.getString("code") &&
-                !re.getString("code").equals(LiMuConstantMethod.SUCCESS_CODE))
+                !re.getString("code").equals(LiMuConstantMethod.SUCCESS_CODE) && !re.getString("code").equals(XinYanConstantMethod.CODE))
             return;
         if (null != re.getString("success") &&
                 !re.getBoolean("success"))
