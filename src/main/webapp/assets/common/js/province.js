@@ -16,9 +16,9 @@ layui.define(['jquery', 'form'], function () {
     treeSelect(defaults);
 });
 function treeSelect(config) {
-    config.v1 = config.v1 ? config.v1 : 110000;
-    config.v2 = config.v2 ? config.v2 : 110100;
-    config.v3 = config.v3 ? config.v3 : 110101;
+    config.v1 = config.v1 ? config.v1 : "";
+    config.v2 = config.v2 ? config.v2 : "";
+    config.v3 = config.v3 ? config.v3 : "";
     $.each(threeSelectData, function (k, v) {
         appendOptionTo($form.find('select[name=' + config.s1 + ']'), k, v.val, config.v1);
     });
