@@ -40,7 +40,7 @@ public class XinYanConstantMethod {
     // H5超链接地址说明
     // https://qz.xinyan.com/h5/{apiUser}/{apiEnc}/{timeMark}/{apiName}/{taskId}? {jumpUrl}=
     // 请求H5页面
-    private static final String H5 = "/h5/";
+    private static final String H5 = "/auth/";
     // 请求原始数据地址
     public static final String JSON_DATA_PATH = "/api/user/data";
     // 请求报告数据地址
