@@ -1,500 +1,939 @@
 <!DOCTYPE html>
-<html lang="en">
+
+<link type="image/x-icon" href="/static/web/images/favicon.ico" rel="Shortcut Icon">
+
+<html>
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href="${ctxPath}/assets/expand/images/favicon.ico" rel="icon">
-    <title>${systemName}</title>
-    <link rel="stylesheet" href="${ctxPath}/assets/common/layui/css/layui.css"/>
+    <meta name="viewport" content="width=device-width"/>
+    <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/limu/css/common.css?_v="/>
+    <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/limu/css/manage.css?_v="/>
+    <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/limu/css/liMuStyle.css?_v="/>
+    <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/myIcon/iconfont.css?_v="/>
     <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/boostrap/bootstrap.3.3.7.min.css">
     <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/Hui3.0/css/mnoReport.css?v=201708101">
-    <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/Hui3.0/lib/iconfont/iconfont.css"
-
+    <title>淘宝报告</title>
 </head>
+
 <body>
-<!-- 头部信息 -->
-<header class="header">
-    <figure class="logo">
-        <span class="need_hidden">芝麻分报告</span>
-    </figure>
-    <p style="height: auto;text-align: center;">
-        <span class="need_hidden">
-            <span class="msg">账号：</span>
-                    ${bSysUser.userAccount}
-        </span>
-        <span class="need_hidden">
-            <span class="msg">用户名：</span>
-                    ${bSysUser.name}
-        </span>
-        <span class="need_hidden">
-            <span class="msg">手机号：</span>
-                    ${bSysUser.phoneNumber}
-         </span>
-    </p>
-</header>
+<div class="pt_container">
+    <div class="pt_content">
+        <!--我的服务-->
+        <div class="box_wrap">
+            <div class="box_center Mserve">
+                <div class="Mreport">
+                    <!--右侧内容区-->
+                    <div class="MrightCon" style="padding: 20px 34px 100px 28px">
 
+                        <div class="headName text_center">
+                            聚合报告
+                        </div>
+                        <!-- 头部内容 -->
+                        <div class="credit_head">
+                            <table border="0" cellspacing="0" cellpadding="0"
+                                   style="width: 100%; table-layout: fixed;">
+                                <tr>
+                                    <td colspan="2">用户姓名：
+                                        <span>
+                                            @if(isNotEmpty(taoBaoWeb.data.taobao.basic_info.real_name)){
+                                                ${taoBaoWeb.data.taobao.basic_info.real_name}
+                                            @}
+                                        </span>
+                                    </td>
+                                    <td class="text-right" colspan="1">数据来源：<span>秒秒贷</span>
+                                    </td>
+                                    <td class="text-right" colspan="2">获取时间范围：<span>3个月</span>
+                                    </td>
+                                    <td class="text-right" colspan="2">获取时间：
+                                        <span>
+                                            ${taoBaoWebDate, "yyyy-MM-dd" }
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
 
-<div id="main">
-    <!--基本信息-->
-    <div class="info baseInfo">
-        <h2 class="title">基本信息</h2>
-        <!--基本信息-->
-        <div class="items">
-            <table>
-                <tbody>
-                <tr>
-                    <td class="msg" colspan="4">用户名</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.basic_info.user_name)){
-                        ${taoBaoWeb.data.basic_info.user_name}
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">昵称</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.basic_info.nick_name)){
-                        ${taoBaoWeb.data.basic_info.nick_name}
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">性别</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.basic_info.gender)){
-                        ${taoBaoWeb.data.basic_info.gender}
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">年龄</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.basic_info.age)){
-                        ${taoBaoWeb.data.basic_info.age}
-                        @}
-                    </td>
-                </tr>
-                <tr>
-                    <td class="msg" colspan="4">真实姓名</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.basic_info.real_name)){
-                        ${taoBaoWeb.data.basic_info.real_name}
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">身份证号</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.basic_info.id_card)){
-                        ${taoBaoWeb.data.basic_info.id_card}
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">是否实名认证</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.basic_info.identity_status)){
-                        <span class="tag normal">已认证</span>
-                        @}else{
-                        <span class="tag danger">未认证</span>
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">认证渠道</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.basic_info.identity_channel)){
-                        ${taoBaoWeb.data.basic_info.identity_channel}
-                        @}
-                    </td>
-                </tr>
-                <tr>
-                    <td class="msg" colspan="4">登录邮箱</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.basic_info.email)){
-                        ${taoBaoWeb.data.basic_info.email}
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">绑定手机</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.basic_info.mobile)){
-                        ${taoBaoWeb.data.basic_info.mobile}
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">会员等级</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.basic_info.vip_level)){
-                        ${taoBaoWeb.data.basic_info.vip_level}
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">淘气值</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.basic_info.tao_score)){
-                        <span class="tag danger">
-                            ${taoBaoWeb.data.basic_info.tao_score}
-                        </span>
-                        @}
-                    </td>
-                </tr>
-                <tr>
-                    <td class="msg" colspan="4">信用积分</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.basic_info.credit_score)){
-                        ${taoBaoWeb.data.basic_info.credit_score}
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">好评率</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.basic_info.favorable_rate)){
-                        ${taoBaoWeb.data.basic_info.favorable_rate}
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">绑定微博账号</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.basic_info.web_account)){
-                        ${taoBaoWeb.data.basic_info.web_account}
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">绑定微博昵称</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.basic_info.web_nick_name)){
-                        ${taoBaoWeb.data.basic_info.web_nick_name}
-                        @}
-                    </td>
-                </tr>
-                <tr>
-                    <td class="msg" colspan="4">芝麻分</td>
-                    <td colspan="28">
-                        @if(isNotEmpty(taoBaoWeb.data.basic_info.zm_score)){
-                        <span class="tag normal">${taoBaoWeb.data.basic_info.zm_score}分</span>
-                        @}
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                        <!-- 主体内容 -->
+                        <div class="credit_main" style="padding-bottom: 100px;">
+                            <!--淘宝信息-->
+                            <h3 class="mt_20 text_center fs_26">
+                                <svg class="myIcon" aria-hidden="true">
+                                    <use xlink:href="#icon-disanfangdenglu-taobao"></use>
+                                </svg>
+                                淘宝信息
+                            </h3>
+                            <!--淘宝信息-->
+                            <div class="mt_14 credit_table">
+                                <p>淘宝信息</p>
+                                <table border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <th colspan="16">
+                                            <svg class="myIcon" aria-hidden="true">
+                                                <use xlink:href="#icon-gerenzhongxinxuanzhong"></use>
+                                            </svg>
+                                            淘宝姓名
+                                        </th>
+                                        <td colspan="84">
+                                            @if(isNotEmpty(taoBaoWeb.data.taobao.basic_info.real_name)){
+                                            <span style="padding-right: 23px">
+                                                    ${taoBaoWeb.data.taobao.basic_info.real_name}
+                                                </span>
+                                            <span class="valid">匹配成功</span>
+                                            @}else{
+                                            <span class="unknow">信息不符</span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">
+                                            <svg class="myIcon" aria-hidden="true">
+                                                <use xlink:href="#icon-shenfenzheng"></use>
+                                            </svg>
+                                            淘宝身份证
+                                        </th>
+                                        <td colspan="84">
+                                            @if(isNotEmpty(taoBaoWeb.data.taobao.basic_info.id_card)){
+                                            <span style="padding-right: 23px">
+                                                    ${taoBaoWeb.data.taobao.basic_info.id_card}
+                                                </span>
+                                            <span class="valid">已实名认证</span>
+                                            @}else{
+                                            <span class="unknow">信息不符</span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">
+                                            <svg class="myIcon" aria-hidden="true">
+                                                <use xlink:href="#icon-shoujihaoma"></use>
+                                            </svg>
+                                            淘宝手机号
+                                        </th>
+                                        <td colspan="84">
+                                            @if(isNotEmpty(taoBaoWeb.data.taobao.basic_info.mobile)){
+                                            <span style="padding-right: 23px">
+                                                    ${taoBaoWeb.data.taobao.basic_info.mobile}
+                                                </span>
+                                            <span class="valid">已实名认证</span>
+                                            @}else{
+                                            <span class="unknow">信息不符</span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">淘宝用户名</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.taobao.basic_info.user_name)){
+                                            <span style="padding-right: 23px">
+                                                ${taoBaoWeb.data.taobao.basic_info.user_name}
+                                            </span>
+                                            @}else{
+                                            <span class="unknow">信息不符</span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">昵称</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.taobao.basic_info.nick_name)){
+                                            <span style="padding-right: 23px">
+                                                ${taoBaoWeb.data.taobao.basic_info.nick_name}
+                                            </span>
+                                            @}else{
+                                            <span class="unknow">无信息</span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">登录邮箱</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.taobao.basic_info.email)){
+                                            <span style="padding-right: 23px">
+                                                    ${taoBaoWeb.data.taobao.basic_info.email}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">无信息</span>
+                                            @}
+                                        </td>
+
+                                        <th colspan="16">性别</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.taobao.basic_info.gender)){
+                                            <span style="padding-right: 23px">
+                                                    ${taoBaoWeb.data.taobao.basic_info.gender}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">无信息</span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">实名认证</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.taobao.basic_info.identity_status)){
+                                            <span class="valid">
+                                                    ${taoBaoWeb.data.taobao.basic_info.identity_status}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">未通过实名认证</span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">认证渠道</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.taobao.basic_info.identity_channel)){
+                                            <span class="valid">
+                                                    ${taoBaoWeb.data.taobao.basic_info.identity_channel}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">未实名认证（未上传身份证件）</span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">淘宝会员等级</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.taobao.basic_info.vip_level)){
+                                            <span class="tag normal">LV.${taoBaoWeb.data.taobao.basic_info.vip_level}</span>
+                                            @}else{
+                                            <span class="unknow">无信息</span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">好评率</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.taobao.basic_info.favorable_rate)){
+                                            <span class="tag normal">${taoBaoWeb.data.taobao.basic_info.favorable_rate}</span>
+                                            @}else{
+                                            <span class="unknow">无信息</span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">淘宝淘气值</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.taobao.basic_info.tao_score)){
+                                            <span class="tag normal"> ${taoBaoWeb.data.taobao.basic_info.tao_score} 分</span>
+                                            @}else{
+                                            <span class="unknow">无信息</span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">淘宝信用积分</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.taobao.basic_info.credit_score)){
+                                            <span class="tag normal">${taoBaoWeb.data.taobao.basic_info.credit_score} 分</span>
+                                            @}else{
+                                            <span class="unknow">无信息</span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">绑定微博账号</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.taobao.basic_info.web_account)){
+                                            ${taoBaoWeb.data.taobao.basic_info.web_account}
+                                            @}else{
+                                            <span class="unknow">无信息</span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">绑定微博昵称</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.taobao.basic_info.web_nick_name)){
+                                            ${taoBaoWeb.data.taobao.basic_info.web_nick_name}
+                                            @}else{
+                                            <span class="unknow">无信息</span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div class="mt_14 credit_table">
+                                    <p>购物行为</p>
+                                    <table border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td style="text-align: center; padding: 26px 0 20px 0">
+                                                <span class="fs_14">购物频率</span>
+                                                <div class="fs_20 col_green" style="margin-top: 2px;">频繁购物</div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!--支付宝信息-->
+                            <h3 class="mt_20 text_center fs_26">
+                                <svg class="myIcon" aria-hidden="true">
+                                    <use xlink:href="#icon-zhifubao8"></use>
+                                </svg>
+                                支付宝信息
+                            </h3>
+                            <div class="mt_14 credit_table">
+                                <p>支付宝信息</p>
+                                <table border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <th colspan="16">
+                                            <svg class="myIcon" aria-hidden="true">
+                                                <use xlink:href="#icon-gerenzhongxinxuanzhong"></use>
+                                            </svg>
+                                            支付宝姓名
+                                        </th>
+                                        <td colspan="84">
+                                            @if(isNotEmpty(taoBaoWeb.data.alipay.basic_info.name)){
+                                            <span style="padding-right: 23px">
+                                                    ${taoBaoWeb.data.alipay.basic_info.name}
+                                                </span>
+                                            <span class="valid">匹配成功</span>
+                                            @}else{
+                                            <span class="unknow">信息不符</span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">
+                                            <svg class="myIcon" aria-hidden="true">
+                                                <use xlink:href="#icon-shenfenzheng"></use>
+                                            </svg>
+                                            支付宝身份证
+                                        </th>
+                                        <td colspan="84">
+                                            @if(isNotEmpty(taoBaoWeb.data.alipay.basic_info.id_card)){
+                                            <span style="padding-right: 23px">
+                                                    ${taoBaoWeb.data.alipay.basic_info.id_card}
+                                                </span>
+                                            <span class="valid">已实名认证</span>
+                                            @}else{
+                                            <span class="unknow">信息不符</span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">
+                                            <svg class="myIcon" aria-hidden="true">
+                                                <use xlink:href="#icon-shoujihaoma"></use>
+                                            </svg>
+                                            支付宝手机号
+                                        </th>
+                                        <td colspan="84">
+                                            @if(isNotEmpty(taoBaoWeb.data.alipay.basic_info.mobile)){
+                                            <span style="padding-right: 23px">
+                                                    ${taoBaoWeb.data.alipay.basic_info.mobile}
+                                                </span>
+                                            <span class="valid">已实名认证</span>
+                                            @}else{
+                                            <span class="unknow">信息不符</span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">最后一次登录时间</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.alipay.basic_info.last_login_time)){
+                                            <span style="padding-right: 23px">
+                                                    ${taoBaoWeb.data.alipay.basic_info.last_login_time}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">未获取到最后登录时间</span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">邮箱</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.alipay.basic_info.email)){
+                                            <span style="padding-right: 23px">
+                                                    ${taoBaoWeb.data.alipay.basic_info.email}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">无信息</span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">实名认证</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.alipay.basic_info.identity_status)){
+                                            <span class="valid">
+                                                    ${taoBaoWeb.data.alipay.basic_info.identity_status}
+                                                </span>
+                                            @}else{
+                                            <span class="unknow">未认证</span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">年龄</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.alipay.basic_info.age)){
+                                            ${taoBaoWeb.data.alipay.basic_info.age} 岁
+                                            @}else{
+                                            <span class="unknow">无信息</span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">注册时间</th>
+                                        <td colspan="84">
+                                            @if(isNotEmpty(taoBaoWeb.data.alipay.basic_info.register_time)){
+                                            ${taoBaoWeb.data.alipay.basic_info.register_time}
+                                            @}else{
+                                            <span class="unknow">无信息</span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">账户余额</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.alipay.wealth.balance)){
+                                            <span class="tag normal">${taoBaoWeb.data.alipay.wealth.balance} 元</span>
+                                            @}else{
+                                            <span class="unknow">无信息</span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">余额宝（余额）</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.alipay.wealth.yuebao)){
+                                            <span class="tag normal">${taoBaoWeb.data.alipay.wealth.yuebao} 元</span>
+                                            @}else{
+                                            <span class="unknow">无信息</span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">历史累计收益</th>
+                                        <td colspan="84">
+                                            @if(isNotEmpty(taoBaoWeb.data.alipay.wealth.yeb_total_earnings)){
+                                            <span class="tag normal">${taoBaoWeb.data.alipay.wealth.yeb_total_earnings} 元</span>
+                                            @}else{
+                                            <span class="unknow">无信息</span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16" class="fs_16 col_red" style="font-weight:bold;">是否有花呗</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.alipay.wealth.has_hb)){
+                                            @if(taoBaoWeb.data.alipay.wealth.has_hb == "true"){
+                                            <span class="valid">有</span>
+                                            @}else{
+                                            <span class="unvalid">无</span>
+                                            @}
+                                            @}else{
+                                            <span class="unknow">无信息</span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">花呗是否逾期</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.alipay.wealth.is_huabei_overdue)){
+                                            @if(taoBaoWeb.data.alipay.wealth.has_hb == "true"){
+                                            <span class="valid">未逾期</span>
+                                            @}else{
+                                            <span class="unvalid">逾期</span>
+                                            @}
+                                            @}else{
+                                            <span class="unknow">无信息</span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16" class="fs_16 col_red" style="font-weight:bold;">花呗总额度</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.alipay.wealth.hb_total_limit)){
+                                            <span class="tag normal">${taoBaoWeb.data.alipay.wealth.hb_total_limit} 元</span>
+                                            @}else{
+                                            <span class="unknow">无信息</span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">花呗可用额度</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.alipay.wealth.hb_available_limit)){
+                                            <span class="tag normal">${taoBaoWeb.data.alipay.wealth.hb_available_limit} 元</span>
+                                            @}else{
+                                            <span class="unknow">无信息</span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">花呗逾期次数</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.alipay.wealth.num_huabei_overdue)){
+                                            ${taoBaoWeb.data.alipay.wealth.num_huabei_overdue} 次
+                                            @}else{
+                                            <span class="unknow">无信息</span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">花呗逾期金额</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.alipay.wealth.huabei_overdue)){
+                                            <span class="tag danger">${taoBaoWeb.data.alipay.wealth.huabei_overdue} 元</span>
+                                            @}else{
+                                            <span class="unknow">无信息</span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16" class="fs_16 col_red" style="font-weight:bold;">花呗状态</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.alipay.wealth.huabei_status)){
+                                            @if(taoBaoWeb.data.alipay.wealth.huabei_status == "REPAID"){
+                                            <span class="valid">已还清</span>
+                                            @}else if(taoBaoWeb.data.alipay.wealth.huabei_status == "NO_CURRENT_BILL"){
+                                            <span class="valid">目前无账单</span>
+                                            @}else if(taoBaoWeb.data.alipay.wealth.huabei_status == "NO_CURRENT_BILL_OVERDUE"){
+                                            <span class="valid">目前无逾期账单</span>
+                                            @}else if(taoBaoWeb.data.alipay.wealth.huabei_status == "NO_HISTORY_BILLS"){
+                                            <span class="valid">无历史账单</span>
+                                            @}else if(taoBaoWeb.data.alipay.wealth.huabei_status == "OVERDUE_INTEREST"){
+                                            <span class="unknow">利息未结清</span>
+                                            @}else if(taoBaoWeb.data.alipay.wealth.huabei_status == "BILL_OVERDUE"){
+                                            <span class="unknow">已逾期</span>
+                                            @}else if(taoBaoWeb.data.alipay.wealth.huabei_status == "CURRENT_BILL_MIN_REPAY"){
+                                            <span class="unknow">部分结清（本期最低金额结清）</span>
+                                            @}
+                                            @}else{
+                                            <span class="unknow">无信息</span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">是否冻结</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.alipay.wealth.is_frozen_huabei)){
+                                            @if(taoBaoWeb.data.alipay.wealth.is_frozen_huabei == "true"){
+                                            <span class="unvalid">冻结</span>
+                                            @}else{
+                                            <span class="valid">未冻结</span>
+                                            @}
+                                            @}else{
+                                            <span class="unknow">无信息</span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">近期还款日期</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.alipay.wealth.closing_date)){
+                                            ${taoBaoWeb.data.alipay.wealth.closing_date}
+                                            @}else{
+                                            <span class="unknow">无信息</span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">下月应还金额</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.alipay.wealth.next_payment)){
+                                            <span class="tag danger">${taoBaoWeb.data.alipay.wealth.next_payment} 元</span>
+                                            @}else{
+                                            <span class="unknow">无信息</span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16" class="fs_16 col_red" style="font-weight:bold;">是否有借呗</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.alipay.wealth.jiebei_total_limit) && taoBaoWeb.data.alipay.wealth.jiebei_total_limit != "0.00"){
+                                            <span class="valid">有</span>
+                                            @}else{
+                                            <span class="unvalid">无</span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">借呗总额度</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.alipay.wealth.jiebei_total_limit)){
+                                            <span class="tag normal">${taoBaoWeb.data.alipay.wealth.jiebei_total_limit} 元</span>
+                                            @}else{
+                                            <span class="unknow">无信息</span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">借呗可用额度</th>
+                                        <td colspan="34">
+                                            @if(isNotEmpty(taoBaoWeb.data.alipay.wealth.jiebei_available_limit)){
+                                            <span class="tag normal">${taoBaoWeb.data.alipay.wealth.jiebei_available_limit} 元</span>
+                                            @}else{
+                                            <span class="unvalid">无</span>
+                                            @}
+                                        </td>
+                                        <th colspan="16">额度是否可调整</th>
+                                        <td colspan="34">
+                                            @if(taoBaoWeb.data.alipay.wealth.is_promot_able == "true"){
+                                            <span class="valid">可以</span>
+                                            @}else{
+                                            <span class="unvalid">不可以</span>
+                                            @}
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <div class="mt_14 credit_table">
+                                    <p>绑定银行卡</p>
+                                    <table style="border-right: 1px solid #dfdfdf;" cellspacing="0"
+                                           cellpadding="0" class="border_right_none">
+                                        <tr>
+                                            <th colspan="10">银行名称</th>
+                                            <th colspan="10">银行卡号
+                                            <th colspan="10">银行卡类型</th>
+                                            <th colspan="10">用户姓名</th>
+                                            <th colspan="10">绑定手机号</th>
+                                            <th colspan="10">开卡时间</th>
+                                            <th colspan="10">开通快捷支付</th>
+                                        </tr>
+                                        @for(bank_card in taoBaoWeb.data.alipay.bank_cards){
+                                        <tr>
+                                            <td colspan="10">${bank_card.bank_name}</td>
+                                            <td colspan="10">${bank_card.card_num}</td>
+                                            <td colspan="10">${bank_card.card_type}</td>
+                                            <td colspan="10">${bank_card.card_name}</td>
+                                            <td colspan="10">${bank_card.phone_num}</td>
+                                            <td colspan="10">${bank_card.open_date}</td>
+                                            <td colspan="10">${bank_card.quick_payment}</td>
+                                        </tr>
+                                        @}
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!--收货地址-->
+                            <h3 class="mt_20 text_center fs_26">
+                                <svg class="myIcon" aria-hidden="true">
+                                    <use xlink:href="#icon-gaopinleidayeweiji2"></use>
+                                </svg>
+                                收货地址
+                            </h3>
+                            <div class="mt_14 credit_table">
+                                <p>收货地址</p>
+                                @for(address in taoBaoWeb.data.taobao.addresses){
+                                <table border="0" cellspacing="0" cellpadding="0" class="border_right_none"
+                                       style="border-right:1px solid #dfdfdf;">
+                                    <tr>
+                                        <td colspan="100"
+                                            style="text-align: center; padding: 20px 0 20px 0; background: #f2f3f5;">
+                                            <span class="fs_14">收货地址 - ${addressLP.index}</span>
+                                            <div class="fs_20" style="margin-top:5px;position:relative;">
+                                                ${address.address}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="25">
+                                            <span class="col_999">收货人姓名</span>
+                                            <div class="fs_20 col_green" style="margin-top: 5px;">
+                                                ${address.name}
+                                            </div>
+                                        </td>
+                                        <td colspan="25">
+                                            <span class="col_999">电话</span>
+                                            <div class="fs_20 col_green" style="margin-top: 5px;">
+                                                ${address.phone_no}
+                                            </div>
+                                        </td>
+                                        <td colspan="25">
+                                            <span class="col_999">邮编</span>
+                                            <div class="fs_20 col_green" style="margin-top: 5px;">
+                                                ${address.postcode}
+                                            </div>
+                                        </td>
+                                        <td colspan="25" style="border-bottom: none;padding-top:16px;">
+                                            <span class="col_999">地址类型</span>
+                                            <div style="margin-top: 5px;">
+                                                未知
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="100">
+                                            <span class="col_999">备注</span>
+                                            <div class="fs_20" style="margin-top: 5px;">
+                                                ${address.note}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                                @}
+                            </div>
+
+                            <!--订单信息-->
+                            <h3 class="mt_20 text_center fs_26">
+                                <svg class="myIcon" aria-hidden="true">
+                                    <use xlink:href="#icon-stack"></use>
+                                </svg>
+                                订单详情
+                            </h3>
+                            <div class="credit_table order_table mt_14">
+                                <p class="headName">订单详情</p>
+                                <div class="order_info">
+
+                                    @for(trade_detail in taoBaoWeb.data.taobao.trade_details){
+                                        @if(trade_detailLP.index < 3){
+                                            <div class="order_item">
+                                                <table border="0" cellspacing="0" cellpadding="0" width="100%"
+                                                       style="table-layout: fixed;">
+                                                    <tbody>
+                                                    <tr>
+                                                        <td colspan="3" style="border-bottom: none;">
+                                                            <span class="span1 fs_16 col_green">订单号:</span>
+                                                            <span class="fs_16  col_green">${trade_detail.trade_info.trade_id}</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <span class="span1">订单金额：</span>
+                                                            <span>${trade_detail.trade_info.amount}</span>
+                                                        </td>
+                                                        <td colspan="2">
+                                                            <span class="span1">订单时间：</span>
+                                                            <span>${trade_detail.trade_info.trade_time}</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <span class="span1">订单状态：</span>
+                                                            <span>${trade_detail.trade_info.trade_status}</span>
+                                                        </td>
+                                                        <td colspan="2">
+                                                            <span class="span1">收货人信息：</span>
+                                                            <span>${trade_detail.trade_info.receiver}</span>
+                                                            <span class="ml_20">86-18699996820</span>
+                                                            <span class="ml_20" title="${trade_detail.trade_info.receive_address}">
+                                                                    ${trade_detail.trade_info.receive_address}
+                                                                </span>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" width="100%">
+                                                    <tr>
+                                                        <td colspan="7" style="border-bottom: none;">
+                                                            <span class="span1 fs_16 col_green">购买商品信息</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>商品ID</th>
+                                                        <th colspan="4">商品名称</th>
+                                                        <th>商品单价</th>
+                                                        <th>商品数量</th>
+                                                    </tr>
+
+                                                    @for(pi in trade_detail.product_info){
+                                                    <tr>
+                                                        <td> ${pi.product_id}</td>
+                                                        <td colspan="4"> ${pi.product_name}</td>
+                                                        <td> ${pi.product_price}</td>
+                                                        <td> ${pi.product_amount}</td>
+                                                    </tr>
+                                                    @}
+
+                                                </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" width="100%"
+                                                       style="table-layout: fixed;">
+                                                    <tr>
+                                                        <td colspan="3" style="border-bottom: none;">
+                                                            <span class="span1 fs_16 col_green">商品物流信息</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>运送方式</th>
+                                                        <th>物流公司</th>
+                                                        <th>送货单号</th>
+                                                    </tr>
+                                                    @for(di in trade_detail.delivery_info){
+                                                    <tr>
+                                                        <td> ${di.delivery_method}</td>
+                                                        <td> ${di.delivery_company}</td>
+                                                        <td> ${di.delivery_no}</td>
+                                                    </tr>
+                                                    @}
+                                                </table>
+                                            </div>
+                                        @}else{
+                                            <div class="order_item"  style="display:none" app-flow-node="">
+                                                <table border="0" cellspacing="0" cellpadding="0" width="100%"
+                                                       style="table-layout: fixed;">
+                                                    <tbody>
+                                                    <tr>
+                                                        <td colspan="3" style="border-bottom: none;">
+                                                            <span class="span1 fs_16 col_green">订单号:</span>
+                                                            <span class="fs_16  col_green">${trade_detail.trade_info.trade_id}</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <span class="span1">订单金额：</span>
+                                                            <span>${trade_detail.trade_info.amount}</span>
+                                                        </td>
+                                                        <td colspan="2">
+                                                            <span class="span1">订单时间：</span>
+                                                            <span>${trade_detail.trade_info.trade_time}</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <span class="span1">订单状态：</span>
+                                                            <span>${trade_detail.trade_info.trade_status}</span>
+                                                        </td>
+                                                        <td colspan="2">
+                                                            <span class="span1">收货人信息：</span>
+                                                            <span>${trade_detail.trade_info.receiver}</span>
+                                                            <span class="ml_20">86-18699996820</span>
+                                                            <span class="ml_20" title="${trade_detail.trade_info.receive_address}">
+                                                                    ${trade_detail.trade_info.receive_address}
+                                                                </span>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" width="100%">
+                                                    <tr>
+                                                        <td colspan="7" style="border-bottom: none;">
+                                                            <span class="span1 fs_16 col_green">购买商品信息</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>商品ID</th>
+                                                        <th colspan="4">商品名称</th>
+                                                        <th>商品单价</th>
+                                                        <th>商品数量</th>
+                                                    </tr>
+
+                                                    @for(pi in trade_detail.product_info){
+                                                    <tr>
+                                                        <td> ${pi.product_id}</td>
+                                                        <td colspan="4"> ${pi.product_name}</td>
+                                                        <td> ${pi.product_price}</td>
+                                                        <td> ${pi.product_amount}</td>
+                                                    </tr>
+                                                    @}
+
+                                                </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" width="100%"
+                                                       style="table-layout: fixed;">
+                                                    <tr>
+                                                        <td colspan="3" style="border-bottom: none;">
+                                                            <span class="span1 fs_16 col_green">商品物流信息</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>运送方式</th>
+                                                        <th>物流公司</th>
+                                                        <th>送货单号</th>
+                                                    </tr>
+                                                    @for(di in trade_detail.delivery_info){
+                                                    <tr>
+                                                        <td> ${di.delivery_method}</td>
+                                                        <td> ${di.delivery_company}</td>
+                                                        <td> ${di.delivery_no}</td>
+                                                    </tr>
+                                                    @}
+                                                </table>
+                                            </div>
+                                        @}
+                                    @}
+                                    <p class="mt_16 text_center" style="margin-bottom: 20px;">
+                                        <a href="javascript:;" class="togglemore">展开</a>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!--备注-->
+                            <p class="fs_14 col_999 mt_30">备注：</p>
+                            <p class="fs_14 col_999 mt_14">1.淘宝数据拉取用户1年内订单，最多1500笔。</p>
+                            <p class="fs_14 col_999 mt_14">2.虚拟消费除购买非实物商品外，还包括机票、酒店、电影票外卖等消费。</p>
+                            <p class="fs_14 col_999 mt_14">3.电话风险清单通过校验负面信息数据库中各类风险数据，提升客户管控效率，降低违约风险。</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
-        <!--基本信息-->
 
-        <h2 class="title">绑定支付宝信息</h2>
-        <!--绑定支付宝信息-->
-        <div class="items">
-            <table>
-                <tbody>
-                <tr>
-                    <td class="msg" colspan="4">支付宝账号</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.alipay_info.alipay_user_name)){
-                        ${taoBaoWeb.data.alipay_info.alipay_user_name}
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">实名认证姓名</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.alipay_info.real_name)){
-                        ${taoBaoWeb.data.alipay_info.real_name}
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">实名认证身份证号</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.alipay_info.card_number)){
-                        ${taoBaoWeb.data.alipay_info.card_number}
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">实名认证状态</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.alipay_info.identity_status)){
-                        <span class="tag normal">已认证</span>
-                        @}else{
-                        <span class="tag danger">未认证</span>
-                        @}
-                    </td>
-                </tr>
-                <tr>
-                    <td class="msg" colspan="4">是否有花呗</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.alipay_info.has_hb)){
-                        <span class="tag normal">有</span>
-                        @}else{
-                        <span class="tag danger">无</span>
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">花呗可用额度</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.alipay_info.hb_available_limit)){
-                        ${taoBaoWeb.data.alipay_info.hb_available_limit}元
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">花呗总额度</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.alipay_info.hb_total_limit)){
-                        ${taoBaoWeb.data.alipay_info.hb_total_limit}
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">花呗是否逾期</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.alipay_info.is_huabei_overdue)){
-                        <span class="tag normal">未逾期</span>
-                        @}else{
-                        <span class="tag danger">逾期/未开通</span>
-                        @}
-                    </td>
-                </tr>
-                <tr>
-                    <td class="msg" colspan="4">花呗逾期次数</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.alipay_info.num_huabei_overdue)){
-                        ${taoBaoWeb.data.alipay_info.num_huabei_overdue}
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">花呗逾期利息</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.alipay_info.huabei_overdue_interest)){
-                        ${taoBaoWeb.data.alipay_info.huabei_overdue_interest}
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">花呗逾期金额</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.alipay_info.huabei_overdue)){
-                        <span class="tag danger">${taoBaoWeb.data.alipay_info.huabei_overdue}元</span>
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">本月应还金额</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.alipay_info.current_payment)){
-                        <span class="tag danger">${taoBaoWeb.data.alipay_info.current_payment}元</span>
-                        @}
-                    </td>
-                </tr>
-                <tr>
-                    <td class="msg" colspan="4">是否冻结</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.alipay_info.is_frozen_huabei)){
-                        <span class="tag danger">是</span>
-                        @}else{
-                        <span class="tag normal">否</span>
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">是否分期</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.alipay_info.is_installment)){
-                        <span class="tag danger">是</span>
-                        @}else{
-                        <span class="tag normal">否</span>
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">下月应还金额</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.alipay_info.next_payment)){
-                        <span class="tag danger">${taoBaoWeb.data.alipay_info.next_payment}元</span>
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">是否有过超额还款</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.alipay_info.has_over_repay)){
-                        <span class="tag danger">是</span>
-                        @}else{
-                        <span class="tag normal">否</span>
-                        @}
-                    </td>
-                </tr>
-                <tr>
-                    <td class="msg" colspan="4">实际罚款总额</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.alipay_info.total_penalty_amount)){
-                        <span class="tag danger">${taoBaoWeb.data.alipay_info.total_penalty_amount}元</span>
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">借呗总额度</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.alipay_info.jiebei_total_limit)){
-                        <span class="tag danger">${taoBaoWeb.data.alipay_info.jiebei_total_limit}元</span>
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">借呗可用额度</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.alipay_info.jiebei_available_limit)){
-                        <span class="tag danger">${taoBaoWeb.data.alipay_info.jiebei_available_limit}元</span>
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">额度是否可调整</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(taoBaoWeb.data.alipay_info.has_over_repay)){
-                        <span class="tag danger">是</span>
-                        @}else{
-                        <span class="tag normal">否</span>
-                        @}
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <!--绑定支付宝信息-->
-
-        @if(isNotEmpty(taoBaoWeb.data.addresses)){
-        <h2 class="title">收货地址</h2>
-        <!--收货地址-->
-        <div class="items">
-            @for(addresses in taoBaoWeb.data.addresses){
-            <table>
-                <caption class="middle">收货地址</caption>
-                <tbody>
-                <tr>
-                    <td class="msg" colspan="4">姓名</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(addresses.name)){
-                        ${addresses.name}
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">手机</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(addresses.phone_no)){
-                        ${addresses.phone_no}
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">邮编</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(addresses.postcode)){
-                        ${addresses.postcode}
-                        @}
-                    </td>
-                </tr>
-                <tr>
-                    <td class="msg" colspan="4">备注</td>
-                    <td colspan="20">
-                        @if(isNotEmpty(addresses.note)){
-                        ${addresses.note}
-                        @}
-                    </td>
-                </tr>
-                <tr>
-                    <td class="msg" colspan="4">地址</td>
-                    <td colspan="20" width="80%">
-                        @if(isNotEmpty(addresses.address)){
-                        ${addresses.address}
-                        @}
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            @}
-        </div>
-        @}
-        <!--收货地址-->
-
-        @if(isNotEmpty(taoBaoWeb.data.trade_details)){
-        <h2 class="title">订单信息</h2>
-        <!--订单信息	-->
-        <div class="items">
-            @for(trade_details in taoBaoWeb.data.trade_details){
-            <table>
-                <caption class="middle">订单信息</caption>
-                <tbody>
-                <tr>
-                    <td class="msg" colspan="4" width="15%">订单号</td>
-                    <td colspan="4" width="18%">
-                        @if(isNotEmpty(trade_details.trade_info.trade_id)){
-                        ${trade_details.trade_info.trade_id}
-                        @}
-                    </td>
-                    <td class="msg" colspan="4" width="15%">订单时间</td>
-                    <td colspan="4" width="18%">
-                        @if(isNotEmpty(trade_details.trade_info.trade_time)){
-                        ${trade_details.trade_info.trade_time}
-                        @}
-                    </td>
-                    <td class="msg" colspan="4" width="15%">订单金额</td>
-                    <td colspan="4" width="18%">
-                        @if(isNotEmpty(trade_details.trade_info.amount)){
-                        ${trade_details.trade_info.amount}
-                        @}
-                    </td>
-                </tr>
-                <tr>
-                    <td class="msg" colspan="4">订单状态</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(trade_details.trade_info.trade_status)){
-                        ${trade_details.trade_info.trade_status}
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">发票抬头</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(trade_details.trade_info.invoice_title)){
-                        ${trade_details.trade_info.invoice_title}
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">卖家</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(trade_details.trade_info.seller)){
-                        ${trade_details.trade_info.seller}
-                        @}
-                    </td>
-                </tr>
-                @for(delivery_info in trade_details.delivery_info){
-                <tr>
-                    <td class="msg" colspan="4">运送方式</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(delivery_info.delivery_method)){
-                        ${delivery_info.delivery_method}
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">物流公司</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(delivery_info.delivery_company)){
-                        ${delivery_info.delivery_company}
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">运货单号</td>
-                    <td colspan="4">
-                        @if(isNotEmpty(delivery_info.delivery_no)){
-                        ${delivery_info.delivery_no}
-                        @}
-                    </td>
-                </tr>
-                @}
-                @for(product_info in trade_details.product_info){
-                <tr>
-                    <td class="msg" colspan="4">商品ID</td>
-                    <td colspan="8">
-                        @if(isNotEmpty(product_info.product_id)){
-                            ${product_info.product_id}
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">商品单价</td>
-                    <td colspan="8">
-                        @if(isNotEmpty(product_info.product_price)){
-                        <span class="tag normal">${product_info.product_price}元</span>
-                        @}
-                    </td>
-                </tr>
-                <tr>
-                    <td class="msg" colspan="4">商品名称</td>
-                    <td colspan="8">
-                        @if(isNotEmpty(product_info.product_name)){
-                            ${product_info.product_name}
-                        @}
-                    </td>
-                    <td class="msg" colspan="4">商品数量</td>
-                    <td colspan="8">
-                        @if(isNotEmpty(product_info.product_amount)){
-                        ${product_info.product_amount}
-                        @}
-                    </td>
-                </tr>
-                @}
-                </tbody>
-            </table>
-            @}
-        </div>
-        @}
-        <!--订单信息	-->
     </div>
 </div>
 
-@/* 加入contextPath属性和session超时的配置 */
+<!--跟随-->
+<div class="rightGps creditGps">
+    <ul>
+        <li><a href="javascript:;">淘宝信息</a></li>
+        <li><a href="javascript:;">支付宝信息</a></li>
+        <li><a href="javascript:;">收货地址</a></li>
+        <li><a href="javascript:;">订单详情</a></li>
+    </ul>
+    <a href="javascript:;" class="backTop1"> <span>返回顶部</span>
+    </a>
+</div>
+<script type="text/javascript" src="${ctxPath}/assets/myIcon/iconfont.js"></script>
+<script src="${ctxPath}/assets/limu/js/echarts-4.2.1.common.min.js?_v=1.5.3" type="text/javascript"
+        charset="utf-8"></script>
+<script src="${ctxPath}/assets/limu/js/jquery-1.11.1.min.js?_v=" type="text/javascript" charset="utf-8"></script>
+<script src="${ctxPath}/assets/limu/js/common.js?_v=" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
-    var Feng = {
-        ctxPath: "",
-        addCtx: function (ctx) {
-            if (this.ctxPath === "") {
-                this.ctxPath = ctx;
+    $(function () {
+        $(".togglemore").on("click", function () {
+            var $this = $(this);
+            if ($this.text() == "展开") {
+                $this.parent().parent().find("div[app-flow-node]").show();
+                $this.parent().parent().find("tr[app-flow-node]").show();
+                $this.addClass("togglemore1");
+                $this.text("收起");
+            } else {
+                $this.parent().parent().find("div[app-flow-node]").hide();
+                $this.parent().parent().find("tr[app-flow-node]").hide();
+                $this.removeClass("togglemore1");
+                $this.text("展开");
             }
-        }
-    };
-    Feng.addCtx("${ctxPath}");
+        });
+    });
 
-    document.oncontextmenu = function () {
-        return false;
+    /*右侧快速定位*/
+    var winTop = 0;
+    var eleTop = [];
+    var eleTopFun = function () {
+        $('.credit_main h3').map(function (index) {
+            eleTop[index] = $(this).offset().top - 10;
+        });
+    };
+    eleTopFun();
+
+    /*window scroll function*/
+    function winScr() {
+        winTop = $(this).scrollTop();
+        if (winTop >= eleTop[0] && winTop < eleTop[1]) {
+            $('.creditGps li a').removeClass('current');
+            $('.creditGps li').eq(0).find('a').addClass('current');
+        } else if (winTop >= eleTop[1] && winTop < eleTop[2]) {
+            $('.creditGps li a').removeClass('current');
+            $('.creditGps li').eq(1).find('a').addClass('current');
+        } else if (winTop >= eleTop[2] && winTop < eleTop[3]) {
+            $('.creditGps li a').removeClass('current');
+            $('.creditGps li').eq(2).find('a').addClass('current');
+        } else if (winTop >= eleTop[3] && winTop < eleTop[4]) {
+            $('.creditGps li a').removeClass('current');
+            $('.creditGps li').eq(3).find('a').addClass('current');
+        } else if (winTop >= eleTop[4] && winTop < eleTop[5]) {
+            $('.creditGps li a').removeClass('current');
+            $('.creditGps li').eq(4).find('a').addClass('current');
+        } else if (winTop >= eleTop[5]) {
+            $('.creditGps li a').removeClass('current');
+            $('.creditGps li').eq(5).find('a').addClass('current');
+        }
+
+        if (winTop > eleTop[0] - 90) {
+            $('.creditGps').stop().fadeIn('fast');
+        } else {
+            $('.creditGps').stop().fadeOut('fast');
+            $('.creditGps li a').removeClass('current');
+        }
+        ;
     }
+
+    /*滚动页面*/
+    $(window).on('scroll', winScr);
+    /*点击定位*/
+    $('.creditGps li a').click(function () {
+        $(window).off('scroll');
+        $('.creditGps li a').removeClass('current');
+        $(this).addClass('current');
+        $('html,body').stop().animate({'scrollTop': eleTop[$(this).parent().index()]}, 300, function () {
+            $(window).on('scroll', winScr);
+        });
+    });
+
+    /*返回顶部*/
+    $('.creditGps .backTop1').on('click', function () {
+        $('html,body').stop().animate({'scrollTop': '0'}, 300);
+    });
+
+
 </script>
-<script type="text/javascript" src="${ctxPath}/assets/common/layui/layui.js"></script>
-<script type="text/javascript" src="${ctxPath}/assets/common/js/common.js"></script>
 </body>
+
 </html>
