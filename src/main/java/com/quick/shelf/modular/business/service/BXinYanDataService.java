@@ -16,16 +16,12 @@ import com.quick.shelf.modular.creditPort.xinYan.XinYanConstantEnum;
 import com.quick.shelf.modular.creditPort.xinYan.XinYanConstantMethod;
 import com.quick.shelf.modular.creditPort.xinYan.XinYanDataResult;
 import com.quick.shelf.modular.creditPort.xinYan.XinYanResult;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -65,8 +61,6 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
      * @param bXinYanData
      */
     public void insert(BXinYanData bXinYanData) {
-        // 数据类型
-        bXinYanData.setDataType(0);
         // 创建时间 一对多
         bXinYanData.setCreateTime(new Date());
         this.baseMapper.insert(bXinYanData);
@@ -114,6 +108,16 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
     }
 
     /**
+     * 保存新颜淘宝的报告数据
+     * 原始数据和报告数据都是收一份的钱
+     *
+     * @param xyResult 新颜回调结果对象
+     */
+    public void xinYanTBReportData(XinYanResult xyResult) {
+        this.getXinYanReportData(xyResult);
+    }
+
+    /**
      * 保存新颜运营商原始数据
      * 此方法主要用于AOP日志记录接口调用的类型
      * 不可简化，否则AOP统计失效
@@ -125,32 +129,51 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
         return this.getXinYanJsonData(xyResult);
     }
 
+    /**
+     * 保存新颜运营商报告数据
+     * 原始数据和报告数据都是收一份的钱
+     *
+     * @param xyResult 新颜回调结果对象
+     */
+    public void xinYanYYSReportData(XinYanResult xyResult) {
+        this.getXinYanReportData(xyResult);
+    }
+
     private String getXinYanJsonData(XinYanResult xyResult) {
-        // 通过 token 凭证 查询报告
-        List<NameValuePair> params = new ArrayList<>();
-        params.add(new BasicNameValuePair("apiUser", XinYanConstantMethod.ApiUser));
-        params.add(new BasicNameValuePair("apiEnc", XinYanConstantMethod.getJsonDataApiEnc()));
-        params.add(new BasicNameValuePair("token", xyResult.getToken()));
-        // 获取新颜查询的结果
-        String result = HttpClientUtil.doGet(XinYanConstantMethod.DEVELOP_URL + XinYanConstantMethod.JSON_DATA_PATH, params);
+        // 获取新颜原始数据查询的结果
+        String result = HttpClientUtil.doGet(XinYanConstantMethod.DEVELOP_URL + XinYanConstantMethod.JSON_DATA_PATH, XinYanConstantMethod.getParams(xyResult.getToken()));
         XinYanDataResult xinYanDataResult = JSONObject.parseObject(result, XinYanDataResult.class);
 
         // 添加
         assert xinYanDataResult != null;
-        assemble(Integer.valueOf(xyResult.getTaskId()), String.valueOf(xinYanDataResult.getDetail()), xyResult.getApiName());
+        assemble(Integer.valueOf(xyResult.getTaskId()), String.valueOf(xinYanDataResult.getDetail()), xyResult.getApiName(),BusinessConst.ORIGINAL_DATA);
 
         JSONObject jsonResult = JSONObject.parseObject(result);
         jsonResult.put("userId", xyResult.getTaskId());
-        logger.info("用户：{} 认证 {} 的返回结果为：{}", xyResult.getTaskId(), XinYanConstantMethod.compareApiName(xyResult.getApiName()), jsonResult.toString());
+        logger.info("用户：{} 认证 {} 的原始数据返回结果为：{}", xyResult.getTaskId(), XinYanConstantMethod.compareApiName(xyResult.getApiName()), jsonResult.toString());
         //一定要返回本次的result，需要做后置日志的接口调用保存
         //会通过返回result进行查找并保存日志
         return jsonResult.toString();
     }
 
+    private void getXinYanReportData(XinYanResult xyResult) {
+        // 获取新颜报告数据查询的结果
+        String result = HttpClientUtil.doGet(XinYanConstantMethod.DEVELOP_URL + XinYanConstantMethod.REPORT_PATH, XinYanConstantMethod.getParams(xyResult.getToken()));
+        XinYanDataResult xinYanDataResult = JSONObject.parseObject(result, XinYanDataResult.class);
+
+        // 添加
+        assert xinYanDataResult != null;
+        assemble(Integer.valueOf(xyResult.getTaskId()), String.valueOf(xinYanDataResult.getDetail()), xyResult.getApiName(),BusinessConst.PAGE_DATA);
+
+        JSONObject jsonResult = JSONObject.parseObject(result);
+        jsonResult.put("userId", xyResult.getTaskId());
+        logger.info("用户：{} 认证 {} 的报告数据返回结果为：{}", xyResult.getTaskId(), XinYanConstantMethod.compareApiName(xyResult.getApiName()), jsonResult.toString());
+    }
+
     /**
      * 组装用户数据，进行新增操作
      */
-    public void assemble(Integer userId, String result, String apiName) {
+    public void assemble(Integer userId, String result, String apiName, Integer dataType) {
         new Thread(() -> {
             BXinYanData xinYanData = new BXinYanData();
             // userId
@@ -163,22 +186,27 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
             xinYanData.setDataValue(result);
             // 保存token
             xinYanData.setToken(JSONObject.parseObject(result).getString("token"));
+            // 数据类型
+            xinYanData.setDataType(dataType);
             insert(xinYanData);
 
-            // 同时更新用户关联的状态表，更新雷达认证状态字段
-            BSysUserStatus bSysUserStatus = new BSysUserStatus();
-            bSysUserStatus.setUserId(userId);
+            // 用户状态只需要在为原始数据的时候更新一次就可以了
+            if (dataType.equals(BusinessConst.ORIGINAL_DATA)) {
+                // 同时更新用户关联的状态表，更新雷达认证状态字段
+                BSysUserStatus bSysUserStatus = new BSysUserStatus();
+                bSysUserStatus.setUserId(userId);
 
-            if (XinYanConstantEnum.API_NAME_LD.getApiName().equals(apiName))
-                bSysUserStatus.setXinyanRadarStatus(BusinessConst.OK);
-            if (XinYanConstantEnum.API_NAME_YYS.getApiName().equals(apiName))
-                bSysUserStatus.setXinyanMobileStatus(BusinessConst.OK);
-            if (XinYanConstantEnum.API_NAME_JH.getApiName().equals(apiName)) {
-                bSysUserStatus.setXinyanZmfStatus(BusinessConst.OK);
-                bSysUserStatus.setXinyanTaobaoStatus(BusinessConst.OK);
+                if (XinYanConstantEnum.API_NAME_LD.getApiName().equals(apiName))
+                    bSysUserStatus.setXinyanRadarStatus(BusinessConst.OK);
+                if (XinYanConstantEnum.API_NAME_YYS.getApiName().equals(apiName))
+                    bSysUserStatus.setXinyanMobileStatus(BusinessConst.OK);
+                if (XinYanConstantEnum.API_NAME_JH.getApiName().equals(apiName)) {
+                    bSysUserStatus.setXinyanZmfStatus(BusinessConst.OK);
+                    bSysUserStatus.setXinyanTaobaoStatus(BusinessConst.OK);
+                }
+
+                this.bSysUserStatusService.updateByUserId(bSysUserStatus);
             }
-
-            this.bSysUserStatusService.updateByUserId(bSysUserStatus);
         }).start();
     }
 }

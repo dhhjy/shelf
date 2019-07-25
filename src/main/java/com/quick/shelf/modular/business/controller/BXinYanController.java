@@ -141,7 +141,7 @@ public class BXinYanController extends BaseController {
             if (jsonResult.getString("errorCode") == null) {
                 // 当接口返回正常 即没有 errorCode时，进行
                 // 新增操作，新增时同时修改用户相关的 状态 'b_sys_user_status'
-                this.bXinYanDataService.assemble(userId, result, XinYanConstantEnum.API_NAME_LD.getApiName());
+                this.bXinYanDataService.assemble(userId, result, XinYanConstantEnum.API_NAME_LD.getApiName(),BusinessConst.ORIGINAL_DATA);
             }
             model.addAttribute("radarData", JSONObject.parse(result));
         } else {
@@ -152,23 +152,41 @@ public class BXinYanController extends BaseController {
     }
 
     /**
-     * 获取用户芝麻分数据（淘宝报告数据）
-     * 新颜淘宝数据主要使用在芝麻分上，所以，
-     * 前台页面的数据叫做芝麻分
+     * 获取用户淘宝报告数据
      *
      * @return
      */
-    @BussinessLog(value = "获取用户芝麻分报告（淘宝报告）")
-    @ApiOperation(value = "获取用户芝麻分报告", notes = "获取用户芝麻分报告", httpMethod = "GET")
+    @BussinessLog(value = "获取用户淘宝报告")
+    @ApiOperation(value = "获取用户淘宝报告", notes = "获取用户淘宝报告", httpMethod = "GET")
     @ApiImplicitParam(value = "用户主键", name = "userId", required = true, dataType = "Integer")
     @RequestMapping(value = "/getTaoBaoWebReport/{userId}")
     public String getTaoBaoWebReport(@PathVariable Integer userId, Model model) {
         logger.info("用户：{} 获取用户芝麻分报告", userId);
         BSysUser bSysUser = this.bSysUserService.selectBSysUserByUserId(userId);
-        BXinYanData zmf = this.bXinYanDataService.selectBXinYanDataByUserId(userId, XinYanConstantEnum.API_NAME_TB.getApiName());
-        model.addAttribute("taoBaoWeb", null == zmf ? null : JSONObject.parseObject(zmf.getDataValue()));
+        BXinYanData tb = this.bXinYanDataService.selectBXinYanDataByUserId(userId, XinYanConstantEnum.API_NAME_JH.getApiName());
+        model.addAttribute("taoBaoWeb", null == tb ? null : JSONObject.parseObject(tb.getDataValue()));
+        model.addAttribute("taoBaoWebDate", null == tb ? null : tb.getCreateTime());
         model.addAttribute("bSysUser", bSysUser);
         return PREFIX + "xinYanTaoBaoWeb.html";
+    }
+
+    /**
+     * 获取用户运营商数据
+     *
+     * @return
+     */
+    @BussinessLog(value = "获取用户运营商报告")
+    @ApiOperation(value = "获取用户运营商报告", notes = "获取用户运营商报告", httpMethod = "GET")
+    @ApiImplicitParam(value = "用户主键", name = "userId", required = true, dataType = "Integer")
+    @RequestMapping(value = "/getMobileWebReport/{userId}")
+    public String getMobileWebReport(@PathVariable Integer userId, Model model) {
+        logger.info("用户：{} 获取用户运营商报告", userId);
+        BSysUser bSysUser = this.bSysUserService.selectBSysUserByUserId(userId);
+        BXinYanData mobile = this.bXinYanDataService.selectBXinYanDataByUserId(userId, XinYanConstantEnum.API_NAME_YYS.getApiName());
+        model.addAttribute("mobileWeb", null == mobile ? null : JSONObject.parseObject(mobile.getDataValue()));
+        model.addAttribute("mobileWebDate", null == mobile ? null : mobile.getCreateTime());
+        model.addAttribute("bSysUser", bSysUser);
+        return PREFIX + "xinYanMobile.html";
     }
 
     /**
@@ -192,8 +210,9 @@ public class BXinYanController extends BaseController {
         BSysUser bSysUser = this.bSysUserService.selectBSysUserByUserId(Integer.valueOf(userId));
         // 原始数据回调
         String callbackJson = getProjectPath() + "/xinYan/callbackJson/" + userId;
+        String callbackReport = getProjectPath() + "/xinYan/callbackReport/" + userId;
         // 正式接入时使用下面这个即可
-        return XinYanConstantMethod.getXinYanH5Url(bSysUser.getUserId() + suffix, type, callbackJson, null);
+        return XinYanConstantMethod.getXinYanH5Url(bSysUser.getUserId() + suffix, type, callbackJson, callbackReport);
     }
 
     /**
@@ -210,7 +229,7 @@ public class BXinYanController extends BaseController {
     @RequestMapping(value = "/callbackJson/{userId}", produces = "application/json", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
     public void callbackJson(@RequestBody XinYanResult xyResult, @PathVariable("userId") Integer userId) {
-        logger.info("新颜征信回调返回了用户：{} 的{} 类型的认证数据", userId, xyResult.getApiName());
+        logger.info("新颜征信原始数据回调返回了用户：{} 的{} 类型的认证数据", userId, xyResult.getApiName());
         // 设置缓存立木回调数据 单位秒：60 * 60 * 24 * 365
         redisUtil.set(XinYanConstantMethod.REDIS_KEY + DateUtil.getCurrentTimestampMs() + "-" + userId + "-" + xyResult.getToken() + "-" + xyResult.getApiName(),
                 userId + "-" + xyResult.getToken() + "-" + xyResult.getApiName() + "-" + DateUtil.getCurrentDateString(), 60 * 60 * 24 * 365);
@@ -222,9 +241,40 @@ public class BXinYanController extends BaseController {
             if (XinYanConstantEnum.API_NAME_JH.getApiName().equals(xyResult.getApiName()))
                 // 保存新颜芝麻分(淘宝)的原始数据
                 this.bXinYanDataService.xinYanJHJsonData(xyResult);
-            if(XinYanConstantEnum.API_NAME_YYS.getApiName().equals(xyResult.getApiName()))
+            if (XinYanConstantEnum.API_NAME_YYS.getApiName().equals(xyResult.getApiName()))
                 // 保存新颜运营商的原始数据
                 this.bXinYanDataService.xinYanYYSJsonData(xyResult);
+        }
+    }
+
+    /**
+     * 查询报告结果通知地址
+     * 新颜报告数据回调
+     *
+     * @return
+     */
+    @CacheEvict(value = BusinessConst.CONSOLE_PORT, allEntries = true)
+    @CallBackLog(value = "新颜报告数据回调地址")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "用户主键ID", name = "userId", required = true, dataType = "String")
+    })
+    @RequestMapping(value = "/callbackReport/{userId}", produces = "application/json", method = RequestMethod.POST)
+    @ResponseStatus(value = HttpStatus.OK)
+    public void callbackReport(@RequestBody XinYanResult xyResult, @PathVariable("userId") Integer userId) {
+        logger.info("新颜征信报告数据回调返回了用户：{} 的{} 类型的认证数据", userId, xyResult.getApiName());
+        xyResult.setTaskId(String.valueOf(userId));
+        // 请求成功后进行查询数据并且保存的操作
+        if (XinYanConstantMethod.SUCCESS.equals(xyResult.getSuccess())) {
+            // 报告数据与原始数据都是一份价钱。同时生成
+            // 所以此处不用再单独调用方法，计算调用次数与调用费用
+            // 设置多个选项的目的是为了记录日志，并且通过AOP的方式
+            // 统计接口统计
+            if (XinYanConstantEnum.API_NAME_TB.getApiName().equals(xyResult.getApiName()))
+                // 保存新颜芝麻分(淘宝)的原始数据
+                this.bXinYanDataService.xinYanTBReportData(xyResult);
+            if (XinYanConstantEnum.API_NAME_YYS.getApiName().equals(xyResult.getApiName()))
+                // 保存新颜运营商的原始数据
+                this.bXinYanDataService.xinYanYYSReportData(xyResult);
         }
     }
 }

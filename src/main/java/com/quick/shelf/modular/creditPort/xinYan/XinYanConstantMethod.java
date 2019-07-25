@@ -7,6 +7,8 @@ import com.quick.shelf.core.util.xinYanUtils.util.SecurityUtil;
 import com.quick.shelf.modular.business.entity.BSysUser;
 import net.sf.json.JSONObject;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -16,10 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 /**
  * 新颜接口常量配置及常用方法
@@ -44,7 +43,7 @@ public class XinYanConstantMethod {
     // 请求原始数据地址
     public static final String JSON_DATA_PATH = "/api/user/data";
     // 请求报告数据地址
-    private static final String REPORT_PATH = "/api/user/data/report/json?";
+    public static final String REPORT_PATH = "/api/user/data/report/json";
     // 请求页面数据
     private static final String PAGE_PATH = "/#/carrierReport?";
     // 全景雷达
@@ -61,6 +60,7 @@ public class XinYanConstantMethod {
     public static final String SUCCESS = "true";
     // 成功状态码
     public static final String CODE = "20000";
+
     /**
      * 获取任务的H5回调页面(默认不显示H5的导航)
      * 通过回调地址 jumpUrl 直接 返回到APP的页面上进行授权后的页面展示
@@ -84,39 +84,6 @@ public class XinYanConstantMethod {
         }
         logger.info("url:{}", url);
         return url;
-    }
-
-    /**
-     * 获取原始数据征信报告时的URL地址
-     *
-     * @param token 任务查询凭证
-     * @return
-     */
-    public static String getJsonDataUrl(String token) {
-        return XinYanConstantMethod.DEVELOP_URL + XinYanConstantMethod.JSON_DATA_PATH + "?apiUser=" + XinYanConstantMethod.ApiUser
-                + "&apiEnc=" + XinYanConstantMethod.getJsonDataApiEnc() + "&token=" + token;
-    }
-
-    /**
-     * 获取报告(页面)征信报告时的URL地址
-     *
-     * @param token 任务查询凭证
-     * @return
-     */
-    public static String getReportaUrl(String token) {
-        return XinYanConstantMethod.DEVELOP_URL + XinYanConstantMethod.REPORT_PATH + "apiUser=" + XinYanConstantMethod.ApiUser
-                + "&apiEnc=" + XinYanConstantMethod.getJsonDataApiEnc() + "&token=" + token;
-    }
-
-    /**
-     * 获取报告(页面)征信报告时的URL地址
-     *
-     * @param token 任务查询凭证
-     * @return
-     */
-    public static String getPageUrl(String token) {
-        return XinYanConstantMethod.DEVELOP_URL + XinYanConstantMethod.PAGE_PATH + "apiUser=" + XinYanConstantMethod.ApiUser
-                + "&apiEnc=" + XinYanConstantMethod.getJsonDataApiEnc() + "&token=" + token;
     }
 
     /**
@@ -152,6 +119,20 @@ public class XinYanConstantMethod {
      */
     public static String getJsonDataApiEnc() {
         return DigestUtils.md5Hex(XinYanConstantMethod.ApiUser + XinYanConstantMethod.AccessKey);
+    }
+
+    /**
+     * 返回封装好的 params 参数
+     *
+     * @param 本次任务查询凭证
+     * @return List<NameValuePair>
+     */
+    public static List<NameValuePair> getParams(String token) {
+        List<NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("apiUser", XinYanConstantMethod.ApiUser));
+        params.add(new BasicNameValuePair("apiEnc", XinYanConstantMethod.getJsonDataApiEnc()));
+        params.add(new BasicNameValuePair("token", token));
+        return params;
     }
 
     /**

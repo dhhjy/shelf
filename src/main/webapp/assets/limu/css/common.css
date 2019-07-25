@@ -868,10 +868,9 @@ input:-moz-placeholder { color:#999; }
 /**/
 .togglemore{
     padding-right: 12px;
-    background: url(../images/manage/icon-down.png) no-repeat right center;
 }
 .togglemore1{
-    background-image: url(../images/manage/icon-up.png);
+
 }
 
 

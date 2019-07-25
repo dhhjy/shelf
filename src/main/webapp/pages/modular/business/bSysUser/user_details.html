@@ -459,6 +459,10 @@
                     <td colspan="5">
                         <a href='javascript:void(0);' id="openReDar"
                            class='btn btn-primary'>全景雷达</a>
+                        @if(bSysUserStatus.xinyanMobileStatus == "1"){
+                        <a href='javascript:void(0);' id="openXyMobile"
+                           class='btn btn-primary'>运营商报告</a>
+                        @}
                         @if(bSysUserStatus.xinyanZmfStatus == "1"){
                         <a href='javascript:void(0);' id="openZmf"
                            class='btn btn-primary'>芝麻分报告</a>
@@ -687,6 +691,24 @@
         };
 
         /**
+         * 打开新颜运营商报告
+         **/
+        var openMobileReportFun = function () {
+            var url = Feng.ctxPath + "/xinYan/getMobileWebReport/" + userId;
+            parent.layer.open({
+                type: 2,
+                title: "运营商",
+                btn: ['关闭'],
+                shadeClose: true,
+                maxmin: true,
+                resize: true,
+                shade: 0.8,
+                area: ['100%', '100%'],
+                content: url
+            });
+        };
+
+        /**
          * 打开定位信息比对
          **/
         var openGPSCompareFun = function () {
@@ -759,7 +781,6 @@
             openMobileFun();
         });
 
-
         // 新颜雷达
         $('#openReDar').click(function () {
             openReDarFun();
@@ -768,6 +789,11 @@
         // 新颜芝麻分
         $('#openZmf').click(function () {
             openZmfReportFun();
+        });
+
+        // 新颜芝麻分
+        $('#openXyMobile').click(function () {
+            openMobileReportFun();
         });
 
         // GPS定位对比
