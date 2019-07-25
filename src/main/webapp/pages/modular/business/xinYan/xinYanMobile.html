@@ -1,698 +1,877 @@
 <!DOCTYPE html>
 
-<link type="image/x-icon" href="/static/web/images/favicon.ico" rel="Shortcut Icon">
-
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="renderer" content="webkit"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width"/>
+    <meta name="viewport" content="width=device-width" />
+    <link href="${ctxPath}/assets/expand/images/favicon.ico" rel="icon">
     <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/limu/css/common.css?_v="/>
     <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/limu/css/manage.css?_v="/>
     <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/limu/css/liMuStyle.css?_v="/>
     <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/myIcon/iconfont.css?_v="/>
     <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/boostrap/bootstrap.3.3.7.min.css">
     <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/Hui3.0/css/mnoReport.css?v=201708101">
-    <title>运营商报告</title>
-</head>
 
-<body>
+    <title>运营商报告</title>
+    <style>
+        .child_table td{
+            line-height: 28px;
+            display: inline-block;
+        }
+        .credit_main table, .credit_head table{
+            font-size: 16px;
+        }
+
+        .bold{
+            font-weight: bold;
+        }
+        .col_red{
+            color:#ff0000;
+        }
+    </style>
+</head>
+<body style="background-color: #f2f2f2;">
 <div class="pt_container">
     <div class="pt_content">
+        <input type="hidden" value="24d09e4bb734439eb5ce4a6c3f8a5dca" id="tokenVal" />
         <!--我的服务-->
         <div class="box_wrap">
             <div class="box_center Mserve">
-                <div class="Mreport">
-                    <!--右侧内容区-->
-                    <div class="MrightCon" style="padding: 20px 34px 100px 28px">
-
+                <div class="Mreport" ><!--  style="padding-left: 0;" -->
+                    <!-- 左侧菜单 -->
+                    <div class="MrightCon" style="padding: 20px 34px 100px 28px"><!-- style="padding-left: 110px;padding-right: 110px; border-left: none;" -->
                         <div class="headName text_center">
                             运营商报告
                         </div>
-                        <!-- 头部内容 -->
                         <div class="credit_head">
-                            <table border="0" cellspacing="0" cellpadding="0"
-                                   style="width: 100%; table-layout: fixed;">
+                            <table border="0" cellspacing="0" cellpadding="0">
                                 <tr>
-                                    <td colspan="2">用户姓名：
-                                        <span>
-                                            @if(isNotEmpty(mobileWeb.data.carrierUserInfo.name)){
-                                                ${mobileWeb.data.carrierUserInfo.name}
-                                            @}
-                                        </span>
+                                    <td>
+                                        主体用户：<span>${mobileWeb.user_basic_info.name}</span>
                                     </td>
-                                    <td class="text-right" colspan="1">数据来源：<span>秒秒贷</span>
+                                    <td class="text_center">
+                                        <span >数据来源：${mobileWeb.data_source.data_type}</span>
                                     </td>
-                                    <td class="text-right" colspan="2">获取时间范围：<span>3个月</span>
-                                    </td>
-                                    <td class="text-right" colspan="2">获取时间：
-                                        <span>
-                                            ${mobileWebDate, "yyyy-MM-dd" }
-                                        </span>
+                                    <td class="text-right">
+                                        获取时间：<span>${mobileWeb.data_source.data_gain_time}</span>
                                     </td>
                                 </tr>
                             </table>
                         </div>
-
-                        <!-- 主体内容 -->
+                        <!--内容-->
                         <div class="credit_main" style="padding-bottom: 100px;">
-                            <!--用户信息-->
-                            <h3 class="mt_20 text_center fs_26">
-                                <svg class="myIcon" aria-hidden="true">
-                                    <use xlink:href="#icon-geren"></use>
-                                </svg>
-                                用户信息
-                            </h3>
-                            <!--用户信息-->
+                            <h3 class="mt_20 text_center fs_28">身份特征</h3>
+                            <!--基本信息-->
                             <div class="mt_14 credit_table">
-                                <p>用户信息</p>
+                                <p>基本信息</p>
                                 <table border="0" cellspacing="0" cellpadding="0">
                                     <tr>
-                                        <th colspan="16">
-                                            <svg class="myIcon" aria-hidden="true">
-                                                <use xlink:href="#icon-gerenzhongxinxuanzhong"></use>
-                                            </svg>
-                                            姓名
-                                        </th>
-                                        <td colspan="84">
-                                            @if(isNotEmpty(mobileWeb.data.carrierUserInfo.name)){
-                                            <span style="padding-right: 23px">
-                                                    ${mobileWeb.data.carrierUserInfo.name}
-                                                </span>
-                                            <span class="valid">匹配成功</span>
-                                            @}else{
-                                            <span class="unknow">信息不符</span>
-                                            @}
-                                        </td>
+                                        <th colspan="16">姓名</th>
+                                        <td colspan="18">${mobileWeb.user_basic_info.name}</td>
+                                        <th colspan="15">性别</th>
+                                        <td colspan="18">${mobileWeb.user_basic_info.gender}</td>
+                                        <th colspan="15">年龄</th>
+                                        <td colspan="18">${mobileWeb.user_basic_info.age}</td>
                                     </tr>
                                     <tr>
-                                        <th colspan="16">
-                                            <svg class="myIcon" aria-hidden="true">
-                                                <use xlink:href="#icon-shenfenzheng"></use>
-                                            </svg>
-                                            身份证
-                                        </th>
-                                        <td colspan="84">
-                                            @if(isNotEmpty(mobileWeb.data.carrierUserInfo.idCard)){
-                                            <span style="padding-right: 23px">
-                                                    ${mobileWeb.data.carrierUserInfo.idCard}
-                                                </span>
-                                            <span class="valid">已实名认证</span>
-                                            @}else{
-                                            <span class="unknow">信息不符</span>
-                                            @}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th colspan="16">
-                                            <svg class="myIcon" aria-hidden="true">
-                                                <use xlink:href="#icon-shoujihaoma"></use>
-                                            </svg>
-                                            淘宝手机号
-                                        </th>
-                                        <td colspan="84">
-                                            @if(isNotEmpty(mobileWeb.data.carrierUserInfo.mobile)){
-                                            <span style="padding-right: 23px">
-                                                    ${mobileWeb.data.carrierUserInfo.mobile}
-                                                </span>
-                                            <span class="valid">已实名认证</span>
-                                            @}else{
-                                            <span class="unknow">信息不符</span>
-                                            @}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th colspan="16">运营商</th>
-                                        <td colspan="34">
-                                            @if(isNotEmpty(mobileWeb.data.carrierUserInfo.carrier)){
-                                            @if(mobileWeb.data.carrierUserInfo.carrier == "CHINA_MOBILE"){
-                                            中国移动
-                                            @}else if(mobileWeb.data.carrierUserInfo.carrier == "CHINA_TELECOM"){
-                                            中国电信
-                                            @}else if(mobileWeb.data.carrierUserInfo.carrier == "CHINA_UNICOM"){
-                                            中国联通
-                                            @}
-                                            @}else{
-                                            <span class="unknow">无信息</span>
-                                            @}
-                                        </td>
                                         <th colspan="16">地址</th>
-                                        <td colspan="34">
-                                            @if(isNotEmpty(mobileWeb.data.carrierUserInfo.address)){
-                                            <span style="padding-right: 23px">
-                                                ${mobileWeb.data.carrierUserInfo.address}
-                                            </span>
-                                            @}else{
-                                            <span class="unknow">无信息</span>
-                                            @}
-                                        </td>
+                                        <td colspan="84">${mobileWeb.user_basic_info.address}</td>
                                     </tr>
                                     <tr>
-                                        <th colspan="16">入网时间</th>
-                                        <td colspan="34">
-                                            @if(isNotEmpty(mobileWeb.data.carrierUserInfo.openTime)){
-                                            <span style="padding-right: 23px">
-                                                    ${mobileWeb.data.carrierUserInfo.openTime}
-                                                </span>
-                                            @}else{
-                                            <span class="unknow">无信息</span>
-                                            @}
-                                        </td>
-
-                                        <th colspan="16">入网时长</th>
-                                        <td colspan="34">
-                                            @if(isNotEmpty(mobileWeb.data.carrierUserInfo.openMonths)){
-                                            <span style="padding-right: 23px">
-                                                    ${mobileWeb.data.carrierUserInfo.openMonths} 个月
-                                                </span>
-                                            @}else{
-                                            <span class="unknow">无信息</span>
-                                            @}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th colspan="16">帐号星级</th>
-                                        <td colspan="34">
-                                            @if(isNotEmpty(mobileWeb.data.carrierUserInfo.level)){
-                                            <span class="valid">
-                                                    ${mobileWeb.data.carrierUserInfo.level}
-                                                </span>
-                                            @}else{
-                                            <span class="unknow">无星级</span>
-                                            @}
-                                        </td>
-                                        <th colspan="16">套餐名称</th>
-                                        <td colspan="34">
-                                            @if(isNotEmpty(mobileWeb.data.carrierUserInfo.packageName)){
-                                            ${mobileWeb.data.carrierUserInfo.packageName}
-                                            @}else{
-                                            <span class="unknow">无信息</span>
-                                            @}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th colspan="16">帐号状态</th>
-                                        <td colspan="34">
-                                            @if(isNotEmpty(mobileWeb.data.carrierUserInfo.state)){
-                                            @if(mobileWeb.data.carrierUserInfo.state == -1){
-                                            <span class="tag danger">未知</span>
-                                            @}else if(mobileWeb.data.carrierUserInfo.state == 0){
-                                            <span class="tag normal">正常</span>
-                                            @}else if(mobileWeb.data.carrierUserInfo.state == 1){
-                                            <span class="tag danger">单向停机</span>
-                                            @}else if(mobileWeb.data.carrierUserInfo.state == 2){
-                                            <span class="tag danger">停机</span>
-                                            @}else if(mobileWeb.data.carrierUserInfo.state == 3){
-                                            <span class="tag danger">预销户</span>
-                                            @}else if(mobileWeb.data.carrierUserInfo.state == 4){
-                                            <span class="tag danger">销户</span>
-                                            @}else if(mobileWeb.data.carrierUserInfo.state == 5){
-                                            <span class="tag danger">过户</span>
-                                            @}else if(mobileWeb.data.carrierUserInfo.state == 6){
-                                            <span class="tag danger">改号</span>
-                                            @}else if(mobileWeb.data.carrierUserInfo.state == 99){
-                                            <span class="tag danger">号码不存在</span>
-                                            @}
-                                            @}else{
-                                            <span class="unknow">无信息</span>
-                                            @}
-                                        </td>
-                                        <th colspan="16">当前可用余额</th>
-                                        <td colspan="34">
-                                            @if(isNotEmpty(mobileWeb.data.carrierUserInfo.availableBalance)){
-                                            <span class="tag normal">${mobileWeb.data.carrierUserInfo.availableBalance/100} 元</span>
-                                            @}else{
-                                            <span class="unknow">无信息</span>
-                                            @}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th colspan="16">最近一次更新时间</th>
+                                        <th colspan="16">身份证号</th>
                                         <td colspan="84">
-                                            @if(isNotEmpty(mobileWeb.data.carrierUserInfo.lastModifyTime)){
-                                            ${mobileWeb.data.carrierUserInfo.lastModifyTime}
-                                            @}else{
-                                            <span class="unknow">无信息</span>
-                                            @}
+                                            <table border="0" cellspacing="0" cellpadding="0" width="100%" class="child_table" style="table-layout: fixed;">
+                                                <tr>
+                                                    <td>${mobileWeb.user_basic_info.idcard}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        身份证号是否命中风险清单
+                                                        @if(isNotEmpty(mobileWeb.friend_circle.risk_analysis.is_name_and_idcard_in_court_black) &&
+                                                        @ mobileWeb.friend_circle.risk_analysis.is_name_and_idcard_in_court_black != "否"){
+                                                            <span class="mingzhong ml_20">命中</span>
+                                                        @}else if(isNotEmpty(mobileWeb.friend_circle.risk_analysis.is_name_and_mobile_in_finance_black) &&
+                                                        @ mobileWeb.friend_circle.risk_analysis.is_name_and_mobile_in_finance_black != "否"){
+                                                            <span class="mingzhong ml_20">命中</span>
+                                                        @}else{
+                                                            <span class="valid ml_20">未命中</span>
+                                                        @}
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">手机号</th>
+                                        <td colspan="84">
+                                            <table border="0" cellspacing="0" cellpadding="0" width="100%" class="child_table" style="table-layout: fixed;">
+                                                <tr style="position:relative;">
+                                                    <td colspan="3">
+                                                        ${mobileWeb.user_basic_info.mobile}
+                                                        <span class="valid ml_20">已实名认证</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5">
+                                                        手机号是否命中风险清单
+                                                        @if(isNotEmpty(mobileWeb.friend_circle.risk_analysis.is_name_and_mobile_in_finance_black) &&
+                                                        @ mobileWeb.friend_circle.risk_analysis.is_name_and_mobile_in_finance_black != "否"){
+                                                        <span class="mingzhong ml_20">命中</span>
+                                                        @}else{
+                                                        <span class="valid ml_20">未命中</span>
+                                                        @}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5">
+                                                        姓名与运营商数据是否匹配
+                                                            @if(mobileWeb.basic_info_check_items[5].result == "匹配成功"){
+                                                                <span class="valid ml_20">${mobileWeb.basic_info_check_items[5].result}</span>
+                                                            @}else{
+                                                                <span class="mingzhong ml_20">${mobileWeb.basic_info_check_items[5].result}</span>
+                                                            @}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5">
+                                                        身份证号与运营商数据是否匹配
+                                                        @if(mobileWeb.basic_info_check_items[4].result == "匹配成功"){
+                                                        <span class="valid ml_20">${mobileWeb.basic_info_check_items[4].result}</span>
+                                                        @}else{
+                                                        <span class="mingzhong ml_20">${mobileWeb.basic_info_check_items[4].result}</span>
+                                                        @}
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="16">紧急联系人</th>
+                                        <td colspan="84">
+                                            <table border="0" cellspacing="0" cellpadding="0" width="100%" class="child_table mt_14" style="table-layout: fixed;margin-top: 0px;">
+                                                <tr>
+                                                    <td>无相关数据</td>
+                                                </tr>
+                                            </table>
                                         </td>
                                     </tr>
                                 </table>
-                                <div class="mt_14 credit_table">
-                                    <p>通话行为</p>
-                                    <table border="0" cellspacing="0" cellpadding="0">
-                                        <tr>
-                                            <td style="text-align: center; padding: 26px 0 20px 0">
-                                                <span class="fs_14">通话频率</span>
-                                                <div class="fs_20 col_green" style="margin-top: 2px;">频繁通话</div>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
                             </div>
 
-                            @if(mobileWeb.data.families.~size > 0){
-                            <!--亲情号码信息-->
-                            <h3 class="mt_20 text_center fs_26">
-                                <svg class="myIcon" aria-hidden="true">
-                                    <use xlink:href="#icon-zhifubao8"></use>
-                                </svg>
-                                亲情号码信息
-                            </h3>
+                            <h3 class="mt_20 text_center fs_26">风险检测</h3>
+                            <!--信息检测-->
+
+
+                            <!--风险清单检测-->
                             <div class="mt_14 credit_table">
-                                <p>亲情号码信息</p>
-                                <table style="border-right: 1px solid #dfdfdf;" cellspacing="0"
-                                       cellpadding="0" class="border_right_none">
+                                <p>风险清单检测</p>
+                                <table border="0" cellspacing="0" cellpadding="0">
                                     <tr>
-                                        <th colspan="10">亲情网编号</th>
-                                        <th colspan="10">长号</th>
-                                        <th colspan="10">短号</th>
-                                        <th colspan="10">成员类型</th>
-                                        <th colspan="10">加入日期</th>
-                                        <th colspan="10">失效日期</th>
+                                        <td colspan="50">项目</td>
+                                        <td colspan="50">
+                                            命中次数
+                                        </td>
                                     </tr>
-                                    @for(familie in mobileWeb.data.families){
                                     <tr>
-                                        <td colspan="10">${familie.familyNum}</td>
-                                        <td colspan="10">${familie.longNumber}</td>
-                                        <td colspan="10">${familie.shortNumber}</td>
-                                        <td colspan="10">${familie.memberType}</td>
-                                        <td colspan="10">${familie.joinDate}</td>
-                                        <td colspan="10">${familie.expireDate}</td>
+                                        <th colspan="50">申请人姓名、身份证号码出现在法院风险单</th>
+                                        @if(mobileWeb.friend_circle.risk_analysis.is_name_and_idcard_in_court_black != "否"){
+                                            <td colspan="50" class="col_red fs_16">
+                                                1次
+                                            </td>
+                                        @}else{
+                                            <td colspan="50" class="col_green fs_16">
+                                                0次
+                                            </td>
+                                        @}
+                                    </tr>
+                                    <tr>
+                                        <th colspan="50">申请人姓名、身份证号码出现在金融机构风险名单</th>
+                                        @if(mobileWeb.friend_circle.risk_analysis.is_name_and_idcard_in_finance_black != "否"){
+                                            <td colspan="50" class="col_red fs_16">
+                                                1次
+                                            </td>
+                                        @}else{
+                                            <td colspan="50" class="col_green fs_16">
+                                                0次
+                                            </td>
+                                        @}
+                                    </tr>
+                                    <tr>
+                                        <th colspan="50">申请人姓名、手机号码出现在金融机构风险名单	</th>
+                                        @if(mobileWeb.friend_circle.risk_analysis.is_name_and_mobile_in_finance_black != "否"){
+                                            <td colspan="50" class="col_red fs_16">
+                                                1次
+                                            </td>
+                                        @}else{
+                                            <td colspan="50" class="col_green fs_16">
+                                                0次
+                                            </td>
+                                        @}
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <!--风险通话检测-->
+                            <div class="mt_14 credit_table">
+                                <p>风险通话检测</p>
+                                <table border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <th colspan="26">110电话</th>
+                                        <td colspan="74">
+                                            <div class="dis_line" style="width: 180px;">
+                                                ${mobileWeb.friend_circle.call_third_part_detail.call_110_num_6m} 次
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="26">120电话</th>
+                                        <td colspan="74">
+                                            <div class="dis_line" style="width: 180px;">
+                                                ${mobileWeb.friend_circle.call_third_part_detail.call_120_num_6m} 次
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="26">澳门电话</th>
+                                        <td colspan="74">
+                                            <div class="dis_line" style="width: 180px;">
+                                                ${mobileWeb.friend_circle.call_third_part_detail.call_macon_num_6m} 次
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="26">贷款类电话</th>
+                                        <td colspan="74">
+                                            <div class="dis_line" style="width: 180px;">
+                                                ${mobileWeb.friend_circle.call_third_part_detail.call_loan_num_6m} 次
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="26">信用卡电话</th>
+                                        <td colspan="74">
+                                            <div class="dis_line" style="width: 180px;">
+                                                ${mobileWeb.friend_circle.call_third_part_detail.call_credit_card_num_6m} 次
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="26">催收类电话</th>
+                                        <td colspan="74">
+                                            <div class="dis_line" style="width: 180px;">
+                                                ${mobileWeb.friend_circle.call_third_part_detail.call_collection_firm_num_6m} 次
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <h3 class="mt_20 text_center fs_26">通话行为</h3>
+                            <!--通话概况-->
+                            <div class="mt_10 credit_table">
+                                <p>通话概况</p>
+                                <table border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <td>
+                                            <table border="0" cellspacing="0" cellpadding="0" class="small_table">
+                                                <tr>
+                                                    <td class="col_000">总通话次数</td>
+                                                    <td colspan="2" class="col_000">总通话时长</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="col_999">
+                                                        <span class="fs_20 col_green">
+                                                            ${parseInt(mobileWeb.friend_circle.active_degree.dial_num_6m)+parseInt(mobileWeb.friend_circle.active_degree.dialed_num_6m)}
+                                                        </span>
+                                                        &nbsp;&nbsp;次
+                                                    </td>
+                                                    <td colspan="2" class="col_999">
+                                                        <span class="fs_20 col_green">
+                                                            ${parseInt(parseInt(parseInt(mobileWeb.friend_circle.active_degree.dial_duration_6m)/60))+parseInt(parseInt(parseInt(mobileWeb.friend_circle.active_degree.dialed_duration_6m)/60))}
+                                                        </span>
+                                                        &nbsp;分钟
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td>
+                                            <table border="0" cellspacing="0" cellpadding="0" class="small_table">
+                                                <tr>
+                                                    <td class="col_000">主叫次数</td>
+                                                    <td colspan="2" class="col_000">主叫时长</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="col_999">
+                                                        <span class="fs_20 col_green">
+                                                            ${mobileWeb.friend_circle.active_degree.dial_num_6m}
+                                                        </span>
+                                                        &nbsp;&nbsp;次
+                                                    </td>
+                                                    <td colspan="2" class="col_999">
+                                                        <span class="fs_20 col_green">
+                                                            ${parseInt(parseInt(mobileWeb.friend_circle.active_degree.dial_duration_6m)/60)}
+                                                        </span>
+                                                        &nbsp;分钟
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <table border="0" cellspacing="0" cellpadding="0" class="small_table">
+                                                <tr>
+                                                    <td class="col_000">被叫次数</td>
+                                                    <td colspan="2" class="col_000">被叫时长</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="col_999">
+                                                        <span class="fs_20 col_green">
+                                                             ${mobileWeb.friend_circle.active_degree.dialed_num_6m}
+                                                        </span>
+                                                        &nbsp;&nbsp;次
+                                                    </td>
+                                                    <td colspan="2" class="col_999">
+                                                        <span class="fs_20 col_green">
+                                                            ${parseInt(parseInt(mobileWeb.friend_circle.active_degree.dialed_duration_6m)/60)}
+                                                        </span>
+                                                        &nbsp;分钟
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td>
+                                            <table border="0" cellspacing="0" cellpadding="0" class="small_table">
+                                                <tr>
+                                                    <td colspan="3" class="col_000">本地通话</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3" class="col_999">
+                                                        <span class="fs_20 col_green">
+                                                            ${mobileWeb.friend_circle.call_time_detail.local_num_avg_6m}
+                                                        </span>
+                                                        &nbsp;&nbsp;次
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+
+                            <!--活跃情况-->
+                            <div class="mt_14 credit_table">
+                                <p>活跃情况</p>
+                                <table border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <td colspan="3">项目</td>
+                                        <td colspan="2">近1月</td>
+                                        <td colspan="2">近3月</td>
+                                        <td colspan="2">近6月</td>
+                                        <td colspan="2">月均</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">通话活跃天数</th>
+                                        <td colspan="2">${mobileWeb.active_degree_detail.call_day_1m}</td>
+                                        <td colspan="2">${mobileWeb.active_degree_detail.call_day_3m}</td>
+                                        <td colspan="2">${mobileWeb.active_degree_detail.call_day_6m}</td>
+                                        <td colspan="2">${mobileWeb.active_degree_detail.call_day_avg_6m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">通话次数</th>
+                                        <td colspan="2">${mobileWeb.active_degree_detail.call_time_1m}</td>
+                                        <td colspan="2">${mobileWeb.active_degree_detail.call_time_3m}</td>
+                                        <td colspan="2">${mobileWeb.active_degree_detail.call_time_6m}</td>
+                                        <td colspan="2">${mobileWeb.active_degree_detail.call_time_avg_6m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">通话时长(分钟)</th>
+                                        <td colspan="2">${parseInt(parseInt(mobileWeb.friend_circle.call_analysis.total_time_1m)/60)}</td>
+                                        <td colspan="2">${parseInt(parseInt(mobileWeb.friend_circle.call_analysis.total_time_3m)/60)}</td>
+                                        <td colspan="2">${parseInt(parseInt(mobileWeb.friend_circle.call_analysis.total_time_6m)/60)}</td>
+                                        <td colspan="2">${parseInt(parseInt(mobileWeb.active_degree_detail.call_avg_duration_6m)/60)}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">主叫次数</th>
+                                        <td colspan="2">${mobileWeb.friend_circle.call_analysis.total_dial_num_1m}</td>
+                                        <td colspan="2">${mobileWeb.friend_circle.call_analysis.total_dial_num_3m}</td>
+                                        <td colspan="2">${mobileWeb.friend_circle.call_analysis.total_dial_num_6m}</td>
+                                        <td colspan="2">${mobileWeb.friend_circle.call_analysis.total_dial_num_avg_6m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">单次通话最长时长(分钟)</th>
+                                        <td colspan="2">${parseInt(parseInt(mobileWeb.friend_circle.call_time_detail.max_time_1m)/60)}</td>
+                                        <td colspan="2">${parseInt(parseInt(mobileWeb.friend_circle.call_time_detail.max_time_3m)/60)}</td>
+                                        <td colspan="2">${parseInt(parseInt(mobileWeb.friend_circle.call_time_detail.max_time_6m)/60)}</td>
+                                        <td colspan="2">--</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">单次通话最短时长(分钟)</th>
+                                        <td colspan="2">${mobileWeb.friend_circle.call_time_detail.min_time_1m}</td>
+                                        <td colspan="2">${mobileWeb.friend_circle.call_time_detail.min_time_3m}</td>
+                                        <td colspan="2">${mobileWeb.friend_circle.call_time_detail.min_time_6m}</td>
+                                        <td colspan="2">--</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">短信条数</th>
+                                        <td colspan="2">${mobileWeb.active_degree_detail.sms_time_1m}</td>
+                                        <td colspan="2">${mobileWeb.active_degree_detail.sms_time_3m}</td>
+                                        <td colspan="2">${mobileWeb.active_degree_detail.sms_time_6m}</td>
+                                        <td colspan="2">${mobileWeb.active_degree_detail.sms_time_avg_6m}</td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <!--通话时间分析-->
+                            <div class="mt_14 credit_table">
+                                <p>通话时间分析（近6个月）</p>
+                                <div id="main" style="height:330px;border-left:1px solid #dfdfdf;border-right:1px solid #dfdfdf;"></div>
+                                <table border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <th colspan="13">时间段</th>
+                                        <th colspan="7" style="padding-right: 0;">通话<br />次数</th>
+                                        <th colspan="8" style="padding-right: 0;">通话<br />号码数</th>
+                                        <th colspan="10" style="padding-right: 0;">通话总<br />时长(分)</th>
+                                        <th colspan="10">主叫号码数</th>
+                                        <th colspan="10">被叫号码数</th>
+                                        <th colspan="10">最后一次通话时间</th>
+                                        <th colspan="10">第一次通话时间	</th>
+                                    </tr>
+                                    @for(cdd in mobileWeb.friend_circle.call_duration_detail_6m){
+                                    <tr>
+                                        <td colspan="13">${cdd.time_step}</td>
+                                        <td colspan="7" style="padding-right: 0;">${cdd.total_num}</td>
+                                        <td colspan="8" style="padding-right: 0;">${cdd.peer_num}</td>
+                                        <td colspan="10" style="padding-right: 0;">${parseInt(parseInt(cdd.total_time)/60)}</td>
+                                        <td colspan="10">${cdd.dial_num}</td>
+                                        <td colspan="10">${cdd.dialed_num}</td>
+                                        <td colspan="10">${cdd.latest_call_time}</td>
+                                        <td colspan="10">${cdd.farthest_call_time}</td>
                                     </tr>
                                     @}
                                 </table>
                             </div>
-                            @}
-                            <!--消费能力-->
+
                             <h3 class="mt_20 text_center fs_26">消费能力</h3>
+                            <!--活跃情况-->
                             <div class="mt_14 credit_table">
                                 <p>消费能力</p>
                                 <table border="0" cellspacing="0" cellpadding="0">
-                                    <tbody><tr>
+                                    <tr>
                                         <td colspan="4">项目</td>
                                         <td colspan="3">近1月</td>
                                         <td colspan="3">近3月</td>
                                         <td colspan="3">近6月</td>
                                         <td colspan="3">平均</td>
                                     </tr>
-
                                     <tr>
                                         <th colspan="4">消费总额(元)</th>
-                                        <td colspan="3">101.00</td>
-                                        <td colspan="3">303.00</td>
-                                        <td colspan="3">425.70</td>
-                                        <td colspan="3">70.95</td>
+                                        <td colspan="3">${parseInt(parseInt(mobileWeb.consumption_detail.total_fee_1m)/100)}</td>
+                                        <td colspan="3">${parseInt(parseInt(mobileWeb.consumption_detail.total_fee_3m)/100)}</td>
+                                        <td colspan="3">${parseInt(parseInt(mobileWeb.consumption_detail.total_fee_6m)/100)}</td>
+                                        <td colspan="3">${parseInt(parseInt(mobileWeb.consumption_detail.total_fee_avg_6m)/100)}</td>
                                     </tr>
-
                                     <tr>
                                         <th colspan="4">网络流量消费金额(元)</th>
-                                        <td colspan="3">--</td>
-                                        <td colspan="3">--</td>
-                                        <td colspan="3">--</td>
-                                        <td colspan="3">--</td>
+                                        <td colspan="3">${parseInt(parseInt(mobileWeb.consumption_detail.web_fee_1m)/100)}</td>
+                                        <td colspan="3">${parseInt(parseInt(mobileWeb.consumption_detail.web_fee_3m)/100)}</td>
+                                        <td colspan="3">${parseInt(parseInt(mobileWeb.consumption_detail.web_fee_6m)/100)}</td>
+                                        <td colspan="3">${parseInt(parseInt(mobileWeb.consumption_detail.web_fee_avg_6m)/100)}</td>
                                     </tr>
 
                                     <tr>
                                         <th colspan="4">通话消费金额(元)</th>
-                                        <td colspan="3">--</td>
-                                        <td colspan="3">--</td>
-                                        <td colspan="3">--</td>
-                                        <td colspan="3">--</td>
+                                        <td colspan="3">${parseInt(parseInt(mobileWeb.consumption_detail.call_fee_1m)/100)}</td>
+                                        <td colspan="3">${parseInt(parseInt(mobileWeb.consumption_detail.call_fee_3m)/100)}</td>
+                                        <td colspan="3">${parseInt(parseInt(mobileWeb.consumption_detail.call_fee_6m)/100)}</td>
+                                        <td colspan="3">${parseInt(parseInt(mobileWeb.consumption_detail.call_fee_avg_6m)/100)}</td>
                                     </tr>
 
                                     <tr>
                                         <th colspan="4">增值业务消费金额(元)</th>
-                                        <td colspan="3">--</td>
-                                        <td colspan="3">--</td>
-                                        <td colspan="3">--</td>
-                                        <td colspan="3">--</td>
+                                        <td colspan="3">${parseInt(parseInt(mobileWeb.consumption_detail.vas_fee_1m)/100)}</td>
+                                        <td colspan="3">${parseInt(parseInt(mobileWeb.consumption_detail.vas_fee_3m)/100)}</td>
+                                        <td colspan="3">${parseInt(parseInt(mobileWeb.consumption_detail.vas_fee_6m)/100)}</td>
+                                        <td colspan="3">${parseInt(parseInt(mobileWeb.consumption_detail.vas_fee_avg_6m)/100)}</td>
                                     </tr>
 
                                     <tr>
                                         <th colspan="4">其它消费金额(元)</th>
-                                        <td colspan="3">--</td>
-                                        <td colspan="3">--</td>
-                                        <td colspan="3">--</td>
-                                        <td colspan="3">--</td>
+                                        <td colspan="3">${parseInt(parseInt(mobileWeb.consumption_detail.extra_fee_1m)/100)}</td>
+                                        <td colspan="3">${parseInt(parseInt(mobileWeb.consumption_detail.extra_fee_3m)/100)}</td>
+                                        <td colspan="3">${parseInt(parseInt(mobileWeb.consumption_detail.extra_fee_6m)/100)}</td>
+                                        <td colspan="3">${parseInt(parseInt(mobileWeb.consumption_detail.extra_fee_avg_6m)/100)}</td>
                                     </tr>
 
-                                    </tbody></table>
+                                </table>
                             </div>
 
-                            <!--收货地址-->
-                            <h3 class="mt_20 text_center fs_26">
-                                <svg class="myIcon" aria-hidden="true">
-                                    <use xlink:href="#icon-gaopinleidayeweiji2"></use>
-                                </svg>
-                                收货地址
-                            </h3>
+                            <h3 class="mt_20 text_center fs_26">出行信息</h3>
+                            <!--出行信息-->
                             <div class="mt_14 credit_table">
-                                <p>收货地址</p>
-                                @for(address in mobileWeb.data.taobao.addresses){
-                                <table border="0" cellspacing="0" cellpadding="0" class="border_right_none"
-                                       style="border-right:1px solid #dfdfdf;">
+                                <p>出行信息</p>
+                                <table border="0" cellspacing="0" cellpadding="0">
                                     <tr>
-                                        <td colspan="100"
-                                            style="text-align: center; padding: 20px 0 20px 0; background: #f2f3f5;">
-                                            <span class="fs_14">收货地址 - ${addressLP.index}</span>
-                                            <div class="fs_20" style="margin-top:5px;position:relative;">
-                                                ${address.address}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="25">
-                                            <span class="col_999">收货人姓名</span>
-                                            <div class="fs_20 col_green" style="margin-top: 5px;">
-                                                ${address.name}
-                                            </div>
-                                        </td>
-                                        <td colspan="25">
-                                            <span class="col_999">电话</span>
-                                            <div class="fs_20 col_green" style="margin-top: 5px;">
-                                                ${address.phone_no}
-                                            </div>
-                                        </td>
-                                        <td colspan="25">
-                                            <span class="col_999">邮编</span>
-                                            <div class="fs_20 col_green" style="margin-top: 5px;">
-                                                ${address.postcode}
-                                            </div>
-                                        </td>
-                                        <td colspan="25" style="border-bottom: none;padding-top:16px;">
-                                            <span class="col_999">地址类型</span>
-                                            <div style="margin-top: 5px;">
-                                                未知
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="100">
-                                            <span class="col_999">备注</span>
-                                            <div class="fs_20" style="margin-top: 5px;">
-                                                ${address.note}
-                                            </div>
-                                        </td>
+                                        <th colspan="4">出发时间</th>
+                                        <th colspan="3">回程时间</th>
+                                        <th colspan="3">出发地</th>
+                                        <th colspan="3">目的地</th>
                                     </tr>
                                 </table>
-                                @}
-                            </div>
-
-                            <!--订单信息-->
-                            <h3 class="mt_20 text_center fs_26">
-                                <svg class="myIcon" aria-hidden="true">
-                                    <use xlink:href="#icon-stack"></use>
-                                </svg>
-                                订单详情
-                            </h3>
-                            <div class="credit_table order_table mt_14">
-                                <p class="headName">订单详情</p>
-                                <div class="order_info">
-
-                                    @for(trade_detail in mobileWeb.data.taobao.trade_details){
-                                    @if(trade_detailLP.index < 3){
-                                    <div class="order_item">
-                                        <table border="0" cellspacing="0" cellpadding="0" width="100%"
-                                               style="table-layout: fixed;">
-                                            <tbody>
-                                            <tr>
-                                                <td colspan="3" style="border-bottom: none;">
-                                                    <span class="span1 fs_16 col_green">订单号:</span>
-                                                    <span class="fs_16  col_green">${trade_detail.trade_info.trade_id}</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <span class="span1">订单金额：</span>
-                                                    <span>${trade_detail.trade_info.amount}</span>
-                                                </td>
-                                                <td colspan="2">
-                                                    <span class="span1">订单时间：</span>
-                                                    <span>${trade_detail.trade_info.trade_time}</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <span class="span1">订单状态：</span>
-                                                    <span>${trade_detail.trade_info.trade_status}</span>
-                                                </td>
-                                                <td colspan="2">
-                                                    <span class="span1">收货人信息：</span>
-                                                    <span>${trade_detail.trade_info.receiver}</span>
-                                                    <span class="ml_20">86-18699996820</span>
-                                                    <span class="ml_20"
-                                                          title="${trade_detail.trade_info.receive_address}">
-                                                                    ${trade_detail.trade_info.receive_address}
-                                                                </span>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                        <table border="0" cellspacing="0" cellpadding="0" width="100%">
-                                            <tr>
-                                                <td colspan="7" style="border-bottom: none;">
-                                                    <span class="span1 fs_16 col_green">购买商品信息</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>商品ID</th>
-                                                <th colspan="4">商品名称</th>
-                                                <th>商品单价</th>
-                                                <th>商品数量</th>
-                                            </tr>
-
-                                            @for(pi in trade_detail.product_info){
-                                            <tr>
-                                                <td> ${pi.product_id}</td>
-                                                <td colspan="4"> ${pi.product_name}</td>
-                                                <td> ${pi.product_price}</td>
-                                                <td> ${pi.product_amount}</td>
-                                            </tr>
-                                            @}
-
-                                        </table>
-                                        <table border="0" cellspacing="0" cellpadding="0" width="100%"
-                                               style="table-layout: fixed;">
-                                            <tr>
-                                                <td colspan="3" style="border-bottom: none;">
-                                                    <span class="span1 fs_16 col_green">商品物流信息</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>运送方式</th>
-                                                <th>物流公司</th>
-                                                <th>送货单号</th>
-                                            </tr>
-                                            @for(di in trade_detail.delivery_info){
-                                            <tr>
-                                                <td> ${di.delivery_method}</td>
-                                                <td> ${di.delivery_company}</td>
-                                                <td> ${di.delivery_no}</td>
-                                            </tr>
-                                            @}
-                                        </table>
-                                    </div>
-                                    @}else{
-                                    <div class="order_item" style="display:none" app-flow-node="">
-                                        <table border="0" cellspacing="0" cellpadding="0" width="100%"
-                                               style="table-layout: fixed;">
-                                            <tbody>
-                                            <tr>
-                                                <td colspan="3" style="border-bottom: none;">
-                                                    <span class="span1 fs_16 col_green">订单号:</span>
-                                                    <span class="fs_16  col_green">${trade_detail.trade_info.trade_id}</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <span class="span1">订单金额：</span>
-                                                    <span>${trade_detail.trade_info.amount}</span>
-                                                </td>
-                                                <td colspan="2">
-                                                    <span class="span1">订单时间：</span>
-                                                    <span>${trade_detail.trade_info.trade_time}</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <span class="span1">订单状态：</span>
-                                                    <span>${trade_detail.trade_info.trade_status}</span>
-                                                </td>
-                                                <td colspan="2">
-                                                    <span class="span1">收货人信息：</span>
-                                                    <span>${trade_detail.trade_info.receiver}</span>
-                                                    <span class="ml_20">86-18699996820</span>
-                                                    <span class="ml_20"
-                                                          title="${trade_detail.trade_info.receive_address}">
-                                                                    ${trade_detail.trade_info.receive_address}
-                                                                </span>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                        <table border="0" cellspacing="0" cellpadding="0" width="100%">
-                                            <tr>
-                                                <td colspan="7" style="border-bottom: none;">
-                                                    <span class="span1 fs_16 col_green">购买商品信息</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>商品ID</th>
-                                                <th colspan="4">商品名称</th>
-                                                <th>商品单价</th>
-                                                <th>商品数量</th>
-                                            </tr>
-
-                                            @for(pi in trade_detail.product_info){
-                                            <tr>
-                                                <td> ${pi.product_id}</td>
-                                                <td colspan="4"> ${pi.product_name}</td>
-                                                <td> ${pi.product_price}</td>
-                                                <td> ${pi.product_amount}</td>
-                                            </tr>
-                                            @}
-
-                                        </table>
-                                        <table border="0" cellspacing="0" cellpadding="0" width="100%"
-                                               style="table-layout: fixed;">
-                                            <tr>
-                                                <td colspan="3" style="border-bottom: none;">
-                                                    <span class="span1 fs_16 col_green">商品物流信息</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>运送方式</th>
-                                                <th>物流公司</th>
-                                                <th>送货单号</th>
-                                            </tr>
-                                            @for(di in trade_detail.delivery_info){
-                                            <tr>
-                                                <td> ${di.delivery_method}</td>
-                                                <td> ${di.delivery_company}</td>
-                                                <td> ${di.delivery_no}</td>
-                                            </tr>
-                                            @}
-                                        </table>
-                                    </div>
-                                    @}
-                                    @}
-                                    <p class="mt_16 text_center" style="margin-bottom: 20px;">
-                                        <a href="javascript:;" class="togglemore">展开</a>
-                                    </p>
+                                <div class="text_center" style="line-height: 164px;border: 1px solid #dfdfdf;border-top: none;">
+                                    无相关数据
                                 </div>
                             </div>
 
-                            <!--备注-->
-                            <p class="fs_14 col_999 mt_30">备注：</p>
-                            <p class="fs_14 col_999 mt_14">1.淘宝数据拉取用户1年内订单，最多1500笔。</p>
-                            <p class="fs_14 col_999 mt_14">2.虚拟消费除购买非实物商品外，还包括机票、酒店、电影票外卖等消费。</p>
-                            <p class="fs_14 col_999 mt_14">3.电话风险清单通过校验负面信息数据库中各类风险数据，提升客户管控效率，降低违约风险。</p>
+                            <h3 class="mt_20 text_center fs_26">社交关系</h3>
+                            <!--社交关系概况-->
+                            <div class="mt_10 credit_table">
+                                <p>社交关系概况</p>
+                                <table border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <td colspan="20">
+                                            <table border="0" cellspacing="0" cellpadding="0" class="small_table">
+                                                <tr>
+                                                    <td class="col_000">
+                                                        <div class="small_table_td_name">
+                                                            联系号码总数
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="col_999">
+                                                        <span class="fs_20 col_green">
+                                                            ${mobileWeb.friend_circle.friend_num_6m}
+                                                        </span>
+                                                        &nbsp;&nbsp;个
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="col_999">近6个月联系号码数</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td colspan="27">
+                                            <table border="0" cellspacing="0" cellpadding="0" class="small_table">
+                                                <tr>
+                                                    <td class="col_000">
+                                                        <div class="small_table_td_name">
+                                                            互通号码数
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="col_999">
+                                                        <span class="fs_20 col_green">
+                                                            ${mobileWeb.friend_circle.inter_peer_num_6m}
+                                                        </span>
+                                                        &nbsp;&nbsp;个
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="col_999">近6个月内相互通过电话的号码数</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td colspan="26">
+                                            <table border="0" cellspacing="0" cellpadding="0" class="small_table">
+                                                <tr>
+                                                    <td class="col_000">
+                                                        <div class="small_table_td_name">
+                                                            朋友圈紧密联系人数
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="col_999">
+                                                        <span class="fs_20 col_green">
+                                                            ${mobileWeb.friend_circle.good_friend_num_6m}
+                                                        </span>
+                                                        &nbsp;&nbsp;个
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="col_999">近6个月累计联系10次以上并且每月通话1次以上号码数量</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td colspan="27">
+                                            <table border="0" cellspacing="0" cellpadding="0" class="small_table">
+                                                <tr>
+                                                    <td class="col_000">
+                                                        <div class="small_table_td_name">
+                                                            朋友圈中心地
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="col_999">
+                                                        <span class="fs_20 col_green">
+                                                            ${mobileWeb.friend_circle.friend_city_center_6m}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="col_999">近6个月联系次数最多的归属地</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <!--近6月前10名通话联系人分析-->
+                            <div class="mt_14 credit_table">
+                                <p>通话联系人分析（按近6月通话次数排名）</p>
+<!--                                <div id="locationMain" style="padding:25px;border-left: 1px solid #dfdfdf;border-right: 1px solid #dfdfdf">-->
+<!--                                    <div id="locationEchart" style="height: 350px;">-->
+
+<!--                                    </div>-->
+<!--                                </div>-->
+                                <table border="0" cellspacing="0" cellpadding="0" class="padNone">
+                                    <tr>
+                                        <th colspan="16">号码</th>
+                                        <th colspan="16">互联网标识</th>
+                                        <th colspan="16">归属地</th>
+                                        <th colspan="16">通话<br/>次数</th>
+                                        <th colspan="16">通话时长(分钟)</th>
+                                        <th colspan="16">主叫<br/>次数</th>
+                                        <th colspan="16">主叫时长(分钟)</th>
+                                        <th colspan="16">第一次通话时间</th>
+                                        <th colspan="16">最后一次通话时间</th>
+                                    </tr>
+                                    @for(clt in mobileWeb.friend_circle.call_contact_detail){
+                                    <tr>
+                                        <td colspan="16">${clt.peer_num}</td>
+                                        <td colspan="16">${clt.company_name}</td>
+                                        <td colspan="16">${clt.city}</td>
+                                        <td colspan="16">${clt.call_num_6m}</td>
+                                        <td colspan="16">${parseInt(parseInt(clt.call_time_6m)/60)}</td>
+                                        <td colspan="16">${clt.dial_num_6m}</td>
+                                        <td colspan="16">${parseInt(parseInt(clt.dial_time_6m)/60)}</td>
+                                        <td colspan="16">${clt.first_call_time}</td>
+                                        <td colspan="16">${clt.last_call_time}</td>
+                                    </tr>
+                                    @}
+                                </table>
+                            </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
-
+        <!--提示-->
+        <div class="box_center fs_14" style="line-height: 26px;margin-bottom: 36px;">
+            免责声明：<br />
+            1、本报告为根据信息主体的授权将查询到的信息进行收集、归纳，未对该信息作任何的修改，不对信息的有效性、准确性、完整性做出任何承诺和保证。<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;您若对该报告有任何疑问的，欢迎及时向及信息源提出异议。<br />
+            2、对本报告不作任何明示或暗示的保证，请您自行承担相关的决策风险。请您按照约定的范围使用本报告，不得将本报告提供给第三人，否则后果自负。
+        </div>
     </div>
+
 </div>
 
 <!--跟随-->
 <div class="rightGps creditGps">
     <ul>
-        <li><a href="javascript:;">淘宝信息</a></li>
-        <li><a href="javascript:;">支付宝信息</a></li>
-        <li><a href="javascript:;">收货地址</a></li>
-        <li><a href="javascript:;">订单详情</a></li>
+        <li>
+            <a href="javascript:;">身份特征</a>
+        </li>
+        <li>
+            <a href="javascript:;">风险检测</a>
+        </li>
+        <li>
+            <a href="javascript:;">通话行为</a>
+        </li>
+        <li>
+            <a href="javascript:;">消费能力</a>
+        </li>
+        <li>
+            <a href="javascript:;">出行信息</a>
+        </li>
+        <li>
+            <a href="javascript:;">社交关系</a>
+        </li>
     </ul>
-    <a href="javascript:;" class="backTop1"> <span>返回顶部</span>
+    <a href="javascript:;" class="backTop1">
+        <span>返回顶部</span>
     </a>
 </div>
-<script type="text/javascript" src="${ctxPath}/assets/myIcon/iconfont.js"></script>
 <script src="${ctxPath}/assets/limu/js/echarts-4.2.1.common.min.js?_v=1.5.3" type="text/javascript"
         charset="utf-8"></script>
 <script src="${ctxPath}/assets/limu/js/jquery-1.11.1.min.js?_v=" type="text/javascript" charset="utf-8"></script>
 <script src="${ctxPath}/assets/limu/js/common.js?_v=" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="${ctxPath}/assets/myIcon/iconfont.js"></script>
 <script type="text/javascript">
-    $(function () {
-        $(".togglemore").on("click", function () {
-            var $this = $(this);
-            if ($this.text() == "展开") {
-                $this.parent().parent().find("div[app-flow-node]").show();
-                $this.parent().parent().find("tr[app-flow-node]").show();
-                $this.addClass("togglemore1");
-                $this.text("收起");
-            } else {
-                $this.parent().parent().find("div[app-flow-node]").hide();
-                $this.parent().parent().find("tr[app-flow-node]").hide();
-                $this.removeClass("togglemore1");
-                $this.text("展开");
-            }
-        });
-    });
-
     /*右侧快速定位*/
     var winTop = 0;
     var eleTop = [];
-    var eleTopFun = function () {
-        $('.credit_main h3').map(function (index) {
-            eleTop[index] = $(this).offset().top - 10;
+    var eleTopFun = function (){
+        $('.credit_main h3').map(function(index){
+            eleTop[index] = $(this).offset().top-10;
         });
     };
     eleTopFun();
-
     /*window scroll function*/
-    function winScr() {
+    function winScr(){
         winTop = $(this).scrollTop();
-        if (winTop >= eleTop[0] && winTop < eleTop[1]) {
+        if(winTop>=eleTop[0] && winTop<eleTop[1]){
             $('.creditGps li a').removeClass('current');
             $('.creditGps li').eq(0).find('a').addClass('current');
-        } else if (winTop >= eleTop[1] && winTop < eleTop[2]) {
+        }else if(winTop>=eleTop[1] && winTop<eleTop[2]){
             $('.creditGps li a').removeClass('current');
             $('.creditGps li').eq(1).find('a').addClass('current');
-        } else if (winTop >= eleTop[2] && winTop < eleTop[3]) {
+        }else if(winTop>=eleTop[2] && winTop<eleTop[3]){
             $('.creditGps li a').removeClass('current');
             $('.creditGps li').eq(2).find('a').addClass('current');
-        } else if (winTop >= eleTop[3] && winTop < eleTop[4]) {
+        }else if(winTop>=eleTop[3] && winTop<eleTop[4]){
             $('.creditGps li a').removeClass('current');
             $('.creditGps li').eq(3).find('a').addClass('current');
-        } else if (winTop >= eleTop[4] && winTop < eleTop[5]) {
+        }else if(winTop>=eleTop[4] && winTop<eleTop[5]){
             $('.creditGps li a').removeClass('current');
             $('.creditGps li').eq(4).find('a').addClass('current');
-        } else if (winTop >= eleTop[5]) {
+        }else if(winTop>=eleTop[5]){
             $('.creditGps li a').removeClass('current');
             $('.creditGps li').eq(5).find('a').addClass('current');
-        }
+        };
 
-        if (winTop > eleTop[0] - 90) {
+        if(winTop>eleTop[0]-90){
             $('.creditGps').stop().fadeIn('fast');
-        } else {
+        }else {
             $('.creditGps').stop().fadeOut('fast');
             $('.creditGps li a').removeClass('current');
-        }
-        ;
+        };
     }
-
     /*滚动页面*/
-    $(window).on('scroll', winScr);
+    $(window).on('scroll',winScr);
     /*点击定位*/
-    $('.creditGps li a').click(function () {
+    $('.creditGps li a').on('click',function(){
         $(window).off('scroll');
         $('.creditGps li a').removeClass('current');
         $(this).addClass('current');
-        $('html,body').stop().animate({'scrollTop': eleTop[$(this).parent().index()]}, 300, function () {
-            $(window).on('scroll', winScr);
+        $('html,body').stop().animate({'scrollTop':eleTop[$(this).parent().index()]},300,function(){
+            $(window).on('scroll',winScr);
         });
     });
-
     /*返回顶部*/
-    $('.creditGps .backTop1').on('click', function () {
-        $('html,body').stop().animate({'scrollTop': '0'}, 300);
+    $('.creditGps .backTop1').on('click',function(){
+        $('html,body').stop().animate({'scrollTop':'0'},300);
     });
+    /*展开收起*/
+    $('.credit_toggleTable_a').on('click',function(){
+        if($(this).html()==='展开明细') {
+            $(this).html('收起明细');
+            $(this).parent().next().stop().slideDown(function(){
+                eleTopFun();
+            });
+        }else {
+            $(this).html('展开明细');
+            $(this).parent().next().stop().slideUp(function(){
+                eleTopFun();
+            });
+        }
+    });
+    function loadCallTimeChart(){
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+        var needSaveChart = '';
+        // 指定图表的配置项和数据
+        option = {
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            toolbox: {
+                show : true,
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: false, readOnly: false},
+                    magicType : {
+                        show: true,
+                        type: ['pie', 'funnel']
+                    },
+                    restore : {show: false},
+                    saveAsImage : {show: false}
+                }
+            },
+            calculable : true,
+            series : [
+                {
+                    name:'通话时间分析',
+                    type:'pie',
+                    radius : [30, 110],
+                    center : ['50%', '50%'],
+                    roseType : 'area',
+                    data:[
+                        {value:'${mobileWeb.friend_circle.call_duration_detail_6m[0].total_num}', name:'${mobileWeb.friend_circle.call_duration_detail_6m[0].time_step}'},
+                        {value:'${mobileWeb.friend_circle.call_duration_detail_6m[1].total_num}', name:'${mobileWeb.friend_circle.call_duration_detail_6m[1].time_step}'},
+                        {value:'${mobileWeb.friend_circle.call_duration_detail_6m[2].total_num}', name:'${mobileWeb.friend_circle.call_duration_detail_6m[2].time_step}'},
+                        {value:'${mobileWeb.friend_circle.call_duration_detail_6m[3].total_num}', name:'${mobileWeb.friend_circle.call_duration_detail_6m[3].time_step}'},
+                        {value:'${mobileWeb.friend_circle.call_duration_detail_6m[4].total_num}', name:'${mobileWeb.friend_circle.call_duration_detail_6m[4].time_step}'}
+                    ]
+                }
+            ],
+            color:['#66cccc','#8378ea', '#fa7878', '#81cc5c', '#6d99f2','#e0bb70']
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    }
 
-
+//     function loadLocationChart(){
+//         var locationColors =['#36a3da', '#30c5e9 ', '#ffa07f ', '#fb7292 ', '#e062ae', '#8377ea ', '#95e55c ', '#ffbe33', '#5ce68e', '#9c96f6'];
+//         var data = '[{"name":"福建","value":1312},{"name":"其他","value":125},{"name":"广东","value":17},{"name":"上海","value":5},{"name":"湖北","value":2},{"name":"江苏","value":2},{"name":"北京","value":1},{"name":"湖南","value":1},{"name":"江西","value":1},{"name":"山东","value":1},{"name":"安徽","value":1},{"name":"浙江","value":1}]',
+//             legendData='["福建","其他","广东","上海","湖北","江苏","北京","湖南","江西","山东","安徽","浙江"]';
+//
+//         var dataArr = [], legendDataArr = [];
+//         if(data != null && data !='null' && data!=''){
+//             try{
+//                 dataArr = JSON.parse(data);
+//                 legendDataArr = JSON.parse(legendData);
+//             }catch(ex){
+//                 console.log(ex);
+//                 dataArr = [];
+//                 legendDataArr=[];
+//             }
+//         }
+//         var myChart = echarts.init(document.getElementById('locationEchart'));
+//         var option = {
+// // 	                 title: {
+// // 	                     text: '归属地通话次数占比',
+// // 	                     x: 'center'
+// // 	                 },
+//             tooltip: {
+//                 trigger: 'item',
+//                 formatter: "{a} <br/>{b} : {c} ({d}%)"
+//             },
+//             legend: {
+//                 orient: 'vertical',
+//                 left: 'right',
+//                 data: legendDataArr,
+//                 itemGap:13
+//             },
+//             series: [{
+//                 name: '通话次数',
+//                 type: 'pie',
+//                 radius: '70%',
+//                 center: ['50%', '50%'],
+//                 data: dataArr,
+//                 itemStyle: {
+//                     emphasis: {
+//                         shadowBlur: 10,
+//                         shadowOffsetX: 0,
+//                         shadowColor: 'rgba(0, 0, 0, 0.5)'
+//                     }
+//                 },
+//                 color: locationColors
+//             }]
+//         };
+//         myChart.setOption(option);
+//     }
+    loadCallTimeChart();
+    // loadLocationChart();
 </script>
 </body>
-
 </html>
