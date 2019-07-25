@@ -43,15 +43,16 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
      * <p>新颜征信报告为一对多的模式，所以会返回最新一份的征信报告</p>
      * 新颜的报告只有原始数据，所以将默认为 0
      *
-     * @param userId
-     * @param type
+     * @param userId 用户主键
+     * @param type   报告类型
+     * @param dataType  0-原始数据，1-报告数据
      * @return BXinYanData
      */
-    public BXinYanData selectBXinYanDataByUserId(Integer userId, String type) {
+    public BXinYanData selectBXinYanDataByUserId(Integer userId, String type, Integer dataType) {
         BXinYanData bXinYanData = new BXinYanData();
         bXinYanData.setUserId(userId);
         bXinYanData.setType(type);
-        bXinYanData.setDataType(BusinessConst.ORIGINAL_DATA);
+        bXinYanData.setDataType(dataType);
         return this.baseMapper.selectBXinYanDataByUserId(bXinYanData);
     }
 
@@ -146,7 +147,7 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
 
         // 添加
         assert xinYanDataResult != null;
-        assemble(Integer.valueOf(xyResult.getTaskId()), String.valueOf(xinYanDataResult.getDetail()), xyResult.getApiName(),BusinessConst.ORIGINAL_DATA);
+        assemble(Integer.valueOf(xyResult.getTaskId()), String.valueOf(xinYanDataResult.getDetail()), xyResult.getApiName(), BusinessConst.ORIGINAL_DATA);
 
         JSONObject jsonResult = JSONObject.parseObject(result);
         jsonResult.put("userId", xyResult.getTaskId());
@@ -163,7 +164,7 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
 
         // 添加
         assert xinYanDataResult != null;
-        assemble(Integer.valueOf(xyResult.getTaskId()), String.valueOf(xinYanDataResult.getDetail()), xyResult.getApiName(),BusinessConst.PAGE_DATA);
+        assemble(Integer.valueOf(xyResult.getTaskId()), String.valueOf(xinYanDataResult.getDetail()), xyResult.getApiName(), BusinessConst.PAGE_DATA);
 
         JSONObject jsonResult = JSONObject.parseObject(result);
         jsonResult.put("userId", xyResult.getTaskId());

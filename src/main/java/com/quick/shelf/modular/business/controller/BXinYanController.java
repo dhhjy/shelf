@@ -132,7 +132,7 @@ public class BXinYanController extends BaseController {
     public String getReDerData(@PathVariable Integer userId, Model model) {
         BSysUser bSysUser = this.bSysUserService.selectBSysUserByUserId(userId);
         logger.info("用户主键 {} 获取新颜雷达报告", userId);
-        BXinYanData xinYanLd = this.bXinYanDataService.selectBXinYanDataByUserId(userId, XinYanConstantEnum.API_NAME_LD.getApiName());
+        BXinYanData xinYanLd = this.bXinYanDataService.selectBXinYanDataByUserId(userId, XinYanConstantEnum.API_NAME_LD.getApiName(),BusinessConst.ORIGINAL_DATA);
         if (xinYanLd != null) {
             model.addAttribute("radarData", JSONObject.parseObject(xinYanLd.getDataValue()));
         } else if (bSysUser != null) {
@@ -163,7 +163,7 @@ public class BXinYanController extends BaseController {
     public String getTaoBaoWebReport(@PathVariable Integer userId, Model model) {
         logger.info("用户：{} 获取用户芝麻分报告", userId);
         BSysUser bSysUser = this.bSysUserService.selectBSysUserByUserId(userId);
-        BXinYanData tb = this.bXinYanDataService.selectBXinYanDataByUserId(userId, XinYanConstantEnum.API_NAME_JH.getApiName());
+        BXinYanData tb = this.bXinYanDataService.selectBXinYanDataByUserId(userId, XinYanConstantEnum.API_NAME_JH.getApiName(),BusinessConst.PAGE_DATA);
         model.addAttribute("taoBaoWeb", null == tb ? null : JSONObject.parseObject(tb.getDataValue()));
         model.addAttribute("taoBaoWebDate", null == tb ? null : tb.getCreateTime());
         model.addAttribute("bSysUser", bSysUser);
@@ -182,7 +182,7 @@ public class BXinYanController extends BaseController {
     public String getMobileWebReport(@PathVariable Integer userId, Model model) {
         logger.info("用户：{} 获取用户运营商报告", userId);
         BSysUser bSysUser = this.bSysUserService.selectBSysUserByUserId(userId);
-        BXinYanData mobile = this.bXinYanDataService.selectBXinYanDataByUserId(userId, XinYanConstantEnum.API_NAME_YYS.getApiName());
+        BXinYanData mobile = this.bXinYanDataService.selectBXinYanDataByUserId(userId, XinYanConstantEnum.API_NAME_YYS.getApiName(),BusinessConst.PAGE_DATA);
         model.addAttribute("mobileWeb", null == mobile ? null : JSONObject.parseObject(mobile.getDataValue()));
         model.addAttribute("mobileWebDate", null == mobile ? null : mobile.getCreateTime());
         model.addAttribute("bSysUser", bSysUser);
