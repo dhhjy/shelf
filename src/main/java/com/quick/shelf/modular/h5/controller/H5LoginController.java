@@ -7,6 +7,7 @@ import com.quick.shelf.core.response.ResponseData;
 import com.quick.shelf.core.shiro.ShiroKit;
 import com.quick.shelf.core.shiro.ShiroUser;
 import com.quick.shelf.core.util.RedisUtil;
+import com.quick.shelf.core.util.ShortUrlUtil;
 import com.quick.shelf.modular.business.service.BSysUserService;
 import com.quick.shelf.modular.business.service.BSysUserStatusService;
 import com.quick.shelf.modular.h5.model.RegisterDto;
@@ -86,8 +87,11 @@ public class H5LoginController extends BaseController {
      * @return
      */
     @ApiOperation(value = "客户端注册页面跳转", notes = "客户端注册页面跳转", httpMethod = "GET")
-    @RequestMapping(value = "/registerIndex")
-    public String registerIndex() {
+    @RequestMapping(value = {"/registerIndex"}, method = RequestMethod.GET)
+    public String registerIndex(Long promoteId, Model model) {
+        if (promoteId == null || promoteId == 0L)
+            promoteId = 21L;
+        model.addAttribute("deptId", promoteId);
         return H5_PATH + "register.html";
     }
 
@@ -173,5 +177,18 @@ public class H5LoginController extends BaseController {
             message = h5LogingService.registerBSysUser(registerDto);
             return ResponseData.success(0, message, registerDto);
         }
+    }
+
+    /**
+     * 获取分公司推广链接
+     *
+     * @return
+     */
+    @ApiOperation(value = "获取分公司推广链接", notes = "获取分公司推广链接", httpMethod = "POST")
+    @RequestMapping(value = "/promoteLinks", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData getPromoteLinks() {
+        String oldUrl = getProjectPath() + "/h5/registerIndex?promoteId=" + ShiroKit.getUserNotNull().getDeptId();
+        return ResponseData.success(200, oldUrl, ShortUrlUtil.getShortUrl(oldUrl));
     }
 }
