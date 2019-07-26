@@ -42,12 +42,12 @@
             <h2 style="text-align: center">您的密码：<span id="passwordInfo"></span></h2>
             <h5 style="text-align: center;color: #00A65A;">请妥善保管您的凭据</h5>
             <h5 style="text-align: center;"><span id="cd"></span>秒后进行跳转或
-                <span><a id='skipLogin' href='/h5/' class='layadmin-link'>立即跳转<a></span>
+                <a id='skipLogin' href='/h5/' class='layadmin-link'>立即跳转<a>
             </h5>
         </div>
         <div id="registerDiv" class="layadmin-user-login-box layadmin-user-login-body layui-form">
             <form id="registerForm" class="layui-form" action="${ctxPath}/login" method="post">
-                <input type="hidden" id="deptId" name="deptId" value="21">
+                <input type="hidden" id="deptId" name="deptId" value="${deptId}">
                 <div class="layui-form-item">
                     <label class="layadmin-user-login-icon layui-icon layui-icon-cellphone" for="userAccount"></label>
                     <input type="text" name="userAccount" id="userAccount" lay-verify="phone" placeholder="手机"
