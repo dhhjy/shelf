@@ -1,6 +1,9 @@
 package com.quick.shelf.modular.business.service;
 
+import cn.stylefeng.roses.core.datascope.DataScope;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.quick.shelf.core.common.page.LayuiPageFactory;
 import com.quick.shelf.modular.business.entity.BMobileData;
 import com.quick.shelf.modular.business.mapper.BMobileDataMapper;
 import org.slf4j.Logger;
@@ -8,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName BMobileDataService
@@ -36,5 +40,16 @@ public class BMobileDataService extends ServiceImpl<BMobileDataMapper, BMobileDa
         this.baseMapper.batchInsert(tMobileData);
 
         logger.info("本次插入通讯录:{}条数据。", tMobileData.size());
+    }
+
+    /**
+     * 查询电话列表
+     *
+     * @param tMobile
+     * @return
+     */
+    public Page<Map<String, Object>> selectBMobileDatas(DataScope dataScope, Integer tMobile) {
+        Page page = LayuiPageFactory.defaultPage();
+        return this.baseMapper.selectBMobileDatas(page, dataScope, tMobile);
     }
 }

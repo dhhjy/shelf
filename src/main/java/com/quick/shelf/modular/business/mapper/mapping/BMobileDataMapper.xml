@@ -84,4 +84,28 @@
         </foreach>
     </insert>
 
+    <select id="selectBMobileDatas" resultType="map">
+        SELECT
+        id,
+        (
+        CASE
+        WHEN t.t_mobile = 0
+        THEN '移动'
+        WHEN t.t_mobile = 1
+        THEN '联通'
+        WHEN t.t_mobile = 2
+        THEN '电信'
+        END
+        ) AS isHitRiskList,
+        t.`t_mobile`,
+        t.`callNum`,
+        t.`create_time`
+        FROM
+        b_mobile_data t
+        WHERE t.status = 0
+        <if test="tMobile != null">
+            AND t.t_mobile = #{tMobile}
+        </if>
+        ORDER BY t.`id` DESC
+    </select>
 </mapper>
