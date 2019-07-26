@@ -8,9 +8,7 @@ import com.quick.shelf.modular.business.entity.BSysUser;
 import com.quick.shelf.modular.business.entity.BSysUserStatus;
 import com.quick.shelf.modular.business.service.BSysUserService;
 import com.quick.shelf.modular.business.service.BSysUserStatusService;
-import com.quick.shelf.modular.constant.BusinessConst;
 import com.quick.shelf.modular.h5.model.RegisterDto;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
