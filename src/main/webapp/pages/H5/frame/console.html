@@ -121,7 +121,7 @@
                     @if(userStatus.bankInfoStatus == "1"){
                     <span class="layui-badge layui-bg-blue pull-right">已认证</span>
                     @}else{
-<!--                    <span class="layui-badge layui-bg-white pull-right">去认证</span>-->
+                    <!--                    <span class="layui-badge layui-bg-white pull-right">去认证</span>-->
                     <span class="layui-badge layui-bg-white pull-right" style="background-color: #c0c4cc">未开通</span>
                     @}
                 </div>
@@ -384,7 +384,12 @@
          * 绑定去借钱点击事件
          */
         $("#next-submit").click(function () {
-            layer.msg("您暂时不符合借贷要求");
+            if (parent.toolsFun.ifStatus() !== false) {
+                parent.layui.index.loadHome({
+                    menuPath: Feng.ctxPath + "/h5/product",
+                    menuName: '<i class="layui-icon layui-icon-home"></i>'
+                });
+            }
         });
     });
 </script>

@@ -120,8 +120,6 @@
          * 信誉管理主页
          */
         var creditManagerFun = function () {
-            // $("#productList").css({"color": "#666", "background-color": "#fff"});
-            // $("#creditManager").css({"color": "#FFFFFF", "background-color": "#1E9FFF"});
             // 信誉管理主页
             index.loadHome({
                 menuPath: '${ctxPath}/h5/console',
@@ -134,11 +132,9 @@
          */
         var productListFun = function () {
             if (toolsFun.ifStatus() !== false) {
-                // $("#creditManager").css({"color": "#666", "background-color": "#fff"});
-                // $("#productList").css({"color": "#FFFFFF", "background-color": "#1E9FFF"});
                 // 信誉管理主页
                 index.loadHome({
-                    menuPath: '${ctxPath}/h5/console',
+                    menuPath: '${ctxPath}/h5/product',
                     menuName: '<i class="layui-icon layui-icon-home"></i>'
                 });
             }
@@ -242,18 +238,13 @@
                 return false;
             }
             // 手机号认证状态
-            if (userStatus.limuMobileReportStatus !== '1') {
+            if (userStatus.xinyanMobileStatus !== '1') {
                 layer.msg("手机号未认证");
                 return false;
             }
             // 淘宝认证状态
-            if (userStatus.limuTaobaoReportStatus !== '1') {
+            if (userStatus.xinyanTaobaoStatus !== '1') {
                 layer.msg("淘宝未认证");
-                return false;
-            }
-            // 支付宝认证状态
-            if (userStatus.xinyanZmfStatus !== '1') {
-                layer.msg("芝麻分未认证");
                 return false;
             }
         }
