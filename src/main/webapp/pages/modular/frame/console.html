@@ -192,12 +192,12 @@
                             <td>开源 / 简洁 / 功能丰富 / 易上手 / 文档丰富 / 社区活跃</td>
                         </tr>
                         <tr>
-                            <td>获取源码</td>
+                            <td>推广注册</td>
                             <td>
-                                <a href="#" target="_blank"
-                                   class="layui-btn layui-btn-sm">前往官网</a>
-                                <a href="#" target="_blank"
-                                   class="layui-btn layui-btn-danger layui-btn-sm">获取VIP</a>
+                                <a href="javascript:void(0)"
+                                   class="layui-btn layui-btn-sm" id="promoteLinks">推广链接</a>
+                                <a href="javascript:void(0)"
+                                   class="layui-btn layui-btn-danger layui-btn-sm" id="createQrCode">二维码</a>
                             </td>
                         </tr>
                         <tr>
@@ -346,6 +346,7 @@
 <script type="text/javascript" src="${ctxPath}/assets/common/js/common.js?v=311"></script>
 <script src="${ctxPath}/assets/common/libs/echarts/echarts.min.js"></script>
 <script src="${ctxPath}/assets/common/libs/echarts/echartsTheme.js"></script>
+<script src="https://cdn.bootcss.com/clipboard.js/1.7.1/clipboard.min.js"></script>
 
 <script>
     // 方法一
@@ -547,6 +548,43 @@
             }]
         };
         myCharts4.setOption(option4);
+
+        /**
+         * 获取推广连接
+         *
+         */
+        var getPromoteLinksUrl = function(){
+            var re = null;
+            var ajax = new $ax(Feng.ctxPath + "/h5/promoteLinks", function (result) {
+                re = result;
+            });
+            ajax.start();
+            return re;
+        };
+
+        /**
+         * 绑定推广连接点击事件
+         */
+        $("#promoteLinks").click(function () {
+            var result = getPromoteLinksUrl();
+            var content = result.data;
+            // 使用textarea支持换行，使用input不支持换行
+            var textarea = document.createElement('textarea');
+            textarea.value = content;
+            document.body.appendChild(textarea);
+            textarea.select();
+            if (document.execCommand('copy')) {
+                document.execCommand('copy');
+                layer.msg("复制成功");
+            }
+            document.body.removeChild(textarea)
+        });
+
+        // 绑定生成二维码事件
+        $("#createQrCode").click(function () {
+            var result = getPromoteLinksUrl();
+            window.open("https://cli.im/api/qrcode/code?text=" + result.message);
+        });
     });
 </script>
 </body>
