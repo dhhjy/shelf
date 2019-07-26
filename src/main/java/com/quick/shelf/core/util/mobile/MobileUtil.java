@@ -7,6 +7,7 @@ import com.quick.shelf.core.util.DateUtil;
 import com.quick.shelf.core.util.bqs.AppConstants;
 import com.quick.shelf.modular.business.entity.BMobileData;
 import com.quick.shelf.modular.creditPort.liMu.LiMuConstantEnum;
+import com.quick.shelf.modular.creditPort.xinYan.XinYanConstantEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -38,7 +39,7 @@ public class MobileUtil {
      * 分类型获取手机号码
      *
      * @param data JSONObject 类型的原始数据信息
-     * @return Map<String                                                                                                                               ,                                                                                                                               Object> 区分运营商后的 结果集
+     * @return Map<String, Object> 区分运营商后的 结果集
      * @pararm type 那种类型的运营商报告数据 （立木，白骑士，新颜）
      */
     public static List<BMobileData> getPhoneNumberByType(String type, Integer userId, String data) {
@@ -49,11 +50,14 @@ public class MobileUtil {
             return getLiMuContactAnalysis(userId, jsonArray);
         }
         // 白骑士通讯录
-        if(null != type && type.equals(AppConstants.bqsMnoReportPage.getType()))
-        {
+        if (null != type && type.equals(AppConstants.bqsMnoReportPage.getType())) {
             List<Node> trs = getBqsCommunicationList(data);
             assert trs != null;
-            return getBqsContactAnalysis(userId,trs);
+            return getBqsContactAnalysis(userId, trs);
+        }
+        // 新颜通讯录
+        if (null != type && type.equals(XinYanConstantEnum.API_NAME_YYS.getApiName())) {
+            return getXinYanCommunicationList(userId, data);
         }
         return null;
     }
@@ -69,10 +73,54 @@ public class MobileUtil {
     }
 
     /**
+     * 新颜通讯录HTML数据
+     */
+    public static List<BMobileData> getXinYanCommunicationList(Integer userId, String data) {
+        List<BMobileData> result = new ArrayList<>();
+        JSONObject jsonObject = JSONObject.parseObject(data);
+        JSONArray arr = jsonObject.getJSONObject("detail").getJSONObject("friend_circle").getJSONArray("call_contact_detail");
+        logger.info("电话总数：{}", arr.size());
+
+        for (Object ar : arr) {
+            JSONObject jsonData = (JSONObject) JSONObject.toJSON(ar);
+            String phone = jsonData.getString("peer_num");
+            //1. 判断是否为手机号，为手机号才继续执行
+            if (isMobile(phone)) {
+                BMobileData BMobileData = new BMobileData();
+                BMobileData.setUserId(userId);
+                //2. 区分运营商
+                BMobileData.setTMobile(getT_Mobile(phone));
+                BMobileData.setStatus(0);
+                BMobileData.setCallNum(phone);
+                BMobileData.setIsHitRiskList("0");
+                // 归属地
+                String attribution = jsonData.getString("city");
+                if (null == attribution || attribution.equals(""))
+                    BMobileData.setAttribution("未知");
+                else
+                    BMobileData.setAttribution(attribution);
+                BMobileData.setCallCnt(Integer.parseInt(jsonData.getString("call_num_6m")));
+                BMobileData.setCallTime(jsonData.getString("call_time_6m"));
+                BMobileData.setCallingCnt(Integer.parseInt(jsonData.getString("dial_num_6m")));
+                BMobileData.setCallingTime(jsonData.getString("dial_time_6m"));
+                BMobileData.setCalledCnt(Integer.parseInt(jsonData.getString("dialed_num_6m")));
+                BMobileData.setCalledTime(jsonData.getString("dialed_time_6m"));
+                BMobileData.setLastStart(DateUtil.getStringToDate(jsonData.getString("last_call_time")));
+                BMobileData.setLastTime("/");
+                BMobileData.setCreateTime(new Date());
+                result.add(BMobileData);
+            }
+        }
+
+        logger.info("过滤后的电话总数：{},过滤电话：{}个", result.size(), arr.size() - result.size());
+        return result;
+    }
+
+    /**
      * 获取白骑士页面HTML数据，
      * 本方法将HTML通过 jsoup 工具类转为DOC对象操作
      */
-    public static List<Node> getBqsCommunicationList(String data){
+    public static List<Node> getBqsCommunicationList(String data) {
         // 压缩HTML代码，去掉空格
         try {
             data = HtmlCompressor.compress(data);
@@ -87,7 +135,7 @@ public class MobileUtil {
 
         Element div;
 
-        if(divs.size() > 1)
+        if (divs.size() > 1)
             div = divs.get(divs.size() - 1);
         else
             return null;
@@ -97,7 +145,7 @@ public class MobileUtil {
 
         Element table;
 
-        if(tables.size() > 0)
+        if (tables.size() > 0)
             table = tables.get(0);
         else
             return null;
@@ -112,7 +160,7 @@ public class MobileUtil {
      * 获取立木组装后的数据
      *
      * @param userId 用户主键
-     * @param data JSONArray 格式数据
+     * @param data   JSONArray 格式数据
      * @return
      */
     private static List<BMobileData> getLiMuContactAnalysis(Integer userId, JSONArray data) {
@@ -132,7 +180,7 @@ public class MobileUtil {
                 BMobileData.setIsHitRiskList(jsonData.getString("isHitRiskList"));
                 // 归属地
                 String attribution = jsonData.getString("attribution");
-                if(null == attribution || attribution.equals(""))
+                if (null == attribution || attribution.equals(""))
                     BMobileData.setAttribution("未知");
                 else
                     BMobileData.setAttribution(attribution);
@@ -159,19 +207,18 @@ public class MobileUtil {
      * @param
      * @return List<BMobileData>
      */
-    public static List<BMobileData> getBqsContactAnalysis(Integer userId,List<Node> trs){
+    public static List<BMobileData> getBqsContactAnalysis(Integer userId, List<Node> trs) {
         List<BMobileData> result = new ArrayList<>();
         logger.info("电话总数：{}", trs.size());
         // 遍历行数据，组装JSON
-        for(Node tr : trs){
+        for (Node tr : trs) {
             List<Node> tds = tr.childNodes();
             // 拿到号码
             String phone = tds.get(0).childNode(0).childNode(0).toString();
             assert phone != null;
 
             //1. 判断是否为手机号，为手机号才继续执行
-            if(isMobile(phone))
-            {
+            if (isMobile(phone)) {
                 BMobileData BMobileData = new BMobileData();
                 BMobileData.setUserId(userId);
                 //2. 区分运营商
@@ -183,16 +230,18 @@ public class MobileUtil {
                 // 归属地
                 BMobileData.setAttribution(tds.get(2).childNode(0).toString());
                 // 通话次数和通话时间
-                String callCntAndCallTime = tds.get(5).childNode(0).toString().replace(" ","");
-                BMobileData.setCallCnt(Integer.valueOf(callCntAndCallTime.substring(0,callCntAndCallTime.indexOf("/"))));
+                String callCntAndCallTime = tds.get(5).childNode(0).toString().replace(" ", "");
+                BMobileData.setCallCnt(Integer.valueOf(callCntAndCallTime.substring(0, callCntAndCallTime.indexOf("/"))));
                 BMobileData.setCallTime(callCntAndCallTime.substring(callCntAndCallTime.indexOf("/") + 1));
                 // 主叫次数和主叫时间
-                String callingCntAndCallingTime = tds.get(6).childNode(0).toString().replace(" ","");;
-                BMobileData.setCallingCnt(Integer.valueOf(callingCntAndCallingTime.substring(0,callingCntAndCallingTime.indexOf("/"))));
+                String callingCntAndCallingTime = tds.get(6).childNode(0).toString().replace(" ", "");
+                ;
+                BMobileData.setCallingCnt(Integer.valueOf(callingCntAndCallingTime.substring(0, callingCntAndCallingTime.indexOf("/"))));
                 BMobileData.setCallingTime(callingCntAndCallingTime.substring(callingCntAndCallingTime.indexOf("/") + 1));
                 // 被叫次数和被叫时间
-                String calledCntAndCaalledTime = tds.get(7).childNode(0).toString().replace(" ","");;
-                BMobileData.setCalledCnt(Integer.valueOf(calledCntAndCaalledTime.substring(0,calledCntAndCaalledTime.indexOf("/"))));
+                String calledCntAndCaalledTime = tds.get(7).childNode(0).toString().replace(" ", "");
+                ;
+                BMobileData.setCalledCnt(Integer.valueOf(calledCntAndCaalledTime.substring(0, calledCntAndCaalledTime.indexOf("/"))));
                 BMobileData.setCalledTime(calledCntAndCaalledTime.substring(calledCntAndCaalledTime.indexOf("/") + 1));
                 BMobileData.setLastStart(new Date(Long.valueOf(tds.get(4).childNode(0).toString())));
                 BMobileData.setCreateTime(new Date());
