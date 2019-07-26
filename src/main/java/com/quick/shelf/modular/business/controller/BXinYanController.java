@@ -269,7 +269,7 @@ public class BXinYanController extends BaseController {
             // 所以此处不用再单独调用方法，计算调用次数与调用费用
             // 设置多个选项的目的是为了记录日志，并且通过AOP的方式
             // 统计接口统计
-            if (XinYanConstantEnum.API_NAME_TB.getApiName().equals(xyResult.getApiName()))
+            if (XinYanConstantEnum.API_NAME_JH.getApiName().equals(xyResult.getApiName()))
                 // 保存新颜芝麻分(淘宝)的原始数据
                 this.bXinYanDataService.xinYanTBReportData(xyResult);
             if (XinYanConstantEnum.API_NAME_YYS.getApiName().equals(xyResult.getApiName()))
