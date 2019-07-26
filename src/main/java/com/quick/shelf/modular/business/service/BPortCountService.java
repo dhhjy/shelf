@@ -4,9 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.quick.shelf.core.shiro.ShiroKit;
 import com.quick.shelf.modular.business.entity.BPortCount;
 import com.quick.shelf.modular.business.mapper.BPortCountMapper;
-import com.quick.shelf.modular.constant.BusinessConst;
 import com.quick.shelf.modular.system.service.DictService;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -53,7 +51,6 @@ public class BPortCountService extends ServiceImpl<BPortCountMapper, BPortCount>
      * 当接口回调日志完成以后，会清除该缓存，在重写调用本方法查询
      * @return
      */
-    @Cacheable(value = BusinessConst.CONSOLE_PORT, key = "'" + BusinessConst.PORT_CALL_NUMBER + "'+#deptId")
     public Map<String, String> getPortNum(Long deptId) {
         if (!ShiroKit.isAdmin() || !ShiroKit.isDeptAdmin())
             deptId = Objects.requireNonNull(ShiroKit.getUser()).getDeptId();
@@ -66,7 +63,6 @@ public class BPortCountService extends ServiceImpl<BPortCountMapper, BPortCount>
      * 当接口回调日志完成以后，会清除该缓存，在重写调用本方法查询
      * @return
      */
-    @Cacheable(value = BusinessConst.CONSOLE_PORT, key = "'" + BusinessConst.PORT_CALL_PRICE + "'+#deptId")
     public Map<String, List> getPortChart(Long deptId) {
         Map<String, List> result = new HashMap<>();
         if (!ShiroKit.isAdmin() || !ShiroKit.isDeptAdmin())
@@ -133,7 +129,6 @@ public class BPortCountService extends ServiceImpl<BPortCountMapper, BPortCount>
      * 当接口回调日志完成以后，会清除该缓存，在重写调用本方法查询
      * @return
      */
-    @Cacheable(value = BusinessConst.COMSOLE_SMS, key = "'" + BusinessConst.SMS_PORT + "'+#deptId")
     public Map<String, String> getSmsPortNum(Long deptId) {
         if (!ShiroKit.isAdmin() || !ShiroKit.isDeptAdmin())
             deptId = Objects.requireNonNull(ShiroKit.getUser()).getDeptId();
@@ -146,7 +141,6 @@ public class BPortCountService extends ServiceImpl<BPortCountMapper, BPortCount>
      * 当接口回调日志完成以后，会清除该缓存，在重写调用本方法查询
      * @return
      */
-    @Cacheable(value = BusinessConst.COMSOLE_SMS, key = "'" + BusinessConst.SMS_PORT_PRICE + "'+#deptId")
     public Map<String, List> getSmsPortChartCount(Long deptId) {
         Map<String, List> result = new HashMap<>();
         if (!ShiroKit.isAdmin() || !ShiroKit.isDeptAdmin())
@@ -214,7 +208,6 @@ public class BPortCountService extends ServiceImpl<BPortCountMapper, BPortCount>
      * @param deptId
      * @return
      */
-    @Cacheable(value = BusinessConst.CONSOLE_PERSOON, key = "'" + BusinessConst.CLIENT_USER_CONT + "'+#deptId")
     public Integer getClientUserCount(Long deptId) {
         if (ShiroKit.isAdmin() || ShiroKit.isDeptAdmin()) {
             //管理员或者总公司查询就查询全部出来
@@ -232,7 +225,6 @@ public class BPortCountService extends ServiceImpl<BPortCountMapper, BPortCount>
      * @param deptId
      * @return
      */
-    @Cacheable(value = BusinessConst.CONSOLE_PERSOON, key = "'" + BusinessConst.CLIENT_TO_DAY_USER_CONT + "'+#deptId")
     public Integer getClientToDayUserCount(Long deptId) {
         if (ShiroKit.isAdmin() || ShiroKit.isDeptAdmin()) {
             //管理员或者总公司查询就查询全部出来

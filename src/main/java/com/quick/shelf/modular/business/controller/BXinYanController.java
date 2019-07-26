@@ -221,7 +221,6 @@ public class BXinYanController extends BaseController {
      *
      * @return
      */
-    @CacheEvict(value = BusinessConst.CONSOLE_PORT, allEntries = true)
     @CallBackLog(value = "新颜原始数据回调地址")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "用户主键ID", name = "userId", required = true, dataType = "String")
@@ -253,7 +252,6 @@ public class BXinYanController extends BaseController {
      *
      * @return
      */
-    @CacheEvict(value = BusinessConst.CONSOLE_PORT, allEntries = true)
     @CallBackLog(value = "新颜报告数据回调地址")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "用户主键ID", name = "userId", required = true, dataType = "String")

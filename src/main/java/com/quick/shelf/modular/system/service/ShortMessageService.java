@@ -103,7 +103,6 @@ public class ShortMessageService extends ServiceImpl<ShortMessageMapper, SmsMess
      *
      *  方法执行完成以后，会清除短信接口的缓存
      */
-    @CacheEvict(value = BusinessConst.COMSOLE_SMS, allEntries = true)
     public void insertSmsMessage(String phone, String type, String templateCode, Integer operator, Long deptId, String code) {
         // 1-验证短信， 2-通知短信
         // 获得模板内容

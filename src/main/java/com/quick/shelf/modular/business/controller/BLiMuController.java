@@ -230,7 +230,6 @@ public class BLiMuController extends BaseController {
     /**
      * 立木数据回调通知地址
      */
-    @CacheEvict(value = BusinessConst.CONSOLE_PORT, allEntries = true)
     @CallBackLog(value = "立木数据回调通知")
     @ApiOperation(value = "立木数据回调通知", notes = "立木数据回调通知", httpMethod = "GET")
     @ApiImplicitParams({
