@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.quick.shelf.core.common.annotion.PortLog;
 import com.quick.shelf.core.common.page.LayuiPageFactory;
 import com.quick.shelf.core.util.HttpClientUtil;
+import com.quick.shelf.core.util.mobile.MobileUtil;
+import com.quick.shelf.modular.business.entity.BMobileData;
 import com.quick.shelf.modular.business.entity.BSysUser;
 import com.quick.shelf.modular.business.entity.BSysUserStatus;
 import com.quick.shelf.modular.business.entity.BXinYanData;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,14 +41,17 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
     @Resource
     private BSysUserStatusService bSysUserStatusService;
 
+    @Resource
+    private BMobileDataService bMobileDataService;
+
     /**
      * 根据用户的主键，以及征信报告类型去获取对应的新颜征信数据
      * <p>新颜征信报告为一对多的模式，所以会返回最新一份的征信报告</p>
      * 新颜的报告只有原始数据，所以将默认为 0
      *
-     * @param userId 用户主键
-     * @param type   报告类型
-     * @param dataType  0-原始数据，1-报告数据
+     * @param userId   用户主键
+     * @param type     报告类型
+     * @param dataType 0-原始数据，1-报告数据
      * @return BXinYanData
      */
     public BXinYanData selectBXinYanDataByUserId(Integer userId, String type, Integer dataType) {
@@ -137,7 +143,15 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
      * @param xyResult 新颜回调结果对象
      */
     public void xinYanYYSReportData(XinYanResult xyResult) {
-        this.getXinYanReportData(xyResult);
+        String result = this.getXinYanReportData(xyResult);
+        // 当为运营商报告时，分析用户6个月的用户信息进行通讯录保存
+        new Thread(() -> {
+            List<BMobileData> list = MobileUtil.getXinYanCommunicationList(Integer.valueOf(xyResult.getTaskId()), result);
+            assert list != null;
+            if (list.size() > 0)
+                //批量插入
+                this.bMobileDataService.batchInsert(list);
+        }).start();
     }
 
     private String getXinYanJsonData(XinYanResult xyResult) {
@@ -157,7 +171,7 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
         return jsonResult.toString();
     }
 
-    private void getXinYanReportData(XinYanResult xyResult) {
+    private String getXinYanReportData(XinYanResult xyResult) {
         // 获取新颜报告数据查询的结果
         String result = HttpClientUtil.doGet(XinYanConstantMethod.DEVELOP_URL + XinYanConstantMethod.REPORT_PATH, XinYanConstantMethod.getParams(xyResult.getToken()));
         XinYanDataResult xinYanDataResult = JSONObject.parseObject(result, XinYanDataResult.class);
@@ -169,6 +183,7 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
         JSONObject jsonResult = JSONObject.parseObject(result);
         jsonResult.put("userId", xyResult.getTaskId());
         logger.info("用户：{} 认证 {} 的报告数据返回结果为：{}", xyResult.getTaskId(), XinYanConstantMethod.compareApiName(xyResult.getApiName()), jsonResult.toString());
+        return jsonResult.toString();
     }
 
     /**

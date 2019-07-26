@@ -63,6 +63,8 @@ public class BSysUserStatusService extends ServiceImpl<BSysUserStatusMapper, BSy
         bSysUserStatus.setBankInfoStatus("0");
         bSysUserStatus.setContactStatus("0");
         bSysUserStatus.setSmsStatus("0");
+        bSysUserStatus.setXinyanMobileStatus("0");
+        bSysUserStatus.setXinyanTaobaoStatus("0");
         this.baseMapper.updateByUserId(bSysUserStatus);
     }
 
