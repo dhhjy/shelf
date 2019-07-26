@@ -459,13 +459,13 @@
                     <td colspan="5">
                         <a href='javascript:void(0);' id="openReDar"
                            class='btn btn-primary'>全景雷达</a>
+                        @if(bSysUserStatus.xinyanZmfStatus == "1"){
+                        <a href='javascript:void(0);' id="openXyTaoBao"
+                           class='btn btn-primary'>淘宝报告</a>
+                        @}
                         @if(bSysUserStatus.xinyanMobileStatus == "1"){
                         <a href='javascript:void(0);' id="openXyMobile"
                            class='btn btn-primary'>运营商报告</a>
-                        @}
-                        @if(bSysUserStatus.xinyanZmfStatus == "1"){
-                        <a href='javascript:void(0);' id="openZmf"
-                           class='btn btn-primary'>芝麻分报告</a>
                         @}
                     </td>
                 </tr>
@@ -525,6 +525,7 @@
                     Feng.error("重置失败!" + data.responseJSON.message + "!");
                 });
                 ajax.set("type", type);
+                ajax.type = "PUT";
                 ajax.start();
                 // 改变当前页面的认证状态
                 eve.empty();
@@ -637,23 +638,23 @@
          **/
         var openReDarFun = function () {
             // 手机认证状态 运营商认证状态
-            var phoneStatus = '${bSysUserStatus.limuMobileReportStatus}';
+            var phoneStatus = '${bSysUserStatus.xinyanMobileStatus}';
             // 身份证
             var identityStatus = '${bSysUserStatus.identityStatus}';
             // 银行卡
             var bankInfoStatus = '${bSysUserStatus.bankInfoStatus}';
 
-            if (phoneStatus !== '0') {
+            if (phoneStatus !== '1') {
                 Feng.error("手机运营商报告未认证，无法查看全景雷达");
                 return false;
             }
 
-            if (identityStatus !== '0') {
+            if (identityStatus !== '1') {
                 Feng.error("身份证认证未认证，无法查看全景雷达");
                 return false;
             }
 
-            if (bankInfoStatus !== '0') {
+            if (bankInfoStatus !== '1') {
                 Feng.error("银行卡认证未认证，无法查看全景雷达");
                 return false;
             }
@@ -679,7 +680,7 @@
             var url = Feng.ctxPath + "/xinYan/getTaoBaoWebReport/" + userId;
             parent.layer.open({
                 type: 2,
-                title: "芝麻分报告",
+                title: "淘宝报告",
                 btn: ['关闭'],
                 shadeClose: true,
                 maxmin: true,
@@ -786,12 +787,12 @@
             openReDarFun();
         });
 
-        // 新颜芝麻分
-        $('#openZmf').click(function () {
+        // 新颜淘宝报告
+        $('#openXyTaoBao').click(function () {
             openZmfReportFun();
         });
 
-        // 新颜芝麻分
+        // 新颜运营商报告
         $('#openXyMobile').click(function () {
             openMobileReportFun();
         });
