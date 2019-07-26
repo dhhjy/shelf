@@ -86,4 +86,10 @@
         update_time = #{updateTime}
         WHERE user_id = #{userId}
     </update>
+
+    <update id="migrateUser">
+            UPDATE B_SYS_USER
+                SET dept_id = #{deptId}
+                WHERE user_id = #{userId}
+    </update>
 </mapper>

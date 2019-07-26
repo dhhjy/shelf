@@ -261,4 +261,23 @@ public class BSysUserController extends BaseController {
         model.addAttribute("idCardAddress", this.bSysUserService.getIdCardAddress(userId));
         return PREFIX + "/gps_compare.html";
     }
+
+    /**
+     * 用户迁移，将某公司的客户迁移单个或多个到其他的公司
+     *
+     * @param ids    用户列表
+     * @param deptId 迁移的新部门
+     * @return
+     */
+    @ApiOperation(value = "用户迁移", notes = "用户迁移", httpMethod = "PUT")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "用户信息", name = "ids", dataType = "Integer[]"),
+            @ApiImplicitParam(value = "公司主键", name = "deptId", dataType = "Long")
+    })
+    @RequestMapping(value = "/migrateUser", method = RequestMethod.PUT)
+    @ResponseBody
+    public ResponseData migrateUser(@RequestParam(value = "ids[]") Integer[] ids, @RequestParam(value = "deptId") Long deptId) {
+        this.bSysUserService.migrateUser(ids, deptId);
+        return ResponseData.success(200, "迁移成功", null);
+    }
 }

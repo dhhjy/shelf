@@ -49,7 +49,15 @@ public interface BSysUserMapper extends BaseMapper<BSysUser> {
 
     /**
      * 修改用户登陆密码
+     *
      * @param bSysUser
      */
     void updateUserPassword(BSysUser bSysUser);
+
+    /**
+     * 用户迁移
+     *
+     * @param bSysUser
+     */
+    void migrateUser(@Param("userId")Integer userId, @Param("deptId") Long deptId);
 }

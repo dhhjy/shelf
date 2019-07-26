@@ -1,3 +1,19 @@
+/**
+ * 系统管理--用户管理
+ */
+var BSysUser = {
+    tableId: "bSysUserTable",    //表格id
+    condition: {
+        name: "",
+        deptId: "",
+        timeLimit: ""
+    },
+    data: {
+        deptId: "",
+        deptName: ""
+    }
+};
+
 layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], function () {
     var layer = layui.layer;
     var form = layui.form;
@@ -6,18 +22,6 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
     var $ax = layui.ax;
     var laydate = layui.laydate;
     var admin = layui.admin;
-
-    /**
-     * 系统管理--用户管理
-     */
-    var BSysUser = {
-        tableId: "bSysUserTable",    //表格id
-        condition: {
-            name: "",
-            deptId: "",
-            timeLimit: ""
-        }
-    };
 
     /**
      * 初始化表格的列
@@ -66,6 +70,57 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
         } else {
             table.exportFile(tableResult.config.id, checkRows.data, 'xls');
         }
+    };
+
+    /**
+     *  迁移用户到其他公司
+     */
+    BSysUser.migrateUser = function () {
+        var checkRows = table.checkStatus(BSysUser.tableId);
+        if (checkRows.data.length === 0) {
+            Feng.error("请选择要迁移的用户");
+        } else {
+            var arr = BSysUser.strJoint(checkRows.data);
+
+            var formName = encodeURIComponent("parent.BSysUser.data.deptName");
+            var formId = encodeURIComponent("parent.BSysUser.data.deptId");
+            var treeUrl = encodeURIComponent("/dept/tree");
+
+            layui.admin.popupRight({
+                type: 2,
+                title: '部门选择',
+                content: Feng.ctxPath + '/system/commonTree?formName=' + formName + "&formId=" + formId + "&treeUrl=" + treeUrl,
+                btn: ['确定'],
+                yes: function (index) {
+                    //取子页面的btn
+                    var btn = layer.getChildFrame('#saveButton', index);
+                    btn.click();
+
+                    var ajax = new $ax(Feng.ctxPath + "/bSysUser/migrateUser", function (result) {
+                        if(result.success){
+                            Feng.info("迁移成功");
+                            table.reload(BSysUser.tableId);
+                        }
+                    }, function (data) {
+                        Feng.error("迁移失败!" + data.responseJSON.message + "!");
+                    });
+                    ajax.type = "PUT";
+                    var js = {};
+                    js.ids = arr;
+                    js.deptId = BSysUser.data.deptId;
+                    ajax.set(js);
+                    ajax.start();
+                }
+            });
+        }
+    };
+
+    BSysUser.strJoint = function (str) {
+        var strArr = [];
+        $.each(str, function (i, o) {
+            strArr.push(o.userId)
+        })
+        return strArr;
     };
 
     /**
@@ -123,7 +178,7 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
             var ajax = new $ax(Feng.ctxPath + "/bSysUser/resetInfoAll", function (data) {
                 layer.closeAll();
                 Feng.success("重置成功!");
-            }, function (data) {
+            }, function () {
                 Feng.error("重置失败!");
             });
             ajax.type = "PUT";
@@ -179,6 +234,11 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
     // 导出excel
     $('#btnExp').click(function () {
         BSysUser.exportExcel();
+    });
+
+    // 迁移用户
+    $('#migrate').click(function () {
+        BSysUser.migrateUser();
     });
 
     // 工具条点击事件

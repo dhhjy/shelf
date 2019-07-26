@@ -16,10 +16,7 @@ import com.quick.shelf.modular.creditPort.liMu.LiMuConstantEnum;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -94,6 +91,16 @@ public class BSysUserService extends ServiceImpl<BSysUserMapper, BSysUser> {
      */
     public void updateUserPassword(BSysUser bSysUser) {
         this.baseMapper.updateUserPassword(bSysUser);
+    }
+
+    /**
+     * 用户迁移
+     */
+    public Integer migrateUser(Integer[] ids, Long deptId) {
+        for (Integer i : ids) {
+            this.baseMapper.migrateUser(i, deptId);
+        }
+        return 0;
     }
 
     /**
