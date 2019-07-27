@@ -76,7 +76,7 @@
                         </div>
 
                         <div class="layui-form-item">
-                            <div class="layui-form-mid">学历<span style="color: red;">*</span></div>
+                            <div class="layui-form-mid">学历</div>
                             <div class="layui-input-inline">
                                 <select name="education">
                                     <option value="">请选择</option>
@@ -92,7 +92,7 @@
                         </div>
 
                         <div class="layui-form-item">
-                            <div class="layui-form-mid">职业<span style="color: red;">*</span></div>
+                            <div class="layui-form-mid">职业</div>
                             <div class="layui-input-inline">
                                 <select name="job">
                                     <option value="">请选择</option>
@@ -120,7 +120,7 @@
                         </div>
 
                         <div class="layui-form-item">
-                            <div class="layui-form-mid">月收入<span style="color: red;">*</span></div>
+                            <div class="layui-form-mid">月收入</div>
                             <div class="layui-input-inline">
                                 <select name="income">
                                     <option value="">请选择</option>
@@ -134,7 +134,7 @@
                         </div>
 
                         <div class="layui-form-item">
-                            <div class="layui-form-mid">婚姻状况<span style="color: red;">*</span></div>
+                            <div class="layui-form-mid">婚姻状况</div>
                             <div class="layui-input-inline">
                                 <select name="marriage">
                                     <option value="">请选择</option>
@@ -146,7 +146,7 @@
                         </div>
 
                         <div class="layui-form-item">
-                            <div class="layui-form-mid">子女数<span style="color: red;">*</span></div>
+                            <div class="layui-form-mid">子女数</div>
                             <div class="layui-input-inline">
                                 <select name="children">
                                     <option value="">请选择</option>
@@ -196,7 +196,7 @@
                     <!-- 单位信息 -->
                     <div id="stepTwo" hidden>
                         <div class="layui-form-item">
-                            <div class="layui-form-mid">单位名称<span style="color: red;">*</span></div>
+                            <div class="layui-form-mid">单位名称</div>
                             <div class="layui-input-inline">
                                 <input type="text" name="company" placeholder="请填写单位名称" required
                                        class="layui-input" maxlength="20">
@@ -204,7 +204,7 @@
                         </div>
 
                         <div class="layui-form-item">
-                            <div class="layui-form-mid">单位电话<span style="color: red;">*</span></div>
+                            <div class="layui-form-mid">单位电话</div>
                             <div class="layui-input-inline">
                                 <label>
                                     <input type="text" name="companyPhone" placeholder="请填写单位电话"
@@ -215,7 +215,7 @@
                         </div>
 
                         <div class="layui-form-item">
-                            <div class="layui-form-mid">详细地址<span style="color: red;">*</span></div>
+                            <div class="layui-form-mid">详细地址</div>
                             <div class="layui-input-inline">
                                 <input type="text" name="company_Address" placeholder="请填写单位详细地址" class="layui-input"
                                        maxlength="50">
@@ -389,26 +389,6 @@
                 layer.msg('身份证号填写有误');
                 return false;
             }
-            if ($("#stepOne [name='education']").val() === '') {
-                layer.msg("未选择学历");
-                return false;
-            }
-            if ($("#stepOne [name='job']").val() === '') {
-                layer.msg("未选择职业");
-                return false;
-            }
-            if ($("#stepOne [name='income']").val() === '') {
-                layer.msg("未选择月收入");
-                return false;
-            }
-            if ($("#stepOne [name='婚姻状况']").val() === '') {
-                layer.msg("未选择婚姻状况");
-                return false;
-            }
-            if ($("#stepOne [name='子女数']").val() === '') {
-                layer.msg("未选择子女数");
-                return false;
-            }
             if ($("#stepOne [name='provid']").val() === '') {
                 layer.msg("未选择居住省");
                 return false;
@@ -441,33 +421,6 @@
 
         //第二步点击事件
         $("#nextTwoSubmit").click(function () {
-            var companyPhone = $("#stepTwo [name='companyPhone']").val();
-            var company = $("#stepTwo [name='company']").val();
-            if (company === '') {
-                layer.msg("单位名称不能为空");
-                return false;
-            }
-            if (company.length < 4) {
-                layer.msg("单位名称填写有误");
-                return false;
-            }
-            if (companyPhone === '') {
-                layer.msg("单位电话不能为空");
-                return false;
-            }
-            if (!telReg.test(companyPhone)) {
-                layer.msg('单位电话填写有误');
-                return false;
-            }
-            var address = $("#stepTwo [name='company_Address']").val();
-            if (address === '') {
-                layer.msg("详细地址不能为空");
-                return false;
-            }
-            if (address.length < 5) {
-                layer.msg("详细地址填写有误");
-                return false;
-            }
             $("#companySpan").hide();
             $("#personSapn").hide();
             $("#linkManSpan").show();

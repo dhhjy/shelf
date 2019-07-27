@@ -82,7 +82,7 @@ public class H5IndexController extends BaseController {
     @RequestMapping(value = "/personDetailIndex")
     @Permission
     public String personDetailIndex() {
-        return H5_PATH + "/business/person_detail_index.html";
+        return H5_PATH + "/business/identification/person_detail_index.html";
     }
 
     /**
@@ -96,6 +96,15 @@ public class H5IndexController extends BaseController {
     public String bankCardIndex(Model model) {
         ShiroUser user = ShiroKit.getUserNotNull();
         model.addAttribute("user", this.bSysUserService.selectBSysUserByUserId(user.getId().intValue()));
-        return H5_PATH + "/business/bank_card_index.html";
+        return H5_PATH + "/business/identification/bank_card_index.html";
+    }
+
+    @ApiOperation(value = "/秒秒贷借款页面跳转")
+    @RequestMapping(value = "/SecondsSecondsBorrowIndex")
+    @Permission
+    public String SecondsSecondsBorrowIndex(Model model) {
+        // 利率
+        model.addAttribute("annualInterestRate", "0.24");
+        return H5_PATH + "/business/borrowMoney/seconds_seconds_borrow_index.html";
     }
 }

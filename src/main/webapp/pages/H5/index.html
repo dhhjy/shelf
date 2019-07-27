@@ -82,6 +82,7 @@
 <script src="${ctxPath}/assets/expand/plugins/jquery/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="${ctxPath}/assets/myIcon/iconfont.js"></script>
 <script>
+    var inde = "";
     var userStatus = ${userStatus};
     layui.use(['layer', 'element', 'admin', 'index', 'carousel'], function () {
         var $ = layui.jquery;
@@ -191,7 +192,12 @@
          */
         $("#btnCallbackFun").click(function () {
             toolsFun.hideHeaderFun();
-            creditManagerFun();
+            if(inde === "productList"){
+                productListFun();
+            }else{
+                creditManagerFun();
+            }
+            inde = "";
         });
 
     });

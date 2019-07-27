@@ -8,77 +8,7 @@
     <link rel="stylesheet" href="${ctxPath}/assets/common/layui/css/layui.css"/>
     <link rel="stylesheet" href="${ctxPath}/assets/common/module/admin.css?v=311"/>
     <link rel="stylesheet" href="${ctxPath}/assets/expand/css/style.css" media="all"/>
-
-    <style>
-        .myIcon {
-            width: 26px;
-            height: 26px;
-            vertical-align: middle
-        }
-
-        /** 卡片轮播图样式 */
-        .admin-carousel .layui-carousel-ind {
-            position: absolute;
-            top: -41px;
-            text-align: right;
-        }
-
-        .admin-carousel .layui-carousel-ind ul {
-            background: 0 0;
-        }
-
-        .admin-carousel .layui-carousel-ind li {
-            background-color: #e2e2e2;
-        }
-
-        .admin-carousel .layui-carousel-ind li.layui-this {
-            background-color: #999;
-        }
-
-        /** 广告位轮播图 */
-        .admin-news .layui-carousel-ind {
-            height: 45px;
-        }
-
-        .admin-news a {
-            display: block;
-            line-height: 60px;
-            text-align: center;
-        }
-
-        .layui-col-space15 > * {
-            padding: 0 !important;
-        }
-
-        .layui-card-header {
-            height: auto;
-            line-height: auto;
-        }
-
-        .cece {
-            width: 100%;
-            padding: 8px 0px;
-            font-size: 16px;
-            display: block;
-            border-radius: 30px;
-            margin-top: 15px;
-            line-height: 26px;
-            text-align: center;
-            text-decoration: none;
-            border: 0;
-            color: #ffffff;
-            background: url(../images/btn.png) no-repeat center;
-            background-size: cover;
-        }
-
-        .show-text {
-            font-size: 1.1rem;
-            color: #4B7897;
-            display: inline-table;
-            vertical-align: top;
-        }
-    </style>
-
+    <link rel="stylesheet" href="${ctxPath}/assets/h5/css/product.css" media="all"/>
 </head>
 <body>
 <!-- 加载动画，移除位置在common.js中 -->
@@ -86,7 +16,7 @@
     <div class="rubik-loader"></div>
 </div>
 <!-- 正文开始 -->
-<div class="layui-fluid layadmin-cmdlist-fluid">
+<div class="layui-fluid">
     <div class="layui-row layui-col-space15">
         <div class="layui-col-xs12 layui-col-sm12 layui-col-md12">
             <div class="layui-card" style="margin:0;pading:0;">
@@ -98,33 +28,294 @@
         <div class="layui-col-xs12 layui-col-sm12 layui-col-md12">
             <div class="layui-card">
                 <div class="layui-card-header">
-                    <div class="layadmin-homepage-list-imgtxt message-content">
-                        <div style="padding-top: 1px;">
-                            <img oncontextmenu="return false;" onselectstart="return false;" class="h-img" src="${ctxPath}/assets/h5/image/banner.jpg" width="100%"/>
-                            <span class="show-text">全国均可申请，无地域限制</span>
-                        </div>
-                        <hr class="layui-bg-cyan">
-                        <div class="media-body">
-                            <div class="pad-btm">
-                                <p class="min-font">
-                                      <span class="layui-breadcrumb">
-                                        <a href="javascript:void (0);">声明：拒绝向在校学生提供金融服务</a>
-                                      </span>
-                                </p>
-                            </div>
-                        </div>
-                        <div style="padding-bottom: 10px;">
-                            <img oncontextmenu="return false;" onselectstart="return false;"  src="${ctxPath}/assets/h5/image/youshi.png" width="100%"/>
-                        </div>
+                    <div style="padding-top: 1px;">
+                        <img oncontextmenu="return false;" onselectstart="return false;" class="h-img"
+                             src="${ctxPath}/assets/h5/image/banner.jpg" width="100%"/>
+                        <span class="show-text">全国均可申请，无地域限制</span>
+                    </div>
+                    <hr class="layui-bg-cyan">
+                    <div class="pad-btm">
+                        <p class="min-font">
+                            <span class="layui-breadcrumb">
+                                <a href="javascript:void (0);">声明：拒绝向在校学生提供金融服务</a>
+                            </span>
+                        </p>
+                    </div>
+                    <div style="padding-bottom: 10px;">
+                        <img oncontextmenu="return false;" onselectstart="return false;"
+                             src="${ctxPath}/assets/h5/image/youshi.png" width="100%"/>
                     </div>
                 </div>
                 <div class="layui-card-body">
                     <ul class="layui-tab-title site-demo-title">
-                        <li class="layui-this">秒秒金融</li>
-                        <li>苹果ID贷</li>
-                        <li>未开通</li>
-                        <li>未开通</li>
+                        <li class="layui-this" id="selectMmjr">
+                            秒秒贷
+                        </li>
+                        <li id="selectPgId">苹果贷</li>
+                        <li id="selectBt">白条</li>
+                        <li id="selectWkt">未开通</li>
                     </ul>
+                </div>
+                <!-- 运营商认证 -->
+                <div class="layui-col-xs12 layui-col-sm12 layui-col-md12" >
+                    <div class="layui-card" style="box-shadow:0 0 0 0;">
+                        <div class="layui-card-header">
+                            <!-- 秒秒金融 -->
+                            <div id="mmjr" class="index-product-info">
+                                <ul>
+                                    <li>
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td class="icon-product">
+                                                    <svg class="myIcon" aria-hidden="true">
+                                                        <use xlink:href="#icon-jinrong"></use>
+                                                    </svg>
+                                                </td>
+                                                <td class="text-product">
+                                                    <b>最高30万</b>
+                                                    <p>免抵押免担保，最高可贷30万</p>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </li>
+                                    <li>
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td class="icon-product">
+                                                    <svg class="myIcon" aria-hidden="true">
+                                                        <use xlink:href="#icon-shandian1"></use>
+                                                    </svg>
+                                                </td>
+                                                <td class="text-product"><b>闪电放款</b>
+                                                    <p>手续便捷，最快1分钟放款</p></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </li>
+                                    <li>
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td class="icon-product">
+                                                    <svg class="myIcon" aria-hidden="true">
+                                                        <use xlink:href="#icon-shijian4"></use>
+                                                    </svg>
+                                                </td>
+                                                <td class="text-product"><b>期限灵活</b>
+                                                    <p>贷款周期1-180天，可灵活选择</p></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </li>
+                                    <li style="border: medium none;">
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td class="icon-product">
+                                                    <svg class="myIcon" aria-hidden="true">
+                                                        <use xlink:href="#icon-jinrongjigou"></use>
+                                                    </svg>
+                                                </td>
+                                                <td class="text-product"><b>轻松还款</b>
+                                                    <p>每月等本等息方式还款</p></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </li>
+                                </ul>
+                                <div class="layui-row layui-col-space15" style="padding-top: 10px;padding-bottom: 10px">
+                                    <div class="layui-card">
+                                        <button class="layui-btn layui-bg layui-btn-fluid" id="mmjr-submit"
+                                                style="background-color:#2776d4;">立即申请
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--  苹果ID贷款-->
+                            <div id="pgId" hidden class="index-product-info">
+                                <ul>
+                                    <li>
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td class="icon-product">
+                                                    <svg class="myIcon" aria-hidden="true">
+                                                        <use xlink:href="#icon-jinrong4"></use>
+                                                    </svg>
+                                                </td>
+                                                <td class="text-product">
+                                                    <b>最高3万</b>
+                                                    <p>免抵押免担保，最高可贷3万</p>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </li>
+                                    <li>
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td class="icon-product">
+                                                    <svg class="myIcon" aria-hidden="true">
+                                                        <use xlink:href="#icon-shoujihao_huaban"></use>
+                                                    </svg>
+                                                </td>
+                                                <td class="text-product"><b>认证方便</b>
+                                                    <p>手续便捷，苹果手机限时专享</p></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </li>
+                                    <li>
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td class="icon-product">
+                                                    <svg class="myIcon" aria-hidden="true">
+                                                        <use xlink:href="#icon-shijian4"></use>
+                                                    </svg>
+                                                </td>
+                                                <td class="text-product"><b>期限灵活</b>
+                                                    <p>贷款周期1-90天，可灵活选择</p></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </li>
+                                    <li style="border: medium none;">
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td class="icon-product">
+                                                    <svg class="myIcon" aria-hidden="true">
+                                                        <use xlink:href="#icon-jinrongjigou"></use>
+                                                    </svg>
+                                                </td>
+                                                <td class="text-product"><b>轻松还款</b>
+                                                    <p>利息低至0.6%，还款无压力</p></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </li>
+                                </ul>
+                                <div class="layui-row layui-col-space15" style="padding-top: 10px;padding-bottom: 10px">
+                                    <div class="layui-card">
+                                        <button class="layui-btn layui-bg layui-btn-fluid" id="pgId-submit"
+                                                style="background-color:#2776d4;">立即申请
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 白条 -->
+                            <div id="bt" hidden class="index-product-info">
+                                <ul>
+                                    <li>
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td class="icon-product">
+                                                    <svg class="myIcon" aria-hidden="true">
+                                                        <use xlink:href="#icon-jinrong-weixuanzhong"></use>
+                                                    </svg>
+                                                </td>
+                                                <td class="text-product">
+                                                    <b>最高5千</b>
+                                                    <p>免抵押免担保，最高可贷5千</p>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </li>
+                                    <li>
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td class="icon-product">
+                                                    <svg class="myIcon" aria-hidden="true">
+                                                        <use xlink:href="#icon-shandianchasha"></use>
+                                                    </svg>
+                                                </td>
+                                                <td class="text-product"><b>即时放款</b>
+                                                    <p>无需认证，当天即可下款</p></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </li>
+                                    <li>
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td class="icon-product">
+                                                    <svg class="myIcon" aria-hidden="true">
+                                                        <use xlink:href="#icon-shijian4"></use>
+                                                    </svg>
+                                                </td>
+                                                <td class="text-product"><b>期限灵活</b>
+                                                    <p>贷款周期1-5周，可灵活选择</p></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </li>
+                                    <li style="border: medium none;">
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td class="icon-product">
+                                                    <svg class="myIcon" aria-hidden="true">
+                                                        <use xlink:href="#icon-jinrongjigou"></use>
+                                                    </svg>
+                                                </td>
+                                                <td class="text-product"><b>还款自由</b>
+                                                    <p>还款自由，还款方式多样</p></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </li>
+                                </ul>
+                                <div class="layui-row layui-col-space15" style="padding-top: 10px;padding-bottom: 10px">
+                                    <div class="layui-card">
+                                        <button class="layui-btn layui-bg layui-btn-fluid" id="bt-submit"
+                                                style="background-color:#2776d4;">立即申请
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 未开通 -->
+                            <div id="wkt" hidden class="index-product-info">
+                                <ul>
+                                    <li>
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td class="icon-product">
+                                                    <svg class="myIcon" aria-hidden="true">
+                                                        <use xlink:href="#icon-shebeilixian"></use>
+                                                    </svg>
+                                                </td>
+                                                <td class="text-product">
+                                                    <b>即将上线</b>
+                                                    <p>新产品即将上线，敬请期待</p>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </li>
+                                </ul>
+                                <div class="layui-row layui-col-space15" style="padding-top: 10px;padding-bottom: 10px">
+                                    <div class="layui-card">
+                                        <button class="layui-btn layui-bg layui-btn-fluid" id="wkt-submit"
+                                                style="background-color:#2776d4;">未开通
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -152,203 +343,73 @@
         var $ = layui.jquery;
         var layer = layui.layer;
 
-        // 用户状态
-        var userStatus = ${userStatus};
-
-        // 渲染券核效率图表
-        var myCharts2 = echarts.init(document.getElementById('hjxl'), myEchartsTheme);
-        var option2 = {
-            backgroundColor: 'rgba(35,159,255)',
-            radar: {
-                splitNumber: 1,
-                radius: "55%",
-                //字体颜色
-                name: {
-                    textStyle: {color: '#fff'}
-                },
-                //斜角分割线颜色
-                axisLine: {
-                    lineStyle: {
-                        color: 'rgba(255,255,255,.2)'
-                    }
-                },
-                //雷达图中的背景色透明度
-                splitArea: {
-                    areaStyle: {
-                        opacity: 0
-                    }
-                },
-                //最外层边框颜色
-                splitLine: {
-                    lineStyle: {
-                        width: 1,
-                        color: 'rgba(255,255,255,.5)'
-                    }
-                },
-                indicator: [
-                    {text: '身份特质', max: 50},
-                    {text: '行为偏好', max: 50},
-                    {text: '人脉关系', max: 50},
-                    {text: '信用历史', max: 50},
-                    {text: '履约能力', max: 50}
-                ]
-            },
-
-            series: [
-                {
-                    type: 'radar',
-                    symbolSize: 0,
-                    //填充区域颜色
-                    areaStyle: {
-                        normal: {
-                            color: 'rgba(255,255,255,.3)'
-                        }
-                    },
-                    data: [{
-                        value: [48, 44, 45, 46, 46],
-                        //数据边框样式
-                        lineStyle: {
-                            normal: {
-                                width: 1,
-                                color: 'rgba(82,206,228,1)'
-                            }
-                        }
-                    }]
-                }
-            ]
-        };
-        myCharts2.setOption(option2);
-
         /**
-         * 进行身份证(实人认证)
+         * 绑定秒秒金融事件
          */
-        var idCardAuthFun = function () {
-            if (userStatus.identityStatus !== '0' && userStatus.identityStatus !== 'ENABLE') {
-                layer.msg("身份证已认证");
-                return false;
-            } else {
-
-            }
-        };
-
-        /**
-         * 进行个人信息认证
-         */
-        var userInfoAuthFun = function () {
-            if (userStatus.userBasicStatus !== '0' && userStatus.userBasicStatus !== 'ENABLE') {
-                layer.msg("个人信息已认证");
-                return false;
-                // } else if(userStatus.identityStatus !== "1"){
-            } else if (false) {
-                layer.msg("请先认证身份证信息");
-                return false;
-            } else {
-                parent.toolsFun.skip(Feng.ctxPath + "/h5/personDetailIndex");
-            }
-        };
-
-        /**
-         * 进行银行卡认证
-         */
-        var bankCardAuthFun = function () {
-            if (userStatus.bankInfoStatus !== '0' && userStatus.bankInfoStatus !== 'ENABLE') {
-                layer.msg("银行卡已认证");
-                return false;
-            } else if (userStatus.userBasicStatus !== "1") {
-                layer.msg("请先认证个人信息认证");
-                return false;
-            } else {
-                // parent.toolsFun.skip(Feng.ctxPath + "/h5/bankCardIndex");
-            }
-        };
-
-        /**
-         * 进行手机验证
-         */
-        var mobileAuthFun = function () {
-            if (userStatus.xinyanMobileStatus !== '0' && userStatus.xinyanMobileStatus !== 'ENABLE') {
-                layer.msg("手机已认证");
-                return false;
-            } else if (userStatus.userBasicStatus !== "1") {
-                layer.msg("请先认证个人信息认证");
-                return false;
-            } else {
-                $.ajax({
-                    type: 'GET',
-                    url: Feng.ctxPath + "/xinYan/index/carrier/" + userStatus.userId,
-                    success: function (url) {
-                        parent.toolsFun.skip(url);
-                    }
-                });
-            }
-        };
-
-        /**
-         * 进行淘宝认证
-         */
-        var taoBaoAuthFun = function () {
-            if (userStatus.xinyanTaobaoStatus !== '0' && userStatus.xinyanTaobaoStatus !== 'ENABLE') {
-                layer.msg("淘宝已认证");
-                return false;
-            } else if (userStatus.userBasicStatus !== "1") {
-                layer.msg("请先认证个人信息认证");
-                return false;
-            } else {
-                $.ajax({
-                    type: 'GET',
-                    url: Feng.ctxPath + "/xinYan/index/taobaopay/" + userStatus.userId,
-                    success: function (url) {
-                        parent.toolsFun.skip(url);
-                    }
-                });
-            }
-        };
-
-        /**
-         * 绑定身份证认证事件
-         */
-        $('.idCard_').click(function () {
-            idCardAuthFun();
+        $('#selectMmjr').click(function () {
+            $("#mmjr").show();
+            $("#pgId").hide();
+            $("#bt").hide();
+            $("#wkt").hide();
         });
 
         /**
-         * 绑定个人信息认证事件
+         * 绑定苹果ID贷事件
          */
-        $('.userInfo_').click(function () {
-            userInfoAuthFun();
+        $('#selectPgId').click(function () {
+            $("#mmjr").hide();
+            $("#pgId").show();
+            $("#bt").hide();
+            $("#wkt").hide();
         });
 
         /**
-         * 绑定银行卡认证事件
+         * 绑定白条事件
          */
-        $('.bankCard_').click(function () {
-            bankCardAuthFun();
+        $('#selectBt').click(function () {
+            $("#mmjr").hide();
+            $("#pgId").hide();
+            $("#bt").show();
+            $("#wkt").hide();
         });
 
         /**
-         * 绑定手机号认证事件
+         * 绑定白条事件
          */
-        $('.mobile_').click(function () {
-            mobileAuthFun();
+        $('#selectWkt').click(function () {
+            $("#mmjr").hide();
+            $("#pgId").hide();
+            $("#bt").hide();
+            $("#wkt").show();
         });
 
         /**
-         * 绑定淘宝认证事件
+         * 绑定秒秒贷借款申请事件
          */
-        $('.taoBao_').click(function () {
-            taoBaoAuthFun();
+        $("#mmjr-submit").click(function () {
+            parent.inde = "productList";
+            parent.toolsFun.skip(Feng.ctxPath + "/h5/SecondsSecondsBorrowIndex");
         });
 
         /**
-         * 绑定去借钱点击事件
+         * 绑定苹果贷借款申请事件
          */
-        $("#next-submit").click(function () {
-            if (parent.toolsFun.ifStatus() !== false) {
-                parent.layui.index.loadHome({
-                    menuPath: Feng.ctxPath + "/h5/product",
-                    menuName: '<i class="layui-icon layui-icon-home"></i>'
-                });
-            }
+        $("#pgId-submit").click(function () {
+            layer.msg("您暂时无法申请该产品");
+        });
+
+        /**
+         * 绑定白条借款申请事件
+         */
+        $("#bt-submit").click(function () {
+            layer.msg("您暂时无法申请该产品");
+        });
+
+        /**
+         * 绑定未开通借款申请事件
+         */
+        $("#wkt-submit").click(function () {
+            layer.msg("产品即将上线");
         });
     });
 </script>
