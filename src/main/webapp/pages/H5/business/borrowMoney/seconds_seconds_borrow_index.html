@@ -8,15 +8,152 @@
     <link href="${ctxPath}/assets/expand/images/favicon.ico" rel="icon">
     <title>${systemName}</title>
     <link rel="stylesheet" href="${ctxPath}/assets/common/layui/css/layui.css"/>
-    <link rel="stylesheet" href="${ctxPath}/assets/common/module/admin.css"/>
+    <link rel="stylesheet" href="${ctxPath}/assets/h5/css/admin.css" media="all">
+    <link rel="stylesheet" href="${ctxPath}/assets/h5/css/login.css" media="all">
     <link rel="stylesheet" href="${ctxPath}/assets/myIcon/iconfont.css" media="all"/>
+
     <style>
         .layui-card-header {
             margin-bottom: 5px;
         }
+
+        .layui-form-mid {
+            float: right;
+        }
+
+        .layui-card {
+            box-shadow: 0 0 0 0;
+        }
     </style>
 </head>
 <body style="overflow-x: hidden;">
+<div class="layui-col-xs12 layui-col-sm12 layui-col-md12">
+    <div class="layui-card">
+        <div class="layui-card-header" id="showText">
+            <svg class="myIcon" aria-hidden="true">
+                <use xlink:href="#icon-jinrongzichan"></use>
+            </svg>
+            秒秒贷
+        </div>
+        <div class="layui-card-body layadmin-user-login-box layadmin-user-login-body">
+            <form id="ssbForm" lay-filter="ssbForm" class="layui-form">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">借多少<span
+                            style="color: red;">*</span></label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="amount" name="amount" placeholder="借多少" class="layui-input"
+                               maxlength="8" oninput="value=value.replace(/[^\d]/g,'')">
+                    </div>
+                </div>
 
+                <div id="hidDiv" hidden>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">借多久<span style="color: red;">*</span></label>
+                        <div class="layui-input-inline">
+                            <select id="debtDuration" name="debtDuration">
+
+                            </select>
+                        </div>
+                    </div>
+
+                    <hr class="layui-bg-gray">
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">还款方式<span style="color: red;">*</span></label>
+                        <div class="layui-input-inline">
+                            <select id="modeOfRepayment" name="modeOfRepayment">
+                                <option value="1">每日本息</option>
+                                <option value="2">每日利息+服务费</option>
+                                <option value="3">到期全额</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">总利息</label>
+                        <div class="layui-input-inline">
+                            <div class="layui-form-mid layui-word-aux right-pill">10</div>
+                            <input type="hidden" id="accrual" name="accrual" placeholder="利息" class="layui-input">
+                        </div>
+                    </div>
+
+                    <hr class="layui-bg-gray">
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">收款方式<span style="color: red;">*</span></label>
+                        <div class="layui-input-inline">
+                            <select id="bank" name="bank">
+                                <option value="1">银行卡</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">放款机构<span style="color: red;"></span></label>
+                        <div class="layui-input-inline">
+                            <input type="hidden" name="productCode">
+                            <div class="layui-form-mid layui-word-aux">秒秒贷</div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-input-inline">
+                            <div class="layui-form-mid layui-word-aux right-pill">温馨提示：您选择的还款方式为每日还款</div>
+                        </div>
+                    </div>
+
+                    <hr class="layui-bg-gray">
+
+                    <div class="layui-row layui-col-space15" style="padding-top: 10px;padding-bottom: 10px">
+                        <div class="layui-card">
+                            <button class="layui-btn layui-bg layui-btn-fluid" id="mmjr-submit"
+                                    style="background-color:#2776d4;">立即申请
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@/* 加入contextPath属性和session超时的配置 */
+<script type="text/javascript">
+    var Feng = {
+        ctxPath: "",
+        addCtx: function (ctx) {
+            if (this.ctxPath === "") {
+                this.ctxPath = ctx;
+            }
+        }
+    };
+    Feng.addCtx("${ctxPath}");
+
+    document.oncontextmenu = function () {
+        return false;
+    }
+</script>
+<script type="text/javascript" src="${ctxPath}/assets/common/layui/layui.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/common/js/common.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/myIcon/iconfont.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/common/js/data.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/common/js/province.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/common/js/verify.js"></script>
+
+<script>
+    layui.use(['form', 'ax', 'admin', 'layer', 'index'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+
+        /**
+         * 绑定借款金额输入时间
+         */
+        $("#amount").change(function () {
+            layer.msg("加载中...");
+            setTimeout(function () {
+                $("#hidDiv").show();
+            }, 500)
+        })
+    });
+</script>
 </body>
 </html>
