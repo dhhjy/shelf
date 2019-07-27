@@ -64,7 +64,11 @@ public class H5LoginController extends BaseController {
     @ApiOperation(value = "H5客户端登录页面跳转", notes = "H5客户端登录页面跳转", httpMethod = "GET")
     @RequestMapping(value = {"", "/", "login"}, method = RequestMethod.GET)
     public String login() {
-        return H5_PATH + "login.html";
+        if (ShiroKit.isAuthenticated() || ShiroKit.getUser() != null) {
+            return REDIRECT + "/h5/index";
+        } else {
+            return H5_PATH + "/login.html";
+        }
     }
 
     /**

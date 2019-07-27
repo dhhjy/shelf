@@ -59,6 +59,21 @@ public class H5IndexController extends BaseController {
     }
 
     /**
+     * 客户端产品列表主页
+     *
+     * @return String
+     * @author zcn
+     */
+    @ApiOperation(value = "客户端产品列表主页", notes = "客户端产品列表主页", httpMethod = "GET")
+    @RequestMapping("/product")
+    @Permission
+    public String product(Model model) {
+        BSysUserStatus userStatus = bSysUserStatusService.selectBSysUserStatusByUserId(Objects.requireNonNull(ShiroKit.getUser()).getId().intValue());
+        model.addAttribute("userStatus", JSONObject.toJSON(userStatus));
+        return H5_PATH + "/frame/product.html";
+    }
+
+    /**
      * 个人信息认证页跳转
      *
      * @return
