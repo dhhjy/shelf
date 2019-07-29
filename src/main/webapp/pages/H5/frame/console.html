@@ -64,6 +64,7 @@
 </div>
 <!-- 正文开始 -->
 <div class="layui-fluid">
+    <input type="hidden" id="ppw" value="${user.payPassword}">
     <!-- 分数统计 -->
     <div class="layui-row layui-col-space15">
         <div class="layui-col-xs12 layui-col-sm12 layui-col-md12">
@@ -385,10 +386,18 @@
          */
         $("#next-submit").click(function () {
             if (parent.toolsFun.ifStatus() !== false) {
-                parent.layui.index.loadHome({
-                    menuPath: Feng.ctxPath + "/h5/product",
-                    menuName: '<i class="layui-icon layui-icon-home"></i>'
-                });
+                if ($("#ppw").val() === "") {
+                    // 设置支付密码
+                    parent.layui.index.loadHome({
+                        menuPath: Feng.ctxPath + "/h5/setPayPassword",
+                        menuName: '<i class="layui-icon layui-icon-home"></i>'
+                    });
+                } else {
+                    parent.layui.index.loadHome({
+                        menuPath: Feng.ctxPath + "/h5/product",
+                        menuName: '<i class="layui-icon layui-icon-home"></i>'
+                    });
+                }
             }
         });
     });
