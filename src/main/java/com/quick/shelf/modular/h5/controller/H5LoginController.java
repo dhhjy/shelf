@@ -82,6 +82,7 @@ public class H5LoginController extends BaseController {
     public String index(Model model) {
         ShiroUser user = ShiroKit.getUserNotNull();
         model.addAttribute("userStatus", JSONObject.toJSON(this.bSysUserStatusService.selectBSysUserStatusByUserId(user.getId().intValue())));
+        model.addAttribute("user", JSONObject.toJSON(this.bSysUserService.selectBSysUserByUserId(user.getId().intValue())));
         return H5_PATH + "/index.html";
     }
 
