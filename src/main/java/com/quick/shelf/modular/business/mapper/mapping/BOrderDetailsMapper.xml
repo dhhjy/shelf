@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.quick.shelf.modular.business.mapper.BOrderDetailsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.quick.shelf.modular.business.entity.BOrderDetails">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="product_code" property="productCode"/>
+        <result column="mode_of_repayment" property="modeOfRepayment"/>
+        <result column="amount" property="amount"/>
+        <result column="debt_duration" property="debtDuration"/>
+        <result column="accrual" property="accrual"/>
+        <result column="servic_charge" property="servicCharge"/>
+        <result column="annual_interest_rate" property="annualInterestRate"/>
+        <result column="actual_amount" property="actualAmount"/>
+        <result column="every_day_refund" property="everyDayRefund"/>
+        <result column="count_refund" property="countRefund"/>
+        <result column="status" property="status"/>
+        <result column="payment_term" property="paymentTerm"/>
+        <result column="create_time" property="createTime"/>
+        <result column="check_user_id" property="checkUserId"/>
+        <result column="check_message" property="checkMessage"/>
+        <result column="check_time" property="checkTime"/>
+        <result column="draw_user_id" property="drawUserId"/>
+        <result column="draw_message" property="drawMessage"/>
+        <result column="draw_time" property="drawTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id AS "id",
+        user_id AS "userId",
+        product_code AS "productCode",
+        mode_of_repayment AS modeOfRepayment,
+        amount AS amount,
+        debt_duration AS debtDuration,
+        accrual AS accrual,
+        servic_charge AS servicCharge,
+        annual_interest_rate AS annualInterestRate,
+        actual_amount AS actualAmount,
+        every_day_refund AS everyDayRefund,
+        count_refund AS countRefund,
+        status AS "status",
+        payment_term AS "paymentTerm",
+        create_time AS "createTime",
+        check_user_id AS "checkUserId",
+        check_message AS "checkMessage",
+        check_time AS "checkTime",
+        draw_user_id AS "drawUserId",
+        draw_message AS "drawMessage",
+        draw_time AS "checkUserId"
+    </sql>
+
+    <select id="ifExistOrderByUserId" resultType="com.quick.shelf.modular.business.entity.BOrderDetails">
+        select
+        <include refid="Base_Column_List"/>
+        from b_order_details where user_id = #{userId}
+        AND status IN (0,1,2,3,4,5)
+        limit 0,1
+    </select>
+</mapper>

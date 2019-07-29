@@ -24,33 +24,72 @@
         .layui-card {
             box-shadow: 0 0 0 0;
         }
+
+        .layui-layer-title {
+            padding: 0 0 0 0 !important;
+            text-align: center;
+        }
+
+        ul, li {
+            list-style: none;
+        }
+
+        .password-div input {
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            border: 0;
+        }
+
+        .password-lable {
+            height: 26px;
+            clear: both;
+        }
+
+        .password-lable li {
+            float: left;
+            width: 26px;
+            height: 26px;
+            line-height: 26px;
+            text-align: center;
+            border: 1px solid #dedede;
+            margin-left: -1px;
+            background-color: #ffffff;
+            font-size: 30px;
+        }
+
+        h4 {
+            padding: 5px;
+        }
     </style>
 </head>
 <body style="overflow-x: hidden;">
-<div class="layui-col-xs12 layui-col-sm12 layui-col-md12">
-    <div class="layui-card">
-        <div class="layui-card-header" id="showText">
-            <svg class="myIcon" aria-hidden="true">
-                <use xlink:href="#icon-jinrongzichan"></use>
-            </svg>
-            秒秒贷
-        </div>
-        <div class="layui-card-body layadmin-user-login-box layadmin-user-login-body">
-            <form id="ssbForm" lay-filter="ssbForm" class="layui-form">
-                <div class="layui-form-item">
-                    <label class="layui-form-label">借多少<span
-                            style="color: red;">*</span></label>
-                    <div class="layui-input-inline">
-                        <input type="text" id="amount" name="amount" placeholder="借多少" class="layui-input"
-                               maxlength="8" oninput="value=value.replace(/[^\d]/g,'')">
+<div class="layui-row">
+    <div class="layui-col-xs12 layui-col-sm12 layui-col-md12">
+        <div class="layui-card">
+            <div class="layui-card-header" id="showText">
+                <svg class="myIcon" aria-hidden="true">
+                    <use xlink:href="#icon-jinrongzichan"></use>
+                </svg>
+                秒秒贷
+            </div>
+            <div class="layui-card-body layadmin-user-login-box layadmin-user-login-body">
+                <form id="ssbForm" lay-filter="ssbForm" class="layui-form">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">借多少<span
+                                style="color: red;">*</span></label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="amount" name="amount" placeholder="借多少" lay-verify="required"
+                                   class="layui-input"
+                                   maxlength="8" oninput="value=value.replace(/[^\d]/g,'')">
+                        </div>
                     </div>
-                </div>
 
-                <div id="hidDiv" hidden>
                     <div class="layui-form-item">
                         <label class="layui-form-label">借多久<span style="color: red;">*</span></label>
                         <div class="layui-input-inline">
-                            <select id="debtDuration" name="debtDuration">
+                            <select id="debtDuration" name="debtDuration" lay-verify="required"
+                                    lay-filter="debtDuration">
 
                             </select>
                         </div>
@@ -58,64 +97,109 @@
 
                     <hr class="layui-bg-gray">
 
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">还款方式<span style="color: red;">*</span></label>
-                        <div class="layui-input-inline">
-                            <select id="modeOfRepayment" name="modeOfRepayment">
-                                <option value="1">每日本息</option>
-                                <option value="2">每日利息+服务费</option>
-                                <option value="3">到期全额</option>
-                            </select>
+                    <div id="hidDiv" hidden>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">还款方式<span style="color: red;">*</span></label>
+                            <div class="layui-input-inline">
+                                <select id="modeOfRepayment" name="modeOfRepayment">
+                                    <option value="">请选择还款方式</option>
+                                    <option value="1">每日本息</option>
+                                    <option value="2" disabled>每日利息+服务费</option>
+                                    <option value="3" disabled>到期全额</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">年化利率</label>
+                            <div class="layui-input-inline">
+                                <div class="layui-form-mid layui-word-aux right-pill">${annualInterestRate}</div>
+                                <input type="hidden" id="annualInterestRate" name="annualInterestRate"
+                                       value="${annualInterestRate}" placeholder="年利率" class="layui-input">
+                            </div>
+                        </div>
+
+                        <hr class="layui-bg-gray">
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">收款方式<span style="color: red;">*</span></label>
+                            <div class="layui-input-inline">
+                                <select id="paymentTerm" name="paymentTerm">
+                                    <option value="1">银行卡</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">放款机构<span style="color: red;"></span></label>
+                            <div class="layui-input-inline">
+                                <input type="hidden" name="productCode" value="1">
+                                <div class="layui-form-mid layui-word-aux">秒秒贷</div>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-input-inline">
+                                <div class="layui-form-mid layui-word-aux right-pill">温馨提示：您选择的还款方式为每日还款</div>
+                            </div>
+                        </div>
+
+                        <hr class="layui-bg-gray">
+
+                        <div class="layui-row layui-col-space15" style="padding-top: 10px;padding-bottom: 10px">
+                            <div class="layui-card">
+                                <button class="layui-btn layui-bg layui-btn-fluid" id="ssbForm-submit"
+                                        lay-filter="ssbForm-submit" lay-submit
+                                        style="background-color:#2776d4;">立即申请
+                                </button>
+                            </div>
                         </div>
                     </div>
+                </form>
 
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">总利息</label>
-                        <div class="layui-input-inline">
-                            <div class="layui-form-mid layui-word-aux right-pill">10</div>
-                            <input type="hidden" id="accrual" name="accrual" placeholder="利息" class="layui-input">
-                        </div>
-                    </div>
-
-                    <hr class="layui-bg-gray">
-
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">收款方式<span style="color: red;">*</span></label>
-                        <div class="layui-input-inline">
-                            <select id="bank" name="bank">
-                                <option value="1">银行卡</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">放款机构<span style="color: red;"></span></label>
-                        <div class="layui-input-inline">
-                            <input type="hidden" name="productCode">
-                            <div class="layui-form-mid layui-word-aux">秒秒贷</div>
-                        </div>
-                    </div>
-
-                    <div class="layui-form-item">
-                        <div class="layui-input-inline">
-                            <div class="layui-form-mid layui-word-aux right-pill">温馨提示：您选择的还款方式为每日还款</div>
-                        </div>
-                    </div>
-
-                    <hr class="layui-bg-gray">
-
-                    <div class="layui-row layui-col-space15" style="padding-top: 10px;padding-bottom: 10px">
-                        <div class="layui-card">
-                            <button class="layui-btn layui-bg layui-btn-fluid" id="mmjr-submit"
-                                    style="background-color:#2776d4;">立即申请
+                <div class="layadmin-user-login layadmin-user-display-show">
+                    <div class="layadmin-user-login-main">
+                        <div id="successDiv" class="layadmin-user-login-box layadmin-user-login-body layui-form" hidden>
+                            <h3 style="color: #00A65A"><img src="${ctxPath}/assets/limu/images/manage/valid.png"
+                                                            style="padding-right: 5px;">订单提交成功，请耐心等待审核结果</h3>
+                            <h4> 创建时间： <span id="createTime"></span></h4>
+                            <h4> 借款金额： <span id="callBackAmount" style="color: #FF5722;"></span>元</h4>
+                            <button class="layui-btn layui-bg layui-btn-fluid" id="back-submit"
+                                    style="background-color:#2776d4;">返 回 主 页
                             </button>
                         </div>
                     </div>
                 </div>
-            </form>
+
+            </div>
         </div>
     </div>
 </div>
+
+<div hidden id="payPasswordDiv" style="text-align: center">
+    <div class="layui-col-xs12 layui-col-sm12 layui-col-md12" style="text-align: center;">
+        <div id="setTradePwd">
+            <div class="layui-form-item" style="padding-top: 20px;">
+                <div class="layui-word-aux">使用秒秒贷借款：<span id="showAmount" style="color: #FF5722;"></span> 元</div>
+            </div>
+
+            <div class="password-div" style="padding-left: 21%">
+                <label for="password" class="password-lable">
+                    <ul style="background-color: #ffffff;text-align: center;list-style: none;">
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                    <input id="password" type="password" name="password" maxlength="6" style="color:transparent;">
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+
 @/* 加入contextPath属性和session超时的配置 */
 <script type="text/javascript">
     var Feng = {
@@ -143,16 +227,112 @@
     layui.use(['form', 'ax', 'admin', 'layer', 'index'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
+        var form = layui.form;
+        var $ax = layui.ax;
+
+        var selectDebtDuration = $("#debtDuration");
+        selectDebtDuration.append("<option value=''>借多久</option>");
+        for (var x = 0; x < 180; x++) {
+            var i = x + 1;
+            selectDebtDuration.append("<option value='" + i + "'>" + i + "天</option>");
+        }
+        // 渲染
+        form.render();
 
         /**
-         * 绑定借款金额输入时间
+         * 借款时间 选择监听
          */
-        $("#amount").change(function () {
-            layer.msg("加载中...");
-            setTimeout(function () {
+        form.on('select(debtDuration)', function () {
+            if ($("#amount").val() === '') {
+                layer.msg("请填写借款金额");
+                $("#debtDuration").val("");
+                // 渲染
+                form.render();
+                return false;
+            } else {
                 $("#hidDiv").show();
-            }, 500)
-        })
+            }
+        });
+
+        // 需要 0-输入支付密码，1-不需要输入支付密码
+        var formStatus = 0;
+
+        /**
+         * 表单提交事件
+         *
+         */
+        form.on('submit(ssbForm-submit)', function (data) {
+            if (formStatus === 0) {
+                // 渲染密码弹出层
+                var val = $("#amount").val();
+                $("#showAmount").text("$ " + val);
+
+                layer.open({
+                    id: 1,
+                    type: 1,
+                    closeBtn: 0,
+                    title: '请输入支付密码',
+                    area: ['70%', '25%'],
+                    content: $("#payPasswordDiv")
+                });
+            } else {
+                var ajax = new $ax(Feng.ctxPath + "/orderDetails/loanApplication", function (result) {
+                    if (result.code === 0) {
+                        $("#createTime").text(result.data.createTime);
+                        $("#callBackAmount").text(result.data.amount);
+                        $("#successDiv").show();
+                        $("#ssbForm").hide();
+                    } else {
+                        Feng.error("有正在进行借款的订单未完结");
+                        return false;
+                    }
+                });
+                ajax.set(data.field);
+                ajax.start();
+            }
+            return false;
+        });
+
+        var old = 0;
+        $(".password-div input").on("input", function (e) { //标签为password-div下的input添加oninput事件
+            old++;
+            var number = 6;   //定义输入最大值
+            var pw = $("input[name = 'password']").val(); //定义pw为name是password的input框的输入值
+            var list = $(".password-div ul li");  //定义list是li
+            for (var i = 0; i < number; i++) {    //for循环遍历将·放入li标签
+                if (pw[i]) {
+                    $(list[i]).text("·");
+                } else {
+                    $(list[i]).text("");
+                }
+            }
+            // 第一遍输入完成以后
+            if (old === 6) {
+                //后台比对支付密码是否正确
+                var ajax = new $ax(Feng.ctxPath + "/h5/comparisonPayPassword", function (data) {
+                    if (data.code === 0) {
+                        formStatus = 1;
+                        layer.closeAll();
+                        document.getElementById("ssbForm-submit").click();
+                    } else {
+                        layer.msg("支付密码错误");
+                    }
+                });
+                ajax.set({"payPassword": pw});
+                ajax.start();
+                return false;
+            }
+        });
+
+        $(".password-div ul").click(function () {
+            $("input[name = 'password']").val("");
+            $("#password").focus();
+            $(".password-div ul li").text("");
+        });
+
+        $("#back-submit").click(function () {
+            parent.location.reload();
+        });
     });
 </script>
 </body>

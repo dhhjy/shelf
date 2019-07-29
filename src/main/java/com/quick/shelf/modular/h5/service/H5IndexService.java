@@ -19,7 +19,7 @@ public class H5IndexService {
     /**
      * 支付密码设置
      */
-    public void setPayPasswordFun(String payPassword){
+    public void setPayPasswordFun(String payPassword) {
         Long userId = ShiroKit.getUserNotNull().getId();
         BSysUser user = this.bSysUserService.selectBSysUserByUserId(userId.intValue());
         String salt = ShiroKit.getRandomSalt(5);
@@ -27,5 +27,16 @@ public class H5IndexService {
         user.setPayPassword(password);
         user.setPaySalt(salt);
         this.bSysUserService.update(user);
+    }
+
+    /**
+     * 用户密码比对
+     */
+    public boolean comparisonPayPassword(String payPassword) {
+        Long userId = ShiroKit.getUserNotNull().getId();
+        BSysUser user = this.bSysUserService.selectBSysUserByUserId(userId.intValue());
+        String orgPass = user.getPayPassword();
+        String password = ShiroKit.md5(payPassword, user.getPaySalt());
+        return orgPass.equals(password);
     }
 }

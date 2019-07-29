@@ -143,4 +143,18 @@ public class H5IndexController extends BaseController {
         this.h5IndexService.setPayPasswordFun(payPassword);
         return ResponseData.success(0, "设置成功", null);
     }
+
+    /**
+     * 支付密码比对
+     */
+    @ApiOperation(value = "设置用户支付密码", notes = "设置用户支付密码", httpMethod = "GET")
+    @ApiImplicitParam(value = "支付密码", name = "payPassword", required = true, dataType = "String")
+    @RequestMapping(value = "/comparisonPayPassword", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData comparisonPayPassword(@RequestParam(value = "payPassword") String payPassword) {
+       if( this.h5IndexService.comparisonPayPassword(payPassword))
+            return ResponseData.success(0, "", null);
+       else
+           return ResponseData.success(-1, "", null);
+    }
 }
