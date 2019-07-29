@@ -53,6 +53,18 @@ public class BSysUser implements Serializable {
     private String salt;
 
     /**
+     * 支付密码
+     */
+    @TableField("pay_password")
+    private String payPassword;
+
+    /**
+     * 支付密码盐
+     */
+    @TableField("pay_salt")
+    private String paySalt;
+
+    /**
      * 电话号码
      */
     @TableField("phone_number")

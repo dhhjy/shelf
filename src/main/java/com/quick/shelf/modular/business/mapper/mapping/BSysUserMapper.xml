@@ -9,6 +9,8 @@
         <result column="name" property="name"/>
         <result column="password" property="password"/>
         <result column="salt" property="salt"/>
+        <result column="pay_password" property="payPassword"/>
+        <result column="pay_salt" property="paySalt"/>
         <result column="phone_number" property="phoneNumber"/>
         <result column="sex" property="sex"/>
         <result column="id_card" property="idCard"/>
@@ -24,11 +26,11 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        user_id AS "userId", user_account AS "userAccount", salt AS "salt", name AS "name", sex AS "sex", phone_number AS "phoneNumber", role_id AS "roleId", dept_id AS "deptId", id_card AS "idCard", status AS "status", create_time AS "createTime", update_time AS "updateTime", update_user AS "updateUser"
+        user_id AS "userId", user_account AS "userAccount", pay_password AS "payPassword", pay_salt AS "paySalt", name AS "name", sex AS "sex", phone_number AS "phoneNumber", role_id AS "roleId", dept_id AS "deptId", id_card AS "idCard", status AS "status", create_time AS "createTime", update_time AS "updateTime", update_user AS "updateUser"
     </sql>
 
     <sql id="Base_Column_List_With_Pwd">
-		 user_id AS "userId", user_account AS "userAccount", salt AS "salt", password AS "password", name AS "name", sex AS "sex", phone_number AS "phoneNumber", role_id AS "roleId", dept_id AS "deptId", id_card AS "idCard", status AS "status", create_time AS "createTime", update_time AS "updateTime", update_user AS "updateUser"
+		 user_id AS "userId", user_account AS "userAccount", salt AS "salt", password AS "password", pay_password AS "payPassword", pay_salt AS "paySalt", name AS "name", sex AS "sex", phone_number AS "phoneNumber", role_id AS "roleId", dept_id AS "deptId", id_card AS "idCard", status AS "status", create_time AS "createTime", update_time AS "updateTime", update_user AS "updateUser"
 	</sql>
 
     <select id="selectBSysUsers" resultType="map">

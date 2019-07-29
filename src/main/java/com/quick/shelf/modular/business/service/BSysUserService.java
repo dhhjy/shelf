@@ -61,10 +61,17 @@ public class BSysUserService extends ServiceImpl<BSysUserMapper, BSysUser> {
     }
 
     /**
-     *
+     * 新增用户信息
      */
     public void insert(BSysUser bSysUser) {
         this.baseMapper.insert(bSysUser);
+    }
+
+    /**
+     * 更新用户信息
+     */
+    public void update(BSysUser bSysUser) {
+        this.baseMapper.updateById(bSysUser);
     }
 
     /**

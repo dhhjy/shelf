@@ -101,6 +101,12 @@ public class BOrderDetails implements Serializable {
     private Integer status;
 
     /**
+     * 收款方式 paymentTerm
+     */
+    @TableField("payment_term")
+    private Integer paymentTerm;
+
+    /**
      * 申请时间
      */
     @TableField("create_time")
