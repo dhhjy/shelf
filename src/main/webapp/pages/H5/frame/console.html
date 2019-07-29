@@ -57,7 +57,7 @@
     </style>
 
 </head>
-<body>
+<body >
 <!-- 加载动画，移除位置在common.js中 -->
 <div class="page-loading">
     <div class="rubik-loader"></div>
@@ -70,8 +70,8 @@
         <div class="layui-col-xs12 layui-col-sm12 layui-col-md12">
             <div class="layui-card" style="margin:0;pading:0;">
                 <div class="layui-card-header">信用管理</div>
-                <div class="layui-card-body" style="height: 222px;overflow: hidden;">
-                    <div id="hjxl" style="width: 100%;height: 222px;"></div>
+                <div class="layui-card-body" style="height: 220px;overflow: hidden;">
+                    @include("/common/dashboard.html"){}
                 </div>
             </div>
         </div>
@@ -196,70 +196,6 @@
 
         // 用户状态
         var userStatus = ${userStatus};
-
-        // 渲染券核效率图表
-        var myCharts2 = echarts.init(document.getElementById('hjxl'), myEchartsTheme);
-        var option2 = {
-            backgroundColor: 'rgba(35,159,255)',
-            radar: {
-                splitNumber: 1,
-                radius: "55%",
-                //字体颜色
-                name: {
-                    textStyle: {color: '#fff'}
-                },
-                //斜角分割线颜色
-                axisLine: {
-                    lineStyle: {
-                        color: 'rgba(255,255,255,.2)'
-                    }
-                },
-                //雷达图中的背景色透明度
-                splitArea: {
-                    areaStyle: {
-                        opacity: 0
-                    }
-                },
-                //最外层边框颜色
-                splitLine: {
-                    lineStyle: {
-                        width: 1,
-                        color: 'rgba(255,255,255,.5)'
-                    }
-                },
-                indicator: [
-                    {text: '身份特质', max: 50},
-                    {text: '行为偏好', max: 50},
-                    {text: '人脉关系', max: 50},
-                    {text: '信用历史', max: 50},
-                    {text: '履约能力', max: 50}
-                ]
-            },
-
-            series: [
-                {
-                    type: 'radar',
-                    symbolSize: 0,
-                    //填充区域颜色
-                    areaStyle: {
-                        normal: {
-                            color: 'rgba(255,255,255,.3)'
-                        }
-                    },
-                    data: [{
-                        value: [48, 44, 45, 46, 46],
-                        //数据边框样式
-                        lineStyle: {
-                            normal: {
-                                width: 1,
-                                color: 'rgba(82,206,228,1)'
-                            }
-                        }
-                    }]
-                }
-            ]
-        };
-        myCharts2.setOption(option2);
 
         /**
          * 进行身份证(实人认证)
