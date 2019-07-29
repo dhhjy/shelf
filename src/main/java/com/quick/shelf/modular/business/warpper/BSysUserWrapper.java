@@ -102,6 +102,9 @@ public class BSysUserWrapper extends BaseControllerWrapper {
      * 紧急联系人中的电话进行脱敏
      */
     public static BEmergencyContactInfo deSensitization(BEmergencyContactInfo bEmergencyContactInfo) {
+        if(bEmergencyContactInfo == null)
+            return null;
+
         // 当不为总公司或管理员的时候，进行数据脱敏
         if (!ShiroKit.isAdmin() && !ShiroKit.isDeptAdmin()) {
             bEmergencyContactInfo.setRelativePhone1(getPhoneNumber(bEmergencyContactInfo.getRelativePhone1()));
@@ -115,6 +118,9 @@ public class BSysUserWrapper extends BaseControllerWrapper {
      * 认证身份证信息中的身份证号码进行脱敏
      */
     public static BIdentityInfo deSensitization(BIdentityInfo bIdentityInfo) {
+        if(bIdentityInfo == null)
+            return null;
+
         // 当不为总公司或管理员的时候，进行数据脱敏
         if (!ShiroKit.isAdmin() && !ShiroKit.isDeptAdmin()) {
             bIdentityInfo.setIdentityNumber(getIdCard(bIdentityInfo.getIdentityNumber()));
@@ -126,6 +132,9 @@ public class BSysUserWrapper extends BaseControllerWrapper {
      * 认证的银行卡信息脱敏
      */
     public static List<BBankCardInfo> deSensitization(List<BBankCardInfo> bBankCardInfos) {
+        if(bBankCardInfos.size() < 1)
+            return bBankCardInfos;
+
         // 当不为总公司或管理员的时候，进行数据脱敏
         if (!ShiroKit.isAdmin() && !ShiroKit.isDeptAdmin()) {
             for (BBankCardInfo bbci : bBankCardInfos) {
