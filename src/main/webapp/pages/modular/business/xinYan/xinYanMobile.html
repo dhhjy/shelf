@@ -199,14 +199,74 @@
                                         @}
                                     </tr>
                                     <tr>
-                                        <th colspan="50">申请人姓名、手机号码出现在金融机构风险名单	</th>
-                                        @if(mobileWeb.friend_circle.risk_analysis.is_name_and_mobile_in_finance_black != "否"){
-                                            <td colspan="50" class="col_red fs_16">
-                                                1次
+                                        <th colspan="50">入网时长</th>
+                                        @if(isNotEmpty(mobileWeb.friend_circle.risk_analysis.in_time)){
+                                            <td colspan="50" class="col_green fs_16">
+                                                ${mobileWeb.friend_circle.risk_analysis.in_time} 月
                                             </td>
                                         @}else{
                                             <td colspan="50" class="col_green fs_16">
-                                                0次
+                                                --
+                                            </td>
+                                        @}
+                                    </tr>
+                                    <tr>
+                                        <th colspan="50">号码沉默度(近三个月)</th>
+                                        @if(isNotEmpty(mobileWeb.friend_circle.risk_analysis.mobile_silence_3m)){
+                                            <td colspan="50" class="col_green fs_16">
+                                                ${mobileWeb.friend_circle.risk_analysis.mobile_silence_3m}
+                                            </td>
+                                        @}else{
+                                            <td colspan="50" class="col_green fs_16">
+                                                --
+                                            </td>
+                                        @}
+                                    </tr>
+                                    <tr>
+                                        <th colspan="50">欠费风险度(近三个月)</th>
+                                        @if(isNotEmpty(mobileWeb.friend_circle.risk_analysis.arrearage_risk_3m)){
+                                            <td colspan="50" class="col_green fs_16">
+                                                ${mobileWeb.friend_circle.risk_analysis.arrearage_risk_3m}
+                                            </td>
+                                        @}else{
+                                            <td colspan="50" class="col_green fs_16">
+                                                --
+                                            </td>
+                                        @}
+                                    </tr>
+                                    <tr>
+                                        <th colspan="50">亲情网风险度</th>
+                                        @if(isNotEmpty(mobileWeb.friend_circle.risk_analysis.binding_risk)){
+                                            <td colspan="50" class="col_green fs_16">
+                                                ${mobileWeb.friend_circle.risk_analysis.binding_risk}
+                                            </td>
+                                        @}else{
+                                            <td colspan="50" class="col_green fs_16">
+                                                --
+                                            </td>
+                                        @}
+                                    </tr>
+                                    <tr>
+                                        <th colspan="50">号码沉默度(近六个月)</th>
+                                        @if(isNotEmpty(mobileWeb.friend_circle.risk_analysis.mobile_silence_6m)){
+                                            <td colspan="50" class="col_green fs_16">
+                                                ${mobileWeb.friend_circle.risk_analysis.mobile_silence_6m}
+                                            </td>
+                                        @}else{
+                                            <td colspan="50" class="col_green fs_16">
+                                                --
+                                            </td>
+                                        @}
+                                    </tr>
+                                    <tr>
+                                        <th colspan="50">欠费风险度(近六个月)</th>
+                                        @if(isNotEmpty(mobileWeb.friend_circle.risk_analysis.arrearage_risk_6m)){
+                                            <td colspan="50" class="col_green fs_16">
+                                                ${mobileWeb.friend_circle.risk_analysis.arrearage_risk_6m}
+                                            </td>
+                                        @}else{
+                                            <td colspan="50" class="col_green fs_16">
+                                                --
                                             </td>
                                         @}
                                     </tr>
@@ -215,6 +275,7 @@
 
                             <!--风险通话检测-->
                             <div class="mt_14 credit_table">
+
                                 <p>风险通话检测</p>
                                 <table border="0" cellspacing="0" cellpadding="0">
                                     <tr>
@@ -425,6 +486,60 @@
                                 </table>
                             </div>
 
+                            <div class="mt_14 credit_table">
+                                <p>用户行为分析</p>
+                                <table border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <th>近3个月联系号码数</th>
+                                        <td>${mobileWeb.friend_circle.friend_num_3m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>近3月联系十次以上的号码数量</th>
+                                        <td>${mobileWeb.friend_circle.good_friend_num_3m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>近3个月联系次数最多的归属地</th>
+                                        <td>${mobileWeb.friend_circle.friend_city_center_3m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>近3月朋友圈中心地是否与手机归属地一致</th>
+                                        <td>${mobileWeb.friend_circle.is_city_match_friend_city_center_3m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>近3个月互通电话的号码数量</th>
+                                        <td>${mobileWeb.friend_circle.inter_peer_num_3m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>近3个月通话次数最多的本机号码通话地</th>
+                                        <td>${mobileWeb.friend_circle.city_center_3m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>近6月联系号码数</th>
+                                        <td>${mobileWeb.friend_circle.friend_num_6m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>近6个月联系十次以上的号码数量</th>
+                                        <td>${mobileWeb.friend_circle.good_friend_num_6m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>近6个月联系次数最多的归属地</th>
+                                        <td>${mobileWeb.friend_circle.friend_city_center_6m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>近6月朋友圈中心地是否与手机归属地一致</th>
+                                        <td>${mobileWeb.friend_circle.is_city_match_friend_city_center_6m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>近6个月互通电话的号码数量</th>
+                                        <td>${mobileWeb.friend_circle.inter_peer_num_6m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>近6个月通话次数最多的本机号码通话地	</th>
+                                        <td>${mobileWeb.friend_circle.city_center_6m}</td>
+                                    </tr>
+                                </table>
+                            </div>
+
                             <!--通话时间分析-->
                             <div class="mt_14 credit_table">
                                 <p>通话时间分析（近6个月）</p>
@@ -499,6 +614,14 @@
                                     </tr>
 
                                     <tr>
+                                        <th colspan="4">短信消费金额(元)</th>
+                                        <td colspan="3">${parseInt(parseInt(mobileWeb.consumption_detail.sms_fee_1m)/100)}</td>
+                                        <td colspan="3">${parseInt(parseInt(mobileWeb.consumption_detail.sms_fee_3m)/100)}</td>
+                                        <td colspan="3">${parseInt(parseInt(mobileWeb.consumption_detail.sms_fee_6m)/100)}</td>
+                                        <td colspan="3">${parseInt(parseInt(mobileWeb.consumption_detail.sms_fee_avg_6m)/100)}</td>
+                                    </tr>
+
+                                    <tr>
                                         <th colspan="4">其它消费金额(元)</th>
                                         <td colspan="3">${parseInt(parseInt(mobileWeb.consumption_detail.extra_fee_1m)/100)}</td>
                                         <td colspan="3">${parseInt(parseInt(mobileWeb.consumption_detail.extra_fee_3m)/100)}</td>
@@ -506,6 +629,134 @@
                                         <td colspan="3">${parseInt(parseInt(mobileWeb.consumption_detail.extra_fee_avg_6m)/100)}</td>
                                     </tr>
 
+                                </table>
+                            </div>
+
+                            <div class="mt_14 credit_table">
+                                <p>漫游分析</p>
+                                <table border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <th colspan="3">漫游地</th>
+                                        <th colspan="3">近三个月漫游地漫游天数</th>
+                                        <th colspan="3">近六个月漫游地漫游天数</th>
+                                        <th colspan="3">近三个月漫游地连续漫游一天以上次数</th>
+                                        <th colspan="3">近六个月漫游地连续漫游一天以上次数</th>
+                                        <th colspan="3">近三个月漫游地连续漫游最大天数	</th>
+                                        <th colspan="3">近六个月漫游地连续漫游最大天数	</th>
+                                    </tr>
+                                    @for(ra in mobileWeb.friend_circle.roam_analysis){
+                                        <tr>
+                                            <td colspan="3">${ra.roam_location}</td>
+                                            <td colspan="3">${ra.roam_day_num_3m}</td>
+                                            <td colspan="3">${ra.roam_day_num_6m}</td>
+                                            <td colspan="3">${ra.continue_roam_num_3m}</td>
+                                            <td colspan="3">${ra.continue_roam_num_6m}</td>
+                                            <td colspan="3">${ra.max_roam_day_num_3m}</td>
+                                            <td colspan="3">${ra.max_roam_day_num_6m}</td>
+                                        </tr>
+                                    @}
+                                </table>
+                            </div>
+
+                            <div class="mt_14 credit_table">
+                                <p>稳定性分析</p>
+                                <table border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <th colspan="3">最近一个月是否亲情网用户</th>
+                                        <td colspan="3">${mobileWeb.friend_circle.call_family_detail.is_family_net_member_1m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">最近三个月是否亲情网用户</th>
+                                        <td colspan="3">${mobileWeb.friend_circle.call_family_detail.is_family_net_member_3m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">最近六个月是否亲情网用户</th>
+                                        <td colspan="3">${mobileWeb.friend_circle.call_family_detail.is_family_net_member_6m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">最近一个月是否亲情网用户户主</th>
+                                        <td colspan="3">${mobileWeb.friend_circle.call_family_detail.is_family_net_master_1m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">最近三个月是否亲情网用户户主</th>
+                                        <td colspan="3">${mobileWeb.friend_circle.call_family_detail.is_family_net_master_3m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">最近六个月是否亲情网用户户主</th>
+                                        <td colspan="3">${mobileWeb.friend_circle.call_family_detail.is_family_net_master_6m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">最近一个月连续充值次数</th>
+                                        <td colspan="3">${mobileWeb.friend_circle.call_family_detail.recharge_month_1m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">最近三个月连续充值次数</th>
+                                        <td colspan="3">${mobileWeb.friend_circle.call_family_detail.recharge_month_3m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">最近六个月连续充值次数</th>
+                                        <td colspan="3">${mobileWeb.friend_circle.call_family_detail.recharge_month_6m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">最近一个月常联系地址是否为手机号码归属地</th>
+                                        <td colspan="3">${mobileWeb.friend_circle.call_family_detail.is_address_match_phone_1m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">最近三个月常联系地址是否为手机号码归属地</th>
+                                        <td colspan="3">${mobileWeb.friend_circle.call_family_detail.is_address_match_phone_3m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">最近六个月常联系地址是否为手机号码归属地</th>
+                                        <td colspan="3">${mobileWeb.friend_circle.call_family_detail.is_address_match_phone_6m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">最近一个月通话次数是否小于使用月数*1次</th>
+                                        <td colspan="3">${mobileWeb.friend_circle.call_family_detail.num_of_call_less_1m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">最近三个月通话次数是否小于使用月数*1次</th>
+                                        <td colspan="3">${mobileWeb.friend_circle.call_family_detail.num_of_call_less_3m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">最近六个月通话次数是否小于使用月数*1次</th>
+                                        <td colspan="3">${mobileWeb.friend_circle.call_family_detail.num_of_call_less_6m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">最近一个月通话次数是否大于使用月数*300次</th>
+                                        <td colspan="3">${mobileWeb.friend_circle.call_family_detail.num_of_call_more_1m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">最近三个月通话次数是否大于使用月数*300次</th>
+                                        <td colspan="3">${mobileWeb.friend_circle.call_family_detail.num_of_call_more_3m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">最近六个月通话次数是否大于使用月数*300次</th>
+                                        <td colspan="3">${mobileWeb.friend_circle.call_family_detail.num_of_call_more_6m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">最近一个月连续欠费月数</th>
+                                        <td colspan="3">${mobileWeb.friend_circle.call_family_detail.unpaid_month_1m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">最近三个月连续欠费月数</th>
+                                        <td colspan="3">${mobileWeb.friend_circle.call_family_detail.unpaid_month_3m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">最近六个月连续欠费月数</th>
+                                        <td colspan="3">${mobileWeb.friend_circle.call_family_detail.unpaid_month_6m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">最近一个月在本地超过非本地通话次数</th>
+                                        <td colspan="3">${mobileWeb.friend_circle.call_family_detail.live_month_1m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">最近三个月在本地超过非本地通话次数</th>
+                                        <td colspan="3">${mobileWeb.friend_circle.call_family_detail.live_month_3m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">最近六个月在本地超过非本地通话次数</th>
+                                        <td colspan="3">${mobileWeb.friend_circle.call_family_detail.live_month_6m}</td>
+                                    </tr>
                                 </table>
                             </div>
 
@@ -620,6 +871,176 @@
                                             </table>
                                         </td>
                                     </tr>
+                                </table>
+                            </div>
+
+                            <!-- 近一周联系人排行 -->
+                            <div class="mt_14 credit_table">
+                                <p>联系人Top10 近一周</p>
+                                <table border="0" cellspacing="0" cellpadding="0" class="padNone">
+                                    <tr>
+                                        <th colspan="16">号码</th>
+                                        <th colspan="16">互联网标识</th>
+                                        <th colspan="16">归属地</th>
+                                        <th colspan="16">通话<br/>次数</th>
+                                        <th colspan="16">通话时长(分钟)</th>
+                                        <th colspan="16">主叫<br/>次数</th>
+                                        <th colspan="16">主叫时长(分钟)</th>
+                                        <th colspan="16">第一次通话时间</th>
+                                        <th colspan="16">最后一次通话时间</th>
+                                    </tr>
+                                    @for(clt in mobileWeb.friend_circle.call_num_top10_1w){
+                                    <tr>
+                                        <td colspan="16">${clt.peer_number}</td>
+                                        <td colspan="16">${clt.company_name}</td>
+                                        <td colspan="16">${clt.city}</td>
+                                        <td colspan="16">${clt.call_num}</td>
+                                        <td colspan="16">${parseInt(parseInt(clt.call_time)/60)}</td>
+                                        <td colspan="16">${clt.dial_num}</td>
+                                        <td colspan="16">${parseInt(parseInt(clt.dial_time)/60)}</td>
+                                        <td colspan="16">${clt.first_call_time}</td>
+                                        <td colspan="16">${clt.last_call_time}</td>
+                                    </tr>
+                                    @}
+                                </table>
+                            </div>
+
+                            <!-- 近一个月联系人排行 -->
+                            <div class="mt_14 credit_table">
+                                <p>联系人Top10 近一个月</p>
+                                <table border="0" cellspacing="0" cellpadding="0" class="padNone">
+                                    <tr>
+                                        <th colspan="16">号码</th>
+                                        <th colspan="16">互联网标识</th>
+                                        <th colspan="16">归属地</th>
+                                        <th colspan="16">通话<br/>次数</th>
+                                        <th colspan="16">通话时长(分钟)</th>
+                                        <th colspan="16">主叫<br/>次数</th>
+                                        <th colspan="16">主叫时长(分钟)</th>
+                                        <th colspan="16">第一次通话时间</th>
+                                        <th colspan="16">最后一次通话时间</th>
+                                    </tr>
+                                    @for(clt in mobileWeb.friend_circle.call_num_top10_1m){
+                                    <tr>
+                                        <td colspan="16">${clt.peer_number}</td>
+                                        <td colspan="16">${clt.company_name}</td>
+                                        <td colspan="16">${clt.city}</td>
+                                        <td colspan="16">${clt.call_num}</td>
+                                        <td colspan="16">${parseInt(parseInt(clt.call_time)/60)}</td>
+                                        <td colspan="16">${clt.dial_num}</td>
+                                        <td colspan="16">${parseInt(parseInt(clt.dial_time)/60)}</td>
+                                        <td colspan="16">${clt.first_call_time}</td>
+                                        <td colspan="16">${clt.last_call_time}</td>
+                                    </tr>
+                                    @}
+                                </table>
+                            </div>
+
+                            <!-- 近三个月联系人排行 -->
+                            <div class="mt_14 credit_table">
+                                <p>联系人Top10 近三个月</p>
+                                <table border="0" cellspacing="0" cellpadding="0" class="padNone">
+                                    <tr>
+                                        <th colspan="16">号码</th>
+                                        <th colspan="16">互联网标识</th>
+                                        <th colspan="16">归属地</th>
+                                        <th colspan="16">通话<br/>次数</th>
+                                        <th colspan="16">通话时长(分钟)</th>
+                                        <th colspan="16">主叫<br/>次数</th>
+                                        <th colspan="16">主叫时长(分钟)</th>
+                                        <th colspan="16">第一次通话时间</th>
+                                        <th colspan="16">最后一次通话时间</th>
+                                    </tr>
+                                    @for(clt in mobileWeb.friend_circle.call_num_top10_3m){
+                                    <tr>
+                                        <td colspan="16">${clt.peer_number}</td>
+                                        <td colspan="16">${clt.company_name}</td>
+                                        <td colspan="16">${clt.city}</td>
+                                        <td colspan="16">${clt.call_num}</td>
+                                        <td colspan="16">${parseInt(parseInt(clt.call_time)/60)}</td>
+                                        <td colspan="16">${clt.dial_num}</td>
+                                        <td colspan="16">${parseInt(parseInt(clt.dial_time)/60)}</td>
+                                        <td colspan="16">${clt.first_call_time}</td>
+                                        <td colspan="16">${clt.last_call_time}</td>
+                                    </tr>
+                                    @}
+                                </table>
+                            </div>
+
+                            <!-- 近六个月联系人排行 -->
+                            <div class="mt_14 credit_table">
+                                <p>联系人Top10 近六个月</p>
+                                <table border="0" cellspacing="0" cellpadding="0" class="padNone">
+                                    <tr>
+                                        <th colspan="16">号码</th>
+                                        <th colspan="16">互联网标识</th>
+                                        <th colspan="16">归属地</th>
+                                        <th colspan="16">通话<br/>次数</th>
+                                        <th colspan="16">通话时长(分钟)</th>
+                                        <th colspan="16">主叫<br/>次数</th>
+                                        <th colspan="16">主叫时长(分钟)</th>
+                                        <th colspan="16">第一次通话时间</th>
+                                        <th colspan="16">最后一次通话时间</th>
+                                    </tr>
+                                    @for(clt in mobileWeb.friend_circle.call_num_top10_6m){
+                                    <tr>
+                                        <td colspan="16">${clt.peer_number}</td>
+                                        <td colspan="16">${clt.company_name}</td>
+                                        <td colspan="16">${clt.city}</td>
+                                        <td colspan="16">${clt.call_num}</td>
+                                        <td colspan="16">${parseInt(parseInt(clt.call_time)/60)}</td>
+                                        <td colspan="16">${clt.dial_num}</td>
+                                        <td colspan="16">${parseInt(parseInt(clt.dial_time)/60)}</td>
+                                        <td colspan="16">${clt.first_call_time}</td>
+                                        <td colspan="16">${clt.last_call_time}</td>
+                                    </tr>
+                                    @}
+                                </table>
+                            </div>
+
+                            <!-- 联系人归属地Top 10 近三个月 -->
+                            <div class="mt_14 credit_table">
+                                <p>	联系人归属地Top 10 近三个月</p>
+                                <table border="0" cellspacing="0" cellpadding="0" class="padNone">
+                                    <tr>
+                                        <th colspan="16">归属地</th>
+                                        <th colspan="16">通话<br/>次数</th>
+                                        <th colspan="16">通话时长(分钟)</th>
+                                        <th colspan="16">主叫<br/>次数</th>
+                                        <th colspan="16">被叫<br/>次数</th>
+                                    </tr>
+                                    @for(clt in mobileWeb.friend_circle.call_location_top10_3m){
+                                    <tr>
+                                        <td colspan="16">${clt.city}</td>
+                                        <td colspan="16">${clt.call_num}</td>
+                                        <td colspan="16">${parseInt(parseInt(clt.call_time)/60)}</td>
+                                        <td colspan="16">${clt.dial_num}</td>
+                                        <td colspan="16">${clt.dialed_num}</td>
+                                    </tr>
+                                    @}
+                                </table>
+                            </div>
+
+                            <!-- 联系人归属地Top 10 近六个月 -->
+                            <div class="mt_14 credit_table">
+                                <p>	联系人归属地Top 10 近六个月</p>
+                                <table border="0" cellspacing="0" cellpadding="0" class="padNone">
+                                    <tr>
+                                        <th colspan="16">归属地</th>
+                                        <th colspan="16">通话<br/>次数</th>
+                                        <th colspan="16">通话时长(分钟)</th>
+                                        <th colspan="16">主叫<br/>次数</th>
+                                        <th colspan="16">被叫<br/>次数</th>
+                                    </tr>
+                                    @for(clt in mobileWeb.friend_circle.call_location_top10_6m){
+                                    <tr>
+                                        <td colspan="16">${clt.city}</td>
+                                        <td colspan="16">${clt.call_num}</td>
+                                        <td colspan="16">${parseInt(parseInt(clt.call_time)/60)}</td>
+                                        <td colspan="16">${clt.dial_num}</td>
+                                        <td colspan="16">${clt.dialed_num}</td>
+                                    </tr>
+                                    @}
                                 </table>
                             </div>
 
