@@ -17,12 +17,13 @@
             left: 50%;
             top: 70%;
             transform: translate(-50%, -50%);
-            background: -webkit-linear-gradient(top, #0e83f5 0%, #21bdf6 100%);
+            background: -webkit-linear-gradient(top, #910ef5 0%, #21bdf6 100%);
             background: -ms-linear-gradient(top, #0e83f5 0%, #21bdf6 100%);
             background: -moz-linear-gradient(top, #0e83f5 0%, #21bdf6 100%);
             background: linear-gradient(top, #0e83f5 0%, #21bdf6 100%);
         }
     </style>
+    <script src="${ctxPath}/assets/expand/plugins/jquery/jquery-3.2.1.min.js"></script>
     <script type="text/javascript">
         window.onload = function() {
             var canvas = document.getElementById('canvas'),
@@ -48,7 +49,7 @@
                     credit = 1000;  //数字默认值开始数
 
                 (function drawFrame() {
-
+                    // 910ef5910ef5
                     ctx.save();
                     ctx.clearRect(0, 0, cWidth, cHeight);
                     ctx.translate(cWidth / 2, cHeight / 2);
@@ -129,8 +130,9 @@
                     ctx.rotate(Math.PI / 2 + deg0);
                     for(i = 0; i < 5; i++) {
                         ctx.fillStyle = 'rgba(255, 255, 255, .4)';
-                        ctx.font = '10px Microsoft yahei';
+                        ctx.font = '12px Microsoft yahei';
                         ctx.textAlign = 'center';
+                        ctx.strong = true;
                         ctx.fillText(stage[i], 5, -115);
                         ctx.rotate(deg1);
                     }
@@ -152,10 +154,10 @@
                     } else if(score <= 900 && score >= 800) {
                         ctx.fillText('贷款金额', 0, 40);
                     }*/
-
+                    var ct = "${userStatus.createTime,'yyyy-MM-dd'}";
                     ctx.fillStyle = '#80cbfa';
                     ctx.font = '14px Microsoft yahei';
-                    ctx.fillText('评估时间：2016.11.06', 0, 50);
+                    ctx.fillText('评估时间：' + ct, 0, 50);
 
                     ctx.fillStyle = '#fff';
                     ctx.font = '20px Microsoft yahei';
@@ -190,7 +192,7 @@
                 ctx.save();
                 ctx.rotate(10 * deg0);
                 ctx.fillStyle = '#fff';
-                ctx.font = '65px Microsoft yahei';
+                ctx.font = '50px Microsoft yahei';
                 ctx.textAlign = 'center';
                 ctx.textBaseLine = 'top';
                 ctx.fillText(process, 0, 10);
@@ -200,8 +202,6 @@
     </script>
 </head>
 <body>
-
-<canvas id="canvas" width="400" height="330" data-score='2500'></canvas>
-
+<canvas id="canvas" width="380" height="330" data-score='2500' style="margin-top: 5px;"></canvas>
 </body>
 </html>

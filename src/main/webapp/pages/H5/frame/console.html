@@ -54,6 +54,43 @@
             height: 60px;
             line-height: 60px;
         }
+
+        .main-wrap {
+            display: inline-block;
+            width: 100%;
+        }
+        .bv-wrap {
+            padding-top: 30px;
+            height: 160px;
+            box-sizing: border-box;
+            background: #fff;
+            box-shadow: 0 10px 30px #e4e2e2;
+        }
+        .bv-item {
+            float: left;
+            width: 25%;
+            text-align: center;
+        }
+
+        .bv-icon {
+            display: inline-block;
+            background: url(../../assets/h5/image/sprite_icon.png) no-repeat;
+            width: 68px;
+            height: 68px;
+        }
+
+        .bv-item:nth-child(1) .bv-icon {
+            background-position: -12px -147px;
+        }
+        .bv-item:nth-child(2) .bv-icon {
+            background-position: -93px -146px;
+        }
+        .bv-item:nth-child(3) .bv-icon {
+            background-position: -172px -146px;
+        }
+        .bv-item:nth-child(4) .bv-icon {
+            background-position: -253px -146px;
+        }
     </style>
 
 </head>
@@ -68,13 +105,40 @@
     <!-- 分数统计 -->
     <div class="layui-row layui-col-space15">
         <div class="layui-col-xs12 layui-col-sm12 layui-col-md12">
-            <div class="layui-card" style="margin:0;pading:0;">
+            <div class="layui-card">
+                <input type="hidden" id="createTime" value="${userStatus.createTime}">
                 <div class="layui-card-header">信用管理</div>
-                <div class="layui-card-body" style="height: 220px;overflow: hidden;">
+                <div class="layui-card" style="height: 220px;overflow: hidden;">
                     @include("/common/dashboard.html"){}
                 </div>
             </div>
         </div>
+
+        <div class="layui-col-xs12 layui-col-sm12 layui-col-md12">
+            <div class="layui-card">
+                <div class="main-wrap">
+                    <div class="bv-wrap clearfix">
+                        <div class="bv-item">
+                            <span class="bv-icon"></span>
+                            <h6 class="bv-label">额度高</h6>
+                        </div>
+                        <div class="bv-item">
+                            <span class="bv-icon"></span>
+                            <h6 class="bv-label">速度快</h6>
+                        </div>
+                        <div class="bv-item">
+                            <span class="bv-icon"></span>
+                            <h6 class="bv-label">利率低</h6>
+                        </div>
+                        <div class="bv-item">
+                            <span class="bv-icon"></span>
+                            <h6 class="bv-label">流程简单</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <!--身份认证（实人认证）-->
         <div class="layui-col-xs12 layui-col-sm12 layui-col-md12 idCard_">

@@ -9,6 +9,16 @@
     <link rel="stylesheet" href="${ctxPath}/assets/common/module/admin.css?v=311"/>
     <link rel="stylesheet" href="${ctxPath}/assets/expand/css/style.css" media="all"/>
     <link rel="stylesheet" href="${ctxPath}/assets/h5/css/product.css" media="all"/>
+    <style>
+
+        .layui-tab-title {
+            white-space: normal;
+        }
+
+        .layui-tab-title li {
+            min-width: 60px;
+        }
+    </style>
 </head>
 <body>
 <!-- 加载动画，移除位置在common.js中 -->
@@ -43,22 +53,22 @@
                     </div>
                     <div style="padding-bottom: 10px;">
                         <img oncontextmenu="return false;" onselectstart="return false;"
-                             src="${ctxPath}/assets/h5/image/youshi.png" width="100%"/>
+                             src="${ctxPath}/assets/h5/image/youshi.png" width="99%"/>
                     </div>
                 </div>
-                <div class="layui-card-body">
-                    <ul class="layui-tab-title site-demo-title">
-                        <li class="layui-this" id="selectMmjr">
-                            秒秒贷
-                        </li>
-                        <li id="selectPgId">苹果贷</li>
-                        <li id="selectBt">白条</li>
-                        <li id="selectWkt">未开通</li>
-                    </ul>
-                </div>
                 <!-- 运营商认证 -->
-                <div class="layui-col-xs12 layui-col-sm12 layui-col-md12" >
-                    <div class="layui-card" style="box-shadow:0 0 0 0;">
+                <div class="layui-col-xs12 layui-col-sm12 layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-body">
+                            <ul class="layui-tab-title">
+                                <li class="layui-this" id="selectMmjr">
+                                    秒秒贷
+                                </li>
+                                <li id="selectPgId">苹果贷</li>
+                                <li id="selectBt">白条</li>
+                                <li id="selectWkt">未开通</li>
+                            </ul>
+                        </div>
                         <div class="layui-card-header">
                             <!-- 秒秒金融 -->
                             <div id="mmjr" class="index-product-info">
