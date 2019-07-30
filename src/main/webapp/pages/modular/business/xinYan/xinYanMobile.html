@@ -483,6 +483,49 @@
                                         <td colspan="2">${mobileWeb.active_degree_detail.sms_time_6m}</td>
                                         <td colspan="2">${mobileWeb.active_degree_detail.sms_time_avg_6m}</td>
                                     </tr>
+                                    <tr>
+                                        <th colspan="3">充值次数</th>
+                                        <td colspan="2">${mobileWeb.active_degree_detail.recharge_time_1m}</td>
+                                        <td colspan="2">${mobileWeb.active_degree_detail.recharge_time_3m}</td>
+                                        <td colspan="2">${mobileWeb.active_degree_detail.recharge_time_6m}</td>
+                                        <td colspan="2">${mobileWeb.active_degree_detail.recharge_time_6m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">套餐流量</th>
+                                        <td colspan="2">
+                                            ${parseInt(parseInt(mobileWeb.active_degree_detail.flow_total_1m)/1024/1024)} GB
+                                        </td>
+                                        <td colspan="2">
+                                            ${parseInt(parseInt(mobileWeb.active_degree_detail.flow_total_3m)/1024/1024)} GB
+                                        </td>
+                                        <td colspan="2">
+                                            ${parseInt(parseInt(mobileWeb.active_degree_detail.flow_total_6m)/1024/1024)} GB
+                                        </td>
+                                        <td colspan="2">
+                                            ${parseInt(parseInt(mobileWeb.active_degree_detail.flow_total_avg_6m)/1024/1024)} GB
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">无呼出天数</th>
+                                        <td colspan="2">${mobileWeb.active_degree_detail.no_dial_day_1m}</td>
+                                        <td colspan="2">${mobileWeb.active_degree_detail.no_dial_day_3m}</td>
+                                        <td colspan="2">${mobileWeb.active_degree_detail.no_dial_day_6m}</td>
+                                        <td colspan="2">${mobileWeb.active_degree_detail.no_dial_day_avg_6m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">无通话天数</th>
+                                        <td colspan="2">${mobileWeb.active_degree_detail.no_call_day_1m}</td>
+                                        <td colspan="2">${mobileWeb.active_degree_detail.no_call_day_3m}</td>
+                                        <td colspan="2">${mobileWeb.active_degree_detail.no_call_day_6m}</td>
+                                        <td colspan="2">${mobileWeb.active_degree_detail.no_call_day_avg_6m}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">关机天数</th>
+                                        <td colspan="2">${mobileWeb.active_degree_detail.power_off_day_1m}</td>
+                                        <td colspan="2">${mobileWeb.active_degree_detail.power_off_day_3m}</td>
+                                        <td colspan="2">${mobileWeb.active_degree_detail.power_off_day_6m}</td>
+                                        <td colspan="2">--</td>
+                                    </tr>
                                 </table>
                             </div>
 
