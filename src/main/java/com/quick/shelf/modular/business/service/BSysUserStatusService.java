@@ -1,6 +1,7 @@
 package com.quick.shelf.modular.business.service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.quick.shelf.core.util.DateUtil;
 import com.quick.shelf.modular.business.core.constant.BusinessConstant;
 import com.quick.shelf.modular.business.entity.BSysUserStatus;
 import com.quick.shelf.modular.business.mapper.BSysUserStatusMapper;
@@ -73,6 +74,7 @@ public class BSysUserStatusService extends ServiceImpl<BSysUserStatusMapper, BSy
      * @param bSysUserStatus
      */
     public void insertBSysUserStatus(BSysUserStatus bSysUserStatus) {
+        bSysUserStatus.setCreateTime(DateUtil.getCurrentDate());
         this.baseMapper.insert(bSysUserStatus);
     }
 
