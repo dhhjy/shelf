@@ -21,6 +21,39 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.tag {
+    display: inline-block;
+    color: #fff;
+    padding: 0 4pt;
+    line-height: 16pt;
+    height: 16pt;
+    border-radius: 3pt;
+    margin-right: 12pt;
+    font-size: 10pt;
+}
+.tag.primary {
+    background-color: #05b0e5;
+}
+.tag.danger {
+    background-color: #d15649;
+}
+.tag.warn {
+    background-color: #e2b627;
+}
+.tag.normal {
+    background-color: #63c676;
+}
+.tag.left {
+    margin-left: 30pt;
+}
+.tag.ghost {
+    background-color: #ffffff;
+    color: #b7b7b7;
+    border: 1px solid #cecece;
+    margin-right: 8px;
+    height: 17pt;
+}
+
 .icon-chanpinguanli:before {
   content: "\e62a";
 }

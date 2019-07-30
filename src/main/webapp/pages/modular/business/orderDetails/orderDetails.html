@@ -1,7 +1,7 @@
-@layout("/common/_container.html",{plugins:["ztree"],js:["/assets/modular/business/xinYan/xinYan.js"]}){
+@layout("/common/_container.html",{plugins:["ztree"],js:["/assets/modular/business/orderDetails/orderDetails.js"]}){
 
 <div class="layui-body-header">
-    <span class="layui-body-header-title">新颜征信管理</span>
+    <span class="layui-body-header-title">待审核订单列表</span>
 </div>
 
 <div class="layui-fluid">
@@ -19,10 +19,10 @@
                     <div class="layui-form toolbar">
                         <div class="layui-form-item">
                             <div class="layui-inline">
-                                <input id="name" class="layui-input" type="text" placeholder="姓名/手机号"/>
+                                <input id="name" class="layui-input" type="text" placeholder="姓名"/>
                             </div>
                             <div class="layui-inline">
-                                <input id="timeLimit" class="layui-input" type="text" placeholder="报告时间"/>
+                                <input id="timeLimit" class="layui-input" type="text" placeholder="订单时间"/>
                             </div>
                             <div class="layui-inline">
                                 <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索
@@ -32,7 +32,7 @@
                             </div>
                         </div>
                     </div>
-                    <table class="layui-table" id="xinYanTable" lay-filter="xinYanTable"></table>
+                    <table class="layui-table" id="toAuditListTable" lay-filter="toAuditListTable"></table>
                 </div>
             </div>
         </div>
@@ -41,34 +41,5 @@
 
 <script type="text/html" id="tableBar">
 
-    @if(shiro.hasPermission("/xinYan/getReDerData")){
-    {{# if(d.type.indexOf('radar') != -1){}}
-    <a title="全景雷达" lay-event="radar">
-        <svg class="myIcon" aria-hidden="true">
-            <use xlink:href="#icon-leida3"></use>
-        </svg>
-    </a>
-    {{#}}}
-    @}
-
-    @if(shiro.hasPermission("/xinYan/getTaoBaoWebReport")){
-    {{# if(d.type.indexOf('taobaoweb') != -1){}}
-    <a title="芝麻分报告" lay-event="taobaoweb">
-        <svg class="myIcon" aria-hidden="true">
-            <use xlink:href="#icon-zhimafenx"></use>
-        </svg>
-    </a>
-    {{#}}}
-    @}
-
-    @if(shiro.hasPermission("/xinYan/getMobileWebReport")){
-    {{# if(d.type.indexOf('carrier') != -1){}}
-    <a title="运营商报告" lay-event="carrier">
-        <svg class="myIcon" aria-hidden="true">
-            <use xlink:href="#icon-shoujihaoma"></use>
-        </svg>
-    </a>
-    {{#}}}
-    @}
 </script>
 @}

@@ -59,4 +59,33 @@
         AND status IN (0,1,2,3,4,5)
         limit 0,1
     </select>
+
+    <select id="selectToAuditList" resultType="map">
+        SELECT
+        bod.user_id AS "userId",
+        bod.product_code AS "productCode",
+        bod.mode_of_repayment AS modeOfRepayment,
+        bod.amount AS amount,
+        bod.debt_duration AS debtDuration,
+        bod.count_refund AS countRefund,
+        bod.status AS "status",
+        bod.payment_term AS "paymentTerm",
+        bod.create_time AS "createTime",
+        bsu.name AS "name",
+        bsu.dept_id AS "deptId"
+        FROM B_ORDER_DETAILS bod
+            LEFT JOIN B_SYS_USER bsu ON
+                bod.user_id = bsu.user_id
+        WHERE bod.STATUS = 0
+        <if test="name != null and name != ''">
+            and (bsu.name like CONCAT('%',#{name},'%'))
+        </if>
+        <if test="deptId != null and deptId != 0">
+            and (bsu.dept_id = #{deptId} )
+        </if>
+        <if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+            and (bod.create_time between CONCAT(#{beginTime},' 00:00:00') and CONCAT(#{endTime},' 23:59:59'))
+        </if>
+        order by bod.create_time desc
+    </select>
 </mapper>
