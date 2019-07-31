@@ -65,8 +65,8 @@ public class BOrderDetails implements Serializable {
     /**
      * 申请借款的服务费用
      */
-    @TableField("servic_charge")
-    private BigDecimal servicCharge;
+    @TableField("service_charge")
+    private BigDecimal serviceCharge;
 
     /**
      * 申请借款的年华利率

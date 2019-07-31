@@ -34,6 +34,13 @@ public class BOrderDetailsService extends ServiceImpl<BOrderDetailsMapper, BOrde
         return bOrderDetails;
     }
 
+    /**
+     * 判断当前申请的用户是否有未完结的借款订单存在
+     * 如果有订单存在，则不可继续借款，需要还清之前的
+     * 订单才可以发起借款，
+     * 存在返回
+     * @return
+     */
     public boolean ifExistOrderByUserId() {
         return null == this.baseMapper.ifExistOrderByUserId(ShiroKit.getUserNotNull().getId().intValue());
     }
@@ -50,5 +57,15 @@ public class BOrderDetailsService extends ServiceImpl<BOrderDetailsMapper, BOrde
     public Page<Map<String, Object>> selectToAuditList(DataScope dataScope, String name, String beginTime, String endTime, Long deptId) {
         Page page = LayuiPageFactory.defaultPage();
         return this.baseMapper.selectToAuditList(page, dataScope, name, beginTime, endTime, deptId);
+    }
+
+    /**
+     * 根据用户主键获取用户正在进行中的
+     * 待审核订单
+     * @param userId
+     * @return
+     */
+    public BOrderDetails selectBOrderDetailsByUserId(Integer userId){
+        return this.baseMapper.selectBOrderDetailsByUserId(userId);
     }
 }

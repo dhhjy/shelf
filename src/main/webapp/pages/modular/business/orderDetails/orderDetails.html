@@ -41,5 +41,12 @@
 
 <script type="text/html" id="tableBar">
 
+    @if(shiro.hasPermission("/orderDetails/manualCheckIndex")){
+    <a title="人工审核" lay-event="manualCheck">
+        <svg class="myIcon" aria-hidden="true">
+            <use xlink:href="#icon-shezhi11"></use>
+        </svg>
+    </a>
+    @}
 </script>
 @}

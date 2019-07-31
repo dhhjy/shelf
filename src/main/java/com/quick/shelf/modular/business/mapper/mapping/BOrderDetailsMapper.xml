@@ -11,7 +11,7 @@
         <result column="amount" property="amount"/>
         <result column="debt_duration" property="debtDuration"/>
         <result column="accrual" property="accrual"/>
-        <result column="servic_charge" property="servicCharge"/>
+        <result column="service_charge" property="serviceCharge"/>
         <result column="annual_interest_rate" property="annualInterestRate"/>
         <result column="actual_amount" property="actualAmount"/>
         <result column="every_day_refund" property="everyDayRefund"/>
@@ -36,7 +36,7 @@
         amount AS amount,
         debt_duration AS debtDuration,
         accrual AS accrual,
-        servic_charge AS servicCharge,
+        service_charge AS serviceCharge,
         annual_interest_rate AS annualInterestRate,
         actual_amount AS actualAmount,
         every_day_refund AS everyDayRefund,
@@ -87,5 +87,13 @@
             and (bod.create_time between CONCAT(#{beginTime},' 00:00:00') and CONCAT(#{endTime},' 23:59:59'))
         </if>
         order by bod.create_time desc
+    </select>
+
+    <select id="selectBOrderDetailsByUserId" resultType="com.quick.shelf.modular.business.entity.BOrderDetails">
+        SELECT
+        <include refid="Base_Column_List"/>
+            FROM B_ORDER_DETAILS
+        ORDER BY CREATE_TIME DESC
+        LIMIT 0,1
     </select>
 </mapper>

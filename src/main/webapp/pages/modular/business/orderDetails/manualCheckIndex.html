@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width"/>
+    <title>待审核订单-人工审核</title>
+    <link href="${ctxPath}/assets/expand/images/favicon.ico" rel="icon">
+    <link rel="stylesheet" href="${ctxPath}/assets/common/layui/css/layui.css"/>
+    <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/limu/css/common.css?_v="/>
+    <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/limu/css/manage.css?_v="/>
+    <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/limu/css/liMuStyle.css?_v="/>
+    <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/myIcon/iconfont.css?_v="/>
+    <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/boostrap/bootstrap.3.3.7.min.css">
+    <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/Hui3.0/css/mnoReport.css?v=201708101">
+</head>
+
+<body>
+<!-- 头部信息 -->
+<header class="header">
+    <figure class="logo">
+        <span class="need_hidden">待审核订单详情</span>
+    </figure>
+    <p style="height: auto;text-align: center;">
+        <span class="need_hidden">
+            <span class="msg">账号：</span>
+                    ${bSysUser.userAccount}
+        </span>
+        <span class="need_hidden">
+            <span class="msg">用户名：</span>
+                    ${bSysUser.name}
+        </span>
+        <span class="need_hidden">
+            <span class="msg">手机号：</span>
+                    ${bSysUser.phoneNumber}
+         </span>
+        <span class="need_hidden">
+            <span class="msg">申请时间：</span>
+                    ${orderDetails.createTime,"yyyy-MM-dd"}
+         </span>
+    </p>
+</header>
+
+
+<div id="main">
+    <!--基本信息-->
+    <div class="info baseInfo">
+        <h2 class="title">基本信息</h2>
+
+        @if(null != bUserBasicInfo){
+        <!--用户基本信息-->
+        <div class="items">
+            <table>
+                <caption class="middle">用户基本信息</caption>
+                <colgroup>
+                    <col class="col">
+                </colgroup>
+                <tbody>
+                <tr>
+                    </td>
+                    <td class="msg">学历</td>
+                    <td>
+                        ${bUserBasicInfo.education}
+                    </td>
+                    <td class="msg">工作</td>
+                    <td>
+                        ${bUserBasicInfo.job}
+                    </td>
+                    <td class="msg">居住地址</td>
+                    <td>
+                        ${bUserBasicInfo.addressCity}-${bUserBasicInfo.address}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="msg">月收入</td>
+                    <td>
+                        ${bUserBasicInfo.income}
+                    </td>
+                    <td class="msg">婚姻情况</td>
+                    <td>
+                        ${bUserBasicInfo.marriage}
+                    </td>
+                    <td class="msg">子女数</td>
+                    <td>
+                        ${bUserBasicInfo.children}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="msg">单位名称</td>
+                    <td>
+                        ${bUserBasicInfo.company}
+                    </td>
+                    <td class="msg">单位电话</td>
+                    <td>
+                        ${bUserBasicInfo.companyPhone}
+                    </td>
+                    <td class="msg">单位地址</td>
+                    <td>
+                        ${bUserBasicInfo.companyAddress}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--用户基本信息-->
+        @}
+        <!--紧急联系人信息-->
+        @if(null != bEmergencyContactInfo){
+        <div class="items">
+            <table>
+                <caption class="middle">紧急联系人信息</caption>
+                <colgroup>
+                    <col class="col">
+                </colgroup>
+                <tbody>
+                <tr>
+                    <td class="msg">类型</td>
+                    <td class="msg">关系</td>
+                    <td class="msg">姓名</td>
+                    <td class="msg">手机号</td>
+                    <td class="msg">通话次数</td>
+                    <td class="msg">通话排名</td>
+                </tr>
+                <tr>
+                    <td>亲属关系</td>
+                    <td>${bEmergencyContactInfo.relative1}</td>
+                    <td>${bEmergencyContactInfo.relativeName1}</td>
+                    <td>${bEmergencyContactInfo.relativePhone1}</td>
+                    <td>
+
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>亲属关系</td>
+                    <td>${bEmergencyContactInfo.relative2}</td>
+                    <td>${bEmergencyContactInfo.relativeName2}</td>
+                    <td>${bEmergencyContactInfo.relativePhone2}</td>
+                    <td>
+
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>社会关系</td>
+                    <td>${bEmergencyContactInfo.social}</td>
+                    <td>${bEmergencyContactInfo.relativeName3}</td>
+                    <td>${bEmergencyContactInfo.socialPhone}</td>
+                    <td>
+
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        @}
+    </div>
+
+    <!--用户信息验证-->
+    <div class="info">
+        <h2 class="title">用户信息验证</h2>
+
+        <!--高级验证-->
+        <div class="items cross">
+            <table>
+                <caption class="middle">高级验证</caption>
+                <thead>
+                <tr>
+                    <td class="msg">编号</td>
+                    <td>${bSysUser.userId}</td>
+                    <td class="msg">姓名</td>
+                    <td>${bSysUser.name}</td>
+                    <td class="msg">手机号</td>
+                    <td>${bSysUser.phoneNumber}</td>
+                </tr>
+                </thead>
+                <tbody>
+                @if(bSysUserStatus.limuMobileReportStatus == "1" || bSysUserStatus.limuTaobaoReportStatus == "1" ||
+                @bSysUserStatus.limuLifangUpgradeCheckStatus == "1"){
+                <tr>
+                    <td class="msg">立木</td>
+                    <td colspan="5">
+                        @if(bSysUserStatus.deviceInfoStatus == "1"){
+                        <a href='javascript:void(0);' id="openDeviceInfo"
+                           class='btn btn-primary'>设备指纹</a>
+                        @}
+                        @if(bSysUserStatus.limuTaobaoReportStatus == "1"){
+                        <a href='javascript:void(0);' id="openTb"
+                           class='btn btn-primary'>淘宝报告</a>
+                        @}
+                        <a href='javascript:void(0);' id="openMachinecheck"
+                           class='btn btn-primary'>机审报告</a>
+                        @if(bSysUserStatus.limuLifangUpgradeCheckStatus == "1"){
+                        <a href='javascript:void(0);' id="openLiFangUp"
+                           class='btn btn-primary'>升级报告</a>
+                        @}
+                        @if(bSysUserStatus.limuMobileReportStatus == "1"){
+                        <a href='javascript:void(0);' id="openMobile"
+                           class='btn btn-primary'>运营商报告</a>
+                        @}
+                    </td>
+                </tr>
+                @}
+                <tr>
+                    <td class="msg">新颜</td>
+                    <td colspan="5">
+                        <a href='javascript:void(0);' id="openReDar"
+                           class='btn btn-primary'>全景雷达</a>
+                        @if(bSysUserStatus.xinyanZmfStatus == "1"){
+                        <a href='javascript:void(0);' id="openXyTaoBao"
+                           class='btn btn-primary'>淘宝报告</a>
+                        @}
+                        @if(bSysUserStatus.xinyanMobileStatus == "1"){
+                        <a href='javascript:void(0);' id="openXyMobile"
+                           class='btn btn-primary'>运营商报告</a>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="msg">GPS定位</td>
+                    <td colspan="5">
+                        <a href='javascript:void(0);' id="openGPSCompare"
+                           class='btn btn-primary'>定位信息比对</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!--用户信息验证-->
+
+
+    <!--借贷资金详情-->
+    <div class="info baseInfo">
+        <h2 class="title">借贷记录详情</h2>
+        <!--借贷记录-->
+        <div class="items">
+            <form id="orderDetailsForm" class="layui-form" lay-filter="orderDetailsForm">
+                <table>
+                    <caption class="middle">借贷记录</caption>
+                    <tbody>
+                    <tr>
+                        <td class="msg">借贷产品</td>
+                        <td class="msg">还款方式</td>
+                        <td class="msg">借款金额</td>
+                        <td class="msg">借款时长(天)</td>
+                        <td class="msg">服务费</td>
+                        <td class="msg">利息</td>
+                        <td class="msg">年化利率</td>
+                        <td class="msg">每日应还</td>
+                        <td class="msg">总共应还</td>
+                        <td class="msg">实际放款</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @if(orderDetails.productCode == 1){
+                            秒秒贷
+                            @} else if(orderDetails.productCode == 2){
+                            苹果ID贷
+                            @} else if(orderDetails.productCode == 3){
+                            白条
+                            @}
+                        </td>
+                        <td>
+                            <span id="modeOfRepayment">
+                                @if(orderDetails.modeOfRepayment == 1){
+                                每日本息
+                                @} else if(orderDetails.modeOfRepayment == 2){
+                                每日利息+服务费
+                                @} else if(orderDetails.modeOfRepayment == 3){
+                                到期全额
+                                @}
+                            </span>
+                            <input type="hidden" name="modeOfRepayment" value="${orderDetails.modeOfRepayment}">
+                        </td>
+                        <td>
+                            <span id="amount" class='tag normal'>
+                                ${orderDetails.amount}
+                            </span>
+                            <input type="hidden" name="amount" value="${orderDetails.amount}">
+                        </td>
+                        <td>
+                            <span id="debtDuration">
+                                ${orderDetails.debtDuration}
+                            </span>
+                            <input type="hidden" name="debtDuration" value="${orderDetails.debtDuration}">
+                        </td>
+                        <td>
+                            <span id="serviceCharge" class='tag danger'>
+                                @if(isNotEmpty(orderDetails.serviceCharge)){
+                                    ${orderDetails.serviceCharge}
+                                @}else{
+                                    0
+                                @}
+                            </span>
+                            <input type="hidden" name="serviceCharge" value="${orderDetails.serviceCharge}">
+                        </td>
+                        <td>
+                            <span id="accrual" class='tag danger'>
+                                @if(isNotEmpty(orderDetails.accrual)){
+                                    ${orderDetails.accrual}
+                                @}else{
+                                    0
+                                @}
+                            </span>
+                            <input type="hidden" name="accrual" value="${orderDetails.accrual}">
+                        </td>
+                        <td>
+                            <span id="annualInterestRate">
+                                ${orderDetails.annualInterestRate}
+                            </span>
+                            <input type="hidden" name="annualInterestRate" value="${orderDetails.annualInterestRate}">
+                        </td>
+                        <td>
+                            <span id="everyDayRefund">
+                                ${orderDetails.everyDayRefund}
+                            </span>
+                            <input type="hidden" name="everyDayRefund" value="${orderDetails.everyDayRefund}">
+                        </td>
+                        <td>
+                            <span id="countRefund">
+                                ${orderDetails.countRefund}
+                            </span>
+                            <input type="hidden" name="countRefund" value="${orderDetails.countRefund}">
+                        </td>
+                        <td>
+                            <span id="actualAmount">
+                                ${orderDetails.actualAmount}
+                            </span>
+                            <input type="hidden" name="actualAmount" value="${orderDetails.actualAmount}">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+        <!--借贷记录-->
+
+        <form id="table" class="layui-form">
+            <table>
+                <caption class="middle">变更订单</caption>
+                <tbody>
+                <tr>
+                    <td class="msg">更改还款方式</td>
+                    <td colspan="9">
+                        <div class="layui-form-item" style="padding-top:10px;">
+                            <div class="layui-input-inline">
+                                <select name="modeOfRepayment" lay-filter="modeOfRepayment">
+                                    <option value="">请选择还款方式</option>
+                                    <option value="1">每日本息</option>
+                                    <option value="2">每日利息+服务费</option>
+                                    <option value="3">到期全额</option>
+                                </select>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>借款金额(元)</td>
+                    <td colspan="4">
+                        <input type='text' name='amount'
+                               placeholder="借款金额"
+                               class='layui-input' style='width:150px'
+                               oninput="value=value.replace(/[^\d]/g,'')" maxlength="6"
+                               readonly="readonly">
+                    </td>
+
+                    <td>年化利率(%)</td>
+                    <td colspan="4">
+                        <div class="layui-form-item" style="padding-top:10px;">
+                            <div class="layui-input-inline">
+                                <select name="annualInterestRate" lay-filter="annualInterestRate" disabled="disabled">
+                                    <option value="">请选择年利率</option>
+                                    <option value="0.20">0.20</option>
+                                    <option value="0.21">0.21</option>
+                                    <option value="0.22">0.22</option>
+                                    <option value="0.23">0.23</option>
+                                    <option value="0.24">0.24</option>
+                                    <option value="0.25">0.25</option>
+                                    <option value="0.26">0.26</option>
+                                    <option value="0.27">0.27</option>
+                                    <option value="0.28">0.28</option>
+                                    <option value="0.29">0.29</option>
+                                    <option value="0.30">0.30</option>
+                                    <option value="0.31">0.31</option>
+                                    <option value="0.32">0.32</option>
+                                    <option value="0.33">0.33</option>
+                                    <option value="0.34">0.34</option>
+                                    <option value="0.35">0.35</option>
+                                    <option value="0.36">0.36</option>
+                                </select>
+                            </div>
+                        </div>
+                    </td>
+                <tr>
+
+                <tr>
+                    <td>服务费(元)</td>
+                    <td colspan="4">
+                        <input type='text' name='serviceCharge'
+                               placeholder="服务费"
+                               class='layui-input' style='width:150px'
+                               oninput="value=value.replace(/[^\d]/g,'')" maxlength="5"
+                               readonly="readonly">
+                    </td>
+
+                    <td>借款天数(天)</td>
+                    <td colspan="4">
+                        <input type='text' name='debtDuration'
+                               placeholder="借款天数"
+                               class='layui-input' style='width:150px'
+                               oninput="value=value.replace(/[^\d]/g,'')" maxlength="3"
+                               readonly="readonly">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>实际放款金额</td>
+                    <td colspan="9">
+                        <input type='text' name='actualAmount'
+                               placeholder="实际放款金额"
+                               class='layui-input' style='width:150px'
+                               oninput="value=value.replace(/[^\d]/g,'')" maxlength="10"
+                               readonly="readonly">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <table>
+                <caption class="middle">审核意见</caption>
+                <tr>
+                    <td class="msg">审核人账号</td>
+                    <td style="padding: 0 0 0 1px;">
+                        <i class="layui-icon layui-icon-username"></i>
+                        <input type="hidden" id="checkUserId" name="checkUserId"
+                               value="${orderDetails.checkUserId}">
+                        ${userName}
+                        </td>
+                </tr>
+                <tr>
+                    <td class="msg">审核意见</td>
+                    <td style="padding: 0">
+                            <textarea id="reason" class="layui-textarea"
+                                      maxlength="200" placeholder="请输入审核意见"></textarea>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="items" style="float: right;">
+                <input class="btn btn-success radius size-L" type="button" value="通过" id="checkPass">
+                <input class="btn btn-danger radius size-L"  type="button" value="拒绝" style="margin-left:15px;" id="checkRefuse">
+                <input class="btn btn-warning radius size-L" type="button" value="退回" style="margin-left:15px;" id="checkBack">
+                <input class="btn btn-primary radius size-L" type="button" value="拉黑" style="margin-left:15px;" id="addBlackList">
+            </div>
+        </form>
+    </div>
+    <!--借贷资金详情-->
+
+    <!--审核还款-->
+
+</div>
+
+@/* 加入contextPath属性和session超时的配置 */
+<script type="text/javascript">
+    var Feng = {
+        ctxPath: "",
+        addCtx: function (ctx) {
+            if (this.ctxPath === "") {
+                this.ctxPath = ctx;
+            }
+        }
+    };
+    Feng.addCtx("${ctxPath}");
+
+    document.oncontextmenu = function () {
+        return false;
+    }
+</script>
+<script type="text/javascript" src="${ctxPath}/assets/common/layui/layui.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/common/js/common.js"></script>
+<script>
+    layui.use(['layer', 'table', 'admin', 'ax', 'form'], function () {
+        var layer = layui.layer;
+        var $ = layui.$;
+        var table = layui.table;
+        var $ax = layui.ax;
+        var admin = layui.admin;
+        var form = layui.form;
+
+        /**
+         * 全局定义还款方式
+         */
+        var type =
+
+        // 监听事件
+        form.on('select(modeOfRepayment)', function (result) {
+            $("#orderDetailsForm [name=modeOfRepayment]").val(result.value);
+            $("#modeOfRepayment").text($("#table [name=modeOfRepayment] option:selected").text());
+            type = result.value;
+            calculateAccrual();
+
+            $("#table input[name=amount]").attr("readonly", false);
+            $("#table [name=annualInterestRate]").removeAttr("disabled");
+            // 渲染
+            form.render("select");
+            $("#table input[name=serviceCharge]").attr("readonly", false);
+            $("#table input[name=debtDuration]").attr("readonly", false);
+            $("#table input[name=actualAmount]").attr("readonly", false);
+        });
+
+        // 监听事件
+        form.on('select(annualInterestRate)', function (result) {
+            $("#orderDetailsForm [name=annualInterestRate]").val(result.value);
+            $("#annualInterestRate").text(result.value);
+            calculateAccrual();
+        });
+
+        // 渲染
+        form.render();
+
+        // 声明用户主键
+        var userId = "${bSysUser.userId}";
+
+        /**
+         * 打开全景雷达
+         **/
+        var openReDarFun = function () {
+            // 手机认证状态 运营商认证状态
+            var phoneStatus = '${bSysUserStatus.xinyanMobileStatus}';
+            // 身份证
+            var identityStatus = '${bSysUserStatus.identityStatus}';
+            // 银行卡
+            var bankInfoStatus = '${bSysUserStatus.bankInfoStatus}';
+
+            if (phoneStatus !== '1') {
+                Feng.error("手机运营商报告未认证，无法查看全景雷达");
+                return false;
+            }
+
+            if (identityStatus !== '1') {
+                Feng.error("身份证认证未认证，无法查看全景雷达");
+                return false;
+            }
+
+            if (bankInfoStatus !== '1') {
+                Feng.error("银行卡认证未认证，无法查看全景雷达");
+                return false;
+            }
+
+            var url = Feng.ctxPath + "/xinYan/getReDerData/" + userId;
+            parent.layer.open({
+                type: 2,
+                title: "全景雷达",
+                btn: ['关闭'],
+                shadeClose: true,
+                maxmin: true,
+                resize: true,
+                shade: 0.8,
+                area: ['100%', '100%'],
+                content: url
+            });
+        };
+
+        /**
+         * 打开芝麻分报告
+         **/
+        var openZmfReportFun = function () {
+            var url = Feng.ctxPath + "/xinYan/getTaoBaoWebReport/" + userId;
+            parent.layer.open({
+                type: 2,
+                title: "淘宝报告",
+                btn: ['关闭'],
+                shadeClose: true,
+                maxmin: true,
+                resize: true,
+                shade: 0.8,
+                area: ['100%', '100%'],
+                content: url
+            });
+        };
+
+        /**
+         * 打开新颜运营商报告
+         **/
+        var openMobileReportFun = function () {
+            var url = Feng.ctxPath + "/xinYan/getMobileWebReport/" + userId;
+            parent.layer.open({
+                type: 2,
+                title: "运营商",
+                btn: ['关闭'],
+                shadeClose: true,
+                maxmin: true,
+                resize: true,
+                shade: 0.8,
+                area: ['100%', '100%'],
+                content: url
+            });
+        };
+
+        /**
+         * 打开定位信息比对
+         **/
+        var openGPSCompareFun = function () {
+            var url = Feng.ctxPath + "/bSysUser/getGpsCompare/" + userId;
+            parent.layer.open({
+                type: 2,
+                title: "定位比对",
+                btn: ['关闭'],
+                shadeClose: true,
+                maxmin: true,
+                resize: true,
+                shade: 0.8,
+                area: ['100%', '100%'],
+                content: url
+            });
+        };
+
+        /**
+         * 计算利息
+         */
+        var calculateAccrual = function(){
+            // 获取用户借款额度
+            var amount = parseInt($("#orderDetailsForm [name=amount]").val());
+            // 用户借款天数
+            var debtDuration = parseInt($("#orderDetailsForm [name=debtDuration]").val());
+            // 年利率
+            var annualInterestRate = parseFloat($("#orderDetailsForm [name=annualInterestRate]").val());
+            // 服务费
+            var serviceCharge = parseInt($("#orderDetailsForm [name=serviceCharge]").val());
+
+            if(isNaN(serviceCharge))
+                return false;
+
+            // 利息
+            var lx = (amount * annualInterestRate) / 365;
+            lx = parseFloat(lx.toFixed(1));
+            // 借款天数 * 每日利息 = 总利息
+            var zlx = lx * debtDuration;
+            // 设置利息
+            $("#accrual").text(zlx);
+            $("#orderDetailsForm [name=accrual]").val(zlx);
+
+            // 每日本息分期
+            if (type === '1') {
+                //每日应还 = 每日本金 + 服务费 + 利息
+                var everyDayRefund = amount / debtDuration + serviceCharge + lx;
+                everyDayRefund = parseFloat(everyDayRefund.toFixed(1));
+                $("#everyDayRefund").text(everyDayRefund);
+                $("#orderDetailsForm [name=everyDayRefund]").val(everyDayRefund);
+                var countRefund = everyDayRefund * debtDuration;
+                countRefund = countRefund.toFixed(1);
+                $("#countRefund").text(countRefund);
+                $("#orderDetailsForm [name=countRefund]").val(countRefund);
+            }
+
+            // 每日利息+服务费
+            if (type === '2') {
+                // 设置每日利息
+                $("#everyDayRefund").text(lx + serviceCharge);
+                $("#orderDetailsForm [name=everyDayRefund]").val(lx + serviceCharge);
+                $("#countRefund").text("");
+                $("#orderDetailsForm [name=countRefund]").val("0");
+            }
+
+            // 到期全额还款
+            if (type === '3') {
+                //本金+利息 = 到期全额应还
+                var yhze = amount + zlx;
+                $("#countRefund").text(yhze);
+                $("#orderDetailsForm [name=countRefund]").val(yhze);
+                $("#everyDayRefund").text("");
+                $("#orderDetailsForm [name=everyDayRefund]").val("0");
+            }
+
+        };
+
+        // 新颜雷达
+        $('#openReDar').click(function () {
+            openReDarFun();
+        });
+
+        // 新颜淘宝报告
+        $('#openXyTaoBao').click(function () {
+            openZmfReportFun();
+        });
+
+        // 新颜运营商报告
+        $('#openXyMobile').click(function () {
+            openMobileReportFun();
+        });
+
+        // GPS定位对比
+        $('#openGPSCompare').click(function () {
+            openGPSCompareFun();
+        });
+
+        // 借款详情更改事件绑定
+        $("#table [name=amount]").change(function () {
+            $("#amount").text(this.value);
+            $("#orderDetailsForm [name=amount]").val(this.value);
+            calculateAccrual();
+        });
+
+        // 服务费改变事件绑定
+        $("#table [name=serviceCharge]").change(function () {
+            $("#serviceCharge").text(this.value);
+            $("#orderDetailsForm [name=serviceCharge]").val(this.value);
+            calculateAccrual();
+        });
+
+        // 借款天数改变事件绑定
+        $("#table [name=debtDuration]").change(function () {
+            $("#debtDuration").text(this.value);
+            $("#orderDetailsForm [name=debtDuration]").val(this.value);
+            calculateAccrual();
+        });
+
+        // 放款金额改变事件绑定
+        $("#table [name=actualAmount]").change(function () {
+            $("#actualAmount").text(this.value);
+            $("#orderDetailsForm [name=actualAmount]").val(this.value);
+            calculateAccrual();
+        });
+
+        // 审核通过
+        $("#checkPass").click(function(){
+
+        });
+        // 审核不通过
+        $("#checkRefuse").click(function(){
+
+        });
+        // 审核退回
+        $("#checkBack").click(function(){
+
+        });
+        // 加入黑名单
+        $("#addBlackList").click(function(){
+
+        });
+    });
+</script>
+</body>
+</html>

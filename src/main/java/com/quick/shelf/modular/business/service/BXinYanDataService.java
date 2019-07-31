@@ -217,7 +217,6 @@ public class BXinYanDataService extends ServiceImpl<BXinYanDataMapper, BXinYanDa
                 if (XinYanConstantEnum.API_NAME_YYS.getApiName().equals(apiName))
                     bSysUserStatus.setXinyanMobileStatus(BusinessConst.OK);
                 if (XinYanConstantEnum.API_NAME_JH.getApiName().equals(apiName)) {
-                    bSysUserStatus.setXinyanZmfStatus(BusinessConst.OK);
                     bSysUserStatus.setXinyanTaobaoStatus(BusinessConst.OK);
                 }
 

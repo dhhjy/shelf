@@ -4,12 +4,16 @@ import cn.stylefeng.roses.core.datascope.DataScope;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.quick.shelf.core.base.BaseController;
+import com.quick.shelf.core.common.annotion.Permission;
 import com.quick.shelf.core.common.page.LayuiPageFactory;
 import com.quick.shelf.core.response.ResponseData;
 import com.quick.shelf.core.shiro.ShiroKit;
+import com.quick.shelf.modular.business.entity.BEmergencyContactInfo;
 import com.quick.shelf.modular.business.entity.BOrderDetails;
-import com.quick.shelf.modular.business.service.BOrderDetailsService;
+import com.quick.shelf.modular.business.entity.BSysUserStatus;
+import com.quick.shelf.modular.business.service.*;
 import com.quick.shelf.modular.business.warpper.BOrderDetailsWrapper;
+import com.quick.shelf.modular.business.warpper.BSysUserWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -17,10 +21,8 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Map;
@@ -35,11 +37,22 @@ public class BOrderDetailsController extends BaseController {
      */
     public static final Logger logger = LoggerFactory.getLogger(BOrderDetailsController.class);
 
-    public static final String PATHFIX = "/modular/business/orderDetails/";
+    private static final String PREFIX = "/modular/business/orderDetails/";
 
     @Resource
     private BOrderDetailsService bOrderDetailsService;
 
+    @Resource
+    private BSysUserService bSysUserService;
+
+    @Resource
+    private BUserBasicInfoService bUserBasicInfoService;
+
+    @Resource
+    private BEmergencyContactInfoService bEmergencyContactInfoService;
+
+    @Resource
+    private BSysUserStatusService bSysUserStatusService;
 
     /**
      * 前端H5客户申请借款
@@ -47,21 +60,72 @@ public class BOrderDetailsController extends BaseController {
      * @param bOrderDetails
      * @return
      */
-    @ApiOperation(value = "前端H5客户申请借款", notes = "前端H5客户申请借款", httpMethod = "POST")
+    ;@ApiOperation(value = "前端H5客户申请借款", notes = "前端H5客户申请借款", httpMethod = "POST")
     @RequestMapping(value = "/loanApplication", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData loanApplication( BOrderDetails bOrderDetails) {
+    public ResponseData loanApplication(BOrderDetails bOrderDetails) {
         //  查询是否有正在进行中的订单
-        if(this.bOrderDetailsService.ifExistOrderByUserId()){
+        if (this.bOrderDetailsService.ifExistOrderByUserId()) {
             return ResponseData.success(0, "申请成功", this.bOrderDetailsService.loanApplication(bOrderDetails));
-        }else{
+        } else {
             return ResponseData.success(-1, "订单冲突", null);
         }
     }
 
+    /**
+     * 待审核订单主页跳转
+     *
+     * @return
+     */
+    @ApiOperation(value = "待审核订单主页跳转", notes = "待审核订单主页跳转", httpMethod = "POST")
+    @Permission
     @RequestMapping(value = "/index")
-    public String index(){
-        return PATHFIX + "orderDetails.html";
+    public String index() {
+        return PREFIX + "orderDetails.html";
+    }
+
+    /**
+     * 人工审核页面跳转
+     *
+     * @return
+     */
+    @ApiOperation(value = "人工审核页面跳转", notes = "人工审核页面跳转", httpMethod = "POST")
+    @Permission
+    @RequestMapping(value = "/manualCheckIndex/{userId}")
+    public String manualCheckIndex(@PathVariable("userId") Integer userId, Model model) {
+        /**
+         * 用户关联的借款订单信息
+         */
+        BOrderDetails bOrderDetails = this.bOrderDetailsService.selectBOrderDetailsByUserId(userId);
+        if (null == bOrderDetails)
+            bOrderDetails = new BOrderDetails();
+        bOrderDetails.setCheckUserId(ShiroKit.getUserNotNull().getId());
+        model.addAttribute("userName", ShiroKit.getUserNotNull().getName());
+        model.addAttribute("orderDetails", bOrderDetails);
+
+        /**
+         * 用户信息
+         */
+        model.addAttribute("bSysUser", BSysUserWrapper.deSensitization(this.bSysUserService.selectBSysUserByUserId(userId)));
+
+        /**
+         * 用户详细个人信息
+         */
+        model.addAttribute("bUserBasicInfo", this.bUserBasicInfoService.selectBUserBasicInfoByUserId(userId));
+
+        /**
+         * 用户联系人信息 b_emergency_contact_info
+         */
+        BEmergencyContactInfo bEmergencyContactInfo = this.bEmergencyContactInfoService.selectBEmergencyContactInfoByUserId(userId);
+        model.addAttribute("bEmergencyContactInfo", BSysUserWrapper.deSensitization(bEmergencyContactInfo));
+
+        /**
+         * 用户所关联的中状态信息 b_sys_user_status
+         */
+        BSysUserStatus bSysUserStatus = this.bSysUserStatusService.selectBSysUserStatusByUserId(userId);
+        model.addAttribute("bSysUserStatus", bSysUserStatus);
+
+        return PREFIX + "manualCheckIndex.html";
     }
 
     /**
@@ -73,11 +137,12 @@ public class BOrderDetailsController extends BaseController {
             @ApiImplicitParam(value = "时间查询", name = "timeLimit", dataType = "String"),
             @ApiImplicitParam(value = "部门主键", name = "deptId", dataType = "Long")
     })
+    @Permission
     @RequestMapping(value = "/toAuditList")
     @ResponseBody
     public Object toAuditList(@RequestParam(required = false) String name,
                               @RequestParam(required = false) String timeLimit,
-                              @RequestParam(required = false) Long deptId){
+                              @RequestParam(required = false) Long deptId) {
         logger.info("查询待审核订单列表");
 
         //拼接查询条件

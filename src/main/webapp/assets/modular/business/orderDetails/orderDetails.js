@@ -74,13 +74,13 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
     };
 
     /**
-     * 打开全景雷达
+     * 打开人工审核页面
      */
-    orderDetails.onRadar = function (data) {
+    orderDetails.onManualCheckIndex = function (data) {
         var index = layer.open({
             type: 2,
-            title: '全景雷达',
-            content: Feng.ctxPath + "/xinYan/getReDerData/" + data.id,
+            title: '人工审核',
+            content: Feng.ctxPath + "/orderDetails/manualCheckIndex/" + data.userId,
             closeBtn: 0,
             shadeClose: true,
             resize: true,
@@ -143,8 +143,8 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
     table.on('tool(' + orderDetails.tableId + ')', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'radar') {
-            orderDetails.onRadar(data);
+        if (layEvent === 'manualCheck') {
+            orderDetails.onManualCheckIndex(data);
         } else if (layEvent === 'taobaoweb') {
             orderDetails.onTaoBaoWeb(data);
         }
