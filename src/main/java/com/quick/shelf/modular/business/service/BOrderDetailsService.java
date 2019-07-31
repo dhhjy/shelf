@@ -39,6 +39,7 @@ public class BOrderDetailsService extends ServiceImpl<BOrderDetailsMapper, BOrde
      * 如果有订单存在，则不可继续借款，需要还清之前的
      * 订单才可以发起借款，
      * 存在返回
+     *
      * @return
      */
     public boolean ifExistOrderByUserId() {
@@ -47,6 +48,7 @@ public class BOrderDetailsService extends ServiceImpl<BOrderDetailsMapper, BOrde
 
     /**
      * 查询待审核订单列表
+     *
      * @param dataScope
      * @param name
      * @param beginTime
@@ -54,18 +56,26 @@ public class BOrderDetailsService extends ServiceImpl<BOrderDetailsMapper, BOrde
      * @param deptId
      * @return
      */
-    public Page<Map<String, Object>> selectToAuditList(DataScope dataScope, String name, String beginTime, String endTime, Long deptId) {
+    public Page<Map<String, Object>> selectToAuditList(DataScope dataScope, String name, String beginTime, String endTime, Long deptId, Integer status) {
         Page page = LayuiPageFactory.defaultPage();
-        return this.baseMapper.selectToAuditList(page, dataScope, name, beginTime, endTime, deptId);
+        return this.baseMapper.selectToAuditList(page, dataScope, name, beginTime, endTime, deptId, status);
     }
 
     /**
      * 根据用户主键获取用户正在进行中的
      * 待审核订单
+     *
      * @param userId
      * @return
      */
-    public BOrderDetails selectBOrderDetailsByUserId(Integer userId){
+    public BOrderDetails selectBOrderDetailsByUserId(Integer userId) {
         return this.baseMapper.selectBOrderDetailsByUserId(userId);
+    }
+
+    /**
+     * 订单审核
+     */
+    public void checkOrderDetails(BOrderDetails bOrderDetails) {
+        this.baseMapper.updateById(bOrderDetails);
     }
 }

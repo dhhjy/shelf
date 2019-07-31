@@ -62,11 +62,17 @@
 
     <select id="selectToAuditList" resultType="map">
         SELECT
+        bod.id AS "id",
         bod.user_id AS "userId",
         bod.product_code AS "productCode",
         bod.mode_of_repayment AS modeOfRepayment,
         bod.amount AS amount,
         bod.debt_duration AS debtDuration,
+        bod.accrual AS accrual,
+        bod.service_charge AS serviceCharge,
+        bod.annual_interest_rate AS annualInterestRate,
+        bod.actual_amount AS actualAmount,
+        bod.every_day_refund AS everyDayRefund,
         bod.count_refund AS countRefund,
         bod.status AS "status",
         bod.payment_term AS "paymentTerm",
@@ -76,7 +82,7 @@
         FROM B_ORDER_DETAILS bod
             LEFT JOIN B_SYS_USER bsu ON
                 bod.user_id = bsu.user_id
-        WHERE bod.STATUS = 0
+        WHERE bod.STATUS = #{status}
         <if test="name != null and name != ''">
             and (bsu.name like CONCAT('%',#{name},'%'))
         </if>

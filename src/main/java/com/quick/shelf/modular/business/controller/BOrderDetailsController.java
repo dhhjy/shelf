@@ -39,6 +39,43 @@ public class BOrderDetailsController extends BaseController {
 
     private static final String PREFIX = "/modular/business/orderDetails/";
 
+    /**
+     * 待审核订单状态
+     */
+    private static final Integer TO_AUDIT_ORDER_STATUS = 0;
+
+    /**
+     * 待放款订单状态
+     */
+    private static final Integer TO_LOAN_ORDER_STATUS = 1;
+
+    /**
+     * 待还款订单状态
+     */
+    private static final Integer REPAYMENT_ORDER_STATUS = 2;
+
+    /**
+     * 逾期订单状态
+     */
+
+    /**
+     * 完结订单状态
+     */
+
+    /**
+     * 延期订单状态
+     */
+
+    /**
+     * 回退订单状态
+     */
+    private static final Integer CHECK_ORDER_BACK_STATUS = 99;
+
+    /**
+     * 取消(拒绝)订单状态
+     */
+    private static final Integer CHECK_REFUSE_STATUS = -1;
+
     @Resource
     private BOrderDetailsService bOrderDetailsService;
 
@@ -60,7 +97,7 @@ public class BOrderDetailsController extends BaseController {
      * @param bOrderDetails
      * @return
      */
-    ;@ApiOperation(value = "前端H5客户申请借款", notes = "前端H5客户申请借款", httpMethod = "POST")
+    @ApiOperation(value = "前端H5客户申请借款", notes = "前端H5客户申请借款", httpMethod = "POST")
     @RequestMapping(value = "/loanApplication", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData loanApplication(BOrderDetails bOrderDetails) {
@@ -85,6 +122,16 @@ public class BOrderDetailsController extends BaseController {
     }
 
     /**
+     * 待下款订单主页跳转
+     */
+    @ApiOperation(value = "待下款订单主页跳转", notes = "待下款订单主页跳转", httpMethod = "POST")
+    @Permission
+    @RequestMapping(value = "/loanIndex")
+    public String loanIndex() {
+        return PREFIX + "loanIndex.html";
+    }
+
+    /**
      * 人工审核页面跳转
      *
      * @return
@@ -93,13 +140,31 @@ public class BOrderDetailsController extends BaseController {
     @Permission
     @RequestMapping(value = "/manualCheckIndex/{userId}")
     public String manualCheckIndex(@PathVariable("userId") Integer userId, Model model) {
+        setOrderDetailsInfo(userId, model);
+        return PREFIX + "manualCheckIndex.html";
+    }
+
+    /**
+     * 放款审核页面跳转
+     *
+     * @return
+     */
+    @ApiOperation(value = "放款审核页面跳转", notes = "放款审核页面跳转", httpMethod = "POST")
+    @Permission
+    @RequestMapping(value = "/loanCheckIndex/{userId}")
+    public String loanCheckIndex(@PathVariable("userId") Integer userId, Model model) {
+        setOrderDetailsInfo(userId, model);
+        return PREFIX + "loanCheckIndex.html";
+    }
+
+    private Model setOrderDetailsInfo(Integer userId, Model model) {
         /**
          * 用户关联的借款订单信息
          */
         BOrderDetails bOrderDetails = this.bOrderDetailsService.selectBOrderDetailsByUserId(userId);
         if (null == bOrderDetails)
             bOrderDetails = new BOrderDetails();
-        bOrderDetails.setCheckUserId(ShiroKit.getUserNotNull().getId());
+        model.addAttribute("userId", ShiroKit.getUserNotNull().getId());
         model.addAttribute("userName", ShiroKit.getUserNotNull().getName());
         model.addAttribute("orderDetails", bOrderDetails);
 
@@ -125,7 +190,7 @@ public class BOrderDetailsController extends BaseController {
         BSysUserStatus bSysUserStatus = this.bSysUserStatusService.selectBSysUserStatusByUserId(userId);
         model.addAttribute("bSysUserStatus", bSysUserStatus);
 
-        return PREFIX + "manualCheckIndex.html";
+        return model;
     }
 
     /**
@@ -144,7 +209,29 @@ public class BOrderDetailsController extends BaseController {
                               @RequestParam(required = false) String timeLimit,
                               @RequestParam(required = false) Long deptId) {
         logger.info("查询待审核订单列表");
+        return list(name, timeLimit, deptId, TO_AUDIT_ORDER_STATUS);
+    }
 
+    /**
+     * 待放款订单列表
+     */
+    @ApiOperation(value = "待放款订单列表", notes = "待放款订单列表", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "查询参数:姓名/账户/手机号", name = "name", dataType = "String"),
+            @ApiImplicitParam(value = "时间查询", name = "timeLimit", dataType = "String"),
+            @ApiImplicitParam(value = "部门主键", name = "deptId", dataType = "Long")
+    })
+    @Permission
+    @RequestMapping(value = "/toLoanList")
+    @ResponseBody
+    public Object toLoanList(@RequestParam(required = false) String name,
+                             @RequestParam(required = false) String timeLimit,
+                             @RequestParam(required = false) Long deptId) {
+        logger.info("查询待放款订单列表");
+        return list(name, timeLimit, deptId, TO_LOAN_ORDER_STATUS);
+    }
+
+    private Object list(String name, String timeLimit, Long deptId, Integer Status) {
         //拼接查询条件
         String beginTime = "";
         String endTime = "";
@@ -156,14 +243,29 @@ public class BOrderDetailsController extends BaseController {
         }
 
         if (ShiroKit.isAdmin()) {
-            Page<Map<String, Object>> orderDetails = bOrderDetailsService.selectToAuditList(null, name, beginTime, endTime, deptId);
+            Page<Map<String, Object>> orderDetails = bOrderDetailsService.selectToAuditList(null, name, beginTime, endTime, deptId, Status);
             Page wrapped = new BOrderDetailsWrapper(orderDetails).wrap();
             return LayuiPageFactory.createPageInfo(wrapped);
         } else {
             DataScope dataScope = new DataScope(ShiroKit.getDeptDataScope());
-            Page<Map<String, Object>> users = bOrderDetailsService.selectToAuditList(dataScope, name, beginTime, endTime, deptId);
+            Page<Map<String, Object>> users = bOrderDetailsService.selectToAuditList(dataScope, name, beginTime, endTime, deptId, Status);
             Page wrapped = new BOrderDetailsWrapper(users).wrap();
             return LayuiPageFactory.createPageInfo(wrapped);
         }
+    }
+
+    /**
+     * 订单审核
+     *
+     * @param bOrderDetails
+     * @return
+     */
+    @ApiOperation(value = "订单审核", notes = "订单审核", httpMethod = "POST")
+    @Permission
+    @RequestMapping(value = "/checkOrderDetails")
+    @ResponseBody
+    public ResponseData checkOrderDetails(BOrderDetails bOrderDetails) {
+        this.bOrderDetailsService.checkOrderDetails(bOrderDetails);
+        return ResponseData.success(0, "审核完成", null);
     }
 }

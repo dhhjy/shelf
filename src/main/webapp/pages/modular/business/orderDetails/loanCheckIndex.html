@@ -6,7 +6,7 @@
     <meta name="renderer" content="webkit"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width"/>
-    <title>待审核订单-人工审核</title>
+    <title>待放款订单-放款审核</title>
     <link href="${ctxPath}/assets/expand/images/favicon.ico" rel="icon">
     <link rel="stylesheet" href="${ctxPath}/assets/common/layui/css/layui.css"/>
     <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/limu/css/common.css?_v="/>
@@ -21,7 +21,7 @@
 <!-- 头部信息 -->
 <header class="header">
     <figure class="logo">
-        <span class="need_hidden">待审核订单详情</span>
+        <span class="need_hidden">待放款订单详情</span>
     </figure>
     <p style="height: auto;text-align: center;">
         <span class="need_hidden">
@@ -249,10 +249,10 @@
                        value="${orderDetails.id}">
                 <input type="hidden" id="userId" name="userId"
                        value="${bSysUser.userId}">
-                <input type="hidden" id="checkUserId" name="checkUserId"
+                <input type="hidden" id="drawUserId" name="drawUserId"
                        value="${userId}">
                 <input type="hidden" id="status" name="status">
-                <input type="hidden" id="checkMessage" name="checkMessage" value="审核通过">
+                <input type="hidden" id="drawMessage" name="drawMessage" value="同意下款">
                 <table>
                     <caption class="middle">借贷记录</caption>
                     <tbody>
@@ -294,7 +294,6 @@
                             <span id="amount" class='tag normal'>
                                 ${orderDetails.amount}
                             </span>
-                            <input type="hidden" name="amount" value="${orderDetails.amount}">
                         </td>
                         <td>
                             <span id="debtDuration">
@@ -304,167 +303,58 @@
                         </td>
                         <td>
                             <span id="serviceCharge" class='tag danger'>
-                                @if(isNotEmpty(orderDetails.serviceCharge)){
-                                    ${orderDetails.serviceCharge}
-                                @}else{
-                                    0
-                                @}
+                                ${orderDetails.serviceCharge}
                             </span>
-                            <input type="hidden" name="serviceCharge" value="${orderDetails.serviceCharge}">
                         </td>
                         <td>
                             <span id="accrual" class='tag danger'>
-                                @if(isNotEmpty(orderDetails.accrual)){
-                                    ${orderDetails.accrual}
-                                @}else{
-                                    0
-                                @}
+                                ${orderDetails.accrual}
                             </span>
-                            <input type="hidden" name="accrual" value="${orderDetails.accrual}">
                         </td>
                         <td>
                             <span id="annualInterestRate">
                                 ${orderDetails.annualInterestRate}
                             </span>
-                            <input type="hidden" name="annualInterestRate" value="${orderDetails.annualInterestRate}">
                         </td>
                         <td>
                             <span id="everyDayRefund">
                                 ${orderDetails.everyDayRefund}
                             </span>
-                            <input type="hidden" name="everyDayRefund" value="${orderDetails.everyDayRefund}">
                         </td>
                         <td>
                             <span id="countRefund">
                                 ${orderDetails.countRefund}
                             </span>
-                            <input type="hidden" name="countRefund" value="${orderDetails.countRefund}">
                         </td>
                         <td>
                             <span id="actualAmount">
                                 ${orderDetails.actualAmount}
                             </span>
-                            <input type="hidden" name="actualAmount" value="${orderDetails.actualAmount}">
                         </td>
                     </tr>
                     </tbody>
                 </table>
+
+                <table>
+                    <caption class="middle">审核意见</caption>
+                    <tr>
+                        <td class="msg">审核人账号</td>
+                        <td style="padding: 0 0 0 2px;">
+                            <i class="layui-icon layui-icon-username"></i>
+                            ${userName}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="msg">审核意见</td>
+                        <td style="padding: 0">
+                            <textarea id="reason" class="layui-textarea"
+                                      maxlength="200" placeholder="请输入审核意见"></textarea>
+                        </td>
+                    </tr>
+                </table>
                 <button class="btn btn-success radius size-L" type="button" style="display: none;" id="submit"
                         lay-filter="submit" lay-submit></button>
             </form>
-        </div>
-        <!--借贷记录-->
-
-        <div id="table" class="layui-form">
-            <table>
-                <caption class="middle">变更订单</caption>
-                <tbody>
-                <tr>
-                    <td class="msg">更改还款方式</td>
-                    <td colspan="9">
-                        <div class="layui-form-item" style="padding-top:10px;">
-                            <div class="layui-input-inline">
-                                <select name="modeOfRepayment" lay-filter="modeOfRepayment">
-                                    <option value="">请选择还款方式</option>
-                                    <option value="1">每日本息</option>
-                                    <option value="2">每日利息+服务费</option>
-                                    <option value="3">到期全额</option>
-                                </select>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>借款金额(元)</td>
-                    <td colspan="4">
-                        <input type='text' name='amount'
-                               placeholder="借款金额"
-                               class='layui-input' style='width:150px'
-                               oninput="value=value.replace(/[^\d]/g,'')" maxlength="6"
-                               readonly="readonly">
-                    </td>
-
-                    <td>年化利率(%)</td>
-                    <td colspan="4">
-                        <div class="layui-form-item" style="padding-top:10px;">
-                            <div class="layui-input-inline">
-                                <select name="annualInterestRate" lay-filter="annualInterestRate" disabled="disabled">
-                                    <option value="">请选择年利率</option>
-                                    <option value="0.20">0.20</option>
-                                    <option value="0.21">0.21</option>
-                                    <option value="0.22">0.22</option>
-                                    <option value="0.23">0.23</option>
-                                    <option value="0.24">0.24</option>
-                                    <option value="0.25">0.25</option>
-                                    <option value="0.26">0.26</option>
-                                    <option value="0.27">0.27</option>
-                                    <option value="0.28">0.28</option>
-                                    <option value="0.29">0.29</option>
-                                    <option value="0.30">0.30</option>
-                                    <option value="0.31">0.31</option>
-                                    <option value="0.32">0.32</option>
-                                    <option value="0.33">0.33</option>
-                                    <option value="0.34">0.34</option>
-                                    <option value="0.35">0.35</option>
-                                    <option value="0.36">0.36</option>
-                                </select>
-                            </div>
-                        </div>
-                    </td>
-                <tr>
-
-                <tr>
-                    <td>服务费(元)</td>
-                    <td colspan="4">
-                        <input type='text' name='serviceCharge'
-                               placeholder="服务费"
-                               class='layui-input' style='width:150px'
-                               oninput="value=value.replace(/[^\d]/g,'')" maxlength="5"
-                               readonly="readonly">
-                    </td>
-
-                    <td>借款天数(天)</td>
-                    <td colspan="4">
-                        <input type='text' name='debtDuration'
-                               placeholder="借款天数"
-                               class='layui-input' style='width:150px'
-                               oninput="value=value.replace(/[^\d]/g,'')" maxlength="3"
-                               readonly="readonly">
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>实际放款金额</td>
-                    <td colspan="9">
-                        <input type='text' name='actualAmount'
-                               placeholder="实际放款金额"
-                               class='layui-input' style='width:150px'
-                               oninput="value=value.replace(/[^\d]/g,'')" maxlength="10"
-                               readonly="readonly">
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-            <table>
-                <caption class="middle">审核意见</caption>
-                <tr>
-                    <td class="msg">审核人账号</td>
-                    <td style="padding: 0 0 0 1px;">
-                        <i class="layui-icon layui-icon-username"></i>
-                        ${userName}
-                    </td>
-                </tr>
-                <tr>
-                    <td class="msg">审核意见</td>
-                    <td style="padding: 0">
-                            <textarea id="reason" class="layui-textarea"
-                                      maxlength="200" placeholder="请输入审核意见"></textarea>
-                    </td>
-                </tr>
-            </table>
-
             <div class="items" style="float: left;">
                 <input class="btn btn-success radius size-L" type="button" value="通过" id="checkPass"
                        lay-filter="checkPass" lay-submit>
@@ -476,6 +366,8 @@
                        id="addBlackList" lay-filter="addBlackList" lay-submit>
             </div>
         </div>
+        <!--借贷记录-->
+
     </div>
     <!--借贷资金详情-->
 </div>
@@ -505,37 +397,6 @@
         var $ax = layui.ax;
         var admin = layui.admin;
         var form = layui.form;
-
-        /**
-         * 全局定义还款方式
-         */
-        var type =
-
-            // 监听事件
-            form.on('select(modeOfRepayment)', function (result) {
-                $("#orderDetailsForm [name=modeOfRepayment]").val(result.value);
-                $("#modeOfRepayment").text($("#table [name=modeOfRepayment] option:selected").text());
-                type = result.value;
-                calculateAccrual();
-
-                $("#table input[name=amount]").attr("readonly", false);
-                $("#table [name=annualInterestRate]").removeAttr("disabled");
-                // 渲染
-                form.render("select");
-                $("#table input[name=serviceCharge]").attr("readonly", false);
-                $("#table input[name=debtDuration]").attr("readonly", false);
-                $("#table input[name=actualAmount]").attr("readonly", false);
-            });
-
-        // 监听事件
-        form.on('select(annualInterestRate)', function (result) {
-            $("#orderDetailsForm [name=annualInterestRate]").val(result.value);
-            $("#annualInterestRate").text(result.value);
-            calculateAccrual();
-        });
-
-        // 渲染
-        form.render();
 
         // 声明用户主键
         var userId = "${bSysUser.userId}";
@@ -636,18 +497,7 @@
 
         // 表单提交事件
         form.on('submit(submit)', function (data) {
-
-            if(data.field.serviceCharge === "")
-            {
-                layer.msg("请填写本次服务费用");
-                return false;
-            }
-            if(data.field.actualAmount === "")
-            {
-                layer.msg("请填写实际下款金额");
-                return false;
-            }
-            if(data.field.status !== "1" && data.field.checkMessage === ""){
+            if(data.field.status !== "2" && data.field.checkMessage === ""){
                 layer.msg("请填写审核意见");
                 return false;
             }
@@ -665,65 +515,6 @@
 
             return false;
         });
-
-        /**
-         * 计算利息
-         */
-        var calculateAccrual = function () {
-            // 获取用户借款额度
-            var amount = parseInt($("#orderDetailsForm [name=amount]").val());
-            // 用户借款天数
-            var debtDuration = parseInt($("#orderDetailsForm [name=debtDuration]").val());
-            // 年利率
-            var annualInterestRate = parseFloat($("#orderDetailsForm [name=annualInterestRate]").val());
-            // 服务费
-            var serviceCharge = parseInt($("#orderDetailsForm [name=serviceCharge]").val());
-
-            if (isNaN(serviceCharge))
-                return false;
-
-            // 利息
-            var lx = (amount * annualInterestRate) / 365;
-            lx = parseFloat(lx.toFixed(1));
-            // 借款天数 * 每日利息 = 总利息
-            var zlx = lx * debtDuration;
-            // 设置利息
-            $("#accrual").text(zlx);
-            $("#orderDetailsForm [name=accrual]").val(zlx);
-
-            // 每日本息分期
-            if (type === '1') {
-                //每日应还 = 每日本金 + 服务费 + 利息
-                var everyDayRefund = amount / debtDuration + serviceCharge + lx;
-                everyDayRefund = parseFloat(everyDayRefund.toFixed(1));
-                $("#everyDayRefund").text(everyDayRefund);
-                $("#orderDetailsForm [name=everyDayRefund]").val(everyDayRefund);
-                var countRefund = everyDayRefund * debtDuration;
-                countRefund = countRefund.toFixed(1);
-                $("#countRefund").text(countRefund);
-                $("#orderDetailsForm [name=countRefund]").val(countRefund);
-            }
-
-            // 每日利息+服务费
-            if (type === '2') {
-                // 设置每日利息
-                $("#everyDayRefund").text(lx + serviceCharge);
-                $("#orderDetailsForm [name=everyDayRefund]").val(lx + serviceCharge);
-                $("#countRefund").text("");
-                $("#orderDetailsForm [name=countRefund]").val("0");
-            }
-
-            // 到期全额还款
-            if (type === '3') {
-                //本金+利息 = 到期全额应还
-                var yhze = amount + zlx;
-                $("#countRefund").text(yhze);
-                $("#orderDetailsForm [name=countRefund]").val(yhze);
-                $("#everyDayRefund").text("");
-                $("#orderDetailsForm [name=everyDayRefund]").val("0");
-            }
-
-        };
 
         // 新颜雷达
         $('#openReDar').click(function () {
@@ -745,42 +536,14 @@
             openGPSCompareFun();
         });
 
-        // 借款详情更改事件绑定
-        $("#table [name=amount]").change(function () {
-            $("#amount").text(this.value);
-            $("#orderDetailsForm [name=amount]").val(this.value);
-            calculateAccrual();
-        });
-
-        // 服务费改变事件绑定
-        $("#table [name=serviceCharge]").change(function () {
-            $("#serviceCharge").text(this.value);
-            $("#orderDetailsForm [name=serviceCharge]").val(this.value);
-            calculateAccrual();
-        });
-
-        // 借款天数改变事件绑定
-        $("#table [name=debtDuration]").change(function () {
-            $("#debtDuration").text(this.value);
-            $("#orderDetailsForm [name=debtDuration]").val(this.value);
-            calculateAccrual();
-        });
-
-        // 放款金额改变事件绑定
-        $("#table [name=actualAmount]").change(function () {
-            $("#actualAmount").text(this.value);
-            $("#orderDetailsForm [name=actualAmount]").val(this.value);
-            calculateAccrual();
-        });
-
         // 审核意见
         $("#reason").change(function () {
-            $("#orderDetailsForm [name=checkMessage]").val(this.value);
+            $("#orderDetailsForm [name=drawMessage]").val(this.value);
         });
 
         // 审核通过
         $("#checkPass").click(function () {
-            $("#orderDetailsForm [name=status]").val("1");
+            $("#orderDetailsForm [name=status]").val("2");
             $("#submit").click();
         });
 

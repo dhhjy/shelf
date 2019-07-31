@@ -24,7 +24,8 @@ public interface BOrderDetailsMapper extends BaseMapper<BOrderDetails> {
      * 查询用户待审核订单列表
      * @return
      */
-    Page<Map<String, Object>> selectToAuditList(@Param("page") Page page, @Param("dataScope") DataScope dataScope, @Param("name") String name, @Param("beginTime") String beginTime, @Param("endTime") String endTime, @Param("deptId") Long deptId);
+    Page<Map<String, Object>> selectToAuditList(@Param("page") Page page, @Param("dataScope") DataScope dataScope, @Param("name") String name,
+                                                @Param("beginTime") String beginTime, @Param("endTime") String endTime, @Param("deptId") Long deptId, @Param("status") Integer status);
 
     /**
      * 根据用户主键查询用户正在进行
