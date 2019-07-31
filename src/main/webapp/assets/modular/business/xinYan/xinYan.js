@@ -158,7 +158,7 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
         var layEvent = obj.event;
         if (layEvent === 'radar') {
             xinYanTable.onRadar(data);
-        } else if (layEvent === 'taobaoweb') {
+        } else if (layEvent === 'taobaopay') {
             xinYanTable.onTaoBaoWeb(data);
         } else if (layEvent === "carrier") {
             xinYanTable.openMobileReportFun(data);
