@@ -8,12 +8,14 @@ import com.quick.shelf.core.shiro.ShiroKit;
 import com.quick.shelf.core.shiro.ShiroUser;
 import com.quick.shelf.core.util.DateUtil;
 import com.quick.shelf.modular.business.entity.BBlackList;
+import com.quick.shelf.modular.business.entity.BOrderAnalyzing;
 import com.quick.shelf.modular.business.entity.BOrderDetails;
 import com.quick.shelf.modular.business.entity.BSysUser;
 import com.quick.shelf.modular.business.mapper.BOrderDetailsMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.Map;
 
 /**
@@ -21,12 +23,19 @@ import java.util.Map;
  */
 @Service
 public class BOrderDetailsService extends ServiceImpl<BOrderDetailsMapper, BOrderDetails> {
+    /**
+     * 放款状态
+     */
+    private static final Integer LOAN_STATUS = 2;
 
     @Resource
     private BSysUserService bSysUserService;
 
     @Resource
     private BBlackListService bBlackListService;
+
+    @Resource
+    private BOrderAnalyzingService bOrderAnalyzingService;
 
     /**
      * 客户端用户申请借款
@@ -37,6 +46,7 @@ public class BOrderDetailsService extends ServiceImpl<BOrderDetailsMapper, BOrde
     public BOrderDetails loanApplication(BOrderDetails bOrderDetails) {
         ShiroUser user = ShiroKit.getUserNotNull();
         bOrderDetails.setUserId(user.getId().intValue());
+        bOrderDetails.setDeptId(user.getDeptId());
         bOrderDetails.setStatus(0);
         bOrderDetails.setCreateTime(DateUtil.getCurrentDate());
         this.baseMapper.insert(bOrderDetails);
@@ -85,7 +95,48 @@ public class BOrderDetailsService extends ServiceImpl<BOrderDetailsMapper, BOrde
      * 订单审核
      */
     public void checkOrderDetails(BOrderDetails bOrderDetails) {
+        if (null != bOrderDetails.getCheckUserId() && null != bOrderDetails.getCheckMessage())
+            bOrderDetails.setCheckTime(DateUtil.getCurrentDate());
+        if (null != bOrderDetails.getDrawUserId() && null != bOrderDetails.getDrawMessage())
+            bOrderDetails.setDrawTime(DateUtil.getCurrentDate());
         this.baseMapper.updateById(bOrderDetails);
+
+        // 当为放款操作时，记录放款
+        if (bOrderDetails.getStatus().equals(BOrderDetailsService.LOAN_STATUS)) {
+            new Thread(() -> {
+                analyze(bOrderDetails);
+            }).start();
+        }
+    }
+
+    private void analyze(BOrderDetails bOrderDetails) {
+        Long deptId = ShiroKit.getUserNotNull().getDeptId();
+        BOrderAnalyzing bOrderAnalyzing = this.bOrderAnalyzingService.selectBOrderAnalyzingByNowDate(deptId);
+        bOrderDetails = this.baseMapper.selectById(bOrderDetails.getId());
+        /**
+         * 为空则该部门今天没有进行过分析，
+         * 反之有进行过分析
+         */
+        if (null == bOrderAnalyzing) {
+            bOrderAnalyzing = new BOrderAnalyzing();
+            bOrderAnalyzing.setDeptId(deptId);
+            // 合同金额
+            bOrderAnalyzing.setContractAmount(bOrderDetails.getAmount());
+            // 实际下款金额
+            bOrderAnalyzing.setLoanAmount(bOrderDetails.getActualAmount());
+            bOrderAnalyzing.setCreateDate(DateUtil.getCurrentDate());
+            // 设置放款率
+            bOrderAnalyzing.setLoanRatio(new BigDecimal("100"));
+            this.bOrderAnalyzingService.insert(bOrderAnalyzing);
+        } else {
+            // 合同金额 累加
+            bOrderAnalyzing.setContractAmount(bOrderAnalyzing.getContractAmount().add(bOrderDetails.getAmount()));
+            // 实际下款金额
+            bOrderAnalyzing.setLoanAmount(bOrderAnalyzing.getLoanAmount().add(bOrderDetails.getActualAmount()));
+            // 设置放款率
+            bOrderAnalyzing.setLoanRatio(new BigDecimal(this.bOrderAnalyzingService.selectLendingRate(deptId)));
+            this.bOrderAnalyzingService.update(bOrderAnalyzing);
+        }
     }
 
     /**

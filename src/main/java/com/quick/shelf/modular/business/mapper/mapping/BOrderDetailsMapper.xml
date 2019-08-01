@@ -6,6 +6,7 @@
     <resultMap id="BaseResultMap" type="com.quick.shelf.modular.business.entity.BOrderDetails">
         <id column="id" property="id"/>
         <result column="user_id" property="userId"/>
+        <result column="dept_id" property="deptId"/>
         <result column="product_code" property="productCode"/>
         <result column="mode_of_repayment" property="modeOfRepayment"/>
         <result column="amount" property="amount"/>
@@ -31,6 +32,7 @@
     <sql id="Base_Column_List">
         id AS "id",
         user_id AS "userId",
+        dept_id AS "deptId",
         product_code AS "productCode",
         mode_of_repayment AS modeOfRepayment,
         amount AS amount,
@@ -64,6 +66,7 @@
         SELECT
         bod.id AS "id",
         bod.user_id AS "userId",
+        bod.dept_id AS "deptId",
         bod.product_code AS "productCode",
         bod.mode_of_repayment AS modeOfRepayment,
         bod.amount AS amount,
@@ -77,8 +80,7 @@
         bod.status AS "status",
         bod.payment_term AS "paymentTerm",
         bod.create_time AS "createTime",
-        bsu.name AS "name",
-        bsu.dept_id AS "deptId"
+        bsu.name AS "name"
         FROM B_ORDER_DETAILS bod
             LEFT JOIN B_SYS_USER bsu ON
                 bod.user_id = bsu.user_id
@@ -91,7 +93,7 @@
             and (bsu.name like CONCAT('%',#{name},'%'))
         </if>
         <if test="deptId != null and deptId != 0">
-            and (bsu.dept_id = #{deptId} )
+            and (bod.dept_id = #{deptId} )
         </if>
         <if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
             and (bod.create_time between CONCAT(#{beginTime},' 00:00:00') and CONCAT(#{endTime},' 23:59:59'))
@@ -103,6 +105,7 @@
         SELECT
         <include refid="Base_Column_List"/>
             FROM B_ORDER_DETAILS
+                WHERE STATUS <![CDATA[ < ]]> 2
         ORDER BY CREATE_TIME DESC
         LIMIT 0,1
     </select>

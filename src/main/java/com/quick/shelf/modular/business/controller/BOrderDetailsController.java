@@ -133,6 +133,16 @@ public class BOrderDetailsController extends BaseController {
     }
 
     /**
+     * 待还款订单主页跳转
+     */
+    @ApiOperation(value = "待还款订单主页跳转", notes = "待还款订单主页跳转", httpMethod = "POST")
+    @Permission
+    @RequestMapping(value = "/rePaymentIndex")
+    public String repaymentIndex() {
+        return PREFIX + "rePaymentIndex.html";
+    }
+
+    /**
      * 人工审核页面跳转
      *
      * @return

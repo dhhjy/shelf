@@ -101,6 +101,59 @@
     </div>
 
     <div class="layui-row layui-col-space15">
+        <div class="layui-col-xs12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-tab layui-tab-brief" lay-filter="tabZZT">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this">下款总额</li>
+                            <!--                            <li>下款额度</li>-->
+                        </ul>
+                        <div class="layui-tab-content">
+                            <div class="layui-tab-item layui-show">
+                                <div class="layui-row layui-col-space30">
+                                    <div class="layui-col-xs12 layui-col-md8">
+                                        <div id="loanAmount" style="height: 300px;margin-top: 20px;"></div>
+                                    </div>
+                                    <div class="layui-col-xs12 layui-col-md4">
+                                        <table class="layui-table" lay-skin="nob">
+                                            <colgroup>
+                                                <col width="50">
+                                                <col width="150">
+                                                <col width="150">
+                                                <col width="100">
+                                            </colgroup>
+                                            <thead>
+                                            <tr style="background: none;color: #333;">
+                                                <th colspan="4">门店排名 Top5<span class="layui-badge layui-bg-black pull-right">日</span></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            @for(data in everyDayData){
+                                                <tr>
+                                                    <td>
+                                                        @if(dataLP.index < 3){
+                                                            <span class="layui-badge layui-bg-cyan">${dataLP.index}</span>
+                                                        @}else{
+                                                            <span class="layui-badge layui-bg-gray">${dataLP.index}</span>
+                                                        @}
+                                                    </td>
+                                                    <td>${data.simpleName}</td>
+                                                    <td>${data.contractAmount}</td>
+                                                    <td>${data.loanRatio}%</td>
+                                                </tr>
+                                            @}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="layui-col-lg8 layui-col-md7">
             <div class="layui-card">
                 <div class="layui-card-header">认证接口柱状图</div>
@@ -426,6 +479,33 @@
         };
 
         /**
+         * 合同金额
+         */
+        var getEveryMonthContractAmount = function (data) {
+
+        };
+
+        /**
+         * 实际放款金额
+         */
+        var getEveryMonthLoanAmount = function (data) {
+            var loanAmount = [];
+            loanAmount.push(data.m1_loan_amount);
+            loanAmount.push(data.m2_loan_amount);
+            loanAmount.push(data.m3_loan_amount);
+            loanAmount.push(data.m4_loan_amount);
+            loanAmount.push(data.m5_loan_amount);
+            loanAmount.push(data.m6_loan_amount);
+            loanAmount.push(data.m7_loan_amount);
+            loanAmount.push(data.m8_loan_amount);
+            loanAmount.push(data.m9_loan_amount);
+            loanAmount.push(data.m10_loan_amount);
+            loanAmount.push(data.m11_loan_amount);
+            loanAmount.push(data.m12_loan_amount);
+            return loanAmount;
+        };
+
+        /**
          * 渲染接口调用量表格
          */
         var myCharts = echarts.init(document.getElementById('xse'), myEchartsTheme);
@@ -549,11 +629,41 @@
         };
         myCharts4.setOption(option4);
 
+
+        // 渲染放款总额
+        var myCharts5 = echarts.init(document.getElementById('loanAmount'), myEchartsTheme);
+        var option5 = {
+            title: {
+                text: '下款总额',
+                textStyle: {
+                    color: '#000',
+                    fontSize: 14
+                }
+            },
+            tooltip: {},
+            grid: {
+                left: '0',
+                right: '0',
+                bottom: '0',
+                containLabel: true
+            },
+            xAxis: {
+                data: ['1月', '2月', '3月', '4月', '6月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+            },
+            yAxis: {},
+            series: [{
+                type: 'bar',
+                data: getEveryMonthLoanAmount(${everyMonthData}),
+                barMaxWidth: 45
+            }]
+        };
+        myCharts5.setOption(option5);
+
         /**
          * 获取推广连接
          *
          */
-        var getPromoteLinksUrl = function(){
+        var getPromoteLinksUrl = function () {
             var re = null;
             var ajax = new $ax(Feng.ctxPath + "/h5/promoteLinks", function (result) {
                 re = result;

@@ -7,6 +7,7 @@ import cn.stylefeng.roses.core.util.ToolUtil;
 import cn.stylefeng.roses.kernel.model.exception.RequestEmptyException;
 import cn.stylefeng.roses.kernel.model.exception.ServiceException;
 import cn.stylefeng.roses.kernel.model.exception.enums.CoreExceptionEnum;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.quick.shelf.config.properties.ShelfProperties;
 import com.quick.shelf.core.base.BaseController;
@@ -18,6 +19,7 @@ import com.quick.shelf.core.response.ResponseData;
 import com.quick.shelf.core.shiro.ShiroKit;
 import com.quick.shelf.core.shiro.ShiroUser;
 import com.quick.shelf.core.util.RedisUtil;
+import com.quick.shelf.modular.business.service.BOrderAnalyzingService;
 import com.quick.shelf.modular.business.service.BPortCountService;
 import com.quick.shelf.modular.system.entity.FileInfo;
 import com.quick.shelf.modular.system.entity.Notice;
@@ -74,6 +76,9 @@ public class SystemController extends BaseController {
     private ShortMessageService shortMessageService;
 
     @Resource
+    private BOrderAnalyzingService bOrderAnalyzingService;
+
+    @Resource
     private RedisUtil redisUtil;
 
     /**
@@ -98,6 +103,10 @@ public class SystemController extends BaseController {
         model.addAttribute("clientUserCount", this.bPortCountService.getClientUserCount(deptId));
         // 网站当天人数
         model.addAttribute("clientUserToDayCount", this.bPortCountService.getClientToDayUserCount(deptId));
+        // 放款额度
+        model.addAttribute("everyMonthData", this.bOrderAnalyzingService.selectEveryMonthData(deptId));
+        // top 榜单
+        model.addAttribute("everyDayData", this.bOrderAnalyzingService.selectEveryDayDeptData());
         return "/modular/frame/console.html";
     }
 

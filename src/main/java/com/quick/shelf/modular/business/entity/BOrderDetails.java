@@ -33,6 +33,12 @@ public class BOrderDetails implements Serializable {
     private Integer userId;
 
     /**
+     * 关联部门
+     */
+    @TableField("dept_id")
+    private Long deptId;
+
+    /**
      * 产品编号
      */
     @TableField("product_code")
