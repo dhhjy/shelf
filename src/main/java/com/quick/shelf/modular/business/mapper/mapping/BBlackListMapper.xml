@@ -31,7 +31,7 @@
     <select id="selectBlackLists" resultType="map">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM B_BLACK_LIST
+        FROM B_BLACK_LIST WHERE 1=1
         <if test="name != null and name != ''">
             and (name like CONCAT('%',#{name},'%')
             or user_account like CONCAT('%',#{name},'%'))
