@@ -7,10 +7,13 @@ import com.quick.shelf.core.common.page.LayuiPageFactory;
 import com.quick.shelf.core.shiro.ShiroKit;
 import com.quick.shelf.core.shiro.ShiroUser;
 import com.quick.shelf.core.util.DateUtil;
+import com.quick.shelf.modular.business.entity.BBlackList;
 import com.quick.shelf.modular.business.entity.BOrderDetails;
+import com.quick.shelf.modular.business.entity.BSysUser;
 import com.quick.shelf.modular.business.mapper.BOrderDetailsMapper;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Map;
 
 /**
@@ -18,6 +21,12 @@ import java.util.Map;
  */
 @Service
 public class BOrderDetailsService extends ServiceImpl<BOrderDetailsMapper, BOrderDetails> {
+
+    @Resource
+    private BSysUserService bSysUserService;
+
+    @Resource
+    private BBlackListService bBlackListService;
 
     /**
      * 客户端用户申请借款
@@ -77,5 +86,30 @@ public class BOrderDetailsService extends ServiceImpl<BOrderDetailsMapper, BOrde
      */
     public void checkOrderDetails(BOrderDetails bOrderDetails) {
         this.baseMapper.updateById(bOrderDetails);
+    }
+
+    /**
+     * 拉黑用户
+     */
+    public void addBlackList(BOrderDetails bOrderDetails) {
+        Integer userId = bOrderDetails.getUserId();
+        BBlackList bBlackList = new BBlackList();
+        bBlackList.setUserId(userId);
+        BSysUser bSysUser = this.bSysUserService.selectBSysUserByUserId(userId);
+        bBlackList.setUserAccount(bSysUser.getUserAccount());
+        bBlackList.setName(bSysUser.getName());
+        bBlackList.setDeptId(bSysUser.getDeptId());
+        if (null != bOrderDetails.getDrawUserId()) {
+            // 设置放款时的拉黑描述
+            bBlackList.setDescription(bOrderDetails.getDrawMessage());
+        } else if (null != bOrderDetails.getCheckUserId()) {
+            // 设置审核时的拉黑描述
+            bBlackList.setDescription(bOrderDetails.getCheckMessage());
+        }
+        // 设置拉黑操作人ID
+        bBlackList.setOperateId(ShiroKit.getUserNotNull().getId());
+        // 设置拉黑操作人姓名
+        bBlackList.setOperate(ShiroKit.getUserNotNull().getName());
+        this.bBlackListService.insert(bBlackList);
     }
 }

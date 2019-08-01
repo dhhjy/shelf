@@ -253,6 +253,7 @@
                        value="${userId}">
                 <input type="hidden" id="status" name="status">
                 <input type="hidden" id="checkMessage" name="checkMessage" value="审核通过">
+                <input type="hidden" id="blackListStatus" name="blackListStatus" value="0">
                 <table>
                     <caption class="middle">借贷记录</caption>
                     <tbody>
@@ -509,23 +510,23 @@
         /**
          * 全局定义还款方式
          */
-        var type =
+        var type;
 
-            // 监听事件
-            form.on('select(modeOfRepayment)', function (result) {
-                $("#orderDetailsForm [name=modeOfRepayment]").val(result.value);
-                $("#modeOfRepayment").text($("#table [name=modeOfRepayment] option:selected").text());
-                type = result.value;
-                calculateAccrual();
+        // 监听事件
+        form.on('select(modeOfRepayment)', function (result) {
+            $("#orderDetailsForm [name=modeOfRepayment]").val(result.value);
+            $("#modeOfRepayment").text($("#table [name=modeOfRepayment] option:selected").text());
+            type = result.value;
+            calculateAccrual();
 
-                $("#table input[name=amount]").attr("readonly", false);
-                $("#table [name=annualInterestRate]").removeAttr("disabled");
-                // 渲染
-                form.render("select");
-                $("#table input[name=serviceCharge]").attr("readonly", false);
-                $("#table input[name=debtDuration]").attr("readonly", false);
-                $("#table input[name=actualAmount]").attr("readonly", false);
-            });
+            $("#table input[name=amount]").attr("readonly", false);
+            $("#table [name=annualInterestRate]").removeAttr("disabled");
+            // 渲染
+            form.render("select");
+            $("#table input[name=serviceCharge]").attr("readonly", false);
+            $("#table input[name=debtDuration]").attr("readonly", false);
+            $("#table input[name=actualAmount]").attr("readonly", false);
+        });
 
         // 监听事件
         form.on('select(annualInterestRate)', function (result) {
@@ -636,22 +637,25 @@
 
         // 表单提交事件
         form.on('submit(submit)', function (data) {
-
-            if(data.field.serviceCharge === "")
-            {
+            // 默认URL为审核操作
+            var url = Feng.ctxPath + "/orderDetails/checkOrderDetails";
+            if (data.field.serviceCharge === "") {
                 layer.msg("请填写本次服务费用");
                 return false;
             }
-            if(data.field.actualAmount === "")
-            {
+            if (data.field.actualAmount === "") {
                 layer.msg("请填写实际下款金额");
                 return false;
             }
-            if(data.field.status !== "1" && data.field.checkMessage === ""){
-                layer.msg("请填写审核意见");
+            if (data.field.status !== "1" && data.field.checkMessage === "审核通过") {
+                layer.msg("请填写操作意见、描述");
                 return false;
             }
-            var ajax = new $ax(Feng.ctxPath + "/orderDetails/checkOrderDetails", function (result) {
+            // 0为不做拉黑操作，1为拉黑操作
+            if (data.field.blackListStatus === "1") {
+                url = Feng.ctxPath + "/orderDetails/addBlackList";
+            }
+            var ajax = new $ax(url, function (result) {
                 Feng.success(result.message);
                 //传给上个页面，刷新table用
                 admin.putTempData('formOk', true);
@@ -798,7 +802,8 @@
 
         // 加入黑名单
         $("#addBlackList").click(function () {
-
+            $("#blackListStatus").val("1");
+            $("#submit").click();
         });
     });
 </script>

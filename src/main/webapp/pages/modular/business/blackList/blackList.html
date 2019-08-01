@@ -1,0 +1,52 @@
+@layout("/common/_container.html",{plugins:["ztree"],js:["/assets/modular/business/blackList/blackList.js"]}){
+
+<div class="layui-body-header">
+    <span class="layui-body-header-title">黑名单管理</span>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        @if(shiro.hasPermission("/bSysUser/zTree")){
+        <div class="layui-col-sm12 layui-col-md3 layui-col-lg2">
+            <div class="layui-card">
+                <div class="layui-card-body mini-bar">
+                    <div class="ztree" id="deptTree"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-sm12 layui-col-md9 layui-col-lg10">
+            @}else{
+            <div class="layui-col-sm12 layui-col-md9 layui-col-lg12">
+                @}
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div class="layui-form toolbar">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <input id="name" class="layui-input" type="text" placeholder="账号/姓名"/>
+                                </div>
+                                <div class="layui-inline">
+                                    <input id="timeLimit" class="layui-input" type="text" placeholder="拉黑时间"/>
+                                </div>
+                                <div class="layui-inline">
+                                    <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索
+                                    </button>
+                                    <button id="btnExp" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="layui-table" id="blackListTable" lay-filter="blackListTable"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/html" id="tableBar">
+        @if(shiro.hasPermission("/blackList/unBlackList")){
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="details">解除限制</a>
+        @}
+    </script>
+</div>
+@}

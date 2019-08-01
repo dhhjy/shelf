@@ -253,6 +253,7 @@
                        value="${userId}">
                 <input type="hidden" id="status" name="status">
                 <input type="hidden" id="drawMessage" name="drawMessage" value="同意下款">
+                <input type="hidden" id="blackListStatus" name="blackListStatus" value="0">
                 <table>
                     <caption class="middle">借贷记录</caption>
                     <tbody>
@@ -497,11 +498,17 @@
 
         // 表单提交事件
         form.on('submit(submit)', function (data) {
-            if(data.field.status !== "2" && data.field.checkMessage === ""){
-                layer.msg("请填写审核意见");
+            // 默认URL为审核操作
+            var url = Feng.ctxPath + "/orderDetails/checkOrderDetails";
+            if (data.field.status !== "2" && data.field.drawMessage === "同意下款") {
+                layer.msg("请填写操作意见、描述");
                 return false;
             }
-            var ajax = new $ax(Feng.ctxPath + "/orderDetails/checkOrderDetails", function (result) {
+            // 0为不做拉黑操作，1为拉黑操作
+            if (data.field.blackListStatus === "1") {
+                url = Feng.ctxPath + "/orderDetails/addBlackList";
+            }
+            var ajax = new $ax(url, function (result) {
                 Feng.success(result.message);
                 //传给上个页面，刷新table用
                 admin.putTempData('formOk', true);
@@ -561,7 +568,8 @@
 
         // 加入黑名单
         $("#addBlackList").click(function () {
-
+            $("#blackListStatus").val("1");
+            $("#submit").click();
         });
     });
 </script>

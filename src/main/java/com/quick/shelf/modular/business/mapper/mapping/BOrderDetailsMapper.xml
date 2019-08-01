@@ -83,6 +83,10 @@
             LEFT JOIN B_SYS_USER bsu ON
                 bod.user_id = bsu.user_id
         WHERE bod.STATUS = #{status}
+        <!-- 不查询被拉黑用户的订单信息 -->
+        AND bod.`user_id` NOT IN (
+            SELECT bbl.user_id FROM B_BLACK_LIST bbl
+            )
         <if test="name != null and name != ''">
             and (bsu.name like CONCAT('%',#{name},'%'))
         </if>

@@ -4,6 +4,7 @@ import cn.stylefeng.roses.core.datascope.DataScope;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.quick.shelf.core.base.BaseController;
+import com.quick.shelf.core.common.annotion.BussinessLog;
 import com.quick.shelf.core.common.annotion.Permission;
 import com.quick.shelf.core.common.page.LayuiPageFactory;
 import com.quick.shelf.core.response.ResponseData;
@@ -260,6 +261,7 @@ public class BOrderDetailsController extends BaseController {
      * @param bOrderDetails
      * @return
      */
+    @BussinessLog(value = "订单审核")
     @ApiOperation(value = "订单审核", notes = "订单审核", httpMethod = "POST")
     @Permission
     @RequestMapping(value = "/checkOrderDetails")
@@ -267,5 +269,18 @@ public class BOrderDetailsController extends BaseController {
     public ResponseData checkOrderDetails(BOrderDetails bOrderDetails) {
         this.bOrderDetailsService.checkOrderDetails(bOrderDetails);
         return ResponseData.success(0, "审核完成", null);
+    }
+
+    /**
+     * 用户拉黑
+     */
+    @BussinessLog(value = "用户拉黑")
+    @ApiOperation(value = "用户拉黑、加入黑名单", notes = "用户拉黑、加入黑名单", httpMethod = "PUT")
+    @Permission
+    @RequestMapping(value = "/addBlackList")
+    @ResponseBody
+    public ResponseData addBlackList(BOrderDetails bOrderDetails) {
+        this.bOrderDetailsService.addBlackList(bOrderDetails);
+        return ResponseData.success(0, "拉黑完成", null);
     }
 }
