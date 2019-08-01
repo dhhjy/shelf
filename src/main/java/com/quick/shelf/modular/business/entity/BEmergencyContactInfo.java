@@ -85,13 +85,13 @@ public class BEmergencyContactInfo implements Serializable {
     private String socialPhone;
 
     /**
-     * 第三联系人手机号
+     * 创建时间
      */
     @TableField("create_time")
     private Date createTime;
 
     /**
-     * 第三联系人手机号
+     * 更新时间
      */
     @TableField("update_time")
     private Date updateTime;
