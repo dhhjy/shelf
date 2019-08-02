@@ -242,6 +242,25 @@ public class BOrderDetailsController extends BaseController {
         return list(name, timeLimit, deptId, TO_LOAN_ORDER_STATUS);
     }
 
+    /**
+     * 待还款订单列表
+     */
+    @ApiOperation(value = "待还款订单列表", notes = "待还款订单列表", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "查询参数:姓名/账户/手机号", name = "name", dataType = "String"),
+            @ApiImplicitParam(value = "时间查询", name = "timeLimit", dataType = "String"),
+            @ApiImplicitParam(value = "部门主键", name = "deptId", dataType = "Long")
+    })
+    @Permission
+    @RequestMapping(value = "/rePaymentList")
+    @ResponseBody
+    public Object rePaymentList(@RequestParam(required = false) String name,
+                             @RequestParam(required = false) String timeLimit,
+                             @RequestParam(required = false) Long deptId) {
+        logger.info("查询待还款订单列表");
+        return list(name, timeLimit, deptId, REPAYMENT_ORDER_STATUS);
+    }
+
     private Object list(String name, String timeLimit, Long deptId, Integer Status) {
         //拼接查询条件
         String beginTime = "";
