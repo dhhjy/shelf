@@ -1,6 +1,7 @@
 package com.quick.shelf.modular.business.service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.quick.shelf.core.util.DateUtil;
 import com.quick.shelf.modular.business.entity.BOrderAnalyzing;
 import com.quick.shelf.modular.business.mapper.BOrderAnalyzingMapper;
 import net.sf.json.JSONArray;
@@ -25,16 +26,24 @@ public class BOrderAnalyzingService extends ServiceImpl<BOrderAnalyzingMapper, B
     }
 
     /**
-     * 获取当天的下款率
+     * 查询今日订单总数量
      */
-    public Float selectLendingRate(Long deptId) {
-        return this.baseMapper.selectLendingRate(deptId);
+    public Integer selectToDayBlanketOrder(Long deptId) {
+        return this.baseMapper.selectToDayBlanketOrder(deptId);
+    }
+
+    /**
+     * 查询今日下款订单数总数量
+     */
+    public Integer selectToDayLoanOrder(Long deptId) {
+        return this.baseMapper.selectToDayLoanOrder(deptId);
     }
 
     /**
      * 新增订单分析
      */
     public void insert(BOrderAnalyzing bOrderAnalyzing) {
+        bOrderAnalyzing.setCreateDate(DateUtil.getCurrentDate());
         this.baseMapper.insert(bOrderAnalyzing);
     }
 

@@ -103,9 +103,7 @@ public class BOrderDetailsService extends ServiceImpl<BOrderDetailsMapper, BOrde
 
         // 当为放款操作时，记录放款
         if (bOrderDetails.getStatus().equals(BOrderDetailsService.LOAN_STATUS)) {
-            new Thread(() -> {
-                analyze(bOrderDetails);
-            }).start();
+            new Thread(() -> analyze(bOrderDetails)).start();
         }
     }
 
@@ -117,6 +115,12 @@ public class BOrderDetailsService extends ServiceImpl<BOrderDetailsMapper, BOrde
          * 为空则该部门今天没有进行过分析，
          * 反之有进行过分析
          */
+        // 今日总订单数
+        Integer blanketOrder = this.bOrderAnalyzingService.selectToDayBlanketOrder(deptId);
+        // 今日下款订单数
+        Integer loanOrder = this.bOrderAnalyzingService.selectToDayLoanOrder(deptId);
+        // 下款率
+        float loanRatio = (float) (loanOrder / blanketOrder * 100);
         if (null == bOrderAnalyzing) {
             bOrderAnalyzing = new BOrderAnalyzing();
             bOrderAnalyzing.setDeptId(deptId);
@@ -124,17 +128,24 @@ public class BOrderDetailsService extends ServiceImpl<BOrderDetailsMapper, BOrde
             bOrderAnalyzing.setContractAmount(bOrderDetails.getAmount());
             // 实际下款金额
             bOrderAnalyzing.setLoanAmount(bOrderDetails.getActualAmount());
-            bOrderAnalyzing.setCreateDate(DateUtil.getCurrentDate());
+            // 设置今日总共多少笔订单
+            bOrderAnalyzing.setBlanketOrder(blanketOrder);
+            // 设置今日下款订单总数
+            bOrderAnalyzing.setLoanOrder(loanOrder);
             // 设置放款率
-            bOrderAnalyzing.setLoanRatio(new BigDecimal("100"));
+            bOrderAnalyzing.setLoanRatio(new BigDecimal(Float.toString(loanRatio)));
             this.bOrderAnalyzingService.insert(bOrderAnalyzing);
         } else {
             // 合同金额 累加
             bOrderAnalyzing.setContractAmount(bOrderAnalyzing.getContractAmount().add(bOrderDetails.getAmount()));
-            // 实际下款金额
+            // 实际下款金额 累加
             bOrderAnalyzing.setLoanAmount(bOrderAnalyzing.getLoanAmount().add(bOrderDetails.getActualAmount()));
+            // 设置今日总共多少笔订单
+            bOrderAnalyzing.setBlanketOrder(blanketOrder);
+            // 设置今日下款订单总数
+            bOrderAnalyzing.setLoanOrder(loanOrder);
             // 设置放款率
-            bOrderAnalyzing.setLoanRatio(new BigDecimal(this.bOrderAnalyzingService.selectLendingRate(deptId)));
+            bOrderAnalyzing.setLoanRatio(new BigDecimal(Float.toString(loanRatio)));
             this.bOrderAnalyzingService.update(bOrderAnalyzing);
         }
     }

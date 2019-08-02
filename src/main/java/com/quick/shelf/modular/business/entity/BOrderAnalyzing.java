@@ -48,6 +48,18 @@ public class BOrderAnalyzing implements Serializable {
     private BigDecimal loanAmount;
 
     /**
+     * 总订单数
+     */
+    @TableField("blanket_order")
+    private Integer blanketOrder;
+
+    /**
+     * 放款订单数
+     */
+    @TableField("loan_order")
+    private Integer loanOrder;
+
+    /**
      * 放款率
      */
     @TableField("loan_ratio")

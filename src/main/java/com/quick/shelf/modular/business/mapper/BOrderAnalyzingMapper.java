@@ -15,9 +15,14 @@ public interface BOrderAnalyzingMapper extends BaseMapper<BOrderAnalyzing> {
     BOrderAnalyzing selectBOrderAnalyzingByNowDate(@Param("deptId") Long deptId);
 
     /**
-     * 查询今天的放款率
+     * 查询今日下款订单总数量
      */
-    Float selectLendingRate(@Param("deptId") Long deptId);
+    Integer selectToDayLoanOrder(@Param("deptId") Long deptId);
+
+    /**
+     * 查询今日订单总数量
+     */
+    Integer selectToDayBlanketOrder(@Param("deptId") Long deptId);
 
     /**
      * 查询每日门店top榜单数据

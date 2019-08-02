@@ -6,7 +6,10 @@
     <resultMap id="BaseResultMap" type="com.quick.shelf.modular.business.entity.BOrderAnalyzing">
         <id column="id" property="id"/>
         <result column="dept_id" property="deptId"/>
+        <result column="contract_amount" property="contractAmount"/>
         <result column="loan_amount" property="loanAmount"/>
+        <result column="blanket_order" property="blanketOrder"/>
+        <result column="loan_order" property="loanOrder"/>
         <result column="loan_ratio" property="loanRatio"/>
         <result column="create_date" property="createDate"/>
     </resultMap>
@@ -17,6 +20,8 @@
         dept_id AS "deptId",
         contract_amount AS "contractAmount",
         loan_amount AS "loanAmount",
+        blanket_order AS "blanketOrder",
+        loan_order AS "loanOrder",
         loan_ratio AS "loanRatio",
         create_date AS "createDate"
     </sql>
@@ -29,23 +34,18 @@
                 AND TO_DAYS(create_date) = TO_DAYS(NOW())
     </select>
 
-    <!-- 获取今天的下款率 -->
-    <select id="selectLendingRate" resultType="java.lang.Float">
-        SELECT
-            (
-                SELECT COUNT(id)
-                    FROM b_order_details
-                        WHERE TO_DAYS(draw_time) = TO_DAYS(NOW())
-                            AND dept_id = #{deptId}
-            )
-             /
-            (
-                SELECT COUNT(id)
-                    FROM b_order_details
-                        WHERE TO_DAYS(create_time) = TO_DAYS(NOW())
-                            AND dept_id = #{deptId}
-            ) * 100
-                AS loanRatio
+    <select id="selectToDayLoanOrder" resultType="java.lang.Integer">
+        SELECT COUNT(ID)
+            FROM B_ORDER_DETAILS
+                WHERE TO_DAYS(DRAW_TIME) = TO_DAYS(NOW())
+                    AND DEPT_ID = #{deptId}
+    </select>
+
+    <select id="selectToDayBlanketOrder" resultType="java.lang.Integer">
+        SELECT COUNT(ID)
+            FROM B_ORDER_DETAILS
+                WHERE TO_DAYS(CREATE_TIME) = TO_DAYS(NOW())
+                    AND DEPT_ID = #{deptId}
     </select>
 
     <!-- 每日分公司放款排名 -->
@@ -56,6 +56,8 @@
         sd.simple_name AS "simpleName",
         boa.contract_amount AS "contractAmount",
         boa.loan_amount AS "loanAmount",
+        boa.blanket_order AS "blanketOrder",
+        boa.loan_order AS "loanOrder",
         boa.loan_ratio AS "loanRatio",
         boa.create_date AS "createDate"
         FROM
@@ -81,6 +83,16 @@
     m1.loan_amount
   ) AS m1_loan_amount,
   IF(
+    AVG(m1.blanket_order) IS NULL,
+    0,
+    m1.blanket_order
+  ) AS m1_blanket_order,
+  IF(
+    AVG(m1.loan_order) IS NULL,
+    0,
+    m1.loan_order
+  ) AS m1_loan_order,
+  IF(
     AVG(m2.contract_amount) IS NULL,
     0,
     m2.contract_amount
@@ -90,6 +102,16 @@
     0,
     m2.loan_amount
   ) AS m2_loan_amount,
+  IF(
+    AVG(m2.blanket_order) IS NULL,
+    0,
+    m2.blanket_order
+  ) AS m2_blanket_order,
+  IF(
+    AVG(m2.loan_order) IS NULL,
+    0,
+    m2.loan_order
+  ) AS m2_loan_order,
   IF(
     AVG(m3.contract_amount) IS NULL,
     0,
@@ -101,6 +123,16 @@
     m3.loan_amount
   ) AS m3_loan_amount,
   IF(
+    AVG(m3.blanket_order) IS NULL,
+    0,
+    m3.blanket_order
+  ) AS m3_blanket_order,
+  IF(
+    AVG(m3.loan_order) IS NULL,
+    0,
+    m3.loan_order
+  ) AS m3_loan_order,
+  IF(
     AVG(m4.contract_amount) IS NULL,
     0,
     m4.contract_amount
@@ -110,6 +142,16 @@
     0,
     m4.loan_amount
   ) AS m4_loan_amount,
+  IF(
+    AVG(m4.blanket_order) IS NULL,
+    0,
+    m4.blanket_order
+  ) AS m4_blanket_order,
+  IF(
+    AVG(m4.loan_order) IS NULL,
+    0,
+    m4.loan_order
+  ) AS m4_loan_order,
   IF(
     AVG(m5.contract_amount) IS NULL,
     0,
@@ -121,6 +163,16 @@
     m5.loan_amount
   ) AS m5_loan_amount,
   IF(
+    AVG(m5.blanket_order) IS NULL,
+    0,
+    m5.blanket_order
+  ) AS m5_blanket_order,
+  IF(
+    AVG(m5.loan_order) IS NULL,
+    0,
+    m5.loan_order
+  ) AS m5_loan_order,
+  IF(
     AVG(m6.contract_amount) IS NULL,
     0,
     m6.contract_amount
@@ -130,6 +182,16 @@
     0,
     m6.loan_amount
   ) AS m6_loan_amount,
+  IF(
+    AVG(m6.blanket_order) IS NULL,
+    0,
+    m6.blanket_order
+  ) AS m6_blanket_order,
+  IF(
+    AVG(m6.loan_order) IS NULL,
+    0,
+    m6.loan_order
+  ) AS m6_loan_order,
   IF(
     AVG(m7.contract_amount) IS NULL,
     0,
@@ -141,6 +203,16 @@
     m7.loan_amount
   ) AS m7_loan_amount,
   IF(
+    AVG(m7.blanket_order) IS NULL,
+    0,
+    m7.blanket_order
+  ) AS m7_blanket_order,
+  IF(
+    AVG(m7.loan_order) IS NULL,
+    0,
+    m7.loan_order
+  ) AS m7_loan_order,
+  IF(
     AVG(m8.contract_amount) IS NULL,
     0,
     m8.contract_amount
@@ -150,6 +222,16 @@
     0,
     m8.loan_amount
   ) AS m8_loan_amount,
+  IF(
+    AVG(m8.blanket_order) IS NULL,
+    0,
+    m8.blanket_order
+  ) AS m8_blanket_order,
+  IF(
+    AVG(m8.loan_order) IS NULL,
+    0,
+    m8.loan_order
+  ) AS m8_loan_order,
   IF(
     AVG(m9.contract_amount) IS NULL,
     0,
@@ -161,6 +243,17 @@
     m9.loan_amount
   ) AS m9_loan_amount,
   IF(
+    AVG(m9.blanket_order) IS NULL,
+    0,
+    m9.blanket_order
+  ) AS m9_blanket_order,
+  IF(
+    AVG(m9.loan_order) IS NULL,
+    0,
+    m9.loan_order
+  ) AS m9_loan_order,
+
+  IF(
     AVG(m10.contract_amount) IS NULL,
     0,
     m10.contract_amount
@@ -170,6 +263,17 @@
     0,
     m10.loan_amount
   ) AS m10_loan_amount,
+  IF(
+    AVG(m10.blanket_order) IS NULL,
+    0,
+    m10.blanket_order
+  ) AS m10_blanket_order,
+  IF(
+    AVG(m10.loan_order) IS NULL,
+    0,
+    m10.loan_order
+  ) AS m10_loan_order,
+
   IF(
     AVG(m11.contract_amount) IS NULL,
     0,
@@ -181,6 +285,17 @@
     m11.loan_amount
   ) AS m11_loan_amount,
   IF(
+    AVG(m11.blanket_order) IS NULL,
+    0,
+    m11.blanket_order
+  ) AS m11_blanket_order,
+  IF(
+    AVG(m11.loan_order) IS NULL,
+    0,
+    m11.loan_order
+  ) AS m11_loan_order,
+
+  IF(
     AVG(m12.contract_amount) IS NULL,
     0,
     m12.contract_amount
@@ -189,78 +304,112 @@
     AVG(m12.loan_amount) IS NULL,
     0,
     m12.loan_amount
-  ) AS m12_loan_amount
+  ) AS m12_loan_amount,
+  IF(
+    AVG(m12.blanket_order) IS NULL,
+    0,
+    m12.blanket_order
+  ) AS m12_blanket_order,
+  IF(
+    AVG(m12.loan_order) IS NULL,
+    0,
+    m12.loan_order
+  ) AS m12_loan_order
 FROM
   (SELECT
     SUM(contract_amount) AS contract_amount,
-    SUM(loan_amount) AS loan_amount
+    SUM(loan_amount) AS loan_amount,
+    SUM(blanket_order) AS blanket_order,
+    SUM(loan_order) AS loan_order
   FROM
     b_order_analyzing
   WHERE DATE_FORMAT(create_date, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-01')
   ) m1,
   (SELECT
     SUM(contract_amount) AS contract_amount,
-    SUM(loan_amount) AS loan_amount
+    SUM(loan_amount) AS loan_amount,
+    SUM(blanket_order) AS blanket_order,
+    SUM(loan_order) AS loan_order
   FROM
     b_order_analyzing
   WHERE DATE_FORMAT(create_date, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-02')) m2,
   (SELECT
     SUM(contract_amount) AS contract_amount,
-    SUM(loan_amount) AS loan_amount
+    SUM(loan_amount) AS loan_amount,
+    SUM(blanket_order) AS blanket_order,
+    SUM(loan_order) AS loan_order
   FROM
     b_order_analyzing
   WHERE DATE_FORMAT(create_date, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-03')) m3,
   (SELECT
     SUM(contract_amount) AS contract_amount,
-    SUM(loan_amount) AS loan_amount
+    SUM(loan_amount) AS loan_amount,
+    SUM(blanket_order) AS blanket_order,
+    SUM(loan_order) AS loan_order
   FROM
     b_order_analyzing
   WHERE DATE_FORMAT(create_date, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-04')) m4,
   (SELECT
     SUM(contract_amount) AS contract_amount,
-    SUM(loan_amount) AS loan_amount
+    SUM(loan_amount) AS loan_amount,
+    SUM(blanket_order) AS blanket_order,
+    SUM(loan_order) AS loan_order
   FROM
     b_order_analyzing
   WHERE DATE_FORMAT(create_date, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-05')) m5,
   (SELECT
     SUM(contract_amount) AS contract_amount,
-    SUM(loan_amount) AS loan_amount
+    SUM(loan_amount) AS loan_amount,
+    SUM(blanket_order) AS blanket_order,
+    SUM(loan_order) AS loan_order
   FROM
     b_order_analyzing
   WHERE DATE_FORMAT(create_date, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-06')) m6,
   (SELECT
     SUM(contract_amount) AS contract_amount,
-    SUM(loan_amount) AS loan_amount
+    SUM(loan_amount) AS loan_amount,
+    SUM(blanket_order) AS blanket_order,
+    SUM(loan_order) AS loan_order
   FROM
     b_order_analyzing
   WHERE DATE_FORMAT(create_date, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-07')) m7,
   (SELECT
     SUM(contract_amount) AS contract_amount,
-    SUM(loan_amount) AS loan_amount
+    SUM(loan_amount) AS loan_amount,
+    SUM(blanket_order) AS blanket_order,
+    SUM(loan_order) AS loan_order
   FROM
     b_order_analyzing
   WHERE DATE_FORMAT(create_date, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-08')) m8,
   (SELECT
     SUM(contract_amount) AS contract_amount,
-    SUM(loan_amount) AS loan_amount
+    SUM(loan_amount) AS loan_amount,
+    SUM(blanket_order) AS blanket_order,
+    SUM(loan_order) AS loan_order
   FROM
     b_order_analyzing
   WHERE DATE_FORMAT(create_date, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-09')) m9,
   (SELECT
     SUM(contract_amount) AS contract_amount,
-    SUM(loan_amount) AS loan_amount
+    SUM(loan_amount) AS loan_amount,
+    SUM(blanket_order) AS blanket_order,
+    SUM(loan_order) AS loan_order
   FROM
     b_order_analyzing
   WHERE DATE_FORMAT(create_date, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-10')) m10,
   (SELECT
     SUM(contract_amount) AS contract_amount,
-    SUM(loan_amount) AS loan_amount
+    SUM(loan_amount) AS loan_amount,
+    SUM(blanket_order) AS blanket_order,
+    SUM(loan_order) AS loan_order
   FROM
     b_order_analyzing
   WHERE DATE_FORMAT(create_date, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-11')) m11,
   (SELECT
     SUM(contract_amount) AS contract_amount,
-    SUM(loan_amount) AS loan_amount
+    SUM(loan_amount) AS loan_amount,
+    SUM(blanket_order) AS blanket_order,
+    SUM(loan_order) AS loan_order
   FROM
     b_order_analyzing
   WHERE DATE_FORMAT(create_date, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-12')) m12
