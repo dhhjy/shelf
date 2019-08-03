@@ -1,9 +1,10 @@
-@layout("/common/_container.html",{js:["/assets/modular/system/dictType/dictType.js"]}){
+@layout("/common/_container.html",{js:["/assets/modular/business/stagingList/stagingList.js"]}){
 
 <div class="layui-body-header">
     <span class="layui-body-header-title">分期账单</span>
 </div>
-
+<input type="hidden" id="userId" value="${userId}">
+<input type="hidden" id="orderNumber" value="${orderNumber}">
 <div class="layui-fluid">
     <div class="layui-row layui-col-space15">
         <div class="layui-col-sm12 layui-col-md12 layui-col-lg12">
@@ -17,12 +18,13 @@
                             <div class="layui-inline">
                                 <select id="status">
                                     <option value="">全部</option>
-                                    <option value="ENABLE">正常</option>
-                                    <option value="DISABLE">逾期</option>
+                                    <option value="1">正常</option>
+                                    <option value="2">逾期</option>
                                 </select>
                             </div>
                             <div class="layui-inline">
                                 <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                                <button id="btnBack" class="layui-btn icon-btn layui-btn-warm"><i class="layui-icon">&#x1006;</i>关闭</button>
                             </div>
                         </div>
                     </div>
@@ -34,6 +36,16 @@
 </div>
 
 <script type="text/html" id="tableBar">
+    @if(shiro.hasPermission("/stagingList/repayment")){
+    <a title="还款" lay-event="repayment" class="layui-btn icon-btn layui-btn-xs">
+        还款
+    </a>
+    @}
 
+    @if(shiro.hasPermission("/stagingList/overdue")){
+    <a title="逾期" lay-event="overdue" class="layui-btn icon-btn layui-btn-xs layui-btn-danger">
+        逾期
+    </a>
+    @}
 </script>
 @}

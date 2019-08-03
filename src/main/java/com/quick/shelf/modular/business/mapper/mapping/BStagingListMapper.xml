@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.quick.shelf.modular.business.mapper.BStagingListMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.quick.shelf.modular.business.entity.BStagingList">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="dept_id" property="deptId"/>
+        <result column="p_order_number" property="pOrderNumber"/>
+        <result column="every_day_refund" property="everyDayRefund"/>
+        <result column="count_refund" property="countRefund"/>
+        <result column="surplus_refund" property="surplusRefund"/>
+        <result column="status" property="status"/>
+        <result column="predict_repayment_time" property="predictRepaymentTime"/>
+        <result column="repayment_time" property="repaymentTime"/>
+        <result column="payee" property="payee"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id AS "id",
+        user_id AS "userId",
+        dept_id AS "deptId",
+        p_order_number AS "pOrderNumber",
+        every_day_refund AS everyDayRefund,
+        count_refund AS countRefund,
+        surplus_refund AS surplusRefund,
+        status AS "status",
+        predict_repayment_time AS "predictRepaymentTime",
+        repayment_time AS "repaymentTime",
+        payee AS "payee"
+    </sql>
+
+    <select id="selectBStagingListByUserId" resultType="map">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM B_STAGING_LIST
+        WHERE USER_ID = #{userId}
+        AND P_ORDER_NUMBER = #{orderNumber}
+        <if test="status != null">
+            AND (STATUS = #{status} )
+        </if>
+        <if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+            AND (predict_repayment_time BETWEEN CONCAT(#{beginTime},' 00:00:00') AND CONCAT(#{endTime},' 23:59:59'))
+        </if>
+        ORDER BY predict_repayment_time ASC
+    </select>
+
+    <update id="updateSurplusRefundByOrderNumber">
+        UPDATE B_STAGING_LIST
+            SET surplus_refund = #{surplusRefund}
+            WHERE p_order_number = #{pOrderNumber}
+                AND status != 1
+    </update>
+</mapper>

@@ -7,11 +7,10 @@ import com.quick.shelf.core.common.page.LayuiPageFactory;
 import com.quick.shelf.core.shiro.ShiroKit;
 import com.quick.shelf.core.shiro.ShiroUser;
 import com.quick.shelf.core.util.DateUtil;
-import com.quick.shelf.modular.business.entity.BBlackList;
-import com.quick.shelf.modular.business.entity.BOrderAnalyzing;
-import com.quick.shelf.modular.business.entity.BOrderDetails;
-import com.quick.shelf.modular.business.entity.BSysUser;
+import com.quick.shelf.core.util.GenerateOrderNoUtil;
+import com.quick.shelf.modular.business.entity.*;
 import com.quick.shelf.modular.business.mapper.BOrderDetailsMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -37,6 +36,9 @@ public class BOrderDetailsService extends ServiceImpl<BOrderDetailsMapper, BOrde
     @Resource
     private BOrderAnalyzingService bOrderAnalyzingService;
 
+    @Resource
+    private BStagingListService bStagingListService;
+
     /**
      * 客户端用户申请借款
      *
@@ -48,6 +50,7 @@ public class BOrderDetailsService extends ServiceImpl<BOrderDetailsMapper, BOrde
         bOrderDetails.setUserId(user.getId().intValue());
         bOrderDetails.setDeptId(user.getDeptId());
         bOrderDetails.setStatus(0);
+        bOrderDetails.setOrderNumber(GenerateOrderNoUtil.gens(user.getId()));
         bOrderDetails.setCreateTime(DateUtil.getCurrentDate());
         this.baseMapper.insert(bOrderDetails);
         return bOrderDetails;
@@ -100,17 +103,51 @@ public class BOrderDetailsService extends ServiceImpl<BOrderDetailsMapper, BOrde
         if (null != bOrderDetails.getDrawUserId() && null != bOrderDetails.getDrawMessage())
             bOrderDetails.setDrawTime(DateUtil.getCurrentDate());
         this.baseMapper.updateById(bOrderDetails);
+        //查询更新后的对象
+        bOrderDetails = this.baseMapper.selectById(bOrderDetails.getId());
 
-        // 当为放款操作时，记录放款
+        // 当为放款操作时，记录放款，并且异步生成还款账单
         if (bOrderDetails.getStatus().equals(BOrderDetailsService.LOAN_STATUS)) {
-            new Thread(() -> analyze(bOrderDetails)).start();
+            // 记录放款
+            BOrderDetails finalBOrderDetails = bOrderDetails;
+            new Thread(() -> analyze(finalBOrderDetails)).start();
+            // 还款账单
+            new Thread(() -> createStaging(finalBOrderDetails)).start();
         }
     }
 
+    /**
+     * 创建还款账单
+     *
+     * @param bOrderDetails
+     */
+    private void createStaging(BOrderDetails bOrderDetails) {
+        BStagingList bStagingList = new BStagingList();
+        BeanUtils.copyProperties(bOrderDetails, bStagingList, "id", "status");
+        for (int x = 0; x < bOrderDetails.getDebtDuration(); x++) {
+            bStagingList.setStatus(0);
+            if (x == 0)
+                bStagingList.setPredictRepaymentTime(DateUtil.getCurrentDate());
+            else
+                bStagingList.setPredictRepaymentTime(DateUtil.afterDate(DateUtil.getCurrentDate(), x));
+            // 订单号
+            bStagingList.setPOrderNumber(bOrderDetails.getOrderNumber());
+            //剩余应还
+            bStagingList.setSurplusRefund(bOrderDetails.getCountRefund());
+            // 插入账单记录
+            this.bStagingListService.insert(bStagingList);
+        }
+    }
+
+    /**
+     * 记录放款到放款分析表
+     *
+     * @param bOrderDetails
+     */
     private void analyze(BOrderDetails bOrderDetails) {
-        Long deptId = ShiroKit.getUserNotNull().getDeptId();
-        BOrderAnalyzing bOrderAnalyzing = this.bOrderAnalyzingService.selectBOrderAnalyzingByNowDate(deptId);
         bOrderDetails = this.baseMapper.selectById(bOrderDetails.getId());
+        Long deptId = bOrderDetails.getDeptId();
+        BOrderAnalyzing bOrderAnalyzing = this.bOrderAnalyzingService.selectBOrderAnalyzingByNowDate(deptId);
         /**
          * 为空则该部门今天没有进行过分析，
          * 反之有进行过分析

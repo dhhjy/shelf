@@ -8,6 +8,7 @@
         <result column="user_id" property="userId"/>
         <result column="dept_id" property="deptId"/>
         <result column="product_code" property="productCode"/>
+        <result column="order_number" property="orderNumber"/>
         <result column="mode_of_repayment" property="modeOfRepayment"/>
         <result column="amount" property="amount"/>
         <result column="debt_duration" property="debtDuration"/>
@@ -34,6 +35,7 @@
         user_id AS "userId",
         dept_id AS "deptId",
         product_code AS "productCode",
+        order_number AS "orderNumber",
         mode_of_repayment AS modeOfRepayment,
         amount AS amount,
         debt_duration AS debtDuration,
@@ -58,7 +60,7 @@
         select
         <include refid="Base_Column_List"/>
         from b_order_details where user_id = #{userId}
-        AND status IN (0,1,2,3,4,5)
+        AND status IN (0,1,2,3,5)
         limit 0,1
     </select>
 
@@ -68,6 +70,7 @@
         bod.user_id AS "userId",
         bod.dept_id AS "deptId",
         bod.product_code AS "productCode",
+        bod.order_number AS "orderNumber",
         bod.mode_of_repayment AS modeOfRepayment,
         bod.amount AS amount,
         bod.debt_duration AS debtDuration,
@@ -105,7 +108,7 @@
         SELECT
         <include refid="Base_Column_List"/>
             FROM B_ORDER_DETAILS
-                WHERE STATUS <![CDATA[ < ]]> 2
+                WHERE USER_ID = #{userId}
         ORDER BY CREATE_TIME DESC
         LIMIT 0,1
     </select>

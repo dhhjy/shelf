@@ -7,7 +7,7 @@ import java.util.Date;
  * 生成订单号 工具类
  */
 public class GenerateOrderNoUtil {
-    private static final String PRE = "XW";
+    private static final String PRE = "";
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 

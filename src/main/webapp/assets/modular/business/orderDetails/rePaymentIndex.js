@@ -25,7 +25,8 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
     rePaymentList.initColumn = function () {
         return [[
             {type: 'checkbox'},
-            {field: 'userId', title: '用户id'},
+            {field: 'userId', hide: true, title: '用户id'},
+            {field: 'orderNumber', title: '订单号', width: 200},
             {field: 'name', title: '姓名'},
             {field: 'productCodeName', title: '产品名称', minWidth: 150},
             {field: 'modeOfRepaymentName', title: '还款方式', minWidth: 150},
@@ -77,7 +78,7 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
      * 打开人工审核页面
      */
     rePaymentList.openStagingListDlg = function (data) {
-        window.location = Feng.ctxPath + "/stagingList/index/" + data.userId;
+        window.location = Feng.ctxPath + "/stagingList/index/" + data.userId + "/" + data.orderNumber;
     };
 
     // 渲染表格

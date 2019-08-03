@@ -45,6 +45,12 @@ public class BOrderDetails implements Serializable {
     private Integer productCode;
 
     /**
+     * 订单号
+     */
+    @TableField("order_number")
+    private String orderNumber;
+
+    /**
      * 还款方式
      */
     @TableField("mode_of_repayment")
