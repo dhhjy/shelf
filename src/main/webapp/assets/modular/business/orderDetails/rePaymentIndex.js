@@ -1,11 +1,9 @@
 layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], function () {
     var layer = layui.layer;
-    var form = layui.form;
     var table = layui.table;
     var $ZTree = layui.ztree;
     var $ax = layui.ax;
     var laydate = layui.laydate;
-    var admin = layui.admin;
 
     /**
      * 订单管理——待还款列表
@@ -75,10 +73,37 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
     };
 
     /**
-     * 打开人工审核页面
+     * 打开分期账单窗口
      */
     rePaymentList.openStagingListDlg = function (data) {
-        window.location = Feng.ctxPath + "/stagingList/index/" + data.userId + "/" + data.orderNumber;
+        window.location = Feng.ctxPath + "/stagingList/index/" + data.userId + "/" + data.orderNumber + "/" + "rePaymentIndex";
+    };
+
+    /**
+     * 提前还款功能
+     */
+    rePaymentList.onPrePaymentFun = function (data) {
+        var operation = function () {
+            var ajax = new $ax(Feng.ctxPath + "/stagingList/adjRepayment", function (data) {
+                Feng.info(data.message);
+                layer.closeAll();
+                tableResult.reload();
+            }, function (data) {
+                Feng.error("还款失败！" + data.responseJSON.message)
+            });
+            ajax.set({"orderNumber": data.orderNumber});
+            ajax.start();
+        };
+
+        layui.admin.open({
+            type: 1,
+            title: "提前还款",
+            btn: ['确定', '取消'],
+            content: '<div style="padding: 50px; line-height: 22px; background-color: #f2f2f2; color: #000000;">确定当前用户提前还款吗？</div>',
+            yes: function () {
+                operation();
+            }
+        });
     };
 
     // 渲染表格
@@ -124,7 +149,7 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
             rePaymentList.openStagingListDlg(data);
         } else {
             // 提前还款
-            rePaymentList.onManualCheckIndex(data);
+            rePaymentList.onPrePaymentFun(data);
         }
     });
 });

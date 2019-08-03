@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,6 +48,20 @@ public class BStagingListService extends ServiceImpl<BStagingListMapper, BStagin
     public Page<Map<String, Object>> selectBStagingListByUserId(DataScope dataScope, String beginTime, String endTime, Integer userId, String orderNumber, Integer status) {
         Page page = LayuiPageFactory.defaultPage();
         return this.baseMapper.selectBStagingListByUserId(page, dataScope, beginTime, endTime, userId, orderNumber, status);
+    }
+
+    public List<BStagingList> selectBStagingListByPOrderNumber(String orderNumber) {
+        return this.baseMapper.selectBStagingListByPOrderNumber(orderNumber);
+    }
+
+    /**
+     * 提前还款
+     */
+    public void adjRepayment(String orderNumber) {
+        List<BStagingList> bStagingLists = selectBStagingListByPOrderNumber(orderNumber);
+        for (BStagingList bsl : bStagingLists) {
+            repayment(bsl.getId());
+        }
     }
 
     /**

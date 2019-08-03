@@ -62,6 +62,7 @@ public class BOrderDetailsController extends BaseController {
     /**
      * 完结订单状态
      */
+    private static final Integer ORDER_END_STATUS = 4;
 
     /**
      * 延期订单状态
@@ -140,6 +141,16 @@ public class BOrderDetailsController extends BaseController {
     @RequestMapping(value = "/rePaymentIndex")
     public String repaymentIndex() {
         return PREFIX + "rePaymentIndex.html";
+    }
+
+    /**
+     * 已完结订单主页跳转
+     */
+    @ApiOperation(value = "已完结订单主页跳转", notes = "已完结订单主页跳转", httpMethod = "POST")
+    @Permission
+    @RequestMapping(value = "/orderEndIndex")
+    public String orderEndIndex() {
+        return PREFIX + "orderEndIndex.html";
     }
 
     /**
@@ -228,7 +239,7 @@ public class BOrderDetailsController extends BaseController {
      */
     @ApiOperation(value = "待放款订单列表", notes = "待放款订单列表", httpMethod = "POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "查询参数:姓名/账户/手机号", name = "name", dataType = "String"),
+            @ApiImplicitParam(value = "查询参数:姓名", name = "name", dataType = "String"),
             @ApiImplicitParam(value = "时间查询", name = "timeLimit", dataType = "String"),
             @ApiImplicitParam(value = "部门主键", name = "deptId", dataType = "Long")
     })
@@ -247,7 +258,7 @@ public class BOrderDetailsController extends BaseController {
      */
     @ApiOperation(value = "待还款订单列表", notes = "待还款订单列表", httpMethod = "POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "查询参数:姓名/账户/手机号", name = "name", dataType = "String"),
+            @ApiImplicitParam(value = "查询参数:姓名", name = "name", dataType = "String"),
             @ApiImplicitParam(value = "时间查询", name = "timeLimit", dataType = "String"),
             @ApiImplicitParam(value = "部门主键", name = "deptId", dataType = "Long")
     })
@@ -255,10 +266,29 @@ public class BOrderDetailsController extends BaseController {
     @RequestMapping(value = "/rePaymentList")
     @ResponseBody
     public Object rePaymentList(@RequestParam(required = false) String name,
-                             @RequestParam(required = false) String timeLimit,
-                             @RequestParam(required = false) Long deptId) {
+                                @RequestParam(required = false) String timeLimit,
+                                @RequestParam(required = false) Long deptId) {
         logger.info("查询待还款订单列表");
         return list(name, timeLimit, deptId, REPAYMENT_ORDER_STATUS);
+    }
+
+    /**
+     * 已完结订单列表
+     */
+    @ApiOperation(value = "已完结订单列表", notes = "已完结订单列表", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "查询参数:姓名", name = "name", dataType = "String"),
+            @ApiImplicitParam(value = "时间查询", name = "timeLimit", dataType = "String"),
+            @ApiImplicitParam(value = "部门主键", name = "deptId", dataType = "Long")
+    })
+    @Permission
+    @RequestMapping(value = "/orderEndList")
+    @ResponseBody
+    public Object orderEndList(@RequestParam(required = false) String name,
+                               @RequestParam(required = false) String timeLimit,
+                               @RequestParam(required = false) Long deptId) {
+        logger.info("查询已完结订单列表");
+        return list(name, timeLimit, deptId, ORDER_END_STATUS);
     }
 
     private Object list(String name, String timeLimit, Long deptId, Integer Status) {

@@ -68,6 +68,18 @@ layui.use(['layer', 'table', 'ax', 'admin', 'laydate'], function () {
     };
 
     /**
+     * 导出excel按钮
+     */
+    stagingList.exportExcel = function () {
+        var checkRows = table.checkStatus(stagingList.tableId);
+        if (checkRows.data.length === 0) {
+            Feng.error("请选择要导出的数据");
+        } else {
+            table.exportFile(tableResult.config.id, checkRows.data, 'xls');
+        }
+    };
+
+    /**
      * 还款
      * @param data
      */
@@ -154,9 +166,14 @@ layui.use(['layer', 'table', 'ax', 'admin', 'laydate'], function () {
         stagingList.search();
     });
 
+    // 导出excel
+    $('#btnExp').click(function () {
+        stagingList.exportExcel();
+    });
+
     // 关闭页面
     $('#btnBack').click(function () {
-        window.location.href = Feng.ctxPath + "/orderDetails/rePaymentIndex";
+        window.location.href = Feng.ctxPath + "/orderDetails/" + $("#target").val();
     });
 
 

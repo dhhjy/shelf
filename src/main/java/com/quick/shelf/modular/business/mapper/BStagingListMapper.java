@@ -7,6 +7,7 @@ import com.quick.shelf.modular.business.entity.BStagingList;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 public interface BStagingListMapper extends BaseMapper<BStagingList> {
@@ -25,4 +26,9 @@ public interface BStagingListMapper extends BaseMapper<BStagingList> {
      * 批量更新还款计划中的剩余应还金额
      */
     void updateSurplusRefundByOrderNumber(@Param("pOrderNumber") String pOrderNumber, @Param("surplusRefund") BigDecimal surplusRefund);
+
+    /**
+     * 根据订单号查询所有的关联订单信息
+     */
+    List<BStagingList> selectBStagingListByPOrderNumber(@Param("orderNumber") String orderNumber);
 }

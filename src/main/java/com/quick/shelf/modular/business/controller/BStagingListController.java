@@ -50,10 +50,11 @@ public class BStagingListController {
     @ApiOperation(value = "分期账单主页跳转", notes = "分期账单主页跳转", httpMethod = "POST")
     @ApiImplicitParam(value = "用户主键", name = "userId", required = true, dataType = "Integer")
     @Permission
-    @RequestMapping(value = "/index/{userId}/{orderNumber}")
-    public String index(@PathVariable("userId") Integer userId, @PathVariable("orderNumber") String orderNumber, Model model) {
+    @RequestMapping(value = "/index/{userId}/{orderNumber}/{target}")
+    public String index(@PathVariable("userId") Integer userId, @PathVariable("orderNumber") String orderNumber, @PathVariable("target") String target, Model model) {
         model.addAttribute("userId", userId);
         model.addAttribute("orderNumber", orderNumber);
+        model.addAttribute("target", target);
         return PREFIX + "stagingListIndex.html";
     }
 
@@ -88,6 +89,21 @@ public class BStagingListController {
 
         Page<Map<String, Object>> orderDetails = bStagingListService.selectBStagingListByUserId(null, beginTime, endTime, userId, orderNumber, status);
         return LayuiPageFactory.createPageInfo(orderDetails);
+    }
+
+    /**
+     * 提前还款
+     */
+    @ApiOperation(value = "提前还款", notes = "提前还款", httpMethod = "POST")
+    @ApiImplicitParam(value = "借款订单号", name = "orderNumber", required = true, dataType = "String")
+    @BussinessLog(value = "提前还款")
+    @Permission
+    @RequestMapping(value = "/adjRepayment")
+    @ResponseBody
+    public ResponseData adjRepayment(String orderNumber) {
+        // 异步操作还款
+        new Thread(() -> this.bStagingListService.adjRepayment(orderNumber)).start();
+        return ResponseData.success(0, "还款成功", null);
     }
 
     /**

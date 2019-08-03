@@ -42,7 +42,6 @@ public class BOrderDetailsWrapper extends BaseControllerWrapper {
     public static String getModeOfRepaymentName(String modeOfRepayment) {
         if (null == modeOfRepayment || ("").equals(modeOfRepayment))
             return "未选择还款方式";
-
         if (modeOfRepayment.equals("1"))
             return "每日本息";
         if (modeOfRepayment.equals("2"))
@@ -68,6 +67,10 @@ public class BOrderDetailsWrapper extends BaseControllerWrapper {
             return "待下款";
         if (status.equals("2"))
             return "待还款";
+        if (status.equals("3"))
+            return "逾期";
+        if (status.equals("4"))
+            return "已完结";
         return "";
     }
 

@@ -1,15 +1,13 @@
 layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], function () {
-    var layer = layui.layer;
     var table = layui.table;
     var $ZTree = layui.ztree;
     var laydate = layui.laydate;
-    var admin = layui.admin;
 
     /**
-     * 订单管理——待放款订单
+     * 订单管理——已完结订单列表
      */
-    var loanTable = {
-        tableId: "toLoanListTable",    //表格id
+    var orderEndList = {
+        tableId: "orderEndListTable",    //表格id
         condition: {
             name: "",
             deptId: "",
@@ -20,10 +18,11 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
     /**
      * 初始化表格的列
      */
-    loanTable.initColumn = function () {
+    orderEndList.initColumn = function () {
         return [[
             {type: 'checkbox'},
-            {field: 'userId', title: '用户id'},
+            {field: 'userId', hide: true, title: '用户id'},
+            {field: 'orderNumber', title: '订单号', width: 200},
             {field: 'name', title: '姓名'},
             {field: 'productCodeName', title: '产品名称', minWidth: 150},
             {field: 'modeOfRepaymentName', title: '还款方式', minWidth: 150},
@@ -33,21 +32,6 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
                 }
             },
             {field: 'debtDuration', title: '借款时长(天)'},
-            {
-                field: 'accrual', title: '总利息', templet: function (d) {
-                    return "<span class='tag danger'>" + d.accrual + "</span>"
-                }
-            },
-            {
-                field: 'serviceCharge', title: '服务费', templet: function (d) {
-                    return "<span class='tag danger'>" + d.serviceCharge + "</span>"
-                }
-            },
-            {
-                field: 'actualAmount', title: '实际放款', templet: function (d) {
-                    return "<span class='tag normal'>" + d.actualAmount + "</span>"
-                }
-            },
             {field: 'statusName', title: '当前状态'},
             {field: 'deptName', title: '所属部门'},
             {field: 'createTime', title: '申请时间', minWidth: 200},
@@ -58,27 +42,27 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
     /**
      * 选择部门时
      */
-    loanTable.onClickDept = function (e, treeId, treeNode) {
-        loanTable.condition.deptId = treeNode.id;
-        loanTable.search();
+    orderEndList.onClickDept = function (e, treeId, treeNode) {
+        orderEndList.condition.deptId = treeNode.id;
+        orderEndList.search();
     };
 
     /**
      * 点击查询按钮
      */
-    loanTable.search = function () {
+    orderEndList.search = function () {
         var queryData = {};
-        queryData['deptId'] = loanTable.condition.deptId;
+        queryData['deptId'] = orderEndList.condition.deptId;
         queryData['name'] = $("#name").val();
         queryData['timeLimit'] = $("#timeLimit").val();
-        table.reload(loanTable.tableId, {where: queryData});
+        table.reload(orderEndList.tableId, {where: queryData});
     };
 
     /**
      * 导出excel按钮
      */
-    loanTable.exportExcel = function () {
-        var checkRows = table.checkStatus(loanTable.tableId);
+    orderEndList.exportExcel = function () {
+        var checkRows = table.checkStatus(orderEndList.tableId);
         if (checkRows.data.length === 0) {
             Feng.error("请选择要导出的数据");
         } else {
@@ -87,35 +71,22 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
     };
 
     /**
-     * 打开放款审核
+     * 打开分期账单窗口
      */
-    loanTable.onLoanCheck = function (data) {
-        admin.putTempData('formOk', false);
-        var index = layer.open({
-            type: 2,
-            title: '人工审核',
-            content: Feng.ctxPath + "/orderDetails/loanCheckIndex/" + data.userId,
-            closeBtn: 0,
-            shadeClose: true,
-            resize: true,
-            btn: ['关闭'],
-            end: function () {
-                admin.getTempData('formOk') && loanTable.search();
-            }
-        });
-        layer.full(index);
+    orderEndList.openStagingListDlg = function (data) {
+        window.location = Feng.ctxPath + "/stagingList/index/" + data.userId + "/" + data.orderNumber + "/" + "orderEndIndex";
     };
 
     // 渲染表格
     var tableResult = table.render({
-        elem: '#' + loanTable.tableId,
-        url: Feng.ctxPath + '/orderDetails/toLoanList',
+        elem: '#' + orderEndList.tableId,
+        url: Feng.ctxPath + '/orderDetails/orderEndList',
         page: true,
         limits: [20, 50, 100],  //每页条数的选择项，默认：[10,20,30,40,50,60,70,80,90]。
         limit: 20, //每页默认显示的数量
         height: "full-98",
         cellMinWidth: 100,
-        cols: loanTable.initColumn()
+        cols: orderEndList.initColumn()
     });
 
     //渲染时间选择框
@@ -127,25 +98,26 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
 
     //初始化左侧部门树
     var ztree = new $ZTree("deptTree", "/dept/tree");
-    ztree.bindOnClick(loanTable.onClickDept);
+    ztree.bindOnClick(orderEndList.onClickDept);
     ztree.init();
 
     // 搜索按钮点击事件
     $('#btnSearch').click(function () {
-        loanTable.search();
+        orderEndList.search();
     });
 
     // 导出excel
     $('#btnExp').click(function () {
-        loanTable.exportExcel();
+        orderEndList.exportExcel();
     });
 
     // 工具条点击事件
-    table.on('tool(' + loanTable.tableId + ')', function (obj) {
+    table.on('tool(' + orderEndList.tableId + ')', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'loanCheck') {
-            loanTable.onLoanCheck(data);
+        // 分期账单
+        if (layEvent === 'stagingList') {
+            orderEndList.openStagingListDlg(data);
         }
     });
 });

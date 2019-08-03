@@ -1,7 +1,7 @@
-@layout("/common/_container.html",{plugins:["ztree"],js:["/assets/modular/business/orderDetails/rePaymentIndex.js"]}){
+@layout("/common/_container.html",{plugins:["ztree"],js:["/assets/modular/business/orderDetails/orderEndIndex.js"]}){
 
 <div class="layui-body-header">
-    <span class="layui-body-header-title">待还款订单列表</span>
+    <span class="layui-body-header-title">已完结订单列表</span>
 </div>
 
 <div class="layui-fluid">
@@ -32,7 +32,7 @@
                             </div>
                         </div>
                     </div>
-                    <table class="layui-table" id="rePaymentListTable" lay-filter="rePaymentListTable"></table>
+                    <table class="layui-table" id="orderEndListTable" lay-filter="orderEndListTable"></table>
                 </div>
             </div>
         </div>
@@ -40,16 +40,8 @@
 </div>
 
 <script type="text/html" id="tableBar">
-    @if(shiro.hasPermission("/stagingList/index")){
-    <a title="分期账单" lay-event="stagingList" class="layui-btn icon-btn layui-btn-xs">
-        分期账单
+    <a title="查看账单" lay-event="stagingList" class="layui-btn icon-btn layui-btn-xs">
+        查看账单
     </a>
-    @}
-
-    @if(shiro.hasPermission("/stagingList/adjRepayment")){
-    <a title="提前还款" lay-event="prePayment" class="layui-btn icon-btn layui-btn-warm layui-btn-xs">
-        提前还款
-    </a>
-    @}
 </script>
 @}

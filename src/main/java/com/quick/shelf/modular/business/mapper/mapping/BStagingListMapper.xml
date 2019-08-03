@@ -53,4 +53,14 @@
             WHERE p_order_number = #{pOrderNumber}
                 AND status != 1
     </update>
+
+    <!-- 根据订单号查询所有的逾期或待还款的订单 -->
+    <select id="selectBStagingListByPOrderNumber" resultType="com.quick.shelf.modular.business.entity.BStagingList">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM B_STAGING_LIST
+        WHERE p_order_number = #{orderNumber}
+        AND status != 1
+        ORDER BY predict_repayment_time ASC
+    </select>
 </mapper>
