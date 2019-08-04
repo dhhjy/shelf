@@ -50,7 +50,20 @@ public class BStagingListService extends ServiceImpl<BStagingListMapper, BStagin
         return this.baseMapper.selectBStagingListByUserId(page, dataScope, beginTime, endTime, userId, orderNumber, status);
     }
 
-    public List<BStagingList> selectBStagingListByPOrderNumber(String orderNumber) {
+    /**
+     * 查询用户主键查询对应的逾期账单
+     */
+    public List<BStagingList> selectOverdueStagingList(Integer userId) {
+        return this.baseMapper.selectOverdueStagingList(userId);
+    }
+
+    /**
+     * 根据订单号查询分期账单
+     *
+     * @param orderNumber
+     * @return
+     */
+    private List<BStagingList> selectBStagingListByPOrderNumber(String orderNumber) {
         return this.baseMapper.selectBStagingListByPOrderNumber(orderNumber);
     }
 

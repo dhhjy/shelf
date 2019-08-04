@@ -27,6 +27,11 @@ public class BOrderDetailsService extends ServiceImpl<BOrderDetailsMapper, BOrde
      */
     private static final Integer LOAN_STATUS = 2;
 
+    /**
+     * 逾期
+     */
+    private static final String OVERDUE = "overdue";
+
     @Resource
     private BSysUserService bSysUserService;
 
@@ -69,7 +74,7 @@ public class BOrderDetailsService extends ServiceImpl<BOrderDetailsMapper, BOrde
     }
 
     /**
-     * 查询待审核订单列表
+     * 查询审核、放款、还款、完结、回退、拒绝 列表通用查询方法
      *
      * @param dataScope
      * @param name
@@ -79,8 +84,38 @@ public class BOrderDetailsService extends ServiceImpl<BOrderDetailsMapper, BOrde
      * @return
      */
     public Page<Map<String, Object>> selectToAuditList(DataScope dataScope, String name, String beginTime, String endTime, Long deptId, Integer status) {
+        return selectList(dataScope, name, beginTime, endTime, deptId, status, null);
+    }
+
+    /**
+     * 查询逾期订单列表方法
+     *
+     * @param dataScope
+     * @param name
+     * @param beginTime
+     * @param endTime
+     * @param deptId
+     * @return
+     */
+    public Page<Map<String, Object>> selectOverdueList(DataScope dataScope, String name, String beginTime, String endTime, Long deptId, Integer status) {
+        return selectList(dataScope, name, beginTime, endTime, deptId, status, OVERDUE);
+    }
+
+    /**
+     * 列表查询
+     *
+     * @param dataScope
+     * @param name
+     * @param beginTime
+     * @param endTime
+     * @param deptId
+     * @param status
+     * @param overdue
+     * @return
+     */
+    private Page<Map<String, Object>> selectList(DataScope dataScope, String name, String beginTime, String endTime, Long deptId, Integer status, String overdue) {
         Page page = LayuiPageFactory.defaultPage();
-        return this.baseMapper.selectToAuditList(page, dataScope, name, beginTime, endTime, deptId, status);
+        return this.baseMapper.selectToAuditList(page, dataScope, name, beginTime, endTime, deptId, status, overdue);
     }
 
     /**

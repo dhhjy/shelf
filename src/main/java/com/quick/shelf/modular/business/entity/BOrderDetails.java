@@ -40,6 +40,7 @@ public class BOrderDetails implements Serializable {
 
     /**
      * 产品编号
+     * 1-秒秒贷 2-苹果ID贷 3-白条
      */
     @TableField("product_code")
     private Integer productCode;
@@ -52,6 +53,7 @@ public class BOrderDetails implements Serializable {
 
     /**
      * 还款方式
+     * 1-每日本息 2-每日利息+服务费 3-到期全额
      */
     @TableField("mode_of_repayment")
     private Integer modeOfRepayment;

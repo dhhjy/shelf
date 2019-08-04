@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width"/>
+    <title>待放款订单-放款审核</title>
+    <link href="${ctxPath}/assets/expand/images/favicon.ico" rel="icon">
+    <link rel="stylesheet" href="${ctxPath}/assets/common/layui/css/layui.css"/>
+    <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/limu/css/common.css?_v="/>
+    <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/limu/css/manage.css?_v="/>
+    <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/limu/css/liMuStyle.css?_v="/>
+    <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/myIcon/iconfont.css?_v="/>
+    <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/boostrap/bootstrap.3.3.7.min.css">
+    <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/Hui3.0/css/mnoReport.css?v=201708101">
+</head>
+
+<body>
+<!-- 头部信息 -->
+<header class="header">
+    <figure class="logo">
+        <span class="need_hidden">逾期订单详情</span>
+    </figure>
+    <p style="height: auto;text-align: center;">
+        <span class="need_hidden">
+            <span class="msg">账号：</span>
+                    ${bSysUser.userAccount}
+        </span>
+        <span class="need_hidden">
+            <span class="msg">用户名：</span>
+                    ${bSysUser.name}
+        </span>
+        <span class="need_hidden">
+            <span class="msg">手机号：</span>
+                    ${bSysUser.phoneNumber}
+         </span>
+    </p>
+</header>
+
+
+<div id="main">
+    <!--基本信息-->
+    <div class="info baseInfo">
+        <h2 class="title">基本信息</h2>
+
+        @if(null != bUserBasicInfo){
+        <!--用户基本信息-->
+        <div class="items">
+            <table>
+                <caption class="middle">用户基本信息</caption>
+                <colgroup>
+                    <col class="col">
+                </colgroup>
+                <tbody>
+                <tr>
+                    </td>
+                    <td class="msg">学历</td>
+                    <td>
+                        ${bUserBasicInfo.education}
+                    </td>
+                    <td class="msg">工作</td>
+                    <td>
+                        ${bUserBasicInfo.job}
+                    </td>
+                    <td class="msg">居住地址</td>
+                    <td>
+                        ${bUserBasicInfo.addressCity}-${bUserBasicInfo.address}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="msg">月收入</td>
+                    <td>
+                        ${bUserBasicInfo.income}
+                    </td>
+                    <td class="msg">婚姻情况</td>
+                    <td>
+                        ${bUserBasicInfo.marriage}
+                    </td>
+                    <td class="msg">子女数</td>
+                    <td>
+                        ${bUserBasicInfo.children}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="msg">单位名称</td>
+                    <td>
+                        ${bUserBasicInfo.company}
+                    </td>
+                    <td class="msg">单位电话</td>
+                    <td>
+                        ${bUserBasicInfo.companyPhone}
+                    </td>
+                    <td class="msg">单位地址</td>
+                    <td>
+                        ${bUserBasicInfo.companyAddress}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--用户基本信息-->
+        @}
+        <!--紧急联系人信息-->
+        @if(null != bEmergencyContactInfo){
+        <div class="items">
+            <table>
+                <caption class="middle">紧急联系人信息</caption>
+                <colgroup>
+                    <col class="col">
+                </colgroup>
+                <tbody>
+                <tr>
+                    <td class="msg">类型</td>
+                    <td class="msg">关系</td>
+                    <td class="msg">姓名</td>
+                    <td class="msg">手机号</td>
+                    <td class="msg">通话次数</td>
+                    <td class="msg">通话排名</td>
+                </tr>
+                <tr>
+                    <td>亲属关系</td>
+                    <td>${bEmergencyContactInfo.relative1}</td>
+                    <td>${bEmergencyContactInfo.relativeName1}</td>
+                    <td>${bEmergencyContactInfo.relativePhone1}</td>
+                    <td>
+
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>亲属关系</td>
+                    <td>${bEmergencyContactInfo.relative2}</td>
+                    <td>${bEmergencyContactInfo.relativeName2}</td>
+                    <td>${bEmergencyContactInfo.relativePhone2}</td>
+                    <td>
+
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>社会关系</td>
+                    <td>${bEmergencyContactInfo.social}</td>
+                    <td>${bEmergencyContactInfo.relativeName3}</td>
+                    <td>${bEmergencyContactInfo.socialPhone}</td>
+                    <td>
+
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        @}
+    </div>
+
+    <!--用户信息验证-->
+    <div class="info">
+        <h2 class="title">用户信息验证</h2>
+
+        <!--高级验证-->
+        <div class="items cross">
+            <table>
+                <caption class="middle">高级验证</caption>
+                <thead>
+                <tr>
+                    <td class="msg">编号</td>
+                    <td>${bSysUser.userId}</td>
+                    <td class="msg">姓名</td>
+                    <td>${bSysUser.name}</td>
+                    <td class="msg">手机号</td>
+                    <td>${bSysUser.phoneNumber}</td>
+                </tr>
+                </thead>
+                <tbody>
+                @if(bSysUserStatus.limuMobileReportStatus == "1" || bSysUserStatus.limuTaobaoReportStatus == "1" ||
+                @bSysUserStatus.limuLifangUpgradeCheckStatus == "1"){
+                <tr>
+                    <td class="msg">立木</td>
+                    <td colspan="5">
+                        @if(bSysUserStatus.deviceInfoStatus == "1"){
+                        <a href='javascript:void(0);' id="openDeviceInfo"
+                           class='btn btn-primary'>设备指纹</a>
+                        @}
+                        @if(bSysUserStatus.limuTaobaoReportStatus == "1"){
+                        <a href='javascript:void(0);' id="openTb"
+                           class='btn btn-primary'>淘宝报告</a>
+                        @}
+                        <a href='javascript:void(0);' id="openMachinecheck"
+                           class='btn btn-primary'>机审报告</a>
+                        @if(bSysUserStatus.limuLifangUpgradeCheckStatus == "1"){
+                        <a href='javascript:void(0);' id="openLiFangUp"
+                           class='btn btn-primary'>升级报告</a>
+                        @}
+                        @if(bSysUserStatus.limuMobileReportStatus == "1"){
+                        <a href='javascript:void(0);' id="openMobile"
+                           class='btn btn-primary'>运营商报告</a>
+                        @}
+                    </td>
+                </tr>
+                @}
+                <tr>
+                    <td class="msg">新颜</td>
+                    <td colspan="5">
+                        <a href='javascript:void(0);' id="openReDar"
+                           class='btn btn-primary'>全景雷达</a>
+                        @if(bSysUserStatus.xinyanTaobaoStatus == "1"){
+                        <a href='javascript:void(0);' id="openXyTaoBao"
+                           class='btn btn-primary'>淘宝报告</a>
+                        @}
+                        @if(bSysUserStatus.xinyanMobileStatus == "1"){
+                        <a href='javascript:void(0);' id="openXyMobile"
+                           class='btn btn-primary'>运营商报告</a>
+                        @}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="msg">GPS定位</td>
+                    <td colspan="5">
+                        <a href='javascript:void(0);' id="openGPSCompare"
+                           class='btn btn-primary'>定位信息比对</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!--用户信息验证-->
+
+
+    <!--借贷资金详情-->
+    <div class="info baseInfo">
+        <h2 class="title">逾期记录详情</h2>
+
+        <div class="items">
+            <table>
+                <caption class="middle">逾期记录</caption>
+                <tbody>
+                <tr>
+                    <td class="msg">序号</td>
+                    <td class="msg">借贷产品</td>
+                    <td class="msg">还款方式</td>
+                    <td class="msg">借款金额</td>
+                    <td class="msg">借款时长</td>
+                    <td class="msg">每日利息</td>
+                    <td class="msg">总共应还</td>
+                    <td class="msg">本期应还</td>
+                    <td class="msg">计划还款时间</td>
+                    <td class="msg">操作</td>
+                </tr>
+                @for(data in bStagingLists){
+                <tr>
+                    <td>${dataLP.index}</td>
+                    <td>
+                        @if(orderDetails.productCode == 1){
+                        秒秒贷
+                        @}else if(orderDetails.productCode == 2){
+                        苹果ID贷
+                        @}else{
+                        白条
+                        @}
+                    </td>
+                    <td>
+                        @if(orderDetails.modeOfRepayment == 1){
+                        每日本息
+                        @}else if(orderDetails.modeOfRepayment == 2){
+                        每日利息+服务费
+                        @}else{
+                        到期全额
+                        @}
+                    </td>
+                    <td>
+                        <span class='tag normal'>
+                            ${orderDetails.amount} 元
+                        </span>
+                    </td>
+                    <td>
+                        ${orderDetails.debtDuration} 天
+                    </td>
+                    <td>
+                        <span class='tag danger'>
+                            ${orderDetails.accrual} 元
+                        </span>
+                    </td>
+                    <td>
+                        <span class='tag normal'>
+                            ${data.countRefund} 元
+                        </span>
+                    </td>
+                    <td>
+                        <span class='tag danger'>
+                            ${data.everyDayRefund} 元
+                        </span>
+                    </td>
+                    <td>
+                        ${data.predictRepaymentTime,"yyyy-MM-dd"}
+                    </td>
+                    <td>
+                        <input class="btn btn-success radius size-L" type="button" value="还款" style="margin-left:15px;"
+                               id="repay" lay-filter="repay" lay-submit>
+                        <input class="btn btn-warning radius size-L" type="button" value="延期" style="margin-left:15px;"
+                               id="extension" lay-filter="extension" lay-submit>
+                    </td>
+                </tr>
+                @}
+                </tbody>
+            </table>
+        </div>
+        <!--借贷记录-->
+        <div class="items">
+            <div class="items" style="float: left;">
+                <input class="btn btn-success radius size-L" type="button" value="放款" id="checkPass"
+                       lay-filter="checkPass" lay-submit>
+                <input class="btn btn-primary radius size-L" type="button" value="拉黑" style="margin-left:15px;"
+                       id="addBlackList" lay-filter="addBlackList" lay-submit>
+            </div>
+        </div>
+        <!--借贷记录-->
+
+    </div>
+    <!--借贷资金详情-->
+</div>
+
+@/* 加入contextPath属性和session超时的配置 */
+<script type="text/javascript">
+    var Feng = {
+        ctxPath: "",
+        addCtx: function (ctx) {
+            if (this.ctxPath === "") {
+                this.ctxPath = ctx;
+            }
+        }
+    };
+    Feng.addCtx("${ctxPath}");
+
+    document.oncontextmenu = function () {
+        return false;
+    }
+</script>
+<script type="text/javascript" src="${ctxPath}/assets/common/layui/layui.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/common/js/common.js"></script>
+<script>
+    layui.use(['layer', 'table', 'admin', 'ax', 'form'], function () {
+        var layer = layui.layer;
+        var $ = layui.$;
+        var $ax = layui.ax;
+        var admin = layui.admin;
+        var form = layui.form;
+
+        // 声明用户主键
+        var userId = "${bSysUser.userId}";
+
+        /**
+         * 打开全景雷达
+         **/
+        var openReDarFun = function () {
+            // 手机认证状态 运营商认证状态
+            var phoneStatus = '${bSysUserStatus.xinyanMobileStatus}';
+            // 身份证
+            var identityStatus = '${bSysUserStatus.identityStatus}';
+            // 银行卡
+            var bankInfoStatus = '${bSysUserStatus.bankInfoStatus}';
+
+            if (phoneStatus !== '1') {
+                Feng.error("手机运营商报告未认证，无法查看全景雷达");
+                return false;
+            }
+
+            if (identityStatus !== '1') {
+                Feng.error("身份证认证未认证，无法查看全景雷达");
+                return false;
+            }
+
+            if (bankInfoStatus !== '1') {
+                Feng.error("银行卡认证未认证，无法查看全景雷达");
+                return false;
+            }
+
+            var url = Feng.ctxPath + "/xinYan/getReDerData/" + userId;
+            parent.layer.open({
+                type: 2,
+                title: "全景雷达",
+                btn: ['关闭'],
+                shadeClose: true,
+                maxmin: true,
+                resize: true,
+                shade: 0.8,
+                area: ['100%', '100%'],
+                content: url
+            });
+        };
+
+        /**
+         * 打开芝麻分报告
+         **/
+        var openZmfReportFun = function () {
+            var url = Feng.ctxPath + "/xinYan/getTaoBaoWebReport/" + userId;
+            parent.layer.open({
+                type: 2,
+                title: "淘宝报告",
+                btn: ['关闭'],
+                shadeClose: true,
+                maxmin: true,
+                resize: true,
+                shade: 0.8,
+                area: ['100%', '100%'],
+                content: url
+            });
+        };
+
+        /**
+         * 打开新颜运营商报告
+         **/
+        var openMobileReportFun = function () {
+            var url = Feng.ctxPath + "/xinYan/getMobileWebReport/" + userId;
+            parent.layer.open({
+                type: 2,
+                title: "运营商",
+                btn: ['关闭'],
+                shadeClose: true,
+                maxmin: true,
+                resize: true,
+                shade: 0.8,
+                area: ['100%', '100%'],
+                content: url
+            });
+        };
+
+        /**
+         * 打开定位信息比对
+         **/
+        var openGPSCompareFun = function () {
+            var url = Feng.ctxPath + "/bSysUser/getGpsCompare/" + userId;
+            parent.layer.open({
+                type: 2,
+                title: "定位比对",
+                btn: ['关闭'],
+                shadeClose: true,
+                maxmin: true,
+                resize: true,
+                shade: 0.8,
+                area: ['100%', '100%'],
+                content: url
+            });
+        };
+
+        // 表单提交事件
+        form.on('submit(submit)', function (data) {
+            // 默认URL为审核操作
+            var url = Feng.ctxPath + "/orderDetails/checkOrderDetails";
+            if (data.field.status !== "2" && data.field.drawMessage === "同意下款") {
+                layer.msg("请填写操作意见、描述");
+                return false;
+            }
+            // 0为不做拉黑操作，1为拉黑操作
+            if (data.field.blackListStatus === "1") {
+                url = Feng.ctxPath + "/orderDetails/addBlackList";
+            }
+            var ajax = new $ax(url, function (result) {
+                Feng.success(result.message);
+                //传给上个页面，刷新table用
+                admin.putTempData('formOk', true);
+                //关掉对话框
+                admin.closeThisDialog();
+            }, function (data) {
+                Feng.error("审核失败！" + data.responseJSON.message)
+            });
+            ajax.set(data.field);
+            ajax.start();
+
+            return false;
+        });
+
+        // 新颜雷达
+        $('#openReDar').click(function () {
+            openReDarFun();
+        });
+
+        // 新颜淘宝报告
+        $('#openXyTaoBao').click(function () {
+            openZmfReportFun();
+        });
+
+        // 新颜运营商报告
+        $('#openXyMobile').click(function () {
+            openMobileReportFun();
+        });
+
+        // GPS定位对比
+        $('#openGPSCompare').click(function () {
+            openGPSCompareFun();
+        });
+
+        // 审核意见
+        $("#reason").change(function () {
+            $("#orderDetailsForm [name=drawMessage]").val(this.value);
+        });
+
+        // 审核通过
+        $("#checkPass").click(function () {
+            $("#orderDetailsForm [name=status]").val("2");
+            $("#submit").click();
+        });
+
+        // 审核不通过
+        $("#checkRefuse").click(function () {
+            $("#orderDetailsForm [name=status]").val("-1");
+            $("#submit").click();
+        });
+
+        // 审核退回
+        $("#checkBack").click(function () {
+            $("#orderDetailsForm [name=status]").val("99");
+            $("#submit").click();
+        });
+
+        // 加入黑名单
+        $("#addBlackList").click(function () {
+            $("#blackListStatus").val("1");
+            $("#submit").click();
+        });
+    });
+</script>
+</body>
+</html>

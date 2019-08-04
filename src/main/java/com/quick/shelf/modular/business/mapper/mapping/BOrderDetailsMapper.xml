@@ -99,16 +99,19 @@
         AND bod.`user_id` NOT IN (
         SELECT bbl.user_id FROM B_BLACK_LIST bbl
         )
+        <if test="overdue != null and overdue != ''">
+            AND bod.overdue_number != 0
+        </if>
         <if test="name != null and name != ''">
-            and (bsu.name like CONCAT('%',#{name},'%'))
+            AND (bsu.name LIKE CONCAT('%',#{name},'%'))
         </if>
         <if test="deptId != null and deptId != 0">
-            and (bod.dept_id = #{deptId} )
+            AND (bod.dept_id = #{deptId} )
         </if>
         <if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
-            and (bod.create_time between CONCAT(#{beginTime},' 00:00:00') and CONCAT(#{endTime},' 23:59:59'))
+            AND (bod.create_time BETWEEN CONCAT(#{beginTime},' 00:00:00') AND CONCAT(#{endTime},' 23:59:59'))
         </if>
-        order by bod.create_time desc
+        ORDER BY bod.create_time DESC
     </select>
 
     <select id="selectBOrderDetailsByUserId" resultType="com.quick.shelf.modular.business.entity.BOrderDetails">

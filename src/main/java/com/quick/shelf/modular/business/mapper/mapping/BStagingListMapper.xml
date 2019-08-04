@@ -63,4 +63,14 @@
         AND status != 1
         ORDER BY predict_repayment_time ASC
     </select>
+
+    <!-- 根据用户主键查询用户的逾期账单 -->
+    <select id="selectOverdueStagingList" resultType="com.quick.shelf.modular.business.entity.BStagingList">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM B_STAGING_LIST
+        WHERE USER_ID = #{userId}
+        AND status = 2
+        ORDER BY predict_repayment_time ASC
+    </select>
 </mapper>

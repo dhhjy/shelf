@@ -56,17 +56,13 @@ public class BOrderDetailsController extends BaseController {
     private static final Integer REPAYMENT_ORDER_STATUS = 2;
 
     /**
-     * 逾期订单状态
+     * 延期订单状态
      */
 
     /**
      * 完结订单状态
      */
     private static final Integer ORDER_END_STATUS = 4;
-
-    /**
-     * 延期订单状态
-     */
 
     /**
      * 回退订单状态
@@ -209,7 +205,7 @@ public class BOrderDetailsController extends BaseController {
         return PREFIX + "loanCheckIndex.html";
     }
 
-    private Model setOrderDetailsInfo(Integer userId, Model model) {
+    private void setOrderDetailsInfo(Integer userId, Model model) {
         /**
          * 用户关联的借款订单信息
          */
@@ -242,7 +238,6 @@ public class BOrderDetailsController extends BaseController {
         BSysUserStatus bSysUserStatus = this.bSysUserStatusService.selectBSysUserStatusByUserId(userId);
         model.addAttribute("bSysUserStatus", bSysUserStatus);
 
-        return model;
     }
 
     /**
@@ -303,6 +298,44 @@ public class BOrderDetailsController extends BaseController {
     }
 
     /**
+     * 逾期订单列表
+     */
+    @ApiOperation(value = "逾期订单列表", notes = "逾期订单列表", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "查询参数:姓名", name = "name", dataType = "String"),
+            @ApiImplicitParam(value = "时间查询", name = "timeLimit", dataType = "String"),
+            @ApiImplicitParam(value = "部门主键", name = "deptId", dataType = "Long")
+    })
+    @Permission
+    @RequestMapping(value = "/overdueList")
+    @ResponseBody
+    public Object overdueList(@RequestParam(required = false) String name,
+                              @RequestParam(required = false) String timeLimit,
+                              @RequestParam(required = false) Long deptId) {
+        logger.info("查询逾期订单列表");
+        //拼接查询条件
+        String beginTime = "";
+        String endTime = "";
+
+        if (ToolUtil.isNotEmpty(timeLimit)) {
+            String[] split = timeLimit.split(" - ");
+            beginTime = split[0];
+            endTime = split[1];
+        }
+
+        if (ShiroKit.isAdmin()) {
+            Page<Map<String, Object>> orderDetails = bOrderDetailsService.selectOverdueList(null, name, beginTime, endTime, deptId, REPAYMENT_ORDER_STATUS);
+            Page wrapped = new BOrderDetailsWrapper(orderDetails).wrap();
+            return LayuiPageFactory.createPageInfo(wrapped);
+        } else {
+            DataScope dataScope = new DataScope(ShiroKit.getDeptDataScope());
+            Page<Map<String, Object>> users = bOrderDetailsService.selectOverdueList(dataScope, name, beginTime, endTime, deptId, REPAYMENT_ORDER_STATUS);
+            Page wrapped = new BOrderDetailsWrapper(users).wrap();
+            return LayuiPageFactory.createPageInfo(wrapped);
+        }
+    }
+
+    /**
      * 完结订单列表
      */
     @ApiOperation(value = "完结订单列表", notes = "完结订单列表", httpMethod = "POST")
@@ -334,8 +367,8 @@ public class BOrderDetailsController extends BaseController {
     @RequestMapping(value = "/checkBackList")
     @ResponseBody
     public Object checkBackList(@RequestParam(required = false) String name,
-                               @RequestParam(required = false) String timeLimit,
-                               @RequestParam(required = false) Long deptId) {
+                                @RequestParam(required = false) String timeLimit,
+                                @RequestParam(required = false) Long deptId) {
         logger.info("查询退回订单列表");
         return list(name, timeLimit, deptId, CHECK_ORDER_BACK_STATUS);
     }
@@ -353,8 +386,8 @@ public class BOrderDetailsController extends BaseController {
     @RequestMapping(value = "/checkRefuseList")
     @ResponseBody
     public Object checkRefuseList(@RequestParam(required = false) String name,
-                               @RequestParam(required = false) String timeLimit,
-                               @RequestParam(required = false) Long deptId) {
+                                  @RequestParam(required = false) String timeLimit,
+                                  @RequestParam(required = false) Long deptId) {
         logger.info("查询拒绝订单列表");
         return list(name, timeLimit, deptId, CHECK_REFUSE_STATUS);
     }

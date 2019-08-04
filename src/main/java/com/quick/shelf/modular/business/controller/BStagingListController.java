@@ -6,7 +6,12 @@ import com.quick.shelf.core.common.annotion.BussinessLog;
 import com.quick.shelf.core.common.annotion.Permission;
 import com.quick.shelf.core.common.page.LayuiPageFactory;
 import com.quick.shelf.core.response.ResponseData;
-import com.quick.shelf.modular.business.service.BStagingListService;
+import com.quick.shelf.modular.business.entity.BEmergencyContactInfo;
+import com.quick.shelf.modular.business.entity.BOrderDetails;
+import com.quick.shelf.modular.business.entity.BStagingList;
+import com.quick.shelf.modular.business.entity.BSysUserStatus;
+import com.quick.shelf.modular.business.service.*;
+import com.quick.shelf.modular.business.warpper.BSysUserWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -21,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,6 +46,21 @@ public class BStagingListController {
     @Resource
     private BStagingListService bStagingListService;
 
+    @Resource
+    private BSysUserService bSysUserService;
+
+    @Resource
+    private BUserBasicInfoService bUserBasicInfoService;
+
+    @Resource
+    private BEmergencyContactInfoService bEmergencyContactInfoService;
+
+    @Resource
+    private BSysUserStatusService bSysUserStatusService;
+
+    @Resource
+    private BOrderDetailsService bOrderDetailsService;
+
     /**
      * 分期账单主页跳转
      * <p>
@@ -48,7 +69,11 @@ public class BStagingListController {
      * @return
      */
     @ApiOperation(value = "分期账单主页跳转", notes = "分期账单主页跳转", httpMethod = "POST")
-    @ApiImplicitParam(value = "用户主键", name = "userId", required = true, dataType = "Integer")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "用户主键", name = "userId", required = true, dataType = "Integer"),
+            @ApiImplicitParam(value = "唯一借款订单号", name = "orderNumber", required = true, dataType = "String"),
+            @ApiImplicitParam(value = "跳转目标页面", name = "target", required = true, dataType = "String"),
+    })
     @Permission
     @RequestMapping(value = "/index/{userId}/{orderNumber}/{target}")
     public String index(@PathVariable("userId") Integer userId, @PathVariable("orderNumber") String orderNumber, @PathVariable("target") String target, Model model) {
@@ -56,6 +81,56 @@ public class BStagingListController {
         model.addAttribute("orderNumber", orderNumber);
         model.addAttribute("target", target);
         return PREFIX + "stagingListIndex.html";
+    }
+
+    /**
+     * 逾期账单主页跳转
+     *
+     * @return
+     */
+    @ApiOperation(value = "逾期账单主页跳转", notes = "逾期账单主页跳转", httpMethod = "POST")
+    @ApiImplicitParam(value = "用户主键", name = "userId", required = true, dataType = "Integer")
+    @Permission
+    @RequestMapping(value = "/overdueStagingIndex/{userId}")
+    public String overdueStagingIndex(@PathVariable("userId") Integer userId, Model model) {
+
+        /**
+         * 用户信息
+         */
+        model.addAttribute("bSysUser", BSysUserWrapper.deSensitization(this.bSysUserService.selectBSysUserByUserId(userId)));
+
+        /**
+         * 用户详细个人信息
+         */
+        model.addAttribute("bUserBasicInfo", this.bUserBasicInfoService.selectBUserBasicInfoByUserId(userId));
+
+        /**
+         * 用户联系人信息 b_emergency_contact_info
+         */
+        BEmergencyContactInfo bEmergencyContactInfo = this.bEmergencyContactInfoService.selectBEmergencyContactInfoByUserId(userId);
+        model.addAttribute("bEmergencyContactInfo", BSysUserWrapper.deSensitization(bEmergencyContactInfo));
+
+        /**
+         * 用户所关联的中状态信息 b_sys_user_status
+         */
+        BSysUserStatus bSysUserStatus = this.bSysUserStatusService.selectBSysUserStatusByUserId(userId);
+        model.addAttribute("bSysUserStatus", bSysUserStatus);
+
+        /**
+         * 用户借款记录
+         */
+        /**
+         * 用户关联的借款订单信息
+         */
+        BOrderDetails bOrderDetails = this.bOrderDetailsService.selectBOrderDetailsByUserId(userId);
+        model.addAttribute("orderDetails", bOrderDetails);
+
+        /**
+         * 用户逾期账单
+         */
+        List<BStagingList> bStagingLists = this.bStagingListService.selectOverdueStagingList(userId);
+        model.addAttribute("bStagingLists", bStagingLists);
+        return PREFIX + "overdueStagingIndex.html";
     }
 
     /**
@@ -90,6 +165,7 @@ public class BStagingListController {
         Page<Map<String, Object>> orderDetails = bStagingListService.selectBStagingListByUserId(null, beginTime, endTime, userId, orderNumber, status);
         return LayuiPageFactory.createPageInfo(orderDetails);
     }
+
 
     /**
      * 提前还款

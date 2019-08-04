@@ -23,6 +23,11 @@ public interface BStagingListMapper extends BaseMapper<BStagingList> {
                                                          @Param("status") Integer status);
 
     /**
+     * 根据用户主键查询用户对应的逾期账单
+     */
+    List<BStagingList> selectOverdueStagingList(@Param("userId") Integer userId);
+
+    /**
      * 批量更新还款计划中的剩余应还金额
      */
     void updateSurplusRefundByOrderNumber(@Param("pOrderNumber") String pOrderNumber, @Param("surplusRefund") BigDecimal surplusRefund);
