@@ -103,5 +103,10 @@ public class BStagingListService extends ServiceImpl<BStagingListMapper, BStagin
         // 收款人
         bStagingList.setPayee(ShiroKit.getUserNotNull().getName());
         this.baseMapper.updateById(bStagingList);
+
+        // 记录该用户的借款信息中累加一次逾期记录
+        BOrderDetails bOrderDetails = this.bOrderDetailsService.selectBOrderDetailsByUserId(bStagingList.getUserId());
+        bOrderDetails.setOverdueNumber(bOrderDetails.getOverdueNumber() + 1);
+        this.bOrderDetailsService.updateById(bOrderDetails);
     }
 }

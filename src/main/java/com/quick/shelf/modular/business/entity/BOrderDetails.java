@@ -113,6 +113,12 @@ public class BOrderDetails implements Serializable {
     private Integer status;
 
     /**
+     * 逾期数
+     */
+    @TableField("overdue_number")
+    private Integer overdueNumber;
+
+    /**
      * 收款方式 paymentTerm
      */
     @TableField("payment_term")

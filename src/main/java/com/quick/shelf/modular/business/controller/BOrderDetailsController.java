@@ -116,7 +116,7 @@ public class BOrderDetailsController extends BaseController {
      *
      * @return
      */
-    @ApiOperation(value = "待审核订单主页跳转", notes = "待审核订单主页跳转", httpMethod = "POST")
+    @ApiOperation(value = "审核订单主页跳转", notes = "审核订单主页跳转", httpMethod = "POST")
     @Permission
     @RequestMapping(value = "/index")
     public String index() {
@@ -126,7 +126,7 @@ public class BOrderDetailsController extends BaseController {
     /**
      * 待下款订单主页跳转
      */
-    @ApiOperation(value = "待下款订单主页跳转", notes = "待下款订单主页跳转", httpMethod = "POST")
+    @ApiOperation(value = "下款订单主页跳转", notes = "下款订单主页跳转", httpMethod = "POST")
     @Permission
     @RequestMapping(value = "/loanIndex")
     public String loanIndex() {
@@ -136,7 +136,7 @@ public class BOrderDetailsController extends BaseController {
     /**
      * 待还款订单主页跳转
      */
-    @ApiOperation(value = "待还款订单主页跳转", notes = "待还款订单主页跳转", httpMethod = "POST")
+    @ApiOperation(value = "还款订单主页跳转", notes = "还款订单主页跳转", httpMethod = "POST")
     @Permission
     @RequestMapping(value = "/rePaymentIndex")
     public String repaymentIndex() {
@@ -144,13 +144,43 @@ public class BOrderDetailsController extends BaseController {
     }
 
     /**
+     * 逾期订单主页跳转
+     */
+    @ApiOperation(value = "逾期订单主页跳转", notes = "逾期订单主页跳转", httpMethod = "POST")
+    @Permission
+    @RequestMapping(value = "/overdueIndex")
+    public String overdueIndex() {
+        return PREFIX + "overdueIndex.html";
+    }
+
+    /**
      * 已完结订单主页跳转
      */
-    @ApiOperation(value = "已完结订单主页跳转", notes = "已完结订单主页跳转", httpMethod = "POST")
+    @ApiOperation(value = "完结订单主页跳转", notes = "完结订单主页跳转", httpMethod = "POST")
     @Permission
     @RequestMapping(value = "/orderEndIndex")
     public String orderEndIndex() {
         return PREFIX + "orderEndIndex.html";
+    }
+
+    /**
+     * 回退订单主页跳转
+     */
+    @ApiOperation(value = "回退订单主页跳转", notes = "回退订单主页跳转", httpMethod = "POST")
+    @Permission
+    @RequestMapping(value = "/checkBackIndex")
+    public String checkBackIndex() {
+        return PREFIX + "checkBackIndex.html";
+    }
+
+    /**
+     * 拒绝订单主页跳转
+     */
+    @ApiOperation(value = "拒绝订单主页跳转", notes = "拒绝订单主页跳转", httpMethod = "POST")
+    @Permission
+    @RequestMapping(value = "/checkRefuseIndex")
+    public String checkRefuseIndex() {
+        return PREFIX + "checkRefuseIndex.html";
     }
 
     /**
@@ -216,9 +246,9 @@ public class BOrderDetailsController extends BaseController {
     }
 
     /**
-     * 待审核订单列表
+     * 审核订单列表
      */
-    @ApiOperation(value = "待审核订单列表", notes = "待审核订单列表", httpMethod = "POST")
+    @ApiOperation(value = "审核订单列表", notes = "审核订单列表", httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "查询参数:姓名/账户/手机号", name = "name", dataType = "String"),
             @ApiImplicitParam(value = "时间查询", name = "timeLimit", dataType = "String"),
@@ -230,14 +260,14 @@ public class BOrderDetailsController extends BaseController {
     public Object toAuditList(@RequestParam(required = false) String name,
                               @RequestParam(required = false) String timeLimit,
                               @RequestParam(required = false) Long deptId) {
-        logger.info("查询待审核订单列表");
+        logger.info("查询审核订单列表");
         return list(name, timeLimit, deptId, TO_AUDIT_ORDER_STATUS);
     }
 
     /**
-     * 待放款订单列表
+     * 放款订单列表
      */
-    @ApiOperation(value = "待放款订单列表", notes = "待放款订单列表", httpMethod = "POST")
+    @ApiOperation(value = "放款订单列表", notes = "放款订单列表", httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "查询参数:姓名", name = "name", dataType = "String"),
             @ApiImplicitParam(value = "时间查询", name = "timeLimit", dataType = "String"),
@@ -249,14 +279,14 @@ public class BOrderDetailsController extends BaseController {
     public Object toLoanList(@RequestParam(required = false) String name,
                              @RequestParam(required = false) String timeLimit,
                              @RequestParam(required = false) Long deptId) {
-        logger.info("查询待放款订单列表");
+        logger.info("查询放款订单列表");
         return list(name, timeLimit, deptId, TO_LOAN_ORDER_STATUS);
     }
 
     /**
-     * 待还款订单列表
+     * 还款订单列表
      */
-    @ApiOperation(value = "待还款订单列表", notes = "待还款订单列表", httpMethod = "POST")
+    @ApiOperation(value = "还款订单列表", notes = "还款订单列表", httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "查询参数:姓名", name = "name", dataType = "String"),
             @ApiImplicitParam(value = "时间查询", name = "timeLimit", dataType = "String"),
@@ -268,14 +298,14 @@ public class BOrderDetailsController extends BaseController {
     public Object rePaymentList(@RequestParam(required = false) String name,
                                 @RequestParam(required = false) String timeLimit,
                                 @RequestParam(required = false) Long deptId) {
-        logger.info("查询待还款订单列表");
+        logger.info("查询还款订单列表");
         return list(name, timeLimit, deptId, REPAYMENT_ORDER_STATUS);
     }
 
     /**
-     * 已完结订单列表
+     * 完结订单列表
      */
-    @ApiOperation(value = "已完结订单列表", notes = "已完结订单列表", httpMethod = "POST")
+    @ApiOperation(value = "完结订单列表", notes = "完结订单列表", httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "查询参数:姓名", name = "name", dataType = "String"),
             @ApiImplicitParam(value = "时间查询", name = "timeLimit", dataType = "String"),
@@ -287,8 +317,46 @@ public class BOrderDetailsController extends BaseController {
     public Object orderEndList(@RequestParam(required = false) String name,
                                @RequestParam(required = false) String timeLimit,
                                @RequestParam(required = false) Long deptId) {
-        logger.info("查询已完结订单列表");
+        logger.info("查询完结订单列表");
         return list(name, timeLimit, deptId, ORDER_END_STATUS);
+    }
+
+    /**
+     * 退回订单列表
+     */
+    @ApiOperation(value = "退回订单列表", notes = "退回订单列表", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "查询参数:姓名", name = "name", dataType = "String"),
+            @ApiImplicitParam(value = "时间查询", name = "timeLimit", dataType = "String"),
+            @ApiImplicitParam(value = "部门主键", name = "deptId", dataType = "Long")
+    })
+    @Permission
+    @RequestMapping(value = "/checkBackList")
+    @ResponseBody
+    public Object checkBackList(@RequestParam(required = false) String name,
+                               @RequestParam(required = false) String timeLimit,
+                               @RequestParam(required = false) Long deptId) {
+        logger.info("查询退回订单列表");
+        return list(name, timeLimit, deptId, CHECK_ORDER_BACK_STATUS);
+    }
+
+    /**
+     * 拒绝订单列表
+     */
+    @ApiOperation(value = "拒绝订单列表", notes = "拒绝订单列表", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "查询参数:姓名", name = "name", dataType = "String"),
+            @ApiImplicitParam(value = "时间查询", name = "timeLimit", dataType = "String"),
+            @ApiImplicitParam(value = "部门主键", name = "deptId", dataType = "Long")
+    })
+    @Permission
+    @RequestMapping(value = "/checkRefuseList")
+    @ResponseBody
+    public Object checkRefuseList(@RequestParam(required = false) String name,
+                               @RequestParam(required = false) String timeLimit,
+                               @RequestParam(required = false) Long deptId) {
+        logger.info("查询拒绝订单列表");
+        return list(name, timeLimit, deptId, CHECK_REFUSE_STATUS);
     }
 
     private Object list(String name, String timeLimit, Long deptId, Integer Status) {

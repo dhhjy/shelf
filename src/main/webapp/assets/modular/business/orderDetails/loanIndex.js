@@ -28,28 +28,32 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
             {field: 'productCodeName', title: '产品名称', minWidth: 150},
             {field: 'modeOfRepaymentName', title: '还款方式', minWidth: 150},
             {
-                field: 'amount', title: '借款金额(元)', minWidth: 150, templet: function (d) {
-                    return "<span class='tag normal'>" + d.amount + "</span>"
+                field: 'amount', title: '借款金额', minWidth: 150, templet: function (d) {
+                    return "<span class='tag normal'>" + d.amount + " 元</span>"
                 }
             },
-            {field: 'debtDuration', title: '借款时长(天)'},
+            {
+                field: 'debtDuration', title: '借款时长', templet: function (d) {
+                    return d.debtDuration + " 天";
+                }
+            },
             {
                 field: 'accrual', title: '总利息', templet: function (d) {
-                    return "<span class='tag danger'>" + d.accrual + "</span>"
+                    return "<span class='tag danger'>" + d.accrual + " 元</span>"
                 }
             },
             {
                 field: 'serviceCharge', title: '服务费', templet: function (d) {
-                    return "<span class='tag danger'>" + d.serviceCharge + "</span>"
+                    return "<span class='tag danger'>" + d.serviceCharge + " 元</span>"
                 }
             },
             {
                 field: 'actualAmount', title: '实际放款', templet: function (d) {
-                    return "<span class='tag normal'>" + d.actualAmount + "</span>"
+                    return "<span class='tag normal'>" + d.actualAmount + " 元</span>"
                 }
             },
             {field: 'statusName', title: '当前状态'},
-            {field: 'deptName', title: '所属部门'},
+            {field: 'deptName', title: '所属部门', minWidth: 150},
             {field: 'createTime', title: '申请时间', minWidth: 200},
             {minWidth: 200, align: 'center', title: '操作', toolbar: '#tableBar', fixed: 'right'}
         ]];

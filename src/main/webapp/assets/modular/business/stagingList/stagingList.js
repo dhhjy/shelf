@@ -23,17 +23,17 @@ layui.use(['layer', 'table', 'ax', 'admin', 'laydate'], function () {
             {field: 'pOrderNumber', title: '订单号'},
             {
                 field: 'countRefund', title: '总共应还', templet: function (d) {
-                    return "<span class='tag normal' style='background-color: #2486FF'>" + d.countRefund + "</span>"
+                    return "<span class='tag normal' style='background-color: #2486FF'>" + d.countRefund + " 元</span>"
                 }
             },
             {
                 field: 'everyDayRefund', sort: true, title: '本期应还', templet: function (d) {
-                    return "<span class='tag normal'>" + d.everyDayRefund + "</span>"
+                    return "<span class='tag normal'>" + d.everyDayRefund + " 元</span>"
                 }
             },
             {
                 field: 'surplusRefund', sort: true, title: '剩余应还', templet: function (d) {
-                    return "<span class='tag danger'>" + d.surplusRefund + "</span>";
+                    return "<span class='tag danger'>" + d.surplusRefund + " 元</span>";
                 }
             },
             {
@@ -96,8 +96,8 @@ layui.use(['layer', 'table', 'ax', 'admin', 'laydate'], function () {
             ajax.start();
         };
 
-        if (data.status === 1) {
-            Feng.error("已还款订单不允许重复还款");
+        if (data.status !== 0) {
+            Feng.error("已还款或已逾期的账单不可操作");
             return false;
         }
 
@@ -106,7 +106,7 @@ layui.use(['layer', 'table', 'ax', 'admin', 'laydate'], function () {
                 type: 1,
                 title: "还款提醒",
                 btn: ['确定', '取消'],
-                content: '<div style="padding: 50px; line-height: 22px; background-color: #f2f2f2; color: #000000;">账单并非今日账单，确定要还款吗？</div>',
+                content: '<div style="padding: 50px; line-height: 22px; background-color: #f2f2f2; color: #000000;">账单并非今日账单，确定要提前还款吗？</div>',
                 yes: function () {
                     operation();
                 }
@@ -130,15 +130,26 @@ layui.use(['layer', 'table', 'ax', 'admin', 'laydate'], function () {
             return false;
         }
 
-        var ajax = new $ax(Feng.ctxPath + "/stagingList/overdue", function (data) {
-            Feng.info(data.message);
-            tableResult.reload();
-        }, function (data) {
-            Feng.error("还款失败！" + data.responseJSON.message)
+        var operation = function () {
+            var ajax = new $ax(Feng.ctxPath + "/stagingList/overdue", function (data) {
+                Feng.info(data.message);
+                tableResult.reload();
+            }, function (data) {
+                Feng.error("还款失败！" + data.responseJSON.message)
+            });
+            ajax.set({"id": data.id});
+            ajax.start();
+        };
+
+        layui.admin.open({
+            type: 1,
+            title: "逾期提醒",
+            btn: ['确定', '取消'],
+            content: '<div style="padding: 50px; line-height: 22px; background-color: #f2f2f2; color: #000000;">确定手动逾期该用户账单吗？</div>',
+            yes: function () {
+                operation();
+            }
         });
-        ajax.set({"id": data.id});
-        ajax.start();
-        return false;
     };
 
     // 渲染表格

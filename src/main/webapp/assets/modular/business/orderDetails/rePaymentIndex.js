@@ -30,12 +30,21 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
             {field: 'modeOfRepaymentName', title: '还款方式', minWidth: 150},
             {
                 field: 'amount', title: '借款金额(元)', minWidth: 150, templet: function (d) {
-                    return "<span class='tag normal'>" + d.amount + "</span>"
+                    return "<span class='tag normal'>" + d.amount + " 元</span>";
                 }
             },
-            {field: 'debtDuration', title: '借款时长(天)'},
+            {
+                field: 'overdueNumber', title: '逾期数', templet: function (d) {
+                    return "<span class='tag danger'>" + d.overdueNumber + " 期</span>";
+                }
+            },
+            {
+                field: 'debtDuration', title: '借款时长', templet: function (d) {
+                    return d.debtDuration + " 天";
+                }
+            },
             {field: 'statusName', title: '当前状态'},
-            {field: 'deptName', title: '所属部门'},
+            {field: 'deptName', title: '所属部门', minWidth: 150},
             {field: 'createTime', title: '申请时间', minWidth: 200},
             {minWidth: 200, align: 'center', title: '操作', toolbar: '#tableBar', fixed: 'right'}
         ]];

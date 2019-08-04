@@ -71,6 +71,10 @@ public class BOrderDetailsWrapper extends BaseControllerWrapper {
             return "逾期";
         if (status.equals("4"))
             return "已完结";
+        if (status.equals("99"))
+            return "已回退";
+        if (status.equals("-1"))
+            return "已拒绝";
         return "";
     }
 
