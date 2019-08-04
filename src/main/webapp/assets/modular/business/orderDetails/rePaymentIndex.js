@@ -92,6 +92,10 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
      * 提前还款功能
      */
     rePaymentList.onPrePaymentFun = function (data) {
+        if(data.overdueNumber !== 0){
+            Feng.error("请先处理逾期订单");
+            return false;
+        }
         var operation = function () {
             var ajax = new $ax(Feng.ctxPath + "/stagingList/adjRepayment", function (data) {
                 Feng.info(data.message);
