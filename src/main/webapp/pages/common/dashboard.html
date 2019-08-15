@@ -44,7 +44,7 @@
             } else {
                 var dot = new Dot(),
                     dotSpeed = 0.03,
-                    textSpeed = Math.round(dotSpeed * 700 / deg1),
+                    textSpeed = Math.round(dotSpeed * 500 / deg1),
                     angle = 0,      //初始角度
                     credit = 1000;  //数字默认值开始数
 
@@ -58,7 +58,7 @@
                     dot.x = radius * Math.cos(angle);
                     dot.y = radius * Math.sin(angle);
 
-                    var aim = (score - 400) * deg1 / 700;//数字对应的弧度数,先确定要走几次,除以mum,然后计算对应的弧度数
+                    var aim = (score - 1000) * deg1 / 500;//数字对应的弧度数,先确定要走几次,除以mum,然后计算对应的弧度数
                     if(angle < aim) {
                         angle += dotSpeed;
                     }
