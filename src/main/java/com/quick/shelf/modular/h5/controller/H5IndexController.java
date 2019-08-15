@@ -84,6 +84,36 @@ public class H5IndexController extends BaseController {
     }
 
     /**
+     * 客户端用户个人中心主页
+     *
+     * @return String
+     * @author zcn
+     */
+    @ApiOperation(value = "客户个人中心主页", notes = "客户个人中心主页", httpMethod = "GET")
+    @RequestMapping("/person")
+    @Permission
+    public String person(Model model) {
+        BSysUserStatus userStatus = bSysUserStatusService.selectBSysUserStatusByUserId(Objects.requireNonNull(ShiroKit.getUser()).getId().intValue());
+        model.addAttribute("userStatus", JSONObject.toJSON(userStatus));
+        return H5_PATH + "frame/person.html";
+    }
+
+    /**
+     * 客户端退出登录跳至登录主页
+     *
+     * @return String
+     * @author zcn
+     */
+    @ApiOperation(value = "客户退出登录", notes = "客户退出登录", httpMethod = "GET")
+    @RequestMapping("/logOut")
+    @Permission
+    public String btnLogout(Model model) {
+        BSysUserStatus userStatus = bSysUserStatusService.selectBSysUserStatusByUserId(Objects.requireNonNull(ShiroKit.getUser()).getId().intValue());
+        model.addAttribute("userStatus", JSONObject.toJSON(userStatus));
+        return H5_PATH + "login.html";
+    }
+
+    /**
      * 个人信息认证页跳转
      *
      * @return

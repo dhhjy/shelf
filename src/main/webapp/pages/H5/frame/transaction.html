@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover" />
+    <title>交易记录</title>
+    <!--
+      @author: SM
+      @email: sm0210@qq.com
+      @desc 账单吸顶效果
+    -->
+    <!--
+        css
+    -->
+    <style type="text/css">
+     *,*::after,*::before {
+        margin: 0px;
+        padding: 0px;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-input-placeholder-color: transparent;
+        -webkit-overflow-scrolling: touch;
+        outline: none;
+      }
+      body {
+        font-family: "PingFang SC", "苹方", "PingFangSC-Regular", "Helvetica Neue",Helvetica,STHeiTi,sans-serif;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        -khtml-user-select: none;
+        user-select: none;
+        -ms-touch-action: none;
+        color: #676767;
+        background: #fff;
+        font-size: 14px;
+      }
+
+     .head {
+       font-size: 1.1rem;
+       height: 3.2rem;
+       width: 100%;
+       background: #26A69A;
+       color: white;
+       text-align: center;
+       line-height: 3.4rem;
+     }
+
+     .head>a {
+       color: white;
+       float: left;
+       margin-left: 1.12rem;
+     }
+
+     a{
+       padding: 0;
+       margin: 0;
+       list-style: none;
+       text-decoration: none;
+     }
+
+
+     ul, li {
+        list-style: none;
+      }
+      /*
+              弹性盒
+          */
+      .box-flex {
+        display: -webkit-box;
+      }
+      .box-flex-1{
+        -webkit-box-flex: 1;
+      }
+
+      .padding-lf-15 {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+      .font-size-12 {
+        font-size: 12px;
+      }
+
+      .filter_content {
+        height: 42px;
+        line-height: 42px;
+        border-bottom: 1px solid #ccc;
+        background-color: #fff;
+        transition:0.4s ease;
+        position: sticky;
+        top: 0px;
+        z-index: 10;
+      }
+      .filter_info {
+        position: relative;
+      }
+      .filter_info span {
+        display: inline-block;
+      }
+      .filter_info span:after {
+        content: '';
+        margin-left: 10px;
+        width: 0;
+        height: 0;
+        position: absolute;
+        top: 18px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #ccc transparent transparent transparent;
+      }
+      .filter_info span:first-child {
+        margin-right: 60px;
+      }
+      .filter_search:before {
+        content: '';
+        border-left: 1px solid #ccc;
+        position: absolute;
+        height: 16px;
+        margin-left: -15px;
+        top: 13px;
+      }
+      /*
+              明细
+          */
+      .bill_detail_month {
+        height: 70px;
+        background-color: #F6F6F6;
+        /* 粘性效果 */
+        transition:0.4s ease;
+        position: sticky;
+        z-index: 9;
+        top: 42px;
+        border-bottom: 1px solid #F1F1F1;
+      }
+      .bill_detail_month .bill_detail_month_text {
+        min-width: 58px;
+        height: 26px;
+        line-height: 26px;
+        background-color: #fff;
+        -webkit-border-radius: 40px;
+        margin-top: 23px;
+        padding-left: 12px;
+        position: relative;
+      }
+
+      .bill_detail_month .bill_detail_month_text:after {
+        content: '';
+        border: 1px solid red;
+        position: absolute;
+        right: 15px;
+        top: 12px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #ccc transparent transparent transparent;
+      }
+
+      .bill_detail_month .bill_detail_text {
+        padding-top: 15px;
+        text-align: right;
+        color: #B4B4B4;
+        font-size: 14px;
+      }
+      /*
+              消费明细
+          */
+      .bill_detail_info {
+        height: 112px;
+      }
+      .bill_detail_info_icon {
+        line-height: normal;
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        line-height: 40px;
+        -webkit-border-radius: 40px;
+        margin-top: 36px;
+      }
+      .bill_detail_info_money {
+        margin-top: 36px;
+        width: 110px;
+        text-align: right;
+        color: #353535;
+        font-weight: bold;
+        font-size: 18px;
+      }
+      /*
+              收入
+          */
+      .bill_detail_info_money.income {
+        color: #EB4D30;
+      }
+      /*
+              图标
+          */
+      .bill_detail_info_icon.elm {
+        background-color: #0C9EFA;
+      }
+
+      .bill_detail_info_icon.zs {
+        background-color: #E00611;
+      }
+
+      .bill_detail_info_icon.yeb {
+        background-color: #E95621;
+      }
+      .bill_detail_info_icon.tk {
+        background-color: #178EE0;
+      }
+
+      .bill_detail_info_icon.tb {
+        background-color: #FC4603;
+      }
+
+      .bill_detail_info_icon_content {
+        margin-left: 20px;
+        margin-top: 36px;
+      }
+      .bill_detail_info_icon_content li {
+        line-height: 22px;
+        color: #5D5D5D;
+      }
+      .bill_detail_info_1px {
+        border-bottom: 1px solid #ccc;
+      }
+      .bill_detail_info:last-child .bill_detail_info_1px {
+        border-bottom: none;
+      }
+      .bill_detail_info_date {
+        color: #A4A4A4;
+      }
+    </style>
+  </head>
+  <body>
+
+      <div class="head">
+        <a href="">
+          < </a> 交易记录 </div> <div class="nav">
+
+      </div>
+    <!-- box -->
+      <div class="box">
+        <!-- 筛选/分类 -->
+        <div class="box-flex padding-lf-15 filter_content">
+          <div class="box-flex-1 filter_info "><span>筛选</span><span>分类</span></div>
+          <div class="filter_search">搜索</div>
+        </div>
+        <!--明细-->
+        <div class="bill_detail">
+          <!-- 月份 -->
+          <div class="box-flex padding-lf-15 bill_detail_month">
+            <div class="bill_detail_month_text">本月</div>
+            <div class="box-flex-1 bill_detail_text">
+              <ul>
+                <li>支出 ￥1,250.03</li>
+                <li>收入 ￥144.55</li>
+              </ul>
+            </div>
+          </div>
+          <!-- 具体明细 -->
+          <div class="box-flex padding-lf-15 bill_detail_info">
+            <div class="bill_detail_info_icon zs"></div>
+            <div class="box-flex-1 box-flex bill_detail_info_1px">
+              <div class="box-flex-1 bill_detail_info_icon_content">
+                <ul>
+                  <li>信用卡还款-银行</li>
+                  <li class="font-size-12">借还款</li>
+                  <li class="bill_detail_info_date font-size-12">03-28 18:19</li>
+                  </ul>
+              </div>
+              <div class="bill_detail_info_money">-297.84</div>
+            </div>
+          </div>
+
+          <div class="box-flex padding-lf-15 bill_detail_info">
+            <div class="bill_detail_info_icon elm"></div>
+            <div class="box-flex-1 box-flex bill_detail_info_1px">
+              <div class="box-flex-1 bill_detail_info_icon_content">
+                <ul>
+                  <li>xxx产品</li>
+                  <li class="font-size-12">交易时间</li>
+                  <li class="bill_detail_info_date font-size-12">03-28 18:19</li>
+                  </ul>
+              </div>
+              <div class="bill_detail_info_money">-11.40</div>
+            </div>
+          </div>
+
+          <div class="box-flex padding-lf-15 bill_detail_info">
+            <div class="bill_detail_info_icon yeb"></div>
+            <div class="box-flex-1 box-flex bill_detail_info_1px">
+              <div class="box-flex-1 bill_detail_info_icon_content">
+                <ul>
+                  <li>某额宝-收益</li>
+                  <li class="font-size-12">理财</li>
+                  <li class="bill_detail_info_date font-size-12">03-28 18:19</li>
+                  </ul>
+              </div>
+              <div class="bill_detail_info_money income">+0.94</div>
+            </div>
+          </div>
+
+          <div class="box-flex padding-lf-15 bill_detail_info">
+            <div class="bill_detail_info_icon tk"></div>
+            <div class="box-flex-1 box-flex bill_detail_info_1px">
+              <div class="box-flex-1 bill_detail_info_icon_content">
+                <ul>
+                  <li>退款-商品</li>
+                  <li class="font-size-12">交通出行</li>
+                  <li class="bill_detail_info_date font-size-12">03-28 18:19</li>
+                  </ul>
+              </div>
+              <div class="bill_detail_info_money income">+6.54</div>
+            </div>
+          </div>
+
+          <div class="box-flex padding-lf-15 bill_detail_info">
+            <div class="bill_detail_info_icon tb"></div>
+            <div class="box-flex-1 box-flex bill_detail_info_1px">
+              <div class="box-flex-1 bill_detail_info_icon_content">
+                <ul>
+                  <li>商品购买</li>
+                  <li class="font-size-12">交通出行</li>
+                  <li class="bill_detail_info_date font-size-12">03-28 18:19</li>
+                  </ul>
+              </div>
+              <div class="bill_detail_info_money">-10.36</div>
+            </div>
+          </div>
+
+          <!-- 具体明细end -->
+
+        </div><!-- 账单详情 -->
+        <!-- 2月 -->
+        <div class="bill_detail">
+          <!-- 月份 -->
+          <div class="box-flex padding-lf-15 bill_detail_month">
+            <div class="bill_detail_month_text">2月</div>
+            <div class="box-flex-1 bill_detail_text">
+              <ul>
+                <li>支出 ￥1,250.03</li>
+                <li>收入 ￥144.55</li>
+              </ul>
+            </div>
+          </div>
+          <!-- 具体明细 -->
+          <div class="box-flex padding-lf-15 bill_detail_info">
+            <div class="bill_detail_info_icon zs"></div>
+            <div class="box-flex-1 box-flex bill_detail_info_1px">
+              <div class="box-flex-1 bill_detail_info_icon_content">
+                <ul>
+                    <li>信用卡还款-银行</li>
+                    <li class="font-size-12">借还款</li>
+                    <li class="bill_detail_info_date font-size-12">02-28 18:19</li>
+                  </ul>
+              </div>
+              <div class="bill_detail_info_money">-297.84</div>
+            </div>
+          </div>
+
+          <div class="box-flex padding-lf-15 bill_detail_info">
+            <div class="bill_detail_info_icon elm"></div>
+            <div class="box-flex-1 box-flex bill_detail_info_1px">
+              <div class="box-flex-1 bill_detail_info_icon_content">
+                <ul>
+                    <li>黄焖鸡米饭(XX快餐)</li>
+                    <li class="font-size-12">饮食</li>
+                    <li class="bill_detail_info_date font-size-12">02-28 18:19</li>
+                  </ul>
+              </div>
+              <div class="bill_detail_info_money">-11.40</div>
+            </div>
+          </div>
+
+          <div class="box-flex padding-lf-15 bill_detail_info">
+            <div class="bill_detail_info_icon yeb"></div>
+            <div class="box-flex-1 box-flex bill_detail_info_1px">
+              <div class="box-flex-1 bill_detail_info_icon_content">
+                <ul>
+                    <li>某额宝-收益</li>
+                    <li class="font-size-12">理财</li>
+                    <li class="bill_detail_info_date font-size-12">02-28 18:19</li>
+                  </ul>
+              </div>
+              <div class="bill_detail_info_money income">+0.94</div>
+            </div>
+          </div>
+
+          <div class="box-flex padding-lf-15 bill_detail_info">
+            <div class="bill_detail_info_icon tk"></div>
+            <div class="box-flex-1 box-flex bill_detail_info_1px">
+              <div class="box-flex-1 bill_detail_info_icon_content">
+                <ul>
+                    <li>退款-商品</li>
+                    <li class="font-size-12">交通出行</li>
+                    <li class="bill_detail_info_date font-size-12">02-28 18:19</li>
+                  </ul>
+              </div>
+              <div class="bill_detail_info_money income">+6.54</div>
+            </div>
+          </div>
+
+          <div class="box-flex padding-lf-15 bill_detail_info">
+            <div class="bill_detail_info_icon tb"></div>
+            <div class="box-flex-1 box-flex bill_detail_info_1px">
+              <div class="box-flex-1 bill_detail_info_icon_content">
+                <ul>
+                    <li>商品购买</li>
+                    <li class="font-size-12">交通出行</li>
+                    <li class="bill_detail_info_date font-size-12">02-28 18:19</li>
+                  </ul>
+              </div>
+              <div class="bill_detail_info_money">-10.36</div>
+            </div>
+          </div>
+          <!-- 具体明细end -->
+        </div><!--账单详情-->
+        <!-- 1月-->
+        <div class="bill_detail">
+          <!-- 月份 -->
+          <div class="box-flex padding-lf-15 bill_detail_month">
+            <div class="bill_detail_month_text">1月</div>
+            <div class="box-flex-1 bill_detail_text">
+              <ul>
+                <li>支出 ￥1,250.03</li>
+                <li>收入 ￥144.55</li>
+              </ul>
+            </div>
+          </div>
+          <!-- 具体明细 -->
+          <div class="box-flex padding-lf-15 bill_detail_info">
+            <div class="bill_detail_info_icon zs"></div>
+            <div class="box-flex-1 box-flex bill_detail_info_1px">
+              <div class="box-flex-1 bill_detail_info_icon_content">
+                <ul>
+                    <li>信用卡还款-银行</li>
+                    <li class="font-size-12">借还款</li>
+                    <li class="bill_detail_info_date font-size-12">01-28 18:19</li>
+                  </ul>
+              </div>
+              <div class="bill_detail_info_money">-297.84</div>
+            </div>
+          </div>
+
+          <div class="box-flex padding-lf-15 bill_detail_info">
+            <div class="bill_detail_info_icon elm"></div>
+            <div class="box-flex-1 box-flex bill_detail_info_1px">
+              <div class="box-flex-1 bill_detail_info_icon_content">
+                <ul>
+                    <li>黄焖鸡米饭(XX快餐)</li>
+                    <li class="font-size-12">饮食</li>
+                    <li class="bill_detail_info_date font-size-12">01-28 18:19</li>
+                  </ul>
+              </div>
+              <div class="bill_detail_info_money">-11.40</div>
+            </div>
+          </div>
+
+          <div class="box-flex padding-lf-15 bill_detail_info">
+            <div class="bill_detail_info_icon yeb"></div>
+            <div class="box-flex-1 box-flex bill_detail_info_1px">
+              <div class="box-flex-1 bill_detail_info_icon_content">
+                <ul>
+                    <li>某额宝-收益</li>
+                    <li class="font-size-12">理财</li>
+                    <li class="bill_detail_info_date font-size-12">01-28 18:19</li>
+                  </ul>
+              </div>
+              <div class="bill_detail_info_money income">+0.94</div>
+            </div>
+          </div>
+
+          <div class="box-flex padding-lf-15 bill_detail_info">
+            <div class="bill_detail_info_icon tk"></div>
+            <div class="box-flex-1 box-flex bill_detail_info_1px">
+              <div class="box-flex-1 bill_detail_info_icon_content">
+                <ul>
+                    <li>退款-商品</li>
+                    <li class="font-size-12">交通出行</li>
+                    <li class="bill_detail_info_date font-size-12">01-28 18:19</li>
+                  </ul>
+              </div>
+              <div class="bill_detail_info_money income">+6.54</div>
+            </div>
+          </div>
+
+          <div class="box-flex padding-lf-15 bill_detail_info">
+            <div class="bill_detail_info_icon tk"></div>
+            <div class="box-flex-1 box-flex bill_detail_info_1px">
+              <div class="box-flex-1 bill_detail_info_icon_content">
+                <ul>
+                    <li>退款-商品</li>
+                    <li class="font-size-12">交通出行</li>
+                    <li class="bill_detail_info_date font-size-12">01-28 18:19</li>
+                  </ul>
+              </div>
+              <div class="bill_detail_info_money income">+6.54</div>
+            </div>
+          </div>
+
+          <div class="box-flex padding-lf-15 bill_detail_info">
+            <div class="bill_detail_info_icon tk"></div>
+            <div class="box-flex-1 box-flex bill_detail_info_1px">
+              <div class="box-flex-1 bill_detail_info_icon_content">
+                <ul>
+                    <li>退款-商品</li>
+                    <li class="font-size-12">交通出行</li>
+                    <li class="bill_detail_info_date font-size-12">01-28 18:19</li>
+                  </ul>
+              </div>
+              <div class="bill_detail_info_money income">+6.54</div>
+            </div>
+          </div>
+
+          <!-- 具体明细end -->
+        </div><!--账单详情-->
+
+      </div>
+    <!-- box -->
+  </body>
+</html>
+

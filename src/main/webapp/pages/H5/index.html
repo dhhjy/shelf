@@ -50,7 +50,7 @@
                     产品清单
                 </div>
             </div>
-            <div class="layui-col-xs4 layui-col-sm4 layui-col-md4" id="btnLogout">
+            <div class="layui-col-xs4 layui-col-sm4 layui-col-md4" id="personCenter">
                 <div style="text-align: center;">
                     <svg class="myIcon" aria-hidden="true">
                         <use xlink:href="#icon-shezhi1"></use>
@@ -152,6 +152,18 @@
         };
 
         /**
+         * 个人中心
+         */
+        var personCenterFun = function () {
+            // 个人中心主页
+            index.loadHome({
+                menuPath: '${ctxPath}/h5/person',
+                menuName: '<i class="layui-icon layui-icon-home"></i>'
+            });
+        };
+
+
+        /**
          * 退出登陆
          */
         var logOutFun = function () {
@@ -188,6 +200,14 @@
         $("#productList").click(function () {
             toolsFun.hideHeaderFun();
             productListFun();
+        });
+
+
+        /**
+         * 个人中心事件绑定
+         */
+        $("#personCenter").click(function () {
+            personCenterFun();
         });
 
         /**

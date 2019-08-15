@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+
+<html lang="zh">
+
+	<head>
+
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>Document</title>
+		<style type="text/css">
+			html {
+				font-size: 100px;
+			}
+
+			body,
+			a,
+			ul,
+			li {
+
+				padding: 0;
+				margin: 0;
+				list-style: none;
+				text-decoration: none;
+			}
+
+			body {
+				/*width: 100%;*/
+				background: rgb(240, 240, 240);
+				font-family: PingFangSC-Regular;
+			}
+
+			div {
+				box-sizing: border-box;
+			}
+
+			.header {
+				position: fixed;
+				left: 0;
+				top: 0;
+				width: 100%;
+				z-index: 10;
+			}
+
+			.head {
+				font-size: 0.16rem;
+				height: 0.44rem;
+				background: #26A69A;
+				color: white;
+				text-align: center;
+				line-height: 0.44rem;
+			}
+
+			.head>a {
+				color: white;
+				float: left;
+				margin-left: 0.12rem;
+			}
+
+			.nav {
+				height: 0.44rem;
+				background: white;
+				font-size: 0.12rem;
+				line-height: 0.44rem;
+				padding-left: 0.28rem;
+			}
+
+			.nav>ul>li {
+				float: left;
+				margin: 0px 0.15rem;
+			}
+
+			.content {
+				margin-top: 1rem;
+			}
+
+			.cell1 {
+				height: 1.59rem;
+				background: white;
+				font-size: 0.12rem;
+				margin-top: 0.13rem;
+			}
+
+			.title {
+				height: 0.22rem;
+				border-bottom: 1px solid #D8D8D8;
+				padding-left: 0.12rem;
+				padding-right: 0.12rem;
+			}
+
+			.title>span {
+				float: right;
+				font-size: 0.09rem;
+				color: #A4A3A3;
+			}
+
+			.cell {
+				height: 0.96rem;
+				background: white;
+				border-bottom: 1px solid #D8D8D8;
+				padding: 0.12rem 0;
+			}
+
+			.cell>.img {
+				width: 0.9rem;
+				height: 0.72rem;
+				float: left;
+				margin-left: 0.12rem;
+			}
+
+			/*.content{
+overflow: scroll;
+}*/
+			.cell>.text {
+				width: 2.12rem;
+				margin-right: 0.12rem;
+				float: right
+			}
+
+			.cell>.text>span {
+				display: block;
+			}
+
+			.cell .intro {
+				font-size: 0.1rem;
+				color: #A4A3A3;
+			}
+
+			.cell .spay {
+				font-size: 0.09rem;
+				color: #A4A3A3;
+			}
+
+			.cell .pay {
+				color: #26A69A;
+				font-size: 0.1rem;
+			}
+
+			.footer {
+				height: 0.32rem;
+				padding: 0.1rem;
+				text-align: center;
+			}
+
+			.footer>.btn {
+				float: right;
+			}
+
+			.option {
+				width: 0.65rem;
+				border: 1px solid #26A69A;
+				border-radius: 2px;
+				float: left;
+				margin-left: 0.07rem;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div class="wrap">
+
+			<div class="header">
+
+				<div class="head">
+					<a href="person.html">
+						< </a> 我的订单 </div> <div class="nav">
+							<ul>
+								<li>全部</li>   <!-- 全部的订单查询 -->
+								<li>待处理</li> <!-- 等待借款或放款 -->
+								<li>还款中</li> <!-- 具体还款的情况，还了多少，还有多少未还 -->
+								<li>已完成</li> <!-- 已经还款完成或放款完成 -->
+								<li>已逾期</li> <!-- 逾期未还款或逾期放款 -->
+							</ul>
+				</div>
+			</div>
+
+			<div class="content">
+				<div class="cell1">
+					<div class="title">
+						产品名称<span>交易成功</span>
+					</div>
+
+					<div class="cell">
+
+						<div class="text">
+							<div class="brand">产品名称</div>
+							<span class="intro">借贷原因：家里xxx住院急用</span>
+							<span class="spay">申请贷款￥330.090</span>
+							<span class="pay">实际放款：￥330.000</span>
+						</div>
+						<div class="img"><img src="assets/h5/image/person/dd.jpg" /></div>
+
+					</div>
+
+					<div class="footer">
+						<div class="btn">
+							<div class="option"> 删除订单 </div>							
+							<div class="option"> 订单详情 </div>
+						</div>
+					</div>
+				</div>
+
+
+
+				<div class="cell1">
+					<div class="title">
+						产品名称<span>交易成功</span>
+					</div>
+
+					<div class="cell">
+						<div class="text">
+							<div class="brand">产品名称</div>
+							<span class="intro">借贷原因：家里xxx住院急用</span>
+							<span class="spay">申请贷款￥330.090</span>
+							<span class="pay">实际放款：￥330.000</span>
+						</div>
+						<div class="img"><img src="${ctxPath}/h5/image/person/jk.jpg" /></div>
+					</div>
+
+					<div class="footer">
+						<div class="btn">
+							<div class="option"> 删除订单 </div>
+							<div class="option"> 订单详情 </div>
+						</div>
+					</div>
+				</div>
+
+
+
+				<div class="cell1">
+					<div class="title">
+						产品名称<span>交易成功</span>
+					</div>
+
+					<div class="cell">
+						<div class="text">
+							<div class="brand">产品名称</div>
+							<span class="intro">借贷原因：家里xxx住院急用</span>
+							<span class="spay">申请贷款￥330.090</span>
+							<span class="pay">实际放款：￥330.000</span>
+						</div>
+						<div class="img"><img src="${ctxPath}/assets/h5/image/person/dd.jpg" /></div>
+					</div>
+
+					<div class="footer">
+						<div class="btn">
+							<div class="option"> 删除订单 </div>
+							<div class="option"> 订单详情 </div>
+						</div>
+					</div>
+				</div>
+
+
+
+				<div class="cell1">
+					<div class="title"> 产品名称<span>交易成功</span> </div>
+					<div class="cell">
+						<div class="text">
+							<div class="brand">产品名称</div>
+							<span class="intro">借贷原因：家里xxx住院急用</span>
+							<span class="spay">申请贷款￥330.090</span>
+							<span class="pay">实际放款：￥330.000</span>
+						</div>
+						<div class="img"><img src="${ctxPath}/assets/h5/image/person/jk.jpg" /></div>
+					</div>
+
+					<div class="footer">
+						<div class="btn">
+							<div class="option"> 删除订单 </div>
+							<div class="option"> 订单详情 </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<script>
+			autoSize();
+			window.onresize = function() {
+				autoSize();
+			}
+
+			function autoSize() {
+
+				// 获取当前浏览器的视窗宽度，放在w中
+				var w = document.documentElement.clientWidth;
+
+				// 计算实际html font-size大小
+				var size = w * 100 / 375;
+
+				// 获取当前页面中的html标签
+				var html = document.querySelector('html');
+
+				// 设置字体大小样式
+				html.style.fontSize = size + 'px';
+
+			}
+		</script>
+	</body>
+</html>

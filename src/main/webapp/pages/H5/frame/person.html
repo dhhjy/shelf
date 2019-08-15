@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>个人中心</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+
+    <!-- CSS Code -->
+    <link rel="stylesheet" href="${ctxPath}/assets/common/css/flickerplate.css" type="text/css">
+    <link rel="stylesheet" href="${ctxPath}/assets/common/css/person_style.css" type="text/css">
+    <!-- JavaScript Code -->
+    <!--<script src="${ctxPath}/assets/common/js/jquery.min.js"></script>-->
+    <!--<script src="${ctxPath}/assets/common/js/bootstrap.js"></script>-->
+
+    <!--<script src="${ctxPath}/assets/common/js/modernizr-custom-v2.7.1.min.js"></script>-->
+    <!--<script src="${ctxPath}/assets/common/js/jquery-finger-v0.1.0.min.js"></script>-->
+    <!--<script src="${ctxPath}/assets/common/js/flickerplate.min.js"></script>-->
+    <!--<script src="${ctxPath}/assets/common/js/jquery.lazyload.js"></script>-->
+
+</head>
+<body>
+<header>
+    个人中心
+    <a href="person_set.html"><div class="_right"><img src="${ctxPath}/assets/h5/image/person/nav_setting.png"></div></a>
+</header>
+<!--  ----------------------------北葵向暖...----------------------------->
+<nav class="_main">
+    <div class="head"><a href="person_edit.html"><img src="${ctxPath}/assets/h5/image/person/tx.jpg"></a></div>
+    <div class="name"><center><span>北葵向暖<img src="${ctxPath}/assets/h5/image/person/main_icon_girl.jpg"></span></center></div>
+    <div class="LV">LV7</div>
+    <ul>
+        <a href="person_focus.html"><li><div class="num">3</div> <div class="category">银行卡</div></li></a>
+        <a href="${ctxPath}/pages/H5/frame/transaction.html"><li><div class="num">25</div> <div class="category">交易记录</div></li></a>
+        <a href="${ctxPath}/pages/H5/frame/myorder.html"><li><div class="num">9</div> <div class="category">我的订单</div></li></a>
+    </ul>
+</nav>
+<!-- 主要内容 -->
+<ul class="sell">
+    <a href="person_wmrd_wpay.html"><li><center><div class="wrap"><img src="${ctxPath}/assets/h5/image/person/money01.jpg">我借出的</div></center></li></a>
+    <a href="person_wmcd_wpay.html"><li><center><div class="wrap"><img src="${ctxPath}/assets/h5/image/person/money02.jpg">我贷款的</div></center></li></a>
+</ul>
+<div class="_main_section">
+    <ul>
+        <a href="person_sign.html"><li>
+            <span class="pic"><img src="${ctxPath}/assets/h5/image/person/iconfont-qiandao.jpg"></span>每日签到</li></a>
+        <a href="person_shop_not.html"><li>
+            <span class="pic"><img src="${ctxPath}/assets/h5/image/person/2_main_icon_wdsy.jpg"></span>我的收益</li></a>
+        <a href="person_dynamic.html"><li>
+            <span class="pic"><img src="${ctxPath}/assets/h5/image/person/3_main_icon_wdxx.jpg"></span>我的消息</li></a>
+        <a href="person_wallet.html"><li>
+            <span class="pic"><img src="${ctxPath}/assets/h5/image/person/4_main_icon_wdqb.png"></span>我的钱包</li></a>
+        <a href="person_addshop.html"><li>
+            <span class="pic"><img src="${ctxPath}/assets/h5/image/person/5_main_icon_kefu.jpg"></span>我的客服</li></a>
+        <a href="person_collect.html"><li>
+            <span class="pic"><img src="${ctxPath}/assets/h5/image/person/6_main_icon_bangzhu.jpg"></span>帮助与反馈</li></a>
+        <a href="person_share.html"><li>
+            <span class="pic"><img src="${ctxPath}/assets/h5/image/person/7_main_icon_fxyl.png"></span>分享有礼</li></a>
+        <a  href="${ctxPath}/logout"><li>
+            <span class="pic"><img src="${ctxPath}/assets/h5/image/person/8_main_icon_tcdl.jpg"></span>退出登录</li></a>
+    </ul>
+</div>
+
+    @/* 加入contextPath属性和session超时的配置 */
+    <script type="text/javascript">
+        var Feng = {
+            ctxPath: "",
+            addCtx: function (ctx) {
+                if (this.ctxPath === "") {
+                    this.ctxPath = ctx;
+                }
+            }
+        };
+        Feng.addCtx("${ctxPath}");
+    </script>
+
+<!--<script src="${ctxPath}/assets/common/js/script.js"></script>-->
+
+</body>
+</html>

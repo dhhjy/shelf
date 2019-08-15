@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="shelf:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>shelf</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="shelf.war">
+      <element id="artifact" artifact-name="shelf:war exploded" />
+    </root>
+  </artifact>
+</component>

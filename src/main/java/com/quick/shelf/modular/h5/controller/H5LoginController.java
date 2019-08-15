@@ -100,6 +100,8 @@ public class H5LoginController extends BaseController {
         return H5_PATH + "register.html";
     }
 
+
+
     /**
      * 客户端找回密码页面跳转
      *
